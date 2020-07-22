@@ -1,12 +1,8 @@
-import Header from '../components/header'
-import Footer from '../components/footer'
+import Header from "../components/Header";
 
-export default ({children}) => (
+export default ({ children }) => (
   <>
-    <Header/>
-    <main>
-      {children}
-    </main>
-    <Footer/>
+    <Header />
+    <main>{children}</main>
   </>
-)
+);
