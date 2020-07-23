@@ -7,20 +7,21 @@ import { signIn, signOut, useSession } from "next-auth/client";
 // rendering, and avoids any flash incorrect content on initial page load.
 export default () => {
   const [session, loading] = useSession();
+  const signedIn = session && session.user.username;
 
   return (
     <Box m={2}>
-      <Container sx={{ maxWidth: 500, px: 3, pt: 2 }}>
-        {!session && (
+      <Container sx={{ maxWidth: 500, py: 2 }}>
+        {!signedIn && (
           <Flex>
-            <Box mx={3} sx={{ flex: "1 1 auto" }}>
+            <Box sx={{ flex: "1 1 auto" }}>
               <Button onClick={() => signIn("twitter")} variant="small">
                 Sign in with Twitter
               </Button>
             </Box>
           </Flex>
         )}
-        {session && (
+        {signedIn && (
           <Flex>
             <Box sx={{ flex: "1 1 auto" }}>
               <Text>

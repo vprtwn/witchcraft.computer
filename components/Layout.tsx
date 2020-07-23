@@ -1,8 +1,11 @@
 import Header from "./Header";
+import { Container, Box } from "theme-ui";
 
-export default ({ children }) => (
-  <>
+const Layout = ({ children }) => (
+  <Container sx={{ maxWidth: 500 }}>
     <Header />
     <main>{children}</main>
-  </>
+  </Container>
 );
+
+export default Layout;
