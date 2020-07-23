@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button } from "theme-ui";
+import { Card, Box, IconButton } from "theme-ui";
 import { LiveProvider, LiveEditor, LiveError, LivePreview, withLive } from "react-live";
 import fetchJson from "../lib/fetchJson";
 import { useDebounce } from "use-debounce";
 import MDX from "@mdx-js/runtime";
+import { theme } from "../lib/editorTheme";
 const emoji = require("remark-emoji");
 var sanitize = require("rehype-sanitize");
 
@@ -47,46 +48,57 @@ export default (props) => {
   }, [dbVal]);
 
   const components = {
-    Demo: (props) => <h3>This is a demo component</h3>,
+    h1: (props) => <h1 style={{ lineHeight: 1 }} {...props} />,
+    h2: (props) => <h2 style={{ lineHeight: 1 }} {...props} />,
+    h3: (props) => <h3 style={{ lineHeight: 1 }} {...props} />,
+    h4: (props) => <h4 style={{ lineHeight: 1 }} {...props} />,
+    h5: (props) => <h5 style={{ lineHeight: 1 }} {...props} />,
+    h6: (props) => <h6 style={{ lineHeight: 1 }} {...props} />,
+    p: (props) => <p style={{ lineHeight: 1 }} {...props} />,
   };
 
   return (
-    <Card sx={{ p: 2, position: "relative" }} hidden={hidden}>
-      {showEditor && (
-        <Button
-          variant="small"
-          sx={{ position: "absolute", right: 2 }}
-          onClick={() => {
-            setEditing(!editing);
-          }}
-        >
-          {editing ? "view" : "edit"}
-        </Button>
-      )}
+    <Card sx={{ p: 0 }} hidden={hidden}>
       <LiveProvider
+        theme={theme}
+        language={"markdown"}
         transformCode={(code) => {
           const newCode = `
-  render(<MDX remarkPlugins={[emoji]} rehypePlugins={[sanitize]} components={components}>{\`
+  <MDX remarkPlugins={[emoji]} rehypePlugins={[sanitize]} components={components}>{\`
   ${code}
   \`}
-  </MDX>);
+  </MDX>;
 `;
           console.log(newCode);
           return newCode;
         }}
-        noInline={true}
         scope={{ MDX, emoji, sanitize, components }}
         code={val}
       >
-        <LivePreview
-          style={{
-            marginBottom: "12px",
-          }}
-        />
+        <Box sx={{ position: "relative" }}>
+          {showEditor && (
+            <IconButton
+              // variant="small"
+              sx={{ position: "absolute", right: 1, bottom: 1 }}
+              onClick={() => {
+                setEditing(!editing);
+              }}
+            >
+              {editing ? "👁" : "✏️"}
+            </IconButton>
+          )}
+          <LivePreview
+            style={{
+              paddingTop: "0.5em",
+              paddingBottom: "1em",
+              marginLeft: "1em",
+              marginRight: "1em",
+            }}
+          />
+        </Box>
         {showEditor && editing && (
           <LiveEditor
             style={{
-              backgroundColor: "#f7fafc",
               fontSize: "16px",
             }}
             onChange={(e) => {

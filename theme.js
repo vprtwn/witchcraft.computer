@@ -16,7 +16,7 @@ export default {
   },
   lineHeights: {
     body: 1.5,
-    heading: 1.125,
+    heading: 1,
   },
   colors: {
     text: "#000",
@@ -82,6 +82,14 @@ export default {
       color: "primary",
       border: "solid",
       borderWidth: 1,
+      bg: "transparent",
+      fontSize: 13,
+      cursor: "pointer",
+    },
+    icon: {
+      px: 2,
+      py: 1,
+      color: "primary",
       bg: "transparent",
       fontSize: 13,
       cursor: "pointer",
@@ -182,7 +190,7 @@ export default {
     },
     h1: {
       variant: "text.heading",
-      fontSize: 5,
+      fontSize: 6,
     },
     h2: {
       variant: "text.heading",
