@@ -10,7 +10,7 @@ export default ({ Component, pageProps }) => {
       <ThemeProvider theme={theme}>
         <Styled.root>
           <Head>
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
             <link rel="icon" href="/favicon.png" />
             <link
               rel="stylesheet"

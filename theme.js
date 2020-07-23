@@ -51,6 +51,7 @@ export default {
       bg: "primary",
       border: "solid",
       borderWidth: 1,
+      cursor: "pointer",
       "&:hover": {
         borderWidth: 1,
         bg: "background",
@@ -83,10 +84,7 @@ export default {
       borderWidth: 1,
       bg: "transparent",
       fontSize: 13,
-      "&:hover": {
-        bg: "primary",
-        color: "background",
-      },
+      cursor: "pointer",
     },
     setup: {
       px: 0,

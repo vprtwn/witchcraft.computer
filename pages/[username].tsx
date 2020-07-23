@@ -11,50 +11,56 @@ const IndexPage = (props) => {
     query: { username },
   } = useRouter();
 
-  const [session, loading] = useSession();
-  const [metadata, setMetadata] = useState(props.metadata);
-
-  const signedIn = session && session.user.username;
-
   return (
     <Layout>
-      {signedIn && (
-        <Box>
-          <Widget metadata={metadata} index={0} username={username} customerId={props.customerId} />
-        </Box>
-      )}
+      <Widget
+        metadata={props.metadata}
+        index={0}
+        username={username}
+        customerId={props.customerId}
+        signedIn={props.signedIn}
+      />
     </Layout>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const query = ctx.query;
+  const username = query.username as string;
   const session = await getSession(ctx);
   let error = null;
   let customer = null;
+  let signedIn = false;
+  // signedIn: check session against url
   if (session && session.user.username) {
-    const email = `${session.user.username}@0l0.at`;
-    try {
-      const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-      const response = await stripe.customers.list({ email: email });
-      if (response.data.length > 0) {
-        customer = response.data[0];
-        console.log("retrieved existing customer");
-      }
-      if (!customer) {
-        customer = await stripe.customers.create({
-          email: email,
-        });
-        console.log("created customer");
-      }
-    } catch (e) {
-      error = e;
-      console.error("error fetching customer: " + e);
+    const sessionUsername = session.user.username;
+    signedIn = sessionUsername === username;
+  }
+  // get customer metadata
+  const email = `${username}@0l0.at`;
+  try {
+    const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+    const response = await stripe.customers.list({ email: email });
+    if (response.data.length > 0) {
+      customer = response.data[0];
+      console.log("retrieved existing customer");
     }
+    if (!customer && signedIn) {
+      customer = await stripe.customers.create({
+        email: email,
+      });
+      console.log("created customer");
+    }
+  } catch (e) {
+    error = e.message;
+    console.error("error fetching customer: " + e);
   }
   return {
     props: {
       metadata: customer ? customer.metadata : null,
       customerId: customer ? customer.id : null,
+      signedIn: signedIn,
+      error: error,
     },
   };
 };

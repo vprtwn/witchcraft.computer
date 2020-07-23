@@ -1,5 +1,36 @@
 # 0l0
 
+## remark plugins to investigate
+
+- https://github.com/kevin940726/remark-codesandbox
+- containers
+  - https://github.com/Nevenall/remark-containers
+  - https://github.com/zWingz/remark-container
+- https://github.com/zestedesavoir/zmarkdown/tree/HEAD/packages/remark-custom-blocks
+- https://github.com/zestedesavoir/zmarkdown/tree/HEAD/packages/remark-grid-tables
+- embeds
+  - https://github.com/zestedesavoir/zmarkdown/tree/HEAD/packages/remark-iframes
+  - https://github.com/agentofuser/remark-oembed
+- viz
+  - https://github.com/temando/remark-mermaid
+  - https://github.com/temando/remark-graphviz
+  - https://github.com/shedali/remark-smcat
+- https://github.com/craftzdog/remark-react-codemirror
+- https://github.com/inlinestyle/remark-react-lowlight
+- https://github.com/djm/remark-shortcodes
+- https://github.com/landakram/remark-wiki-link
+- https://github.com/hanford/remark-slate
+- https://github.com/zestedesavoir/zmarkdown/tree/HEAD/packages/remark-ping
+- https://github.com/silvenon/remark-smartypants
+- https://github.com/RichardLitt/remark-title
+- https://github.com/remarkjs/remark-squeeze-paragraphs
+- https://github.com/Nevenall/remark-terms
+- https://github.com/madiodio/remark-twemoji
+- typography
+  - https://github.com/mavrin/remark-typograf
+  - https://github.com/remarkjs/remark-textr
+  - https://github.com/Swizec/remark-utf8
+
 ## mdx/runtime, hast, rehype, oh my
 
 This stuff is confusing.

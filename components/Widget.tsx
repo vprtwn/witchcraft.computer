@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, Container } from "theme-ui";
+import { Card, Button } from "theme-ui";
 import { LiveProvider, LiveEditor, LiveError, LivePreview, withLive } from "react-live";
 import fetchJson from "../lib/fetchJson";
 import { useDebounce } from "use-debounce";
@@ -8,10 +8,19 @@ const emoji = require("remark-emoji");
 var sanitize = require("rehype-sanitize");
 
 export default (props) => {
-  const defaultVal = "<span></span>";
+  const defaultVal = ":wave: **hi**";
+  const signedIn = props.signedIn;
   const indexString = props.index.toString();
-  console.log(props.metadata[indexString]);
-  const initialVal = props.metadata ? props.metadata[indexString] : defaultVal;
+  let initialVal = props.metadata ? props.metadata[indexString] : null;
+  let showEditor = signedIn;
+  let hidden = false;
+  if (!signedIn && !initialVal) {
+    hidden = true;
+  }
+  if (signedIn && !initialVal) {
+    initialVal = defaultVal;
+  }
+  const [editing, setEditing] = useState(showEditor);
   const [val, setVal] = useState(initialVal);
   const [dbVal] = useDebounce(val, 700);
 
@@ -42,7 +51,18 @@ export default (props) => {
   };
 
   return (
-    <Card>
+    <Card sx={{ p: 2, position: "relative" }} hidden={hidden}>
+      {showEditor && (
+        <Button
+          variant="small"
+          sx={{ position: "absolute", right: 2 }}
+          onClick={() => {
+            setEditing(!editing);
+          }}
+        >
+          {editing ? "view" : "edit"}
+        </Button>
+      )}
       <LiveProvider
         transformCode={(code) => {
           const newCode = `
@@ -63,16 +83,18 @@ export default (props) => {
             marginBottom: "12px",
           }}
         />
-        <LiveEditor
-          style={{
-            backgroundColor: "#f7fafc",
-            fontSize: "15px",
-          }}
-          onChange={(e) => {
-            setVal(e);
-          }}
-        />
-        <LiveError />
+        {showEditor && editing && (
+          <LiveEditor
+            style={{
+              backgroundColor: "#f7fafc",
+              fontSize: "16px",
+            }}
+            onChange={(e) => {
+              setVal(e);
+            }}
+          />
+        )}
+        {showEditor && editing && <LiveError />}
       </LiveProvider>
     </Card>
   );
