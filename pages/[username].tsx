@@ -1,98 +1,26 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
+import Widget from "../components/Widget";
 import { useRouter } from "next/router";
-import { useDebounce } from "use-debounce";
-import { Box, Card } from "theme-ui";
+import { Box } from "theme-ui";
 import { GetServerSideProps } from "next";
 import { useSession, getSession } from "next-auth/client";
-import { LiveProvider, LiveEditor, LiveError, LivePreview, withLive } from "react-live";
-import fetchJson from "../lib/fetchJson";
 
 const IndexPage = (props) => {
   const {
     query: { username },
   } = useRouter();
 
-  const initialValue = "<span></span>";
-
   const [session, loading] = useSession();
   const [metadata, setMetadata] = useState(props.metadata);
-  const [val1, setVal1] = useState(props.metadata ? props.metadata["1"] : initialValue);
-  const [dVal1] = useDebounce(val1, 1000);
-  const [val2, setVal2] = useState(props.metadata ? props.metadata["2"] : initialValue);
-  const [dVal2] = useDebounce(val1, 1000);
-  const [val3, setVal3] = useState(props.metadata ? props.metadata["3"] : initialValue);
-  const [dVal3] = useDebounce(val1, 1000);
 
-  useEffect(() => {
-    const update = async function () {
-      try {
-        const metadata = {
-          "1": val1,
-          "2": val2,
-          "3": val3,
-        };
-        const params = { username: username, metadata: metadata, customerId: props.customerId };
-        await fetchJson(`/api/update_metadata`, {
-          method: "POST",
-          body: JSON.stringify(params),
-        });
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    update();
-  }, [dVal1, dVal2, dVal3]);
+  const signedIn = session && session.user.username;
 
   return (
     <Layout>
-      {session && session.user.username && (
+      {signedIn && (
         <Box>
-          <Card>
-            <LiveProvider code={val1}>
-              <LiveError />
-              <LiveEditor
-                style={{
-                  backgroundColor: "#f7fafc",
-                  marginBottom: "12px",
-                }}
-                onChange={(e) => {
-                  setVal1(e);
-                }}
-              />
-              <LivePreview />
-            </LiveProvider>
-          </Card>
-          <Card>
-            <LiveProvider code={val2}>
-              <LiveError />
-              <LiveEditor
-                style={{
-                  backgroundColor: "#f7fafc",
-                  marginBottom: "12px",
-                }}
-                onChange={(e) => {
-                  setVal2(e);
-                }}
-              />
-              <LivePreview />
-            </LiveProvider>
-          </Card>
-          <Card>
-            <LiveProvider code={val3}>
-              <LiveError />
-              <LiveEditor
-                style={{
-                  backgroundColor: "#f7fafc",
-                  marginBottom: "12px",
-                }}
-                onChange={(e) => {
-                  setVal3(e);
-                }}
-              />
-              <LivePreview />
-            </LiveProvider>
-          </Card>
+          <Widget metadata={metadata} index={0} username={username} customerId={props.customerId} />
         </Box>
       )}
     </Layout>

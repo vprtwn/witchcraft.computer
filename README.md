@@ -1,121 +1,31 @@
-# NextAuth.js Example
+# 0l0
 
-[next-auth-example.now.sh](https://next-auth-example.now.sh)
+## mdx/runtime, hast, rehype, oh my
 
-## About this project
+This stuff is confusing.
 
-This is an example of how to use [NextAuth.js](https://next-auth.js.org) library to add authentication to a [Next.js](https://nextjs.org) application.
+- I tried using hast-util-sanitize with GH defaults: https://github.com/syntax-tree/hast-util-sanitize#schema
+- This was tricky. I couldn't figure out how to avoid syntax errors bubbling up to the frontend, and it didn't seem like sanitization was happening. It's late though, and I might be missing something (dropping a code snippet below to pick up later, maybe)
+- NextJS throws an error overlay on syntax errors within react-live. I think this is because I'm rendering MDX within react-live, or something... If you could disable the error overlay, that could be a path forward: https://github.com/vercel/next.js/issues/13387
+- I thought it _might_ be possible to conditionally render after running
+  babel-standalone's parse on the JSX, but that seems tricky and beyond my abilities. Possibly slow, too.
+- I also thought: maybe there's a rehype or hast plugin that can do this. I didn't find one, but don't really know how to use these plugins (in the context of the MDX runtime)
 
-## About NextAuth.js
+  - https://github.com/rehypejs/rehype/blob/main/doc/plugins.md#list-of-plugins
+  - https://github.com/syntax-tree/hast#list-of-utilities
 
-NextAuth.js is an easy to implement, full-stack (client/server) open source authentication library designed for [Next.js](https://nextjs.org) and [Serverless](https://now.sh).
-
-Go to [next-auth.js.org](https://next-auth.js.org) for more information and documentation.
-
-_NextAuth.js is not associated with Vercel or Next.js._
-
-## Getting started
-
-### 1. Clone the repository and install dependancies
-
-```
-git clone https://github.com/iaincollins/next-auth-example.git
-cd next-auth-example
-npm i
-```
-
-### 2. Configure your local environment
-
-Copy the .env.local.example file in this directory to .env.local (which will be ignored by Git):
+- I decided to abandon MDX and just use MD with remark plugins (seems like there are some nice plugins, and it's more user-friendly than JSX components anyway)
+- Using rehype-sanitize (rather than the above technique) is basically strict markdown only.
+- This conversation seems to suggest this also: https://spectrum.chat/mdx/general/runtime-users-how-do-you-deal-with-xss-sanitization~bc2b8f66-f3af-4920-a012-2500a5639fb2
 
 ```
-cp .env.local.example .env.local
+var merge = require("deepmerge");
+var gh = require("hast-util-sanitize/lib/github");
+var sanitize = require("hast-util-sanitize");
+var assert = require("hast-util-assert");
+var raw = require("hast-util-raw");
+...
+var schema = merge(gh, { tagNames: { "*": ["Demo"] } });
+...
+render(<MDX remarkPlugins={[emoji]} rehypePlugins={[sanitize, {schema: schema}]} components={components}>{\
 ```
-
-Add details for one or more providers (e.g. Google, Twitter, GitHub, Email, etc).
-
-#### Database configuration
-
-A database is needed to persist user accounts and to support email sign in, but you can still use NextAuth.js for authentication without one by using OAuth for authentication. If you do not specify a database, JSON Web Tokens will be enabled by default.
-
-You can skip configuring a database and come back to it later if you want.
-
-When configuring your database you should also install an appropriate node_module.
-
-- **SQLite**
-
-  Install module:
-  `npm i sqlite3`
-
-  Database URI:
-  `sqlite://localhost/:memory:?synchronize=true`
-
-- **MySQL**
-
-  Install module:
-  `npm i mysql`
-
-  Database URI:
-  `mysql://username:password@127.0.0.1:3306/database_name?synchronize=true`
-
-- **Postgres**
-
-  Install module:
-  `npm i pg`
-
-  Database URI:
-  `postgres://username:password@127.0.0.1:5432/database_name?synchronize=true`
-
-- **MongoDB**
-
-  Install module:
-  `npm i mongodb`
-
-  Database URI:
-  `mongodb://username:password@127.0.0.1:27017/database_name?synchronize=true`
-
-Notes:
-
-- The example .env specifies an in-memory SQLite database that does not persist data.
-- SQLite is suitable for development / testing but not for production.
-- The option `?synchronize=true` automatically syncs schema changes to the database. It should not be used in production as may result in data loss if there are changes to the schema or to NextAuth.js
-- You can also specify a [TypeORM connection object](https://typeorm.io/#/connection-options) in `pages/api/auth/[...nextauth.js]` instead of a database URL / connection string.
-
-### 3. Configure authentication providers
-
-- Review and update options in `pages/api/auth/[...nextauth.js]` as needed.
-
-- When setting up OAUTH, in the developer admin page for each of your OAuth services, you should configure the callback URL to use a callback path of `{server}/api/auth/callback/{provider}`.
-
-  e.g. For Google OAuth you would use: `http://localhost:3000/api/auth/callback/google`
-
-  A list of configured providers and their callback URLs is available from the endpoint `/api/auth/providers`. You can find more information at https://next-auth.js.org/configuration/providers
-
-- You can also choose to specify an SMTP server for passwordless sign in via email.
-
-### 4. Start the application
-
-To run your site locally, use:
-
-```
-npm run dev
-```
-
-To run it it production mode, use:
-
-```
-npm build
-npm start
-```
-
-### 5. Configuring for production
-
-You must set the NEXTAUTH_URL environment variable with the URL of your site, before deploying to production.
-
-e.g. `NEXTAUTH_URL=https://example.com`
-
-To do this in on Vercel, you can use the [Vercel project dashboard](https://vercel.com/dashboard) or the `now env` command:
-
-    now env add NEXTAUTH_URL production
-
-Be sure to also set environment variables for the Client ID and Client Secret values for all your authentication providers.

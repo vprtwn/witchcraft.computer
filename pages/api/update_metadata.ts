@@ -8,20 +8,23 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return;
   }
   const session = await getSession({ req });
-  console.log("session", JSON.stringify(session, null, 2));
   if (session && !session.user.username) {
+    const code = "error_session_missing_username";
+    console.error(code);
     return res.status(401).json({
       message: "no username in session",
-      code: "error_session_missing_username",
+      code: code,
     });
   }
   const params = JSON.parse(req.body);
   const username = params.username;
   const customerId = params.customerId;
   if (session && session.user.username !== username) {
+    const code = "error_session_username_mismatch";
+    console.error(code);
     return res.status(401).json({
       message: "username doesn't match session username",
-      code: "error_session_username_mismatch",
+      code: code,
     });
   }
   // TODO: JWT example below. Using JWT would be more secure?
@@ -31,9 +34,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
     await stripe.customers.update(customerId, { metadata: metadata });
   } catch (e) {
+    const code = "error_customer_update_error";
+    console.error(code);
     return res.status(500).json({
       message: e.message,
-      code: "error_customer_update_erro",
+      code: code,
     });
   }
   res.json({});

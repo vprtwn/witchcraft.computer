@@ -1,8 +1,6 @@
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
 
-let username = null;
-
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
 const options = {
@@ -37,14 +35,7 @@ const options = {
   // option is set - or by default if no database is specified.
   // https://next-auth.js.org/configuration/options#jwt
   jwt: {
-    // A secret to use for key generation (you should set this explicitly)
-    // secret: 'INp8IvdIyeMcoGAgFGoA61DdBglwwSqnXJZkgz8PSnw',
-    // Set to true to use encryption (default: false)
-    // encryption: true,
-    // You can define your own encode/decode functions for signing and encryption
-    // if you want to override the default behaviour.
-    // encode: async ({ secret, token, maxAge }) => {},
-    // decode: async ({ secret, token, maxAge }) => {},
+    encryption: true,
   },
 
   // You can define custom pages to override the built-in pages.
@@ -64,15 +55,18 @@ const options = {
   // https://next-auth.js.org/configuration/callbacks
   callbacks: {
     session: async (session, token) => {
-      if (username) {
-        session.user.username = username;
+      console.log("next-auth.cb.session.token", JSON.stringify(token, null, 2));
+      if (token.username) {
+        session.user.username = token.username;
       }
+      console.log("next-auth.cb.session.session", JSON.stringify(session, null, 2));
       return Promise.resolve(session);
     },
     jwt: async (token, profile) => {
       if (profile) {
-        username = profile.screen_name;
+        token.username = profile.screen_name;
       }
+      console.log("next-auth.cb.jwt.token", JSON.stringify(token, null, 2));
       return Promise.resolve(token);
     },
   },
