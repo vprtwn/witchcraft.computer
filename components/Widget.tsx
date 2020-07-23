@@ -58,7 +58,15 @@ export default (props) => {
   };
 
   return (
-    <Card sx={{ p: 0 }} hidden={hidden}>
+    <Card
+      sx={{
+        p: 0,
+        boxShadow: editing ? "0 0 8px rgba(0, 0, 0, 0.125)" : "none",
+        border: editing ? "none" : "1px solid",
+        borderColor: editing ? "none" : "lightgray",
+      }}
+      hidden={hidden}
+    >
       <LiveProvider
         theme={theme}
         language={"markdown"}
@@ -78,7 +86,6 @@ export default (props) => {
         <Box sx={{ position: "relative" }}>
           {showEditor && (
             <IconButton
-              // variant="small"
               sx={{ position: "absolute", right: 1, bottom: 1 }}
               onClick={() => {
                 setEditing(!editing);
