@@ -1,25 +1,173 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
 import Widget from "../components/Widget";
+import fetchJson from "../lib/fetchJson";
 import { useRouter } from "next/router";
-import { Box } from "theme-ui";
+import { Box, IconButton, Flex } from "theme-ui";
 import { GetServerSideProps } from "next";
 import { useSession, getSession } from "next-auth/client";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+
+enum Direction {
+  Up,
+  Down,
+}
+
+const reorder = (list, startIndex, endIndex): { i: number }[] => {
+  const result = Array.from(list) as { i: number }[];
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+  return result;
+};
+
+const remove = (list, index): { i: number }[] => {
+  const result = Array.from(list) as { i: number }[];
+  const [removed] = result.splice(index, 1);
+  return result;
+};
+
+const add = (list, newObject): { i: number }[] => {
+  const result = Array.from(list) as { i: number }[];
+  result.push(newObject);
+  return result;
+};
 
 const IndexPage = (props) => {
   const {
     query: { username },
   } = useRouter();
 
+  const order = props.metadata ? JSON.parse(props.metadata["order"]) : null;
+  console.log("order", JSON.stringify(order, null, 2));
+  const defaultOrder = [{ i: 0 }, { i: 1 }, { i: 2 }];
+  const initialOrder = order || defaultOrder;
+  const [items, setItems] = useState(initialOrder);
+  const [hideToolbar, setHideToolbar] = useState(false);
+
+  const updateOrder = async function (newOrder: { i: number }[], removed: number | null = null) {
+    try {
+      const metadata = {};
+      metadata["order"] = JSON.stringify(newOrder);
+      if (removed) {
+        metadata[removed.toString()] = null;
+      }
+      const params = {
+        username: username,
+        metadata: metadata,
+        customerId: props.customerId,
+      };
+      console.log("params", JSON.stringify(params, null, 2));
+      await fetchJson(`/api/update_metadata`, {
+        method: "POST",
+        body: JSON.stringify(params),
+      });
+      console.log("updated metadata", JSON.stringify(metadata));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const onDragEnd = (result) => {
+    // dropped outside the list
+    if (!result.destination) {
+      return;
+    }
+    const newItems = reorder(items, result.source.index, result.destination.index);
+    setItems(newItems);
+    updateOrder(newItems);
+  };
+
+  const moveItem = (index: number, direction: Direction) => {
+    if (index === 0 && direction === Direction.Up) {
+      return;
+    }
+    const newIndex = direction === Direction.Up ? index - 1 : index + 1;
+    const newItems = reorder(items, index, newIndex);
+    setItems(newItems);
+    updateOrder(newItems);
+  };
+
+  const removeItem = (index: number) => {
+    const newItems = remove(items, index);
+    setItems(newItems);
+    updateOrder(newItems, index);
+  };
+
+  const addItem = () => {
+    const newI = Math.floor(Math.random() * 10000);
+    const newObject = { i: newI };
+    const newItems = add(items, newObject);
+    setItems(newItems);
+    updateOrder(newItems);
+  };
+
   return (
     <Layout>
-      <Widget
-        metadata={props.metadata}
-        index={0}
-        username={username}
-        customerId={props.customerId}
-        signedIn={props.signedIn}
-      />
+      <Box py={2} />
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="droppable">
+          {(provided, snapshot) => (
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              {items.map((item, index) => (
+                <Draggable key={item.i.toString()} draggableId={item.i.toString()} index={index}>
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <Widget
+                        hideToolbar={hideToolbar}
+                        metadata={props.metadata}
+                        index={item.i}
+                        username={username}
+                        customerId={props.customerId}
+                        signedIn={props.signedIn}
+                        onDown={() => {
+                          moveItem(index, Direction.Down);
+                        }}
+                        onUp={() => {
+                          moveItem(index, Direction.Up);
+                        }}
+                        onDelete={() => {
+                          removeItem(index);
+                        }}
+                      />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+
+      {props.signedIn && (
+        <Flex sx={{ py: 3, justifyContent: "space-between" }}>
+          <Box>
+            <IconButton
+              sx={{ fontSize: "20px" }}
+              onClick={() => {
+                setHideToolbar(!hideToolbar);
+              }}
+            >
+              {hideToolbar ? "✏️" : "👁"}
+            </IconButton>
+          </Box>
+          <Box>
+            <IconButton
+              sx={{ fontSize: "20px" }}
+              onClick={() => {
+                addItem();
+              }}
+            >
+              {hideToolbar ? "" : "🆕"}
+            </IconButton>
+          </Box>
+        </Flex>
+      )}
+      <Box py={4} my={4} />
     </Layout>
   );
 };

@@ -27,6 +27,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       code: code,
     });
   }
+  console.log("params", JSON.stringify(params, null, 2));
   // TODO: JWT example below. Using JWT would be more secure?
   // const token = await jwt.getToken({ req, secret });
   const metadata = params.metadata;

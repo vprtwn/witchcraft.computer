@@ -123,9 +123,6 @@ export default {
       paddingY: 2,
       borderRadius: 4,
       boxShadow: "0 0 8px rgba(0, 0, 0, 0.125)",
-      marginX: 2,
-      marginY: 4,
-      maxWidth: 800,
     },
     flat: {
       paddingX: 3,
@@ -133,7 +130,6 @@ export default {
       borderRadius: 4,
       border: "1px solid",
       borderColor: "mediumgray",
-      maxWidth: 800,
     },
   },
   badges: {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, Box, IconButton } from "theme-ui";
+import { Card, Box, IconButton, Button, Flex } from "theme-ui";
 import { LiveProvider, LiveEditor, LiveError, LivePreview, withLive } from "react-live";
 import fetchJson from "../lib/fetchJson";
 import { useDebounce } from "use-debounce";
@@ -21,7 +21,7 @@ export default (props) => {
   if (signedIn && !initialVal) {
     initialVal = defaultVal;
   }
-  const [editing, setEditing] = useState(showEditor);
+  const [editing, setEditing] = useState(false);
   const [val, setVal] = useState(initialVal);
   const [dbVal] = useDebounce(val, 700);
 
@@ -61,6 +61,7 @@ export default (props) => {
     <Card
       sx={{
         p: 0,
+        my: 2,
         boxShadow: editing ? "0 0 8px rgba(0, 0, 0, 0.125)" : "none",
         border: editing ? "none" : "1px solid",
         borderColor: editing ? "none" : "lightgray",
@@ -84,16 +85,6 @@ export default (props) => {
         code={val}
       >
         <Box sx={{ position: "relative" }}>
-          {showEditor && (
-            <IconButton
-              sx={{ position: "absolute", right: 1, bottom: 1 }}
-              onClick={() => {
-                setEditing(!editing);
-              }}
-            >
-              {editing ? "👁" : "✏️"}
-            </IconButton>
-          )}
           <LivePreview
             style={{
               paddingTop: "0.5em",
@@ -115,6 +106,37 @@ export default (props) => {
         )}
         {showEditor && editing && <LiveError />}
       </LiveProvider>
+      {showEditor && !props.hideToolbar && (
+        <Flex sx={{ bg: "lightgray" }}>
+          <Box sx={{ ml: 2, flexGrow: 1 }}>
+            <IconButton
+              variant="icon"
+              sx={{ left: 0 }}
+              onClick={() => {
+                setEditing(!editing);
+              }}
+            >
+              {editing ? "👁" : "✏️"}
+            </IconButton>
+          </Box>
+          <Box sx={{ flexGrow: 1 }} hidden={editing}>
+            <IconButton sx={{ left: 0 }} onClick={props.onDown}>
+              ⬇️
+            </IconButton>
+          </Box>
+          <Box sx={{ flexGrow: 1 }} hidden={editing}>
+            <IconButton onClick={props.onUp}>⬆️</IconButton>
+          </Box>
+          <IconButton
+            sx={{ right: 0, mr: 2 }}
+            onClick={() => {
+              props.onDelete();
+            }}
+          >
+            🗑
+          </IconButton>
+        </Flex>
+      )}
     </Card>
   );
 };

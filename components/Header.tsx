@@ -11,7 +11,7 @@ export default () => {
 
   return (
     <Box>
-      <Container sx={{ p: 2, bg: "verylightgray", boxShadow: "0 0 8px rgba(0, 0, 0, 0.125)" }}>
+      <Container sx={{ p: 2, boxShadow: "0 0 8px rgba(0, 0, 0, 0.125)" }}>
         {!signedIn && (
           <Flex>
             <Box sx={{ flex: "1 1 auto" }}>

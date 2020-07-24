@@ -23,6 +23,7 @@
     "node-fetch": "^2.6.0",
     "prism-react-renderer": "^1.1.1",
     "react": "^16.13.1",
+    "react-beautiful-dnd": "12.2.0",
     "react-dom": "^16.13.1",
     "react-live": "^2.2.2",
     "rehype-sanitize": "^3.0.1",
