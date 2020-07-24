@@ -121,11 +121,11 @@ export default (props) => {
           </Box>
           <Box sx={{ flexGrow: 1 }} hidden={editing}>
             <IconButton sx={{ left: 0 }} onClick={props.onDown}>
-              ⬇️
+              {props.hideDown ? "" : "⬇️"}
             </IconButton>
           </Box>
           <Box sx={{ flexGrow: 1 }} hidden={editing}>
-            <IconButton onClick={props.onUp}>⬆️</IconButton>
+            <IconButton onClick={props.onUp}>{props.hideUp ? "" : "⬆️"}️</IconButton>
           </Box>
           <IconButton
             sx={{ right: 0, mr: 2 }}

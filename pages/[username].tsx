@@ -37,7 +37,10 @@ const IndexPage = (props) => {
     query: { username },
   } = useRouter();
 
-  const order = props.metadata ? JSON.parse(props.metadata["order"]) : null;
+  let order = null;
+  if (props.metadata && props.metadata["order"]) {
+    order = JSON.parse(props.metadata["order"]);
+  }
   console.log("order", JSON.stringify(order, null, 2));
   const defaultOrder = [{ i: 0 }, { i: 1 }, { i: 2 }];
   const initialOrder = order || defaultOrder;
@@ -117,6 +120,8 @@ const IndexPage = (props) => {
                       {...provided.dragHandleProps}
                     >
                       <Widget
+                        hideUp={index === 0}
+                        hideDown={index === items.length - 1}
                         hideToolbar={hideToolbar}
                         metadata={props.metadata}
                         index={item.i}
