@@ -120,21 +120,28 @@ export default (props) => {
             </IconButton>
           </Box>
           <Box sx={{ flexGrow: 1 }} hidden={editing}>
-            <IconButton sx={{ left: 0 }} onClick={props.onDown}>
-              {props.hideDown ? "" : "⬇️"}
+            <IconButton
+              sx={{ left: 0, visibility: props.hideDown ? "hidden" : "visible" }}
+              onClick={props.onDown}
+            >
+              ⬇️
             </IconButton>
           </Box>
-          <Box sx={{ flexGrow: 1 }} hidden={editing}>
-            <IconButton onClick={props.onUp}>{props.hideUp ? "" : "⬆️"}️</IconButton>
+          <Box sx={{ visibility: props.hideUp ? "hidden" : "visible" }} hidden={editing}>
+            <IconButton sx={{ right: 0, mr: 2 }} onClick={props.onUp}>
+              ⬆️
+            </IconButton>
           </Box>
-          <IconButton
-            sx={{ right: 0, mr: 2 }}
-            onClick={() => {
-              props.onDelete();
-            }}
-          >
-            🗑
-          </IconButton>
+          <Box hidden={!editing}>
+            <IconButton
+              sx={{ right: 0, mr: 2 }}
+              onClick={() => {
+                props.onDelete();
+              }}
+            >
+              🗑
+            </IconButton>
+          </Box>
         </Flex>
       )}
     </Card>
