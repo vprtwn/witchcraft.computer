@@ -98,6 +98,7 @@ export default (props) => {
           <LiveEditor
             style={{
               fontSize: "16px",
+              fontFamily: "Recursive",
             }}
             onChange={(e) => {
               setVal(e);

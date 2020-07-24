@@ -4,9 +4,9 @@ export default {
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
     heading: "inherit",
-    monospace: "Cascadia Code, Menlo, monospace",
+    monospace: "Recursive, Menlo, monospace",
     body:
-      'HK Grotesk, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
+      'Recursive, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
   },
   fontSizes: [12, 14, 16, 20, 24, 32, 48, 64, 96],
   fontWeights: {
@@ -64,12 +64,10 @@ export default {
       fontSize: 20,
       fontWeight: "bold",
       variant: "text.heading",
-      // fontFamily: "monospace",
       fontWeight: "medium",
       border: "solid",
       borderWidth: 2,
       borderRadius: 8,
-      // whiteSpace: "nowrap",
       "&:hover": {
         borderWidth: 2,
         bg: "background",
@@ -84,6 +82,7 @@ export default {
       borderWidth: 1,
       bg: "transparent",
       fontSize: 13,
+      fontFamily: "Recursive",
       cursor: "pointer",
     },
     icon: {

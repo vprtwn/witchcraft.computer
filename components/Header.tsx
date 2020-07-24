@@ -13,8 +13,8 @@ export default () => {
     <Box>
       <Container sx={{ p: 2, boxShadow: "0 0 8px rgba(0, 0, 0, 0.125)" }}>
         {!signedIn && (
-          <Flex>
-            <Box sx={{ flex: "1 1 auto" }}>
+          <Flex sx={{ justifyContent: "center" }}>
+            <Box sx={{}}>
               <Button onClick={() => signIn("twitter")} variant="small" sx={{}}>
                 <Box
                   aria-hidden="true"

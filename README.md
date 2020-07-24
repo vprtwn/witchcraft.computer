@@ -1,5 +1,12 @@
 # 0l0
 
+## Getting started
+
+- Create an `.env.local` using the info from the Paper brainstorming doc
+- `yarn` (install dependencies)
+- `yarn dev` (run locally)
+- Changes merged to master will automatically deploy to Vercel. (vercel teams costs \$20/month, easier to just use the Github integration)
+
 ## remark plugins to investigate
 
 - https://github.com/kevin940726/remark-codesandbox
