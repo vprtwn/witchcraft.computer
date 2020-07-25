@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
+import Header from "../components/Header";
 import Widget from "../components/Widget";
 import fetchJson from "../lib/fetchJson";
 import { useRouter } from "next/router";
-import { Box, IconButton, Flex } from "theme-ui";
+import { Box, IconButton, Flex, Card, Label, Radio, Select, useColorMode } from "theme-ui";
 import { GetServerSideProps } from "next";
 import { useSession, getSession } from "next-auth/client";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
@@ -37,15 +38,28 @@ const IndexPage = (props) => {
     query: { username },
   } = useRouter();
 
-  let order = null;
-  if (props.metadata && props.metadata["order"]) {
-    order = JSON.parse(props.metadata["order"]);
+  let remoteOrder = null;
+  const defaultStyle = { colorMode: "light" };
+  let remoteStyle = defaultStyle;
+  if (props.metadata) {
+    if (props.metadata["order"]) {
+      remoteOrder = JSON.parse(props.metadata["order"]);
+    }
+    if (props.metadata["style"]) {
+      remoteStyle = JSON.parse(props.metadata["style"]);
+    }
   }
-  console.log("order", JSON.stringify(order, null, 2));
-  const defaultOrder = [{ i: 0 }, { i: 1 }, { i: 2 }];
-  const initialOrder = order || defaultOrder;
+  // order of items
+  const initialId = Math.floor(Math.random() * 10000);
+  const defaultOrder = [{ i: initialId }];
+  const initialOrder = remoteOrder || defaultOrder;
   const [items, setItems] = useState(initialOrder);
-  const [hideToolbar, setHideToolbar] = useState(false);
+  // style of items
+  const [style, setStyle] = useState(remoteStyle);
+
+  const [previewing, setPreviewing] = useState(false);
+  const [styling, setStyling] = useState(false);
+  const [colorMode, setColorMode] = useColorMode();
 
   const updateOrder = async function (newOrder: { i: number }[], removed: number | null = null) {
     try {
@@ -65,6 +79,26 @@ const IndexPage = (props) => {
         body: JSON.stringify(params),
       });
       console.log("updated metadata", JSON.stringify(metadata));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const updateStyle = async function (style) {
+    try {
+      const metadata = {};
+      metadata["style"] = JSON.stringify(style);
+      const params = {
+        username: username,
+        metadata: metadata,
+        customerId: props.customerId,
+      };
+      console.log("params", JSON.stringify(params, null, 2));
+      const result = await fetchJson(`/api/update_metadata`, {
+        method: "POST",
+        body: JSON.stringify(params),
+      });
+      console.log("updated metadata", JSON.stringify(result));
     } catch (e) {
       console.error(e);
     }
@@ -106,9 +140,10 @@ const IndexPage = (props) => {
 
   return (
     <Layout>
+      <Header username={username} />
       <Box py={2} />
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="droppable">
+        <Droppable droppableId="droppable" isDragDisabled={props.signedIn}>
           {(provided, snapshot) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {items.map((item, index) => (
@@ -122,7 +157,7 @@ const IndexPage = (props) => {
                       <Widget
                         hideUp={index === 0}
                         hideDown={index === items.length - 1}
-                        hideToolbar={hideToolbar}
+                        hideToolbar={previewing}
                         metadata={props.metadata}
                         index={item.i}
                         username={username}
@@ -152,25 +187,61 @@ const IndexPage = (props) => {
         <Flex sx={{ py: 3, justifyContent: "space-between" }}>
           <Box>
             <IconButton
-              sx={{ fontSize: "20px" }}
+              sx={{ fontSize: "24px" }}
               onClick={() => {
-                setHideToolbar(!hideToolbar);
+                setPreviewing(!previewing);
               }}
             >
-              {hideToolbar ? "✏️" : "👁"}
+              {previewing ? "✏️" : "👁"}
             </IconButton>
           </Box>
           <Box>
             <IconButton
-              sx={{ fontSize: "20px" }}
+              sx={{ fontSize: "24px" }}
               onClick={() => {
-                addItem();
+                setStyling(!styling);
               }}
             >
-              {hideToolbar ? "" : "🆕"}
+              {styling ? "🖌" : "🎨"}
+            </IconButton>
+          </Box>
+          <Box>
+            <IconButton
+              sx={{ fontSize: "24px" }}
+              onClick={() => {
+                if (!previewing) {
+                  addItem();
+                }
+              }}
+            >
+              {previewing ? "" : "🆕"}
             </IconButton>
           </Box>
         </Flex>
+      )}
+      {styling && (
+        <Card
+          sx={{
+            p: 3,
+            my: 2,
+            border: "1px solid",
+            borderColor: "primary",
+          }}
+        >
+          <Select
+            defaultValue={style.colorMode}
+            onChange={(e) => {
+              const newMode = e.target.value;
+              const newStyle = { colorMode: newMode };
+              setStyle(newStyle);
+              updateStyle(newStyle);
+              setColorMode(newMode);
+            }}
+          >
+            <option>light</option>
+            <option>darkNectarine</option>
+          </Select>
+        </Card>
       )}
       <Box py={4} my={4} />
     </Layout>
@@ -183,10 +254,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = await getSession(ctx);
   let error = null;
   let customer = null;
-  let signedIn = false;
+  let signedIn = false; // signed in as this user
+  let sessionUsername = null;
   // signedIn: check session against url
   if (session && session.user.username) {
-    const sessionUsername = session.user.username;
+    sessionUsername = session.user.username;
     signedIn = sessionUsername === username;
   }
   // get customer metadata

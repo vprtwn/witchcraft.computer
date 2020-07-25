@@ -6,7 +6,8 @@ import { useDebounce } from "use-debounce";
 import MDX from "@mdx-js/runtime";
 import { theme } from "../lib/editorTheme";
 const emoji = require("remark-emoji");
-var sanitize = require("rehype-sanitize");
+import rehypeSanitize from "rehype-sanitize";
+const smartypants = require("@silvenon/remark-smartypants");
 
 export default (props) => {
   const defaultVal = ":wave: **hi**";
@@ -54,7 +55,11 @@ export default (props) => {
     h4: (props) => <h4 style={{ lineHeight: 1 }} {...props} />,
     h5: (props) => <h5 style={{ lineHeight: 1 }} {...props} />,
     h6: (props) => <h6 style={{ lineHeight: 1 }} {...props} />,
-    p: (props) => <p style={{ lineHeight: 1 }} {...props} />,
+    p: (props) => <p style={{ lineHeight: 1.5 }} {...props} />,
+    a: (props) => <a style={{ color: "#4299e1" }} {...props} />,
+    img: (props) => (
+      <img style={{ maxWidth: 300, display: "block", margin: "0 auto" }} {...props} />
+    ),
   };
 
   return (
@@ -62,31 +67,39 @@ export default (props) => {
       sx={{
         p: 0,
         my: 2,
-        boxShadow: editing ? "0 0 8px rgba(0, 0, 0, 0.125)" : "none",
-        border: editing ? "none" : "1px solid",
-        borderColor: editing ? "none" : "lightgray",
+        border: editing ? "2px solid" : "1px solid",
+        borderColor: editing ? "primary" : "outline",
+        borderRadius: 4,
       }}
       hidden={hidden}
     >
       <LiveProvider
         theme={theme}
         language={"markdown"}
-        transformCode={(code) => {
+        transformCode={(c) => {
           const newCode = `
-  <MDX remarkPlugins={[emoji]} rehypePlugins={[sanitize]} components={components}>{\`
-  ${code}
-  \`}
-  </MDX>;
+<MDX 
+  remarkPlugins={[emoji, smartypants]} 
+  rehypePlugins={[[rehypeSanitize]]} 
+  components={components}>
+  {\`${c}\`}
+</MDX>;
 `;
-          console.log(newCode);
           return newCode;
         }}
-        scope={{ MDX, emoji, sanitize, components }}
+        scope={{
+          MDX,
+          emoji,
+          smartypants,
+          rehypeSanitize,
+          components,
+        }}
         code={val}
       >
         <Box sx={{ position: "relative" }}>
           <LivePreview
             style={{
+              fontFamily: "Inter",
               paddingTop: "0.5em",
               paddingBottom: "1em",
               marginLeft: "1em",
@@ -108,7 +121,7 @@ export default (props) => {
         {showEditor && editing && <LiveError />}
       </LiveProvider>
       {showEditor && !props.hideToolbar && (
-        <Flex sx={{ bg: "lightgray" }}>
+        <Flex sx={{ bg: "outline", borderRadius: 4 }}>
           <Box sx={{ ml: 2, flexGrow: 1 }}>
             <IconButton
               variant="icon"

@@ -1,10 +1,10 @@
-import Header from "./Header";
 import { Container, Box } from "theme-ui";
 
 const Layout = ({ children }) => (
   <Container sx={{ maxWidth: 400 }}>
-    <Header />
-    <main>{children}</main>
+    <Box sx={{ m: 1 }}>
+      <main>{children}</main>
+    </Box>
   </Container>
 );
 

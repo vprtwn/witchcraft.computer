@@ -1,5 +1,6 @@
 import React from "react";
 import Layout from "../components/Layout";
+import Header from "../components/Header";
 import { Box } from "theme-ui";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
@@ -7,6 +8,7 @@ import { getSession } from "next-auth/client";
 const IndexPage = () => {
   return (
     <Layout>
+      <Header />
       <Box></Box>
     </Layout>
   );

@@ -18,12 +18,8 @@ export default {
     body: 1.5,
     heading: 1,
   },
+  useLocalStorage: false,
   colors: {
-    text: "#000",
-    background: "#fff",
-    primary: "#1a202c",
-    secondary: "#30c",
-    error: "#c53030",
     lightgreen: "#c6f6d5",
     verylightgreen: "#f0fff4",
     lightindigo: "#c3dafe",
@@ -44,36 +40,22 @@ export default {
     lightblue: "#bee3f8",
     mediumyellow: "#f6e05e",
     mediumorange: "#fbd38d",
+    modes: {
+      light: {
+        text: "#000",
+        background: "#fff",
+        primary: "#000",
+        outline: "#edf2f7",
+      },
+      darkNectarine: {
+        text: "#fff",
+        background: "#17223b",
+        primary: "#ff6768",
+        outline: "#263859",
+      },
+    },
   },
   buttons: {
-    primary: {
-      color: "background",
-      bg: "primary",
-      border: "solid",
-      borderWidth: 1,
-      cursor: "pointer",
-      "&:hover": {
-        borderWidth: 1,
-        bg: "background",
-        color: "primary",
-      },
-    },
-    marketing: {
-      color: "background",
-      bg: "primary",
-      fontSize: 20,
-      fontWeight: "bold",
-      variant: "text.heading",
-      fontWeight: "medium",
-      border: "solid",
-      borderWidth: 2,
-      borderRadius: 8,
-      "&:hover": {
-        borderWidth: 2,
-        bg: "background",
-        color: "primary",
-      },
-    },
     small: {
       px: 2,
       py: 1,
@@ -85,6 +67,17 @@ export default {
       fontFamily: "Recursive",
       cursor: "pointer",
     },
+    tiny: {
+      px: 1,
+      py: 0,
+      color: "text",
+      border: "solid",
+      borderWidth: 1,
+      bg: "transparent",
+      fontSize: 10,
+      fontFamily: "Recursive",
+      cursor: "pointer",
+    },
     icon: {
       px: 2,
       py: 1,
@@ -92,18 +85,6 @@ export default {
       bg: "transparent",
       fontSize: 13,
       cursor: "pointer",
-    },
-    setup: {
-      px: 0,
-      py: 0,
-      bg: "transparent",
-      fontWeight: "bold",
-      fontSize: 18,
-      color: "inherit",
-      textDecoration: "none",
-      "&:hover": {
-        textDecoration: "underline",
-      },
     },
   },
   links: {
@@ -121,14 +102,6 @@ export default {
       paddingX: 3,
       paddingY: 2,
       borderRadius: 4,
-      boxShadow: "0 0 8px rgba(0, 0, 0, 0.125)",
-    },
-    flat: {
-      paddingX: 3,
-      paddingY: 2,
-      borderRadius: 4,
-      border: "1px solid",
-      borderColor: "mediumgray",
     },
   },
   badges: {
@@ -152,17 +125,6 @@ export default {
       borderRadius: 99999,
     },
   },
-  textarea: {
-    borderColor: "mediumgray",
-    pl: 3,
-    "&:focus": {
-      borderColor: "mediumorange",
-      bg: "verylightorange",
-    },
-    "::selection": {
-      bg: "mediumyellow",
-    },
-  },
   text: {
     heading: {
       fontFamily: "heading",
@@ -175,8 +137,8 @@ export default {
       color: "#4299e1",
     },
     progress: {
-      color: "lightorange",
-      bg: "lightindigo",
+      color: "primary",
+      bg: "outline",
     },
     root: {
       fontFamily: "body",

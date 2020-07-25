@@ -20,8 +20,9 @@ export default ({ Component, pageProps }) => {
               rel="stylesheet"
               href="https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/hk-grotesk.min.css"
             />
+            {/* Recursive font: sorta monospace but not, somewhat casual */}
             <link
-              href="https://fonts.googleapis.com/css2?family=Recursive&display=swap"
+              href="https://fonts.googleapis.com/css2?family=Recursive:CASL,CRSV,MONO@0.5,1,0.5&display=swap"
               rel="stylesheet"
             />
           </Head>
