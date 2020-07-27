@@ -6,20 +6,16 @@ import { signIn, signOut, useSession } from "next-auth/client";
 // rendering, and avoids any flash incorrect content on initial page load.
 export default (props) => {
   const data = props.data;
+  const tipText = data.tt || "Leave a tip";
   return (
     <Flex sx={{ bg: "primary", alignItems: "center", py: 1 }}>
-      <Box sx={{ ml: 3, whiteSpace: "nowrap" }}>
-        {!props.editing && <Text sx={{ color: "bg", fontSize: "13px", py: 1 }}>Leave a tip</Text>}
+      <Box sx={{ ml: 3 }}>
+        {!props.editing && <Text variant="tipText">{tipText}</Text>}
         {props.editing && (
-          <Input
-            variant="tipText"
-            onChange={props.onTipMessageChange}
-            sx={{ color: "bg", fontSize: "13px" }}
-            defaultValue={data.t || "Leave a tip"}
-          />
+          <Input variant="tipText" onChange={props.onTipTextChange} defaultValue={tipText} />
         )}
       </Box>
-      <Box sx={{ flex: "1 1 auto", mx: 3, px: 2 }}></Box>
+      <Box sx={{ flex: "1 1 auto", px: 1 }}></Box>
       <Box sx={{ mr: 2, textAlign: "right", alignItems: "center", justifyContent: "flex-end" }}>
         <Badge sx={{ px: 2, py: 1 }} variant="invisible">
           <Button

@@ -10,17 +10,21 @@ const emoji = require("remark-emoji");
 import rehypeSanitize from "rehype-sanitize";
 const smartypants = require("@silvenon/remark-smartypants");
 
+const DEBOUNCE_MS = 700;
+
 export default (props) => {
   const defaultVal = ":wave: **hi**";
   const signedIn = props.signedIn;
   let initialMd = null;
   let remoteVal = null;
+  let initialTipText = null;
   if (props.metadata && props.metadata[props.id]) {
     remoteVal = props.metadata[props.id];
     try {
       remoteVal = JSON.parse(remoteVal);
     } catch (e) {}
     initialMd = remoteVal.md;
+    initialTipText = remoteVal.tt;
   }
   let showEditor = signedIn;
   let hidden = false;
@@ -33,12 +37,17 @@ export default (props) => {
   const [editing, setEditing] = useState(false);
   const [md, setMd] = useState(initialMd);
   const [val, setVal] = useState(remoteVal);
-  const [tipText, setTipText] = useState(remoteVal);
-  const [debouncedMd] = useDebounce(md, 700);
+  const [tipText, setTipText] = useState(initialTipText);
+  const [debouncedMd] = useDebounce(md, DEBOUNCE_MS);
+  const [debouncedTipText] = useDebounce(tipText, DEBOUNCE_MS);
 
   useEffect(() => {
     updateMetadata({ md: debouncedMd });
   }, [debouncedMd]);
+
+  useEffect(() => {
+    updateMetadata({ tt: debouncedTipText });
+  }, [debouncedTipText]);
 
   const updateMetadata = async function (value) {
     try {
@@ -149,10 +158,10 @@ export default (props) => {
       </LiveProvider>
       {val && val.tj && (
         <TipJar
-          data={val.tj}
+          data={val}
           editing={editing}
-          onTipMessageChange={(e) => {
-            console.log(e.target.value);
+          onTipTextChange={(e) => {
+            setTipText(e.target.value);
           }}
         />
       )}

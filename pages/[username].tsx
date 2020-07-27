@@ -41,6 +41,7 @@ const UserPage = (props) => {
       if (removedId) {
         metadata[removedId] = null;
       }
+      console.log("METADATA", JSON.stringify(metadata, null, 2));
       const params = {
         username: props.username,
         metadata: metadata,
@@ -77,6 +78,7 @@ const UserPage = (props) => {
 
   const removeItem = (index: number) => {
     const result = remove(items, index);
+    console.log("result", JSON.stringify(result, null, 2));
     setItems(result.items);
     updateOrder(result.items, result.removedId);
   };

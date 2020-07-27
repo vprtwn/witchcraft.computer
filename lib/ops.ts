@@ -111,26 +111,37 @@ const updateCustomerMetadata = async (
     } else {
       const remoteCustomer = getResponse.data as Stripe.Customer;
       const remoteMetadata = remoteCustomer.metadata;
+      // WARNING: THIS CODE PATH IS DANGEROUS/NEEDS UNIT TESTS
       // perform a deep Object.assign (and parse flattened JSON)
       const mergedMetadata = {};
       Object.keys(remoteMetadata).forEach((k) => {
         const value = metadata[k];
-        if (value) {
-          let remoteValue = remoteMetadata[k];
+        let remoteValue = remoteMetadata[k];
+        // order should overwrite remote value
+        if (k === "order") {
+          mergedMetadata[k] = value;
+        }
+        // otherwise, merge (note: arrays may be buggy)
+        else {
+          let parsedValue = null;
           try {
-            remoteValue = JSON.parse(remoteValue);
+            parsedValue = JSON.parse(remoteValue);
           } catch (e) {
             console.error(e);
           }
-          const newValue = remoteValue;
-          const mergedValue = Object.assign(newValue, value);
-          mergedMetadata[k] = mergedValue;
-        } else {
-          mergedMetadata[k] = remoteMetadata[k];
+          if (parsedValue) {
+            const newValue = parsedValue;
+            const mergedValue = Object.assign(newValue, value);
+            mergedMetadata[k] = mergedValue;
+          } else {
+            mergedMetadata[k] = remoteValue;
+          }
         }
       });
       Object.keys(metadata).forEach((k) => {
-        if (!mergedMetadata[k]) {
+        if (metadata[k] === null) {
+          mergedMetadata[k] = null;
+        } else if (!mergedMetadata[k]) {
           mergedMetadata[k] = metadata[k];
         }
       });
@@ -139,7 +150,9 @@ const updateCustomerMetadata = async (
         if (typeof value === "string") {
           mergedMetadata[k] = value;
         } else {
-          mergedMetadata[k] = JSON.stringify(value);
+          if (value) {
+            mergedMetadata[k] = JSON.stringify(value);
+          }
         }
       });
 

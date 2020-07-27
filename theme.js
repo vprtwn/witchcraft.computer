@@ -143,14 +143,14 @@ export default {
       fontWeight: "bold",
     },
     tipText: {
-      borderColor: "outline",
+      mx: 0,
+      border: "1px solid",
       fontSize: "13px",
       fontFamily: "Recursive",
       py: 1,
-      px: 0,
+      px: 2,
       "&:focus": {
-        borderColor: "primary",
-        boxShadow: (t) => `0 0 0 1px ${t.colors.primary}`,
+        border: "1px solid",
         outline: "none",
       },
     },
@@ -163,6 +163,13 @@ export default {
       fontFamily: "heading",
       lineHeight: "heading",
       fontWeight: "heading",
+    },
+    tipText: {
+      borderColor: "outline",
+      fontSize: "13px",
+      fontFamily: "Recursive",
+      py: 1,
+      px: 0,
     },
   },
   styles: {
