@@ -174,7 +174,7 @@ const updateCustomerMetadata = async (
     errored: errorResponse != null,
     data: errorResponse ? errorResponse : customerResponse,
   };
-  logCustomerOp("updateCustomerMetadata", response);
+  logCustomerOp(customerId ? "updateMetadataForCustomerId" : "updateMetadataForCustomer", response);
   return response;
 };
 

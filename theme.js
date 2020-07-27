@@ -22,13 +22,13 @@ export default {
   colors: {
     text: "#000",
     background: "#fff",
-    primary: "#000",
+    primary: "#e6fffa",
     outline: "#edf2f7",
     modes: {
       light: {
         text: "#000",
         background: "#fff",
-        primary: "#000",
+        primary: "#e6fffa",
         outline: "#edf2f7",
       },
       darkNectarine: {
@@ -75,12 +75,12 @@ export default {
     },
     tip: {
       px: 2,
-      py: 1,
-      color: "bg",
+      py: 0,
+      color: "text",
       border: "solid",
       borderWidth: 1,
-      bg: "primary",
-      fontSize: 13,
+      bg: "transparent",
+      fontSize: "12px",
       fontFamily: "Recursive",
       cursor: "pointer",
     },
@@ -125,6 +125,10 @@ export default {
       fontSize: 10,
       fontFamily: "Recursive",
     },
+    invisible: {
+      color: "transparent",
+      bg: "transparent",
+    },
   },
   images: {
     avatar: {
@@ -138,33 +142,17 @@ export default {
       fontSize: 1,
       fontWeight: "bold",
     },
-    input: {
-      borderColor: "gray",
+    tipText: {
+      borderColor: "outline",
+      fontSize: "13px",
+      fontFamily: "Recursive",
+      py: 1,
+      px: 0,
       "&:focus": {
         borderColor: "primary",
-        boxShadow: (t) => `0 0 0 2px ${t.colors.primary}`,
+        boxShadow: (t) => `0 0 0 1px ${t.colors.primary}`,
         outline: "none",
       },
-    },
-    select: {
-      borderColor: "gray",
-      fontFamily: "body",
-      "&:focus": {
-        borderColor: "primary",
-        boxShadow: (t) => `0 0 0 2px ${t.colors.primary}`,
-        outline: "none",
-      },
-    },
-    textarea: {
-      borderColor: "gray",
-      "&:focus": {
-        borderColor: "primary",
-        boxShadow: (t) => `0 0 0 2px ${t.colors.primary}`,
-        outline: "none",
-      },
-    },
-    slider: {
-      bg: "muted",
     },
   },
   text: {

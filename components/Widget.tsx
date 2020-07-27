@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, Box, IconButton, Button, Flex, Text } from "theme-ui";
 import { LiveProvider, LiveEditor, LiveError, LivePreview, withLive } from "react-live";
 import fetchJson from "../lib/fetchJson";
+import TipJar from "./TipJar";
 import { useDebounce } from "use-debounce";
 import MDX from "@mdx-js/runtime";
 import { theme } from "../lib/editorTheme";
@@ -32,6 +33,7 @@ export default (props) => {
   const [editing, setEditing] = useState(false);
   const [md, setMd] = useState(initialMd);
   const [val, setVal] = useState(remoteVal);
+  const [tipText, setTipText] = useState(remoteVal);
   const [debouncedMd] = useDebounce(md, 700);
 
   useEffect(() => {
@@ -145,34 +147,14 @@ export default (props) => {
         )}
         {showEditor && editing && <LiveError />}
       </LiveProvider>
-      {val.tj && (
-        <Flex sx={{ bg: "primary", borderRadius: 4 }}>
-          <Box sx={{}}>
-            <Text sx={{ ml: 2, color: "primary" }}>Give me a tip</Text>
-          </Box>
-          <Box sx={{ flexGrow: 1 }}>
-            <Button
-              variant="tip"
-              sx={{ left: 0 }}
-              onClick={() => {
-                console.log("tip 1");
-              }}
-            >
-              $1
-            </Button>
-          </Box>
-          <Box sx={{ flexGrow: 1 }}>
-            <Button
-              variant="tip"
-              sx={{ left: 0 }}
-              onClick={() => {
-                console.log("tip 2");
-              }}
-            >
-              $2
-            </Button>
-          </Box>
-        </Flex>
+      {val && val.tj && (
+        <TipJar
+          data={val.tj}
+          editing={editing}
+          onTipMessageChange={(e) => {
+            console.log(e.target.value);
+          }}
+        />
       )}
       {showEditor && !props.hideToolbar && (
         <Flex sx={{ bg: "outline", borderRadius: 4 }}>
@@ -203,7 +185,7 @@ export default (props) => {
               }}
               variant="tinywide"
             >
-              {val.tj ? "Remove tipjar" : "Add a tipjar"}
+              {val && val.tj ? "Remove tipjar" : "Add a tipjar"}
             </Button>
           </Box>
           <Box sx={{ visibility: props.hideUp ? "hidden" : "visible" }} hidden={editing}>

@@ -41,7 +41,7 @@ export default (props) => {
       {signedIn && (
         <Flex>
           <Flex sx={{ flex: "1 1 auto", alignItems: "center" }}>
-            {props.username && <Box sx={{ px: 3, fontFamily: "Inter" }}>{props.username}</Box>}
+            {props.username && <Box sx={{ px: 3 }}>{props.username}</Box>}
             {!props.username && (
               <Box sx={{ px: 3 }}>
                 <Box sx={{ px: 3, fontWeight: "bold" }}>

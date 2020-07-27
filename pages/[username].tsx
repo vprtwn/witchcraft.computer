@@ -98,7 +98,7 @@ const UserPage = (props) => {
           {(provided, snapshot) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {items.map((item, index) => (
-                <Draggable key={item.i.toString()} draggableId={item.i.toString()} index={index}>
+                <Draggable key={item.i} draggableId={item.i} index={index}>
                   {(provided, snapshot) => (
                     <div
                       ref={provided.innerRef}
