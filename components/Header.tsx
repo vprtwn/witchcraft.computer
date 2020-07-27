@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { Flex, Box, Container, IconButton, Button, Text, Image } from "theme-ui";
+import { Flex, Box, Container, IconButton, Button, Text, Image, Link } from "theme-ui";
 import { signIn, signOut, useSession } from "next-auth/client";
 
 // The approach used in this component shows how to built a sign in and sign out
@@ -10,11 +9,13 @@ export default (props) => {
   const signedIn = session && session.user.username;
 
   return (
-    <Container sx={{ mt: 1, border: "2px solid", borderColor: "primary", borderRadius: 4 }}>
+    <Container sx={{ mt: 1, border: "2px solid", borderColor: "outline", borderRadius: 4 }}>
       {!signedIn && (
         <Flex>
           <Flex sx={{ flex: "1 1 auto", alignItems: "center" }}>
-            <Box sx={{ px: 2, fontFamily: "Inter" }}>{props.username}</Box>
+            <Box sx={{ px: 3, fontWeight: "bold" }}>
+              <Link href="/">flexjar</Link>
+            </Box>
           </Flex>
           <Box sx={{ bg: "outline", borderRadius: 4, py: 2, px: 3 }}>
             <Button onClick={() => signIn("twitter")} variant="small" sx={{}}>
@@ -40,7 +41,14 @@ export default (props) => {
       {signedIn && (
         <Flex>
           <Flex sx={{ flex: "1 1 auto", alignItems: "center" }}>
-            <Box sx={{ px: 2, fontFamily: "Inter" }}>{props.username}</Box>
+            {props.username && <Box sx={{ px: 3, fontFamily: "Inter" }}>{props.username}</Box>}
+            {!props.username && (
+              <Box sx={{ px: 3 }}>
+                <Box sx={{ px: 3, fontWeight: "bold" }}>
+                  <Link href="/">flexjar</Link>
+                </Box>
+              </Box>
+            )}
           </Flex>
           <Box sx={{ bg: "outline", borderRadius: 4, py: 2, px: 3 }}>
             <Text sx={{ fontSize: "12px" }}>Signed in as</Text>

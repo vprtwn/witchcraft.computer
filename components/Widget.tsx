@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, Box, IconButton, Button, Flex } from "theme-ui";
+import { Card, Box, IconButton, Button, Flex, Text } from "theme-ui";
 import { LiveProvider, LiveEditor, LiveError, LivePreview, withLive } from "react-live";
 import fetchJson from "../lib/fetchJson";
 import { useDebounce } from "use-debounce";
@@ -12,41 +12,66 @@ const smartypants = require("@silvenon/remark-smartypants");
 export default (props) => {
   const defaultVal = ":wave: **hi**";
   const signedIn = props.signedIn;
-  const indexString = props.index.toString();
-  let initialVal = props.metadata ? props.metadata[indexString] : null;
+  let initialMd = null;
+  let remoteVal = null;
+  if (props.metadata && props.metadata[props.id]) {
+    remoteVal = props.metadata[props.id];
+    try {
+      remoteVal = JSON.parse(remoteVal);
+    } catch (e) {}
+    initialMd = remoteVal.md;
+  }
   let showEditor = signedIn;
   let hidden = false;
-  if (!signedIn && !initialVal) {
+  if (!signedIn && !initialMd) {
     hidden = true;
   }
-  if (signedIn && !initialVal) {
-    initialVal = defaultVal;
+  if (signedIn && !initialMd) {
+    initialMd = defaultVal;
   }
   const [editing, setEditing] = useState(false);
-  const [val, setVal] = useState(initialVal);
-  const [dbVal] = useDebounce(val, 700);
+  const [md, setMd] = useState(initialMd);
+  const [val, setVal] = useState(remoteVal);
+  const [debouncedMd] = useDebounce(md, 700);
 
   useEffect(() => {
-    const update = async function () {
+    updateMetadata({ md: debouncedMd });
+  }, [debouncedMd]);
+
+  const updateMetadata = async function (value) {
+    try {
+      const metadata = {};
+      metadata[props.id] = value;
+      const params = {
+        username: props.username,
+        metadata: metadata,
+        customerId: props.customerId,
+      };
+      const newMetadata = await fetchJson(`/api/update_metadata`, {
+        method: "POST",
+        body: JSON.stringify(params),
+      });
+      let newVal = newMetadata[props.id];
       try {
-        const metadata = {};
-        metadata[indexString] = dbVal;
-        const params = {
-          username: props.username,
-          metadata: metadata,
-          customerId: props.customerId,
-        };
-        await fetchJson(`/api/update_metadata`, {
-          method: "POST",
-          body: JSON.stringify(params),
-        });
-        console.log("updated metadata", JSON.stringify(metadata));
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    update();
-  }, [dbVal]);
+        newVal = JSON.parse(newVal);
+      } catch (e) {}
+      setVal(newVal);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const toggleTipjar = async function () {
+    console.log("val", val);
+    const currentTipjar = val["tj"];
+    let newTipjar = currentTipjar;
+    if (!currentTipjar || currentTipjar === undefined) {
+      newTipjar = {};
+    } else {
+      newTipjar = null;
+    }
+    await updateMetadata({ tj: newTipjar });
+  };
 
   const components = {
     h1: (props) => <h1 style={{ lineHeight: 1 }} {...props} />,
@@ -94,7 +119,7 @@ export default (props) => {
           rehypeSanitize,
           components,
         }}
-        code={val}
+        code={md}
       >
         <Box sx={{ position: "relative" }}>
           <LivePreview
@@ -114,12 +139,41 @@ export default (props) => {
               fontFamily: "Recursive",
             }}
             onChange={(e) => {
-              setVal(e);
+              setMd(e);
             }}
           />
         )}
         {showEditor && editing && <LiveError />}
       </LiveProvider>
+      {val.tj && (
+        <Flex sx={{ bg: "primary", borderRadius: 4 }}>
+          <Box sx={{}}>
+            <Text sx={{ ml: 2, color: "primary" }}>Give me a tip</Text>
+          </Box>
+          <Box sx={{ flexGrow: 1 }}>
+            <Button
+              variant="tip"
+              sx={{ left: 0 }}
+              onClick={() => {
+                console.log("tip 1");
+              }}
+            >
+              $1
+            </Button>
+          </Box>
+          <Box sx={{ flexGrow: 1 }}>
+            <Button
+              variant="tip"
+              sx={{ left: 0 }}
+              onClick={() => {
+                console.log("tip 2");
+              }}
+            >
+              $2
+            </Button>
+          </Box>
+        </Flex>
+      )}
       {showEditor && !props.hideToolbar && (
         <Flex sx={{ bg: "outline", borderRadius: 4 }}>
           <Box sx={{ ml: 2, flexGrow: 1 }}>
@@ -140,6 +194,17 @@ export default (props) => {
             >
               ⬇️
             </IconButton>
+          </Box>
+          <Box sx={{ flexGrow: 1 }} hidden={!editing}>
+            <Button
+              sx={{ left: 0 }}
+              onClick={() => {
+                toggleTipjar();
+              }}
+              variant="tinywide"
+            >
+              {val.tj ? "Remove tipjar" : "Add a tipjar"}
+            </Button>
           </Box>
           <Box sx={{ visibility: props.hideUp ? "hidden" : "visible" }} hidden={editing}>
             <IconButton sx={{ right: 0, mr: 2 }} onClick={props.onUp}>

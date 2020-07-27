@@ -2,103 +2,54 @@ import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
 import Header from "../components/Header";
 import Widget from "../components/Widget";
+import Settings from "../components/Settings";
 import fetchJson from "../lib/fetchJson";
+import { getOrCreateCustomer } from "../lib/ops";
+import { reorder, remove, add, unprefixUsername, generateCardId } from "../lib/utils";
+import { Direction, OrderItem } from "../lib/typedefs";
 import { useRouter } from "next/router";
-import { Box, IconButton, Flex, Card, Label, Radio, Select, useColorMode } from "theme-ui";
+import { Box, IconButton, Flex } from "theme-ui";
 import { GetServerSideProps } from "next";
 import { useSession, getSession } from "next-auth/client";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-enum Direction {
-  Up,
-  Down,
-}
-
-const reorder = (list, startIndex, endIndex): { i: number }[] => {
-  const result = Array.from(list) as { i: number }[];
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-  return result;
-};
-
-const remove = (list, index): { i: number }[] => {
-  const result = Array.from(list) as { i: number }[];
-  const [removed] = result.splice(index, 1);
-  return result;
-};
-
-const add = (list, newObject): { i: number }[] => {
-  const result = Array.from(list) as { i: number }[];
-  result.push(newObject);
-  return result;
-};
-
-const IndexPage = (props) => {
+const UserPage = (props) => {
   const {
-    query: { username },
+    query: { v },
   } = useRouter();
 
   let remoteOrder = null;
-  const defaultStyle = { colorMode: "light" };
-  let remoteStyle = defaultStyle;
   if (props.metadata) {
     if (props.metadata["order"]) {
-      remoteOrder = JSON.parse(props.metadata["order"]);
-    }
-    if (props.metadata["style"]) {
-      remoteStyle = JSON.parse(props.metadata["style"]);
+      try {
+        remoteOrder = JSON.parse(props.metadata["order"]);
+      } catch (e) {}
     }
   }
   // order of items
-  const initialId = Math.floor(Math.random() * 10000);
-  const defaultOrder = [{ i: initialId }];
+  const defaultOrder = [];
   const initialOrder = remoteOrder || defaultOrder;
   const [items, setItems] = useState(initialOrder);
-  // style of items
-  const [style, setStyle] = useState(remoteStyle);
 
   const [previewing, setPreviewing] = useState(false);
-  const [styling, setStyling] = useState(false);
-  const [colorMode, setColorMode] = useColorMode();
+  const [viewingSettings, setViewingSettings] = useState(v === "settings");
 
-  const updateOrder = async function (newOrder: { i: number }[], removed: number | null = null) {
+  const updateOrder = async function (newOrder: OrderItem[], removedId: string | null = null) {
     try {
       const metadata = {};
       metadata["order"] = JSON.stringify(newOrder);
-      if (removed) {
-        metadata[removed.toString()] = null;
+      if (removedId) {
+        metadata[removedId] = null;
       }
       const params = {
-        username: username,
+        username: props.username,
         metadata: metadata,
         customerId: props.customerId,
       };
-      console.log("params", JSON.stringify(params, null, 2));
       await fetchJson(`/api/update_metadata`, {
         method: "POST",
         body: JSON.stringify(params),
       });
-      console.log("updated metadata", JSON.stringify(metadata));
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const updateStyle = async function (style) {
-    try {
-      const metadata = {};
-      metadata["style"] = JSON.stringify(style);
-      const params = {
-        username: username,
-        metadata: metadata,
-        customerId: props.customerId,
-      };
-      console.log("params", JSON.stringify(params, null, 2));
-      const result = await fetchJson(`/api/update_metadata`, {
-        method: "POST",
-        body: JSON.stringify(params),
-      });
-      console.log("updated metadata", JSON.stringify(result));
     } catch (e) {
       console.error(e);
     }
@@ -125,14 +76,14 @@ const IndexPage = (props) => {
   };
 
   const removeItem = (index: number) => {
-    const newItems = remove(items, index);
-    setItems(newItems);
-    updateOrder(newItems, index);
+    const result = remove(items, index);
+    setItems(result.items);
+    updateOrder(result.items, result.removedId);
   };
 
   const addItem = () => {
-    const newI = Math.floor(Math.random() * 10000);
-    const newObject = { i: newI };
+    const newId = generateCardId();
+    const newObject = { i: newId };
     const newItems = add(items, newObject);
     setItems(newItems);
     updateOrder(newItems);
@@ -140,7 +91,7 @@ const IndexPage = (props) => {
 
   return (
     <Layout>
-      <Header username={username} />
+      <Header username={props.username} />
       <Box py={2} />
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable" isDragDisabled={props.signedIn}>
@@ -155,12 +106,12 @@ const IndexPage = (props) => {
                       {...provided.dragHandleProps}
                     >
                       <Widget
+                        id={item.i}
                         hideUp={index === 0}
                         hideDown={index === items.length - 1}
                         hideToolbar={previewing}
                         metadata={props.metadata}
-                        index={item.i}
-                        username={username}
+                        username={props.username}
                         customerId={props.customerId}
                         signedIn={props.signedIn}
                         onDown={() => {
@@ -187,7 +138,7 @@ const IndexPage = (props) => {
         <Flex sx={{ py: 3, justifyContent: "space-between" }}>
           <Box>
             <IconButton
-              sx={{ fontSize: "24px" }}
+              sx={{ fontSize: "24px", visibility: items.length > 0 ? "visible" : "hidden" }}
               onClick={() => {
                 setPreviewing(!previewing);
               }}
@@ -199,10 +150,10 @@ const IndexPage = (props) => {
             <IconButton
               sx={{ fontSize: "24px" }}
               onClick={() => {
-                setStyling(!styling);
+                setViewingSettings(!viewingSettings);
               }}
             >
-              {styling ? "🖌" : "🎨"}
+              {viewingSettings ? "🔧" : "⚙️"}
             </IconButton>
           </Box>
           <Box>
@@ -219,29 +170,12 @@ const IndexPage = (props) => {
           </Box>
         </Flex>
       )}
-      {styling && (
-        <Card
-          sx={{
-            p: 3,
-            my: 2,
-            border: "1px solid",
-            borderColor: "primary",
-          }}
-        >
-          <Select
-            defaultValue={style.colorMode}
-            onChange={(e) => {
-              const newMode = e.target.value;
-              const newStyle = { colorMode: newMode };
-              setStyle(newStyle);
-              updateStyle(newStyle);
-              setColorMode(newMode);
-            }}
-          >
-            <option>light</option>
-            <option>darkNectarine</option>
-          </Select>
-        </Card>
+      {viewingSettings && props.signedIn && (
+        <Settings
+          username={props.username}
+          metadata={props.metadata}
+          customerId={props.customerId}
+        />
       )}
       <Box py={4} my={4} />
     </Layout>
@@ -250,7 +184,7 @@ const IndexPage = (props) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const query = ctx.query;
-  const username = query.username as string;
+  const username = unprefixUsername(query.username as string);
   const session = await getSession(ctx);
   let error = null;
   let customer = null;
@@ -261,33 +195,31 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     sessionUsername = session.user.username;
     signedIn = sessionUsername === username;
   }
-  // get customer metadata
-  const email = `${username}@0l0.at`;
-  try {
-    const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-    const response = await stripe.customers.list({ email: email });
-    if (response.data.length > 0) {
-      customer = response.data[0];
-      console.log("retrieved existing customer");
-    }
-    if (!customer && signedIn) {
-      customer = await stripe.customers.create({
-        email: email,
-      });
-      console.log("created customer");
-    }
-  } catch (e) {
-    error = e.message;
-    console.error("error fetching customer: " + e);
+  const response = await getOrCreateCustomer(session, signedIn);
+  if (response.errored) {
+    return {
+      props: {
+        username: username,
+        error: response.data,
+      },
+    };
+  }
+  customer = response.data;
+  let metadata = null;
+  let customerId = null;
+  if (customer) {
+    metadata = customer.metadata || null;
+    customerId = customer.id || null;
   }
   return {
     props: {
-      metadata: customer ? customer.metadata : null,
-      customerId: customer ? customer.id : null,
+      username: username,
+      metadata: metadata,
+      customerId: customerId,
       signedIn: signedIn,
       error: error,
     },
   };
 };
 
-export default IndexPage;
+export default UserPage;

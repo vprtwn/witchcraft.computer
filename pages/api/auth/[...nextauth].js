@@ -1,6 +1,9 @@
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
 
+const DEBUG = false;
+const LOGSYM = "🔑";
+
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
 const options = {
@@ -55,18 +58,27 @@ const options = {
   // https://next-auth.js.org/configuration/callbacks
   callbacks: {
     session: async (session, token) => {
-      console.log("next-auth.cb.session.token", JSON.stringify(token, null, 2));
+      DEBUG &&
+        console.log(`${LOGSYM}  next-auth.callback.session.token`, JSON.stringify(token, null, 2));
       if (token.username) {
         session.user.username = token.username;
+        session.user.email = token.email;
       }
-      console.log("next-auth.cb.session.session", JSON.stringify(session, null, 2));
+      DEBUG &&
+        console.log(
+          `${LOGSYM} next-auth.callback.session.session`,
+          JSON.stringify(session, null, 2)
+        );
+
       return Promise.resolve(session);
     },
     jwt: async (token, profile) => {
       if (profile) {
+        DEBUG && console.log("👤 profile", JSON.stringify(profile, null, 2));
         token.username = profile.screen_name;
+        token.email = profile.email;
       }
-      console.log("next-auth.cb.jwt.token", JSON.stringify(token, null, 2));
+      // DEBUG && console.log(`${LOGSYM} next-auth.callback.jwt.token`, JSON.stringify(token, null, 2));
       return Promise.resolve(token);
     },
   },

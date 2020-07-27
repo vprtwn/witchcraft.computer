@@ -1,46 +1,38 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/client";
+import { validateSession } from "../../lib/validateSession";
 import jwt from "next-auth/jwt";
 const secret = process.env.SECRET;
+import { updateMetadataForCustomerId } from "../../lib/ops";
+import { ErrorResponse } from "../../lib/typedefs";
+import Stripe from "stripe";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
     return;
   }
+  // TODO: use JWT – more secure?
+  // const token = await jwt.getToken({ req, secret });
   const session = await getSession({ req });
-  if (session && !session.user.username) {
-    const code = "error_session_missing_username";
-    console.error(code);
-    return res.status(401).json({
-      message: "no username in session",
-      code: code,
-    });
-  }
   const params = JSON.parse(req.body);
   const username = params.username;
   const customerId = params.customerId;
-  if (session && session.user.username !== username) {
-    const code = "error_session_username_mismatch";
-    console.error(code);
-    return res.status(401).json({
-      message: "username doesn't match session username",
-      code: code,
-    });
+
+  const authError = validateSession(session, username);
+  if (authError) {
+    return res.status(authError.httpStatus).json(authError);
   }
-  console.log("params", JSON.stringify(params, null, 2));
-  // TODO: JWT example below. Using JWT would be more secure?
-  // const token = await jwt.getToken({ req, secret });
+  if (!customerId) {
+    res.status(400).json({});
+    return;
+  }
+
   const metadata = params.metadata;
-  try {
-    const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-    await stripe.customers.update(customerId, { metadata: metadata });
-  } catch (e) {
-    const code = "error_customer_update_error";
-    console.error(code);
-    return res.status(500).json({
-      message: e.message,
-      code: code,
-    });
+  const response = await updateMetadataForCustomerId(session, customerId, metadata);
+  if (response.errored) {
+    const error = response.data as ErrorResponse;
+    return res.status(error.httpStatus).json(error);
   }
-  res.json({});
+  const customer = response.data as Stripe.Customer;
+  res.json(customer.metadata);
 };

@@ -20,26 +20,10 @@ export default {
   },
   useLocalStorage: false,
   colors: {
-    lightgreen: "#c6f6d5",
-    verylightgreen: "#f0fff4",
-    lightindigo: "#c3dafe",
-    lightteal: "#b2f5ea",
-    lightpink: "#fed7e2",
-    verylightyellow: "#fffff0",
-    lightyellow: "#fefcbf",
-    lightpurple: "#e9d8fd",
-    verylightpurple: "#faf5ff",
-    lightorange: "#fbd38d",
-    verylightorange: "#FFF6E1",
-    lightblue: "#bee3f8",
-    lightgray: "#edf2f7",
-    verylightgray: "#f7fafc",
-    verylightteal: "#e6fffa",
-    mediumgray: "#cbd5e0",
-    darkgray: "#a0aec0",
-    lightblue: "#bee3f8",
-    mediumyellow: "#f6e05e",
-    mediumorange: "#fbd38d",
+    text: "#000",
+    background: "#fff",
+    primary: "#000",
+    outline: "#edf2f7",
     modes: {
       light: {
         text: "#000",
@@ -78,6 +62,28 @@ export default {
       fontFamily: "Recursive",
       cursor: "pointer",
     },
+    tinywide: {
+      px: 2,
+      py: 0,
+      color: "text",
+      border: "solid",
+      borderWidth: 1,
+      bg: "transparent",
+      fontSize: 10,
+      fontFamily: "Recursive",
+      cursor: "pointer",
+    },
+    tip: {
+      px: 2,
+      py: 1,
+      color: "bg",
+      border: "solid",
+      borderWidth: 1,
+      bg: "primary",
+      fontSize: 13,
+      fontFamily: "Recursive",
+      cursor: "pointer",
+    },
     icon: {
       px: 2,
       py: 1,
@@ -109,13 +115,15 @@ export default {
       color: "background",
       bg: "primary",
     },
-    large: {
-      color: "background",
-      bg: "primary",
-      fontSize: 13,
-      my: 2,
-      py: 1,
+    tiny: {
       px: 2,
+      py: 0,
+      color: "text",
+      border: "solid",
+      borderWidth: 1,
+      bg: "transparent",
+      fontSize: 10,
+      fontFamily: "Recursive",
     },
   },
   images: {
@@ -125,7 +133,44 @@ export default {
       borderRadius: 99999,
     },
   },
+  forms: {
+    label: {
+      fontSize: 1,
+      fontWeight: "bold",
+    },
+    input: {
+      borderColor: "gray",
+      "&:focus": {
+        borderColor: "primary",
+        boxShadow: (t) => `0 0 0 2px ${t.colors.primary}`,
+        outline: "none",
+      },
+    },
+    select: {
+      borderColor: "gray",
+      fontFamily: "body",
+      "&:focus": {
+        borderColor: "primary",
+        boxShadow: (t) => `0 0 0 2px ${t.colors.primary}`,
+        outline: "none",
+      },
+    },
+    textarea: {
+      borderColor: "gray",
+      "&:focus": {
+        borderColor: "primary",
+        boxShadow: (t) => `0 0 0 2px ${t.colors.primary}`,
+        outline: "none",
+      },
+    },
+    slider: {
+      bg: "muted",
+    },
+  },
   text: {
+    small: {
+      fontSize: "12px",
+    },
     heading: {
       fontFamily: "heading",
       lineHeight: "heading",
