@@ -1,12 +1,16 @@
 import Stripe from "stripe";
 
-export interface OrderItem {
-  i: string;
+export type Metadata = Record<string, Record<string, string> | string | null>;
+export type MetadataValue = Record<string, string>[] | Record<string, string> | string | null;
+
+export interface CardMeta {
+  // tipjar visible ("1" or null)
+  tj_v: string | null;
+  // tipjar text
+  tj_t: string | null;
 }
 
-export interface StyleData {
-  colorMode: string;
-}
+export type OrderItem = Record<string, string>;
 
 export interface StripeAccountData {
   id: string;

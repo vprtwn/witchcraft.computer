@@ -6,7 +6,8 @@ import Settings from "../components/Settings";
 import fetchJson from "../lib/fetchJson";
 import { getOrCreateCustomer } from "../lib/ops";
 import { reorder, remove, add, unprefixUsername, generateCardId } from "../lib/utils";
-import { Direction, OrderItem } from "../lib/typedefs";
+import { postMetadataUpdate } from "../lib/metadataUtils";
+import { Direction } from "../lib/typedefs";
 import { useRouter } from "next/router";
 import { Box, IconButton, Flex } from "theme-ui";
 import { GetServerSideProps } from "next";
@@ -29,28 +30,29 @@ const UserPage = (props) => {
   // order of items
   const defaultOrder = [];
   const initialOrder = remoteOrder || defaultOrder;
-  const [items, setItems] = useState(initialOrder);
+  const [order, setOrder] = useState(initialOrder);
 
   const [previewing, setPreviewing] = useState(false);
   const [viewingSettings, setViewingSettings] = useState(v === "settings");
 
-  const updateOrder = async function (newOrder: OrderItem[], removedId: string | null = null) {
+  const updateOrder = async function (
+    newOrder: Record<string, string>[],
+    removedId: string | null = null
+  ) {
     try {
       const metadata = {};
       metadata["order"] = JSON.stringify(newOrder);
       if (removedId) {
         metadata[removedId] = null;
       }
-      console.log("METADATA", JSON.stringify(metadata, null, 2));
-      const params = {
-        username: props.username,
-        metadata: metadata,
-        customerId: props.customerId,
-      };
-      await fetchJson(`/api/update_metadata`, {
-        method: "POST",
-        body: JSON.stringify(params),
-      });
+      const newVal = await postMetadataUpdate(
+        "order",
+        newOrder,
+        props.customerId,
+        props.username,
+        removedId
+      );
+      setOrder(newVal);
     } catch (e) {
       console.error(e);
     }
@@ -61,8 +63,8 @@ const UserPage = (props) => {
     if (!result.destination) {
       return;
     }
-    const newItems = reorder(items, result.source.index, result.destination.index);
-    setItems(newItems);
+    const newItems = reorder(order, result.source.index, result.destination.index);
+    setOrder(newItems);
     updateOrder(newItems);
   };
 
@@ -71,23 +73,23 @@ const UserPage = (props) => {
       return;
     }
     const newIndex = direction === Direction.Up ? index - 1 : index + 1;
-    const newItems = reorder(items, index, newIndex);
-    setItems(newItems);
+    const newItems = reorder(order, index, newIndex);
+    setOrder(newItems);
     updateOrder(newItems);
   };
 
   const removeItem = (index: number) => {
-    const result = remove(items, index);
+    const result = remove(order, index);
     console.log("result", JSON.stringify(result, null, 2));
-    setItems(result.items);
+    setOrder(result.items);
     updateOrder(result.items, result.removedId);
   };
 
   const addItem = () => {
     const newId = generateCardId();
     const newObject = { i: newId };
-    const newItems = add(items, newObject);
-    setItems(newItems);
+    const newItems = add(order, newObject);
+    setOrder(newItems);
     updateOrder(newItems);
   };
 
@@ -99,37 +101,38 @@ const UserPage = (props) => {
         <Droppable droppableId="droppable" isDragDisabled={props.signedIn}>
           {(provided, snapshot) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
-              {items.map((item, index) => (
-                <Draggable key={item.i} draggableId={item.i} index={index}>
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                    >
-                      <Widget
-                        id={item.i}
-                        hideUp={index === 0}
-                        hideDown={index === items.length - 1}
-                        hideToolbar={previewing}
-                        metadata={props.metadata}
-                        username={props.username}
-                        customerId={props.customerId}
-                        signedIn={props.signedIn}
-                        onDown={() => {
-                          moveItem(index, Direction.Down);
-                        }}
-                        onUp={() => {
-                          moveItem(index, Direction.Up);
-                        }}
-                        onDelete={() => {
-                          removeItem(index);
-                        }}
-                      />
-                    </div>
-                  )}
-                </Draggable>
-              ))}
+              {order &&
+                order.map((item, index) => (
+                  <Draggable key={item.i} draggableId={item.i} index={index}>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <Widget
+                          id={item.i}
+                          hideUp={index === 0}
+                          hideDown={index === order.length - 1}
+                          hideToolbar={previewing}
+                          metadata={props.metadata}
+                          username={props.username}
+                          customerId={props.customerId}
+                          signedIn={props.signedIn}
+                          onDown={() => {
+                            moveItem(index, Direction.Down);
+                          }}
+                          onUp={() => {
+                            moveItem(index, Direction.Up);
+                          }}
+                          onDelete={() => {
+                            removeItem(index);
+                          }}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
               {provided.placeholder}
             </div>
           )}
@@ -140,7 +143,10 @@ const UserPage = (props) => {
         <Flex sx={{ py: 3, justifyContent: "space-between" }}>
           <Box>
             <IconButton
-              sx={{ fontSize: "24px", visibility: items.length > 0 ? "visible" : "hidden" }}
+              sx={{
+                fontSize: "24px",
+                visibility: order && order.length > 0 ? "visible" : "hidden",
+              }}
               onClick={() => {
                 setPreviewing(!previewing);
               }}

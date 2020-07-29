@@ -1,6 +1,7 @@
 import Stripe from "stripe";
-import { ErrorResponse, CustomerOpResponse, StripeAccountData } from "./typedefs";
+import { ErrorResponse, CustomerOpResponse, StripeAccountData, Metadata } from "./typedefs";
 import { generateCustomerEmailForTwitter } from "./utils";
+import { syncMetadata } from "./metadataUtils";
 const LOGSYM = "🔄";
 
 const logCustomerOp = (name: string, response: CustomerOpResponse) => {
@@ -69,7 +70,7 @@ export const getOrCreateCustomer = async (
 export const updateMetadataForCustomerId = async (
   session: any,
   customerId: string | null,
-  metadata: any
+  metadata: Stripe.Metadata
 ): Promise<CustomerOpResponse> => {
   return updateCustomerMetadata(session, customerId, null, metadata);
 };
@@ -77,7 +78,7 @@ export const updateMetadataForCustomerId = async (
 export const updateMetadataForCustomer = async (
   session: any,
   customer: Stripe.Customer | null,
-  metadata: any
+  metadata: Stripe.Metadata
 ): Promise<CustomerOpResponse> => {
   return updateCustomerMetadata(session, null, customer, metadata);
 };
@@ -87,7 +88,7 @@ const updateCustomerMetadata = async (
   session: any,
   customerId: string | null,
   customer: Stripe.Customer | null,
-  metadata: any
+  metadata: Stripe.Metadata
 ): Promise<CustomerOpResponse> => {
   let errorResponse: ErrorResponse | null = null;
   let customerResponse: Stripe.Customer | null = null;
@@ -104,67 +105,25 @@ const updateCustomerMetadata = async (
       errorMessage: "Invalid session",
       errorCode: "invalid_session",
     };
-  } else {
+  }
+  const username = session.user.username;
+  const expectedEmail = generateCustomerEmailForTwitter(username);
+  if (customer && expectedEmail !== customer.email) {
+    errorResponse = {
+      httpStatus: 401,
+      errorMessage: `Permission denied: ${expectedEmail} !== ${customer.email}`,
+      errorCode: "session_user_not_custome_",
+    };
+  }
+  if (!errorResponse) {
     const getResponse = await getOrCreateCustomer(session, false);
     if (getResponse.errored) {
       errorResponse = getResponse.data as ErrorResponse;
     } else {
       const remoteCustomer = getResponse.data as Stripe.Customer;
       const remoteMetadata = remoteCustomer.metadata;
-      // WARNING: THIS CODE PATH IS DANGEROUS/NEEDS UNIT TESTS
-      // perform a deep Object.assign (and parse flattened JSON)
-      const mergedMetadata = {};
-      Object.keys(remoteMetadata).forEach((k) => {
-        const value = metadata[k];
-        let remoteValue = remoteMetadata[k];
-        // order should overwrite remote value
-        if (k === "order") {
-          mergedMetadata[k] = value;
-        }
-        // otherwise, merge (note: arrays may be buggy)
-        else {
-          let parsedValue = null;
-          try {
-            parsedValue = JSON.parse(remoteValue);
-          } catch (e) {
-            console.error(e);
-          }
-          if (parsedValue) {
-            const newValue = parsedValue;
-            const mergedValue = Object.assign(newValue, value);
-            mergedMetadata[k] = mergedValue;
-          } else {
-            mergedMetadata[k] = remoteValue;
-          }
-        }
-      });
-      Object.keys(metadata).forEach((k) => {
-        if (metadata[k] === null) {
-          mergedMetadata[k] = null;
-        } else if (!mergedMetadata[k]) {
-          mergedMetadata[k] = metadata[k];
-        }
-      });
-      Object.keys(mergedMetadata).forEach((k) => {
-        const value = mergedMetadata[k];
-        if (typeof value === "string") {
-          mergedMetadata[k] = value;
-        } else {
-          if (value) {
-            mergedMetadata[k] = JSON.stringify(value);
-          }
-        }
-      });
+      const mergedMetadata = syncMetadata(metadata, remoteMetadata);
 
-      const username = session.user.username;
-      const expectedEmail = generateCustomerEmailForTwitter(username);
-      if (customer && expectedEmail !== customer.email) {
-        errorResponse = {
-          httpStatus: 401,
-          errorMessage: `Permission denied: ${expectedEmail} !== ${customer.email}`,
-          errorCode: "session_user_customer_mismatch",
-        };
-      }
       try {
         const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
         let cid = customerId;

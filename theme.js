@@ -43,7 +43,7 @@ export default {
     small: {
       px: 2,
       py: 1,
-      color: "primary",
+      color: "text",
       border: "solid",
       borderWidth: 1,
       bg: "transparent",

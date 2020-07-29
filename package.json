@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "jest --watch"
   },
   "author": "Iain Collins <me@iaincollins.com>",
   "license": "ISC",
@@ -37,8 +38,11 @@
     "use-debounce": "^3.4.3"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.10.4",
     "@types/node": "^14.0.24",
     "@types/react": "^16.9.43",
+    "babel-jest": "^26.1.0",
+    "jest": "^26.1.0",
     "typescript": "^3.9.7"
   }
 }

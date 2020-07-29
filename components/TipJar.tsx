@@ -1,12 +1,10 @@
 import { Flex, Box, Input, Badge, Button, Text } from "theme-ui";
 import { signIn, signOut, useSession } from "next-auth/client";
+import { CardMeta } from "../lib/typedefs";
 
-// The approach used in this component shows how to built a sign in and sign out
-// component that works on pages which support both client and server side
-// rendering, and avoids any flash incorrect content on initial page load.
 export default (props) => {
-  const data = props.data;
-  const tipText = data.tt || "Leave a tip";
+  const data = props.data as CardMeta;
+  const tipText = data.tj_t || "Leave a tip";
   return (
     <Flex sx={{ bg: "primary", alignItems: "center", py: 1 }}>
       <Box sx={{ ml: 3 }}>

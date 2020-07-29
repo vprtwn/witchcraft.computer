@@ -1,87 +1,90 @@
 import React, { useState, useEffect } from "react";
 import { Card, Box, IconButton, Button, Flex, Text } from "theme-ui";
 import { LiveProvider, LiveEditor, LiveError, LivePreview, withLive } from "react-live";
-import fetchJson from "../lib/fetchJson";
 import TipJar from "./TipJar";
 import { useDebounce } from "use-debounce";
 import MDX from "@mdx-js/runtime";
 import { theme } from "../lib/editorTheme";
+import {
+  readString,
+  readCardMeta,
+  postMetadataUpdate,
+  toMetadataValue,
+  toCardMeta,
+} from "../lib/metadataUtils";
+import { CardMeta, MetadataValue } from "../lib/typedefs";
 const emoji = require("remark-emoji");
 import rehypeSanitize from "rehype-sanitize";
 const smartypants = require("@silvenon/remark-smartypants");
+import Stripe from "stripe";
 
 const DEBOUNCE_MS = 700;
 
 export default (props) => {
-  const defaultVal = ":wave: **hi**";
+  const defaultMd = ":wave: **hi**";
   const signedIn = props.signedIn;
-  let initialMd = null;
-  let remoteVal = null;
-  let initialTipText = null;
-  if (props.metadata && props.metadata[props.id]) {
-    remoteVal = props.metadata[props.id];
-    try {
-      remoteVal = JSON.parse(remoteVal);
-    } catch (e) {}
-    initialMd = remoteVal.md;
-    initialTipText = remoteVal.tt;
-  }
+  let initialMd = readString(props.metadata, props.id, props.signedIn ? defaultMd : null);
+  const remoteCardMeta = readCardMeta(props.metadata, `${props.id}.meta`);
+  const initialTipText = remoteCardMeta ? remoteCardMeta.tj_t : null;
   let showEditor = signedIn;
   let hidden = false;
   if (!signedIn && !initialMd) {
     hidden = true;
   }
-  if (signedIn && !initialMd) {
-    initialMd = defaultVal;
-  }
   const [editing, setEditing] = useState(false);
-  const [md, setMd] = useState(initialMd);
-  const [val, setVal] = useState(remoteVal);
+  const [cardVal, setCardVal] = useState(initialMd);
+  const [cardMeta, setCardMeta] = useState<CardMeta>(remoteCardMeta);
   const [tipText, setTipText] = useState(initialTipText);
-  const [debouncedMd] = useDebounce(md, DEBOUNCE_MS);
+  const [debouncedCardVal] = useDebounce(cardVal, DEBOUNCE_MS);
   const [debouncedTipText] = useDebounce(tipText, DEBOUNCE_MS);
 
   useEffect(() => {
-    updateMetadata({ md: debouncedMd });
-  }, [debouncedMd]);
+    updateCardValue(debouncedCardVal);
+  }, [debouncedCardVal]);
 
   useEffect(() => {
-    updateMetadata({ tt: debouncedTipText });
+    updateCardMeta({ tj_t: debouncedTipText, tj_v: cardMeta ? cardMeta.tj_v : null });
   }, [debouncedTipText]);
 
-  const updateMetadata = async function (value) {
+  const updateCardValue = async function (value) {
     try {
-      const metadata = {};
-      metadata[props.id] = value;
-      const params = {
-        username: props.username,
-        metadata: metadata,
-        customerId: props.customerId,
-      };
-      const newMetadata = await fetchJson(`/api/update_metadata`, {
-        method: "POST",
-        body: JSON.stringify(params),
-      });
-      let newVal = newMetadata[props.id];
-      try {
-        newVal = JSON.parse(newVal);
-      } catch (e) {}
-      setVal(newVal);
+      const newVal = (await postMetadataUpdate(
+        props.id,
+        value,
+        props.customerId,
+        props.username
+      )) as Stripe.Metadata;
+      // if (typeof newVal === "string") {
+      // setCardVal(newVal);
+      // }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const updateCardMeta = async function (value: CardMeta) {
+    try {
+      const newVal = await postMetadataUpdate(
+        `${props.id}.meta`,
+        toMetadataValue(value),
+        props.customerId,
+        props.username
+      );
+      // setCardMeta(toCardMeta(newVal));
     } catch (e) {
       console.error(e);
     }
   };
 
   const toggleTipjar = async function () {
-    console.log("val", val);
-    const currentTipjar = val["tj"];
-    let newTipjar = currentTipjar;
-    if (!currentTipjar || currentTipjar === undefined) {
-      newTipjar = {};
+    const visible = cardMeta ? cardMeta.tj_v : null;
+    let newVisible = visible;
+    if (!visible || visible === undefined) {
+      newVisible = "1";
     } else {
-      newTipjar = null;
+      newVisible = null;
     }
-    await updateMetadata({ tj: newTipjar });
+    await updateCardMeta({ tj_v: newVisible, tj_t: cardMeta ? cardMeta.tj_t : null });
   };
 
   const components = {
@@ -130,7 +133,7 @@ export default (props) => {
           rehypeSanitize,
           components,
         }}
-        code={md}
+        code={cardVal}
       >
         <Box sx={{ position: "relative" }}>
           <LivePreview
@@ -150,15 +153,15 @@ export default (props) => {
               fontFamily: "Recursive",
             }}
             onChange={(e) => {
-              setMd(e);
+              setCardVal(e);
             }}
           />
         )}
         {showEditor && editing && <LiveError />}
       </LiveProvider>
-      {val && val.tj && (
+      {cardMeta && cardMeta.tj_v && (
         <TipJar
-          data={val}
+          data={cardMeta}
           editing={editing}
           onTipTextChange={(e) => {
             setTipText(e.target.value);
@@ -194,7 +197,7 @@ export default (props) => {
               }}
               variant="tinywide"
             >
-              {val && val.tj ? "Remove tipjar" : "Add a tipjar"}
+              {cardMeta && cardMeta.tj_v ? "Remove tipjar" : "Add a tipjar"}
             </Button>
           </Box>
           <Box sx={{ visibility: props.hideUp ? "hidden" : "visible" }} hidden={editing}>
