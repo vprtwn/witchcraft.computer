@@ -18,6 +18,10 @@ test("syncMetadata", () => {
   local = { foo: [1, 2] };
   remote = { foo: "[1, 2, 3]" };
   expect(syncMetadata(local, remote)).toStrictEqual({ foo: "[1,2]" });
+  // overwrite remote strings with local
+  local = { foo: "bar" };
+  remote = { foo: "baz" };
+  expect(syncMetadata(local, remote)).toStrictEqual({ foo: "bar" });
   // merge remote dicts with local
   local = { meta: { tj_v: null } };
   remote = { meta: '{"tj_t":"bar"}' };

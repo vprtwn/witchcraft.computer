@@ -64,13 +64,14 @@ export default (props) => {
 
   const updateCardMeta = async function (value: CardMeta) {
     try {
+      setCardMeta(value);
       const newVal = await postMetadataUpdate(
         `${props.id}.meta`,
         toMetadataValue(value),
         props.customerId,
         props.username
       );
-      // setCardMeta(toCardMeta(newVal));
+      setCardMeta(toCardMeta(newVal));
     } catch (e) {
       console.error(e);
     }

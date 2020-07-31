@@ -12,7 +12,11 @@ export const postMetadataUpdate = async (
   const update = {};
   update[key] = value;
   if (removedKey) {
+    // TODO: refactor this & test
     update[removedKey] = null;
+    if (removedKey.startsWith("c.")) {
+      update[`${removedKey}.meta`] = null;
+    }
   }
   const params = {
     username: username,
@@ -41,27 +45,24 @@ export const syncMetadata = (
   remote: Stripe.Metadata
 ): Metadata => {
   const merged: Record<string, MetadataValue> = {};
-  // console.log("local", JSON.stringify(local, null, 2));
-  // console.log("remote", JSON.stringify(remote, null, 2));
   Object.keys(remote).forEach((k) => {
     const value = local[k];
     let remoteValue = remote[k];
     merged[k] = remoteValue;
-    let parsedValue = null;
-    try {
-      parsedValue = JSON.parse(remoteValue);
-    } catch (e) {}
-    if (parsedValue) {
-      // overwrite remote arrays with local
-      if (Array.isArray(value)) {
-        merged[k] = value;
-      }
-      // overwrite remote strings with local
-      else if (typeof value === "string") {
-        merged[k] = value;
-      }
+    // overwrite remote arrays with local
+    if (Array.isArray(value)) {
+      merged[k] = value;
+    }
+    // overwrite remote strings with local
+    else if (typeof value === "string") {
+      merged[k] = value;
+    } else {
       // merge remote dicts with local
-      else {
+      let parsedValue = null;
+      try {
+        parsedValue = JSON.parse(remoteValue);
+      } catch (e) {}
+      if (parsedValue) {
         const newValue = parsedValue;
         const mergedValue = Object.assign(newValue, value);
         merged[k] = mergedValue;
@@ -76,6 +77,7 @@ export const syncMetadata = (
       merged[k] = local[k];
     }
   });
+  // console.log("merged", JSON.stringify(merged, null, 2));
   const flattened: Stripe.Metadata = {};
   // flatten
   Object.keys(merged).forEach((k) => {
@@ -90,7 +92,6 @@ export const syncMetadata = (
       }
     }
   });
-  // console.log("merged", JSON.stringify(merged, null, 2));
   return flattened;
 };
 
