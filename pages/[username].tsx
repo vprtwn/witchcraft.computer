@@ -6,7 +6,7 @@ import Settings from "../components/Settings";
 import fetchJson from "../lib/fetchJson";
 import { getOrCreateCustomer } from "../lib/ops";
 import { reorder, remove, add, unprefixUsername, generateCardId } from "../lib/utils";
-import { postMetadataUpdate } from "../lib/metadataUtils";
+import { postMetadataUpdate, readOrder } from "../lib/metadataUtils";
 import { Direction } from "../lib/typedefs";
 import { useRouter } from "next/router";
 import { Box, IconButton, Flex } from "theme-ui";
@@ -19,15 +19,8 @@ const UserPage = (props) => {
     query: { v },
   } = useRouter();
 
-  let remoteOrder = null;
-  if (props.metadata) {
-    if (props.metadata["order"]) {
-      try {
-        remoteOrder = JSON.parse(props.metadata["order"]);
-      } catch (e) {}
-    }
-  }
   // order of items
+  let remoteOrder = readOrder(props.metadata);
   const defaultOrder = [];
   const initialOrder = remoteOrder || defaultOrder;
   const [order, setOrder] = useState(initialOrder);

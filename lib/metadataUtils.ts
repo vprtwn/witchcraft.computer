@@ -1,4 +1,4 @@
-import { Metadata, MetadataValue, CardMeta } from "./typedefs";
+import { Metadata, MetadataValue, CardMeta, OrderItem } from "./typedefs";
 import Stripe from "stripe";
 import fetchJson from "../lib/fetchJson";
 
@@ -32,38 +32,43 @@ export const postMetadataUpdate = async (
 
 /**
  * Performs a deep merge, then flattens the result to [string:string].
+ * Local values are unserialized: {foo: [1, 2]}
+ * Remote values are expected to be serialized strings: {foo: "[1,2]"}
  * Runs before POSTing a metadata update.
  */
-export const syncMetadata = (local: Stripe.Metadata, remote: Stripe.Metadata): Metadata => {
-  const merged: Stripe.Metadata = {};
+export const syncMetadata = (
+  local: Record<string, MetadataValue>,
+  remote: Stripe.Metadata
+): Metadata => {
+  const merged: Record<string, MetadataValue> = {};
   // console.log("local", JSON.stringify(local, null, 2));
   // console.log("remote", JSON.stringify(remote, null, 2));
   Object.keys(remote).forEach((k) => {
     const value = local[k];
     let remoteValue = remote[k];
-    let parsedValue = remoteValue;
+    merged[k] = remoteValue;
+    let parsedValue = null;
     try {
       parsedValue = JSON.parse(remoteValue);
     } catch (e) {}
     if (parsedValue) {
-      // array -> overwrite
+      // overwrite remote arrays with local
       if (Array.isArray(value)) {
         merged[k] = value;
       }
-      // string -> overwrite
+      // overwrite remote strings with local
       else if (typeof value === "string") {
         merged[k] = value;
       }
-      // dict -> merge
+      // merge remote dicts with local
       else {
         const newValue = parsedValue;
         const mergedValue = Object.assign(newValue, value);
         merged[k] = mergedValue;
       }
-    } else {
-      merged[k] = remoteValue;
     }
   });
+  // clear remote keys if explicitly set to null
   Object.keys(local).forEach((k) => {
     if (local[k] === null) {
       merged[k] = null;
@@ -71,18 +76,22 @@ export const syncMetadata = (local: Stripe.Metadata, remote: Stripe.Metadata): M
       merged[k] = local[k];
     }
   });
+  const flattened: Stripe.Metadata = {};
   // flatten
   Object.keys(merged).forEach((k) => {
     const value = merged[k];
     if (typeof value === "string") {
-      merged[k] = value;
+      flattened[k] = value;
     } else {
       if (value) {
-        merged[k] = JSON.stringify(value);
+        flattened[k] = JSON.stringify(value);
+      } else {
+        flattened[k] = null;
       }
     }
   });
-  return merged;
+  // console.log("merged", JSON.stringify(merged, null, 2));
+  return flattened;
 };
 
 export const readString = (
@@ -107,6 +116,60 @@ export const readString = (
   return value;
 };
 
+export const readCardMeta = (metadata: Stripe.Metadata | null, id: string): CardMeta | null => {
+  const dict = readDict(metadata, id);
+  if (!dict) {
+    return null;
+  }
+  return toCardMeta(dict);
+};
+
+export const readDict = (
+  metadata: Stripe.Metadata | null,
+  key: string,
+  defaultVal: Record<string, string> | null = null
+): Record<string, string> | null => {
+  if (!metadata) {
+    return null;
+  }
+  let value = null;
+  if (metadata[key]) {
+    value = metadata[key];
+  }
+  let parsedValue = null;
+  try {
+    parsedValue = JSON.parse(value);
+  } catch (e) {}
+  if (!parsedValue || Array.isArray(parsedValue)) {
+    return defaultVal;
+  }
+  return parsedValue;
+};
+
+export const readOrder = (
+  metadata: Stripe.Metadata | null,
+  defaultVal: Array<OrderItem> | null = null
+): Array<OrderItem> | null => {
+  if (!metadata) {
+    return null;
+  }
+  let value = null;
+  if (metadata["order"]) {
+    value = metadata["order"];
+  } else {
+    return defaultVal;
+  }
+  let parsedValue: Array<OrderItem> = defaultVal;
+  try {
+    parsedValue = JSON.parse(value);
+  } catch (e) {}
+  if (Array.isArray(parsedValue)) {
+    return parsedValue as Array<OrderItem>;
+  }
+  return defaultVal;
+};
+
+// type transformations
 export const toCardMeta = (metadataValue: MetadataValue): CardMeta => {
   const cardMeta: CardMeta = {
     tj_t: null,
@@ -135,34 +198,4 @@ export const toMetadataValue = (cardMeta: CardMeta): MetadataValue => {
     tj_v: cardMeta.tj_v,
   };
   return value;
-};
-
-export const readCardMeta = (metadata: Stripe.Metadata | null, id: string): CardMeta | null => {
-  const dict = readDict(metadata, id);
-  if (!dict) {
-    return null;
-  }
-  return toCardMeta(dict);
-};
-
-export const readDict = (
-  metadata: Stripe.Metadata | null,
-  key: string,
-  defaultVal: Record<string, string> | null = null
-): Record<string, string> | null => {
-  if (!metadata) {
-    return null;
-  }
-  let value = null;
-  if (metadata[key]) {
-    value = metadata[key];
-  }
-  let parsedValue: any = defaultVal;
-  try {
-    parsedValue = JSON.parse(value);
-  } catch (e) {}
-  if (Array.isArray(parsedValue)) {
-    return defaultVal;
-  }
-  return parsedValue;
 };
