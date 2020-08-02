@@ -54,9 +54,9 @@ export default (props) => {
         props.customerId,
         props.username
       )) as Stripe.Metadata;
-      // if (typeof newVal === "string") {
-      // setCardVal(newVal);
-      // }
+      if (newVal && typeof newVal === "string") {
+        setCardVal(newVal);
+      }
     } catch (e) {
       console.error(e);
     }
