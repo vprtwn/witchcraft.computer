@@ -45,7 +45,7 @@ const UserPage = (props) => {
         props.username,
         removedId
       );
-      setOrder(newVal);
+      // setOrder(newVal);
     } catch (e) {
       console.error(e);
     }
