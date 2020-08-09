@@ -1,7 +1,33 @@
 import { Provider } from "next-auth/client";
-import { ThemeProvider, Styled, Container } from "theme-ui";
+import { ThemeProvider, Styled, Flex, Box, Link } from "theme-ui";
 import Head from "next/head";
 import theme from "../theme";
+import { MDXProvider } from "@mdx-js/react";
+import Layout from "../components/Layout";
+
+const components = {
+  wrapper: (props) => (
+    <div>
+      <Layout>
+        <Flex pt={1}>
+          <Box>
+            <Link href="/" variant="nav">
+              Flexjar
+            </Link>
+          </Box>
+          <Box flex="1 1 auto" mx={1} />
+          <Box>
+            <Link href="/policies" variant="nav">
+              / policies
+            </Link>
+          </Box>
+        </Flex>
+        <main {...props} />
+      </Layout>
+      <Box mb={5} />
+    </div>
+  ),
+};
 
 // @NOTE: using next-auth v3 beta
 export default ({ Component, pageProps }) => {
@@ -26,7 +52,9 @@ export default ({ Component, pageProps }) => {
               rel="stylesheet"
             />
           </Head>
-          <Component {...pageProps} />
+          <MDXProvider components={components}>
+            <Component {...pageProps} />
+          </MDXProvider>
         </Styled.root>
       </ThemeProvider>
     </Provider>

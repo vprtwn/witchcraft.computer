@@ -21,7 +21,7 @@ export default {
   useLocalStorage: false,
   colors: {
     text: "#000",
-    background: "#fff",
+    background: "#ffffff",
     primary: "#e6fffa",
     outline: "#edf2f7",
     modes: {
@@ -139,8 +139,9 @@ export default {
   },
   forms: {
     label: {
-      fontSize: 1,
-      fontWeight: "bold",
+      fontSize: "10px",
+      fontFamily: "Recursive",
+      color: "text",
     },
     tipText: {
       mx: 0,
@@ -149,6 +150,7 @@ export default {
       fontFamily: "Recursive",
       py: 1,
       px: 2,
+      ml: 1,
       "&:focus": {
         border: "1px solid",
         outline: "none",

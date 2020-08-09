@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Card, Box, IconButton, Button, Flex, Text } from "theme-ui";
-import { LiveProvider, LiveEditor, LiveError, LivePreview, withLive } from "react-live";
+import { Card, Box, IconButton, Button, Flex, Label } from "theme-ui";
 import TipJar from "./TipJar";
 import { useDebounce } from "use-debounce";
-import MDX from "@mdx-js/runtime";
-import { theme } from "../lib/editorTheme";
 import {
   readString,
   readCardMeta,
@@ -13,10 +10,8 @@ import {
   toCardMeta,
 } from "../lib/metadataUtils";
 import { CardMeta, MetadataValue } from "../lib/typedefs";
-const emoji = require("remark-emoji");
-import rehypeSanitize from "rehype-sanitize";
-const smartypants = require("@silvenon/remark-smartypants");
 import Stripe from "stripe";
+import Editor from "rich-markdown-editor";
 
 const DEBOUNCE_MS = 700;
 
@@ -105,61 +100,25 @@ export default (props) => {
   return (
     <Card
       sx={{
-        p: 0,
-        my: 2,
+        py: 0,
+        px: 0,
+        my: 4,
         border: editing ? "2px solid" : "1px solid",
-        borderColor: editing ? "primary" : "outline",
+        borderColor: "text",
         borderRadius: 4,
+        bg: "background",
       }}
       hidden={hidden}
     >
-      <LiveProvider
-        theme={theme}
-        language={"markdown"}
-        transformCode={(c) => {
-          const newCode = `
-<MDX 
-  remarkPlugins={[emoji, smartypants]} 
-  rehypePlugins={[[rehypeSanitize]]} 
-  components={components}>
-  {\`${c}\`}
-</MDX>;
-`;
-          return newCode;
-        }}
-        scope={{
-          MDX,
-          emoji,
-          smartypants,
-          rehypeSanitize,
-          components,
-        }}
-        code={cardVal}
-      >
-        <Box sx={{ position: "relative" }}>
-          <LivePreview
-            style={{
-              fontFamily: "Inter",
-              paddingTop: "0.5em",
-              paddingBottom: "1em",
-              marginLeft: "1em",
-              marginRight: "1em",
-            }}
-          />
-        </Box>
-        {showEditor && editing && (
-          <LiveEditor
-            style={{
-              fontSize: "16px",
-              fontFamily: "Recursive",
-            }}
-            onChange={(e) => {
-              setCardVal(e);
-            }}
-          />
-        )}
-        {showEditor && editing && <LiveError />}
-      </LiveProvider>
+      <Box p={2}>
+        <Editor
+          defaultValue={cardVal}
+          readOnly={!editing}
+          onChange={(v) => {
+            setCardVal(v());
+          }}
+        />
+      </Box>
       {cardMeta && cardMeta.tj_v && (
         <TipJar
           data={cardMeta}
@@ -170,7 +129,7 @@ export default (props) => {
         />
       )}
       {showEditor && !props.hideToolbar && (
-        <Flex sx={{ bg: "outline", borderRadius: 4 }}>
+        <Flex sx={{ bg: "outline", borderRadius: 4, py: 2 }}>
           <Box sx={{ ml: 2, flexGrow: 1 }}>
             <IconButton
               variant="icon"
@@ -179,7 +138,55 @@ export default (props) => {
                 setEditing(!editing);
               }}
             >
-              {editing ? "👁" : "✏️"}
+              {editing ? (
+                <Box sx={{}}>
+                  <svg
+                    height="21"
+                    viewBox="0 0 21 21"
+                    width="21"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g
+                      fill="none"
+                      fill-rule="evenodd"
+                      stroke="#2a2e3b"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      transform="translate(3 3)"
+                    >
+                      <path d="m2 .5h11c1.1045695 0 2 .8954305 2 2v6.04882185c0 1.1045695-.8954305 1.99999995-2 1.99999995-.0025044 0-.0050088-.0000047-.0075132-.0000141l-10.99999997-.0413227c-1.10162878-.0041384-1.99248683-.89834933-1.99248683-1.99998589v-6.00749911c0-1.1045695.8954305-2 2-2z" />
+                      <path d="m2.464 12.5h10.036" />
+                      <path d="m4.5 14.5h6" />
+                    </g>
+                  </svg>
+                  <Label>View</Label>
+                </Box>
+              ) : (
+                <Box sx={{}}>
+                  <svg
+                    height="21"
+                    viewBox="0 0 21 21"
+                    width="21"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g
+                      fill="none"
+                      fill-rule="evenodd"
+                      stroke="#2a2e3b"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      transform="translate(2 2)"
+                    >
+                      <path
+                        d="m8.24920737-.79402796c1.17157287 0 2.12132033.94974747 2.12132033 2.12132034v13.43502882l-2.12132033 3.5355339-2.08147546-3.495689-.03442539-13.47488064c-.00298547-1.16857977.94191541-2.11832105 2.11049518-2.12130651.00180188-.00000461.00360378-.00000691.00540567-.00000691z"
+                        transform="matrix(.70710678 .70710678 -.70710678 .70710678 8.605553 -3.271644)"
+                      />
+                      <path d="m13.5 4.5 1 1" />
+                    </g>
+                  </svg>
+                  <Label>Edit</Label>
+                </Box>
+              )}
             </IconButton>
           </Box>
           <Box sx={{ flexGrow: 1 }} hidden={editing}>
@@ -187,33 +194,133 @@ export default (props) => {
               sx={{ left: 0, visibility: props.hideDown ? "hidden" : "visible" }}
               onClick={props.onDown}
             >
-              ⬇️
+              <Box>
+                <svg height="21" viewBox="0 0 21 21" width="21" xmlns="http://www.w3.org/2000/svg">
+                  <g
+                    fill="none"
+                    fill-rule="evenodd"
+                    stroke="#2a2e3b"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    transform="matrix(0 1 -1 0 20 2)"
+                  >
+                    <circle cx="8.5" cy="8.5" r="8" />
+                    <path
+                      d="m11.621 6.379v4.242h-4.242"
+                      transform="matrix(.70710678 .70710678 .70710678 -.70710678 -3.227683 7.792317)"
+                    />
+                    <path d="m8.5 4.5v8" transform="matrix(0 1 -1 0 17 0)" />
+                  </g>
+                </svg>
+              </Box>
             </IconButton>
           </Box>
           <Box sx={{ flexGrow: 1 }} hidden={!editing}>
-            <Button
+            <IconButton
               sx={{ left: 0 }}
               onClick={() => {
                 toggleTipjar();
               }}
-              variant="tinywide"
             >
-              {cardMeta && cardMeta.tj_v ? "Remove tipjar" : "Add a tipjar"}
-            </Button>
+              {cardMeta && cardMeta.tj_v ? (
+                <Box sx={{ border: "none" }}>
+                  <svg
+                    height="21"
+                    viewBox="0 0 21 21"
+                    width="21"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g
+                      fill="none"
+                      fill-rule="evenodd"
+                      stroke="#2a2e3b"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      transform="translate(1 3)"
+                    >
+                      <path d="m17.5 8.5v3c0 1.2994935-3.1340068 3-7 3-3.86599325 0-7-1.7005065-7-3 0-.4275221 0-1.2608554 0-2.5" />
+                      <path d="m3.79385803 9.25873308c.86480173 1.14823502 3.53999333 2.22489962 6.70614197 2.22489962 3.8659932 0 7-1.60524016 7-2.98595204 0-.77476061-.9867994-1.62391104-2.5360034-2.22001882" />
+                      <path d="m14.5 3.5v3c0 1.29949353-3.1340068 3-7 3-3.86599325 0-7-1.70050647-7-3 0-.64128315 0-2.35871685 0-3" />
+                      <path d="m7.5 6.48363266c3.8659932 0 7-1.60524012 7-2.985952 0-1.38071187-3.1340068-2.99768066-7-2.99768066-3.86599325 0-7 1.61696879-7 2.99768066 0 1.38071188 3.13400675 2.985952 7 2.985952z" />
+                    </g>
+                  </svg>
+                  <Label>Hide</Label>
+                </Box>
+              ) : (
+                <Box>
+                  <svg
+                    height="21"
+                    viewBox="0 0 21 21"
+                    width="21"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g
+                      fill="none"
+                      fill-rule="evenodd"
+                      stroke="#2a2e3b"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      transform="translate(1 3)"
+                    >
+                      <path d="m17.5 8.5v3c0 1.2994935-3.1340068 3-7 3-3.86599325 0-7-1.7005065-7-3 0-.4275221 0-1.2608554 0-2.5" />
+                      <path d="m3.79385803 9.25873308c.86480173 1.14823502 3.53999333 2.22489962 6.70614197 2.22489962 3.8659932 0 7-1.60524016 7-2.98595204 0-.77476061-.9867994-1.62391104-2.5360034-2.22001882" />
+                      <path d="m14.5 3.5v3c0 1.29949353-3.1340068 3-7 3-3.86599325 0-7-1.70050647-7-3 0-.64128315 0-2.35871685 0-3" />
+                      <path d="m7.5 6.48363266c3.8659932 0 7-1.60524012 7-2.985952 0-1.38071187-3.1340068-2.99768066-7-2.99768066-3.86599325 0-7 1.61696879-7 2.99768066 0 1.38071188 3.13400675 2.985952 7 2.985952z" />
+                    </g>
+                  </svg>
+                  <Label sx={{ whiteSpace: "nowrap" }}>+ Tips</Label>
+                </Box>
+              )}
+            </IconButton>
           </Box>
           <Box sx={{ visibility: props.hideUp ? "hidden" : "visible" }} hidden={editing}>
             <IconButton sx={{ right: 0, mr: 2 }} onClick={props.onUp}>
-              ⬆️
+              <Box>
+                <svg height="21" viewBox="0 0 21 21" width="21" xmlns="http://www.w3.org/2000/svg">
+                  <g
+                    fill="none"
+                    fill-rule="evenodd"
+                    stroke="#2a2e3b"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    transform="matrix(0 -1 1 0 2 19)"
+                  >
+                    <circle cx="8.5" cy="8.5" r="8" />
+                    <path
+                      d="m11.621 6.379v4.242h-4.242"
+                      transform="matrix(.70710678 .70710678 .70710678 -.70710678 -3.227683 7.792317)"
+                    />
+                    <path d="m8.5 4.5v8" transform="matrix(0 1 -1 0 17 0)" />
+                  </g>
+                </svg>
+              </Box>
             </IconButton>
           </Box>
           <Box hidden={!editing}>
             <IconButton
-              sx={{ right: 0, mr: 2 }}
+              sx={{ mr: 3 }}
               onClick={() => {
                 props.onDelete();
               }}
             >
-              🗑
+              <Box>
+                <svg height="21" viewBox="0 0 21 21" width="21" xmlns="http://www.w3.org/2000/svg">
+                  <g
+                    fill="none"
+                    fill-rule="evenodd"
+                    stroke="#2a2e3b"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    transform="translate(3 2)"
+                  >
+                    <path d="m2.5 2.5h10v12c0 1.1045695-.8954305 2-2 2h-6c-1.1045695 0-2-.8954305-2-2zm5-2c1.1045695 0 2 .8954305 2 2h-4c0-1.1045695.8954305-2 2-2z" />
+                    <path d="m.5 2.5h14" />
+                    <path d="m5.5 5.5v8" />
+                    <path d="m9.5 5.5v8" />
+                  </g>
+                </svg>
+                <Label>Delete</Label>
+              </Box>
             </IconButton>
           </Box>
         </Flex>
