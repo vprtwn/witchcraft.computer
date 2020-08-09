@@ -106,7 +106,7 @@ export default (props) => {
         border: editing ? "2px solid" : "1px solid",
         borderColor: "text",
         borderRadius: 4,
-        bg: "background",
+        bg: "white",
       }}
       hidden={hidden}
     >

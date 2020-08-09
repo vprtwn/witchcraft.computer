@@ -30,7 +30,7 @@ export default (props) => {
       sx={{
         p: 3,
         my: 2,
-        bg: "background",
+        bg: "white",
         border: "2px solid",
         borderColor: "text",
       }}

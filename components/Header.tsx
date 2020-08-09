@@ -19,8 +19,8 @@ export default (props) => {
           </Box>
         )}
         <Box sx={{ flex: "1 1 auto" }} />
-        <Text sx={{ fontSize: "10px" }}>made with</Text>
-        <Box sx={{ pl: 1, pr: 0, fontWeight: "bold" }}>
+        <Text sx={{ fontSize: "10px" }}>try</Text>
+        <Box sx={{ pl: 1, pr: 0, fontWeight: "bold", fontSize: "12px" }}>
           <Link href="/" variant="nav">
             <i>flexjar</i>
           </Link>

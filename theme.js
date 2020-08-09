@@ -21,7 +21,8 @@ export default {
   useLocalStorage: false,
   colors: {
     text: "#000",
-    background: "#ffffff",
+    white: "#fff",
+    background: "#f7fafc",
     primary: "#e6fffa",
     outline: "#edf2f7",
     modes: {
@@ -112,7 +113,7 @@ export default {
   },
   badges: {
     primary: {
-      color: "background",
+      color: "white",
       bg: "primary",
     },
     tiny: {
