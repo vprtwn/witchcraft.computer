@@ -9,18 +9,14 @@ export default (props) => {
         <Flex
           sx={{ bg: "transparent", borderRadius: 4, border: "1px solid", alignItems: "center" }}
         >
-          <Box sx={{ pl: 2, pr: 0, fontWeight: "bold", fontSize: "12px" }}>
-            <Link href="/" variant="nav">
-              <i>flexjar</i>
-            </Link>
-          </Box>
-          <Text sx={{ fontSize: "10px", ml: 2 }}>by</Text>
-          <Box sx={{ flex: "1 1 auto", fontSize: "9px", ml: 2, mr: 2 }}>
-            <Link href="https://mysterious.technology" variant="nav" sx={{ fontWeight: "normal" }}>
-              <Text>mysterious</Text>
-              <Text>.technology</Text>
-            </Link>
-          </Box>
+          <Flex sx={{ alignItems: "top" }}>
+            <Text sx={{ fontSize: "9px", ml: 2, mr: 1 }}>made with</Text>
+            <Box sx={{ pl: 0, pr: 4, fontWeight: "bold", fontSize: "12px" }}>
+              <Link href="/" variant="nav">
+                <i>flexjar</i>
+              </Link>
+            </Box>
+          </Flex>
           <Link href="/policies" variant="nav" sx={{ mx: 2, py: 1, fontSize: "10px" }}>
             Policies
           </Link>

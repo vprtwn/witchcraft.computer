@@ -14,17 +14,11 @@ export default (props) => {
         {props.username && (
           <Box sx={{ px: 0 }}>
             <Link href={`https://twitter.com/${props.username}`} variant="nav">
-              <Text sx={{ fontWeight: "normal" }}>{props.username}</Text>
+              <Text sx={{ fontWeight: "normal" }}>@{props.username}</Text>
             </Link>
           </Box>
         )}
         <Box sx={{ flex: "1 1 auto" }} />
-        <Text sx={{ fontSize: "10px" }}>made with</Text>
-        <Box sx={{ pl: 1, pr: 0, fontWeight: "bold", fontSize: "12px" }}>
-          <Link href="/" variant="nav">
-            <i>flexjar</i>
-          </Link>
-        </Box>
       </Flex>
     </Container>
   );

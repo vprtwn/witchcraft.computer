@@ -36,12 +36,13 @@ export default (props) => {
       }}
     >
       <Box pb={2}>
-        <Label>{stripeAccount ? "Tips enabled" : "Enable tips"}</Label>
+        <Label variant="settingslabel">{stripeAccount ? "Payments enabled" : "Add payments"}</Label>
         {!stripeAccount && (
           <Text variant="small">
-            To let people leave tips, connect your Stripe account.{" "}
+            To accept payments on Flexjar, connect your Stripe account.{" "}
             <Button
               variant="tinywide"
+              mr={2}
               onClick={() => {
                 window.location.assign(connectUrl);
               }}
@@ -65,21 +66,6 @@ export default (props) => {
           </Text>
         )}
       </Box>
-
-      <Label>Style</Label>
-      <Select
-        defaultValue={style.colorMode}
-        onChange={(e) => {
-          const newMode = e.target.value;
-          const newStyle = { colorMode: newMode };
-          setStyle(newStyle);
-          updateStyle(newStyle);
-          setColorMode(newMode);
-        }}
-      >
-        <option>light</option>
-        <option>darkNectarine</option>
-      </Select>
 
       <Box sx={{ bg: "transparent", borderRadius: 4, pt: 3, px: 3 }}>
         <Text sx={{ fontSize: "12px", textAlign: "center" }}>

@@ -3,6 +3,7 @@ import Layout from "../components/Layout";
 import Header from "../components/Header";
 import Widget from "../components/Widget";
 import Settings from "../components/Settings";
+import UserFooter from "../components/UserFooter";
 import { getOrCreateCustomer, getCustomer } from "../lib/ops";
 import { reorder, remove, add, unprefixUsername, generateCardId } from "../lib/utils";
 import { postMetadataUpdate, readOrder } from "../lib/metadataUtils";
@@ -24,7 +25,7 @@ const UserPage = (props) => {
   const initialOrder = remoteOrder || defaultOrder;
   const [order, setOrder] = useState(initialOrder);
 
-  const [previewing, setPreviewing] = useState(false);
+  const [previewing, setPreviewing] = useState(true);
   const [viewingSettings, setViewingSettings] = useState(v === "settings");
 
   const updateOrder = async function (
@@ -329,6 +330,7 @@ const UserPage = (props) => {
         />
       )}
       <Box py={4} my={4} />
+      <UserFooter />
     </Layout>
   );
 };
