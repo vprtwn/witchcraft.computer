@@ -141,6 +141,7 @@ export default (props) => {
               {editing ? (
                 <Box sx={{}}>
                   <svg
+                    display="block"
                     height="21"
                     viewBox="0 0 21 21"
                     width="21"
@@ -164,6 +165,7 @@ export default (props) => {
               ) : (
                 <Box sx={{}}>
                   <svg
+                    display="block"
                     height="21"
                     viewBox="0 0 21 21"
                     width="21"
@@ -195,7 +197,13 @@ export default (props) => {
               onClick={props.onDown}
             >
               <Box>
-                <svg height="21" viewBox="0 0 21 21" width="21" xmlns="http://www.w3.org/2000/svg">
+                <svg
+                  display="block"
+                  height="21"
+                  viewBox="0 0 21 21"
+                  width="21"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
                   <g
                     fill="none"
                     fill-rule="evenodd"
@@ -212,6 +220,7 @@ export default (props) => {
                     <path d="m8.5 4.5v8" transform="matrix(0 1 -1 0 17 0)" />
                   </g>
                 </svg>
+                <Label>Down</Label>
               </Box>
             </IconButton>
           </Box>
@@ -225,6 +234,7 @@ export default (props) => {
               {cardMeta && cardMeta.tj_v ? (
                 <Box sx={{ border: "none" }}>
                   <svg
+                    display="block"
                     height="21"
                     viewBox="0 0 21 21"
                     width="21"
@@ -247,8 +257,53 @@ export default (props) => {
                   <Label>Hide</Label>
                 </Box>
               ) : (
+                <Flex
+                  sx={{
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box>
+                    <svg
+                      display="block"
+                      height="21"
+                      viewBox="0 0 21 21"
+                      width="21"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <g
+                        fill="none"
+                        fill-rule="evenodd"
+                        stroke="#2a2e3b"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        transform="translate(1 3)"
+                      >
+                        <path d="m17.5 8.5v3c0 1.2994935-3.1340068 3-7 3-3.86599325 0-7-1.7005065-7-3 0-.4275221 0-1.2608554 0-2.5" />
+                        <path d="m3.79385803 9.25873308c.86480173 1.14823502 3.53999333 2.22489962 6.70614197 2.22489962 3.8659932 0 7-1.60524016 7-2.98595204 0-.77476061-.9867994-1.62391104-2.5360034-2.22001882" />
+                        <path d="m14.5 3.5v3c0 1.29949353-3.1340068 3-7 3-3.86599325 0-7-1.70050647-7-3 0-.64128315 0-2.35871685 0-3" />
+                        <path d="m7.5 6.48363266c3.8659932 0 7-1.60524012 7-2.985952 0-1.38071187-3.1340068-2.99768066-7-2.99768066-3.86599325 0-7 1.61696879-7 2.99768066 0 1.38071188 3.13400675 2.985952 7 2.985952z" />
+                      </g>
+                    </svg>
+                  </Box>
+                  <Box>
+                    <Label sx={{ whiteSpace: "nowrap" }}>+ Payments</Label>
+                  </Box>
+                </Flex>
+              )}
+            </IconButton>
+          </Box>
+          <Box sx={{ visibility: props.hideUp ? "hidden" : "visible" }} hidden={editing}>
+            <IconButton sx={{ right: 0, mr: 2 }} onClick={props.onUp}>
+              <Flex
+                sx={{
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
                 <Box>
                   <svg
+                    display="block"
                     height="21"
                     viewBox="0 0 21 21"
                     width="21"
@@ -260,40 +315,21 @@ export default (props) => {
                       stroke="#2a2e3b"
                       stroke-linecap="round"
                       stroke-linejoin="round"
-                      transform="translate(1 3)"
+                      transform="matrix(0 -1 1 0 2 19)"
                     >
-                      <path d="m17.5 8.5v3c0 1.2994935-3.1340068 3-7 3-3.86599325 0-7-1.7005065-7-3 0-.4275221 0-1.2608554 0-2.5" />
-                      <path d="m3.79385803 9.25873308c.86480173 1.14823502 3.53999333 2.22489962 6.70614197 2.22489962 3.8659932 0 7-1.60524016 7-2.98595204 0-.77476061-.9867994-1.62391104-2.5360034-2.22001882" />
-                      <path d="m14.5 3.5v3c0 1.29949353-3.1340068 3-7 3-3.86599325 0-7-1.70050647-7-3 0-.64128315 0-2.35871685 0-3" />
-                      <path d="m7.5 6.48363266c3.8659932 0 7-1.60524012 7-2.985952 0-1.38071187-3.1340068-2.99768066-7-2.99768066-3.86599325 0-7 1.61696879-7 2.99768066 0 1.38071188 3.13400675 2.985952 7 2.985952z" />
+                      <circle cx="8.5" cy="8.5" r="8" />
+                      <path
+                        d="m11.621 6.379v4.242h-4.242"
+                        transform="matrix(.70710678 .70710678 .70710678 -.70710678 -3.227683 7.792317)"
+                      />
+                      <path d="m8.5 4.5v8" transform="matrix(0 1 -1 0 17 0)" />
                     </g>
                   </svg>
-                  <Label sx={{ whiteSpace: "nowrap" }}>+ Tips</Label>
                 </Box>
-              )}
-            </IconButton>
-          </Box>
-          <Box sx={{ visibility: props.hideUp ? "hidden" : "visible" }} hidden={editing}>
-            <IconButton sx={{ right: 0, mr: 2 }} onClick={props.onUp}>
-              <Box>
-                <svg height="21" viewBox="0 0 21 21" width="21" xmlns="http://www.w3.org/2000/svg">
-                  <g
-                    fill="none"
-                    fill-rule="evenodd"
-                    stroke="#2a2e3b"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    transform="matrix(0 -1 1 0 2 19)"
-                  >
-                    <circle cx="8.5" cy="8.5" r="8" />
-                    <path
-                      d="m11.621 6.379v4.242h-4.242"
-                      transform="matrix(.70710678 .70710678 .70710678 -.70710678 -3.227683 7.792317)"
-                    />
-                    <path d="m8.5 4.5v8" transform="matrix(0 1 -1 0 17 0)" />
-                  </g>
-                </svg>
-              </Box>
+                <Box>
+                  <Label>Up</Label>
+                </Box>
+              </Flex>
             </IconButton>
           </Box>
           <Box hidden={!editing}>
@@ -303,8 +339,19 @@ export default (props) => {
                 props.onDelete();
               }}
             >
-              <Box>
-                <svg height="21" viewBox="0 0 21 21" width="21" xmlns="http://www.w3.org/2000/svg">
+              <Flex
+                sx={{
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <svg
+                  display="block"
+                  height="21"
+                  viewBox="0 0 21 21"
+                  width="21"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
                   <g
                     fill="none"
                     fill-rule="evenodd"
@@ -319,8 +366,10 @@ export default (props) => {
                     <path d="m9.5 5.5v8" />
                   </g>
                 </svg>
-                <Label>Delete</Label>
-              </Box>
+                <Box>
+                  <Label>Delete</Label>
+                </Box>
+              </Flex>
             </IconButton>
           </Box>
         </Flex>

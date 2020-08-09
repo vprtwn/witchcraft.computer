@@ -3,8 +3,7 @@ import Layout from "../components/Layout";
 import Header from "../components/Header";
 import Widget from "../components/Widget";
 import Settings from "../components/Settings";
-import fetchJson from "../lib/fetchJson";
-import { getOrCreateCustomer } from "../lib/ops";
+import { getOrCreateCustomer, getCustomer } from "../lib/ops";
 import { reorder, remove, add, unprefixUsername, generateCardId } from "../lib/utils";
 import { postMetadataUpdate, readOrder } from "../lib/metadataUtils";
 import { Direction } from "../lib/typedefs";
@@ -90,12 +89,17 @@ const UserPage = (props) => {
     <Layout>
       <Header username={props.username} />
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="droppable" isDragDisabled={props.signedIn}>
+        <Droppable droppableId="droppable">
           {(provided, snapshot) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {order &&
                 order.map((item, index) => (
-                  <Draggable key={item.i} draggableId={item.i} index={index}>
+                  <Draggable
+                    key={item.i}
+                    draggableId={item.i}
+                    index={index}
+                    isDragDisabled={!props.signedIn}
+                  >
                     {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
@@ -148,6 +152,7 @@ const UserPage = (props) => {
               {previewing ? (
                 <Box sx={{}}>
                   <svg
+                    display="block"
                     height="21"
                     viewBox="0 0 21 21"
                     width="21"
@@ -173,6 +178,7 @@ const UserPage = (props) => {
               ) : (
                 <Box sx={{}}>
                   <svg
+                    display="block"
                     height="21"
                     viewBox="0 0 21 21"
                     width="21"
@@ -204,51 +210,71 @@ const UserPage = (props) => {
               }}
             >
               {viewingSettings ? (
-                <Box>
-                  <svg
-                    height="21"
-                    viewBox="0 0 21 21"
-                    width="21"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g
-                      fill="none"
-                      fill-rule="evenodd"
-                      stroke="#2a2e3b"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      transform="translate(3 3)"
+                <Flex
+                  sx={{
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box>
+                    <svg
+                      display="block"
+                      height="21"
+                      viewBox="0 0 21 21"
+                      width="21"
+                      xmlns="http://www.w3.org/2000/svg"
                     >
-                      <path d="m5.5.5v5h-5.5" transform="matrix(1 0 0 -1 0 15)" />
-                      <path d="m5.5.5v5h-5.5" transform="matrix(-1 0 0 -1 15 15)" />
-                      <path d="m5.5.5v5.5h-5" transform="matrix(0 1 1 0 -.5 0)" />
-                      <path d="m5.5.5v5.5h-5" transform="matrix(0 1 -1 0 15.5 0)" />
-                    </g>
-                  </svg>
-                  <Label>Settings</Label>
-                </Box>
+                      <g
+                        fill="none"
+                        fill-rule="evenodd"
+                        stroke="#2a2e3b"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        transform="translate(3 3)"
+                      >
+                        <path d="m5.5.5v5h-5.5" transform="matrix(1 0 0 -1 0 15)" />
+                        <path d="m5.5.5v5h-5.5" transform="matrix(-1 0 0 -1 15 15)" />
+                        <path d="m5.5.5v5.5h-5" transform="matrix(0 1 1 0 -.5 0)" />
+                        <path d="m5.5.5v5.5h-5" transform="matrix(0 1 -1 0 15.5 0)" />
+                      </g>
+                    </svg>
+                  </Box>
+                  <Box>
+                    <Label>Settings</Label>
+                  </Box>
+                </Flex>
               ) : (
-                <Box>
-                  <svg
-                    height="21"
-                    viewBox="0 0 21 21"
-                    width="21"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g
-                      fill="none"
-                      fill-rule="evenodd"
-                      stroke="#2a2e3b"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      transform="translate(2 4)"
+                <Flex
+                  sx={{
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box>
+                    <svg
+                      display="block"
+                      height="21"
+                      viewBox="0 0 21 21"
+                      width="21"
+                      xmlns="http://www.w3.org/2000/svg"
                     >
-                      <path d="m.5 8.5 8 4 8.017-4" />
-                      <path d="m.5 4.657 8.008 3.843 8.009-3.843-8.009-4.157z" />
-                    </g>
-                  </svg>
-                  <Label>Settings</Label>
-                </Box>
+                      <g
+                        fill="none"
+                        fill-rule="evenodd"
+                        stroke="#2a2e3b"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        transform="translate(2 4)"
+                      >
+                        <path d="m.5 8.5 8 4 8.017-4" />
+                        <path d="m.5 4.657 8.008 3.843 8.009-3.843-8.009-4.157z" />
+                      </g>
+                    </svg>
+                  </Box>
+                  <Box>
+                    <Label>Settings</Label>
+                  </Box>
+                </Flex>
               )}
             </IconButton>
           </Box>
@@ -266,6 +292,7 @@ const UserPage = (props) => {
               ) : (
                 <Box sx={{}}>
                   <svg
+                    display="block"
                     height="21"
                     viewBox="0 0 21 21"
                     width="21"
@@ -319,7 +346,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     sessionUsername = session.user.username;
     signedIn = sessionUsername === username;
   }
-  const response = await getOrCreateCustomer(session, signedIn);
+  let response = null;
+  if (signedIn) {
+    response = await getOrCreateCustomer(session, signedIn);
+  } else {
+    response = await getCustomer(username);
+  }
   if (response.errored) {
     return {
       props: {

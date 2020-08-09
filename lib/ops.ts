@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { ErrorResponse, CustomerOpResponse, StripeAccountData, Metadata } from "./typedefs";
-import { generateCustomerEmailForTwitter } from "./utils";
+import { emailFromUsername } from "./utils";
 import { syncMetadata } from "./metadataUtils";
 const LOGSYM = "🔄";
 
@@ -35,8 +35,7 @@ export const getOrCreateCustomer = async (
     };
   } else {
     const username = session.user.username;
-    // jar.bio email for user
-    const jarEmail = generateCustomerEmailForTwitter(username);
+    const jarEmail = emailFromUsername(username);
     try {
       const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
       const response = await stripe.customers.list({ email: jarEmail });
@@ -49,6 +48,13 @@ export const getOrCreateCustomer = async (
           metadata: { email: session.user.email },
         });
       }
+      if (!customer) {
+        errorResponse = {
+          httpStatus: 404,
+          errorMessage: "No user data found",
+          errorCode: "customer_not_found",
+        };
+      }
     } catch (e) {
       errorResponse = {
         httpStatus: 500,
@@ -56,6 +62,37 @@ export const getOrCreateCustomer = async (
         errorCode: "stripe_exception",
       };
     }
+  }
+  const response = {
+    errored: errorResponse != null,
+    data: errorResponse ? errorResponse : customer,
+  };
+  logCustomerOp("getOrCreateCustomer", response);
+  return response;
+};
+
+export const getCustomer = async (username: string): Promise<CustomerOpResponse> => {
+  let customer: Stripe.Customer | null = null;
+  let errorResponse: ErrorResponse | null = null;
+  const jarEmail = emailFromUsername(username);
+  try {
+    const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+    const response = await stripe.customers.list({ email: jarEmail });
+    if (response.data.length > 0) {
+      customer = response.data[0];
+    } else {
+      errorResponse = {
+        httpStatus: 404,
+        errorMessage: "No user data found",
+        errorCode: "customer_not_found",
+      };
+    }
+  } catch (e) {
+    errorResponse = {
+      httpStatus: 500,
+      errorMessage: e.message,
+      errorCode: "stripe_exception",
+    };
   }
   const response = {
     errored: errorResponse != null,
@@ -107,7 +144,7 @@ const updateCustomerMetadata = async (
     };
   }
   const username = session.user.username;
-  const expectedEmail = generateCustomerEmailForTwitter(username);
+  const expectedEmail = emailFromUsername(username);
   if (customer && expectedEmail !== customer.email) {
     errorResponse = {
       httpStatus: 401,

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Layout from "../components/Layout";
 import Header from "../components/Header";
+import HomeFooter from "../components/HomeFooter";
 import fetchJson from "../lib/fetchJson";
 import { Box, Button } from "theme-ui";
 import { GetServerSideProps } from "next";
@@ -36,11 +37,16 @@ const IndexPage = () => {
     <Layout>
       <Header />
       <Box sx={{ bg: "transparent", borderRadius: 4, py: 2, px: 3 }}>
-        <Button onClick={() => signIn("twitter")} variant="small" sx={{}}>
+        <Button
+          onClick={() => signIn("twitter")}
+          variant="small"
+          sx={{
+            bg: "white",
+          }}
+        >
           <Box
             aria-hidden="true"
             sx={{
-              bg: "white",
               display: "inline-block",
               width: "1.2em",
               height: "1.2em",
@@ -56,6 +62,7 @@ const IndexPage = () => {
         </Button>
       </Box>
       <Box></Box>
+      <HomeFooter />
     </Layout>
   );
 };

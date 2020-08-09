@@ -38,7 +38,7 @@ export const generateFriendlyId = (): string => {
   return `card.${predicate}-${object}`;
 };
 
-export const generateCustomerEmailForTwitter = (username: string): string => {
+export const emailFromUsername = (username: string): string => {
   return `${username}+twitter@jar.bio`;
 };
 
