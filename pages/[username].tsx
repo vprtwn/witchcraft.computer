@@ -24,6 +24,8 @@ const UserPage = (props) => {
   const defaultOrder = [];
   const initialOrder = remoteOrder || defaultOrder;
   const [order, setOrder] = useState(initialOrder);
+  const initialWidgets = Array.from(Array(30).keys()) as Array<any>;
+  const [editingWidgets, setEditingWidgets] = useState(initialWidgets);
 
   const [previewing, setPreviewing] = useState(true);
   const [viewingSettings, setViewingSettings] = useState(v === "settings");
@@ -94,42 +96,52 @@ const UserPage = (props) => {
           {(provided, snapshot) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {order &&
-                order.map((item, index) => (
-                  <Draggable
-                    key={item.i}
-                    draggableId={item.i}
-                    index={index}
-                    isDragDisabled={!props.signedIn}
-                  >
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                      >
-                        <Widget
-                          id={item.i}
-                          hideUp={index === 0}
-                          hideDown={index === order.length - 1}
-                          hideToolbar={previewing}
-                          metadata={props.metadata}
-                          username={props.username}
-                          customerId={props.customerId}
-                          signedIn={props.signedIn}
-                          onDown={() => {
-                            moveItem(index, Direction.Down);
-                          }}
-                          onUp={() => {
-                            moveItem(index, Direction.Up);
-                          }}
-                          onDelete={() => {
-                            removeItem(index);
-                          }}
-                        />
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
+                order.map((item, index) => {
+                  console.log(item);
+                  console.log("editingWidgets", editingWidgets[index]);
+                  return (
+                    <Draggable
+                      key={item.i}
+                      draggableId={item.i}
+                      index={index}
+                      isDragDisabled={!props.signedIn || editingWidgets[index] === true}
+                    >
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
+                          <Widget
+                            id={item.i}
+                            hideUp={index === 0}
+                            hideDown={index === order.length - 1}
+                            hideToolbar={previewing}
+                            metadata={props.metadata}
+                            username={props.username}
+                            customerId={props.customerId}
+                            signedIn={props.signedIn}
+                            onDown={() => {
+                              moveItem(index, Direction.Down);
+                            }}
+                            onUp={() => {
+                              moveItem(index, Direction.Up);
+                            }}
+                            onDelete={() => {
+                              removeItem(index);
+                            }}
+                            onChangeEditing={(e) => {
+                              const newWidgets = editingWidgets;
+                              newWidgets[index] = e;
+                              setEditingWidgets([...newWidgets]);
+                              console.log(newWidgets);
+                            }}
+                          />
+                        </div>
+                      )}
+                    </Draggable>
+                  );
+                })}
               {provided.placeholder}
             </div>
           )}

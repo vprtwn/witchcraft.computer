@@ -34,6 +34,12 @@ export default (props) => {
   const [debouncedTipText] = useDebounce(tipText, DEBOUNCE_MS);
 
   useEffect(() => {
+    if (props.onChangeEditing) {
+      props.onChangeEditing(editing);
+    }
+  }, [editing]);
+
+  useEffect(() => {
     updateCardValue(debouncedCardVal);
   }, [debouncedCardVal]);
 
