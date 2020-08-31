@@ -117,14 +117,6 @@ export const readString = (
   return value;
 };
 
-export const readCardMeta = (metadata: Stripe.Metadata | null, id: string): CardMeta | null => {
-  const dict = readDict(metadata, id);
-  if (!dict) {
-    return null;
-  }
-  return toCardMeta(dict);
-};
-
 export const readDict = (
   metadata: Stripe.Metadata | null,
   key: string,
@@ -171,19 +163,6 @@ export const readOrder = (
 };
 
 // type transformations
-export const toCardMeta = (metadataValue: MetadataValue): CardMeta => {
-  const cardMeta: CardMeta = {
-    tj_t: null,
-    tj_v: null,
-  };
-  if (typeof metadataValue === "string") {
-    return cardMeta;
-  }
-  cardMeta.tj_t = metadataValue["tj_t"];
-  cardMeta.tj_v = metadataValue["tj_v"];
-  return cardMeta;
-};
-
 export const toDict = (metadataValue: MetadataValue): Record<string, string> => {
   const dict: Record<string, string> = {};
   if (!metadataValue || typeof metadataValue === "string") {
@@ -191,12 +170,4 @@ export const toDict = (metadataValue: MetadataValue): Record<string, string> => 
   }
   Object.assign(dict, metadataValue);
   return dict;
-};
-
-export const toMetadataValue = (cardMeta: CardMeta): MetadataValue => {
-  const value: MetadataValue = {
-    tj_t: cardMeta.tj_t,
-    tj_v: cardMeta.tj_v,
-  };
-  return value;
 };

@@ -1,22 +1,27 @@
-import React, { useState, useEffect } from "react";
-import Layout from "../components/Layout";
-import Header from "../components/Header";
-import Widget from "../components/Widget";
-import Settings from "../components/Settings";
-import UserFooter from "../components/UserFooter";
-import { getOrCreateCustomer, getCustomer } from "../lib/ops";
-import { reorder, remove, add, unprefixUsername, generateCardId } from "../lib/utils";
-import { postMetadataUpdate, readOrder } from "../lib/metadataUtils";
-import { Direction } from "../lib/typedefs";
-import { useRouter } from "next/router";
-import { Box, IconButton, Flex, Label, Text } from "theme-ui";
-import { GetServerSideProps } from "next";
-import { useSession, getSession } from "next-auth/client";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import React, { useState, useEffect } from 'react';
+import Layout from '../components/Layout';
+import Header from '../components/Header';
+import Widget from '../components/Widget';
+import Settings from '../components/Settings';
+import UserFooter from '../components/UserFooter';
+import { getOrCreateCustomer, getCustomer } from '../lib/ops';
+import { reorder, remove, add, unprefixUsername, generateCardId } from '../lib/utils';
+import { postMetadataUpdate, readOrder } from '../lib/metadataUtils';
+import { Direction } from '../lib/typedefs';
+import { useRouter } from 'next/router';
+import { Box, IconButton, Flex, Label, Text } from 'theme-ui';
+import { GetServerSideProps } from 'next';
+import { useSession, getSession } from 'next-auth/client';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import EditButtonIcon from '../components/EditButtonIcon';
+import ViewButtonIcon from '../components/ViewButtonIcon';
+import SettingsCloseButtonIcon from '../components/SettingsCloseButtonIcon';
+import SettingsOpenButtonIcon from '../components/SettingsOpenButtonIcon';
+import AddButtonIcon from '../components/AddButtonIcon';
 
 const UserPage = (props) => {
   const {
-    query: { v },
+    query: {},
   } = useRouter();
 
   // order of items
@@ -28,26 +33,15 @@ const UserPage = (props) => {
   const [editingWidgets, setEditingWidgets] = useState(initialWidgets);
 
   const [previewing, setPreviewing] = useState(true);
-  const [viewingSettings, setViewingSettings] = useState(v === "settings");
 
-  const updateOrder = async function (
-    newOrder: Record<string, string>[],
-    removedId: string | null = null
-  ) {
+  const updateOrder = async function (newOrder: Record<string, string>[], removedId: string | null = null) {
     try {
       const metadata = {};
-      metadata["order"] = JSON.stringify(newOrder);
+      metadata['order'] = JSON.stringify(newOrder);
       if (removedId) {
         metadata[removedId] = null;
       }
-      const newVal = await postMetadataUpdate(
-        "order",
-        newOrder,
-        props.customerId,
-        props.username,
-        removedId
-      );
-      // setOrder(newVal);
+      await postMetadataUpdate('order', newOrder, props.customerId, props.username, removedId);
     } catch (e) {
       console.error(e);
     }
@@ -75,7 +69,7 @@ const UserPage = (props) => {
 
   const removeItem = (index: number) => {
     const result = remove(order, index);
-    console.log("result", JSON.stringify(result, null, 2));
+    console.log('result', JSON.stringify(result, null, 2));
     setOrder(result.items);
     updateOrder(result.items, result.removedId);
   };
@@ -97,8 +91,6 @@ const UserPage = (props) => {
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {order &&
                 order.map((item, index) => {
-                  console.log(item);
-                  console.log("editingWidgets", editingWidgets[index]);
                   return (
                     <Draggable
                       key={item.i}
@@ -107,11 +99,7 @@ const UserPage = (props) => {
                       isDragDisabled={!props.signedIn || editingWidgets[index] === true}
                     >
                       {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                        >
+                        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                           <Widget
                             id={item.i}
                             hideUp={index === 0}
@@ -134,7 +122,6 @@ const UserPage = (props) => {
                               const newWidgets = editingWidgets;
                               newWidgets[index] = e;
                               setEditingWidgets([...newWidgets]);
-                              console.log(newWidgets);
                             }}
                           />
                         </div>
@@ -149,197 +136,37 @@ const UserPage = (props) => {
       </DragDropContext>
 
       {props.signedIn && (
-        <Flex sx={{ py: 3, justifyContent: "space-between" }}>
+        <Flex sx={{ py: 3, mx: 1, justifyContent: 'space-between' }}>
           <Box sx={{}}>
             <IconButton
-              sx={{
-                // fontSize: "24px",
-                // width: "21px",
-                // height: "21px",
-                visibility: order && order.length > 0 ? "visible" : "hidden",
-              }}
+              sx={
+                {
+                  // visibility: !order || (order && order.length > 0) ? "visible" : "hidden",
+                }
+              }
               onClick={() => {
                 setPreviewing(!previewing);
               }}
             >
-              {previewing ? (
-                <Box sx={{}}>
-                  <svg
-                    display="block"
-                    height="21"
-                    viewBox="0 0 21 21"
-                    width="21"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g
-                      fill="none"
-                      fill-rule="evenodd"
-                      stroke="#2a2e3b"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      transform="translate(2 2)"
-                    >
-                      <path
-                        d="m8.24920737-.79402796c1.17157287 0 2.12132033.94974747 2.12132033 2.12132034v13.43502882l-2.12132033 3.5355339-2.08147546-3.495689-.03442539-13.47488064c-.00298547-1.16857977.94191541-2.11832105 2.11049518-2.12130651.00180188-.00000461.00360378-.00000691.00540567-.00000691z"
-                        transform="matrix(.70710678 .70710678 -.70710678 .70710678 8.605553 -3.271644)"
-                      />
-                      <path d="m13.5 4.5 1 1" />
-                    </g>
-                  </svg>
-                  <Label>Edit</Label>
-                </Box>
-              ) : (
-                <Box sx={{}}>
-                  <svg
-                    display="block"
-                    height="21"
-                    viewBox="0 0 21 21"
-                    width="21"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g
-                      fill="none"
-                      fill-rule="evenodd"
-                      stroke="#2a2e3b"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      transform="translate(3 3)"
-                    >
-                      <path d="m2 .5h11c1.1045695 0 2 .8954305 2 2v6.04882185c0 1.1045695-.8954305 1.99999995-2 1.99999995-.0025044 0-.0050088-.0000047-.0075132-.0000141l-10.99999997-.0413227c-1.10162878-.0041384-1.99248683-.89834933-1.99248683-1.99998589v-6.00749911c0-1.1045695.8954305-2 2-2z" />
-                      <path d="m2.464 12.5h10.036" />
-                      <path d="m4.5 14.5h6" />
-                    </g>
-                  </svg>
-                  <Label>View</Label>
-                </Box>
-              )}
+              {previewing ? <EditButtonIcon /> : <ViewButtonIcon label="Preview" />}
             </IconButton>
           </Box>
           <Box>
             <IconButton
-              sx={{ fontSize: "24px" }}
-              onClick={() => {
-                setViewingSettings(!viewingSettings);
-              }}
-            >
-              {viewingSettings ? (
-                <Flex
-                  sx={{
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                >
-                  <Box>
-                    <svg
-                      display="block"
-                      height="21"
-                      viewBox="0 0 21 21"
-                      width="21"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <g
-                        fill="none"
-                        fill-rule="evenodd"
-                        stroke="#2a2e3b"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        transform="translate(3 3)"
-                      >
-                        <path d="m5.5.5v5h-5.5" transform="matrix(1 0 0 -1 0 15)" />
-                        <path d="m5.5.5v5h-5.5" transform="matrix(-1 0 0 -1 15 15)" />
-                        <path d="m5.5.5v5.5h-5" transform="matrix(0 1 1 0 -.5 0)" />
-                        <path d="m5.5.5v5.5h-5" transform="matrix(0 1 -1 0 15.5 0)" />
-                      </g>
-                    </svg>
-                  </Box>
-                  <Box>
-                    <Label>Settings</Label>
-                  </Box>
-                </Flex>
-              ) : (
-                <Flex
-                  sx={{
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                >
-                  <Box>
-                    <svg
-                      display="block"
-                      height="21"
-                      viewBox="0 0 21 21"
-                      width="21"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <g
-                        fill="none"
-                        fill-rule="evenodd"
-                        stroke="#2a2e3b"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        transform="translate(2 4)"
-                      >
-                        <path d="m.5 8.5 8 4 8.017-4" />
-                        <path d="m.5 4.657 8.008 3.843 8.009-3.843-8.009-4.157z" />
-                      </g>
-                    </svg>
-                  </Box>
-                  <Box>
-                    <Label>Settings</Label>
-                  </Box>
-                </Flex>
-              )}
-            </IconButton>
-          </Box>
-          <Box>
-            <IconButton
-              sx={{ fontSize: "24px" }}
+              sx={{ fontSize: '24px' }}
               onClick={() => {
                 if (!previewing) {
                   addItem();
                 }
               }}
             >
-              {previewing ? (
-                ""
-              ) : (
-                <Box sx={{}}>
-                  <svg
-                    display="block"
-                    height="21"
-                    viewBox="0 0 21 21"
-                    width="21"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g
-                      fill="none"
-                      fill-rule="evenodd"
-                      stroke="#2a2e3b"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      transform="translate(3 2)"
-                    >
-                      <path
-                        d="m.5 9v3.5c0 1.1045695.8954305 2 2 2h7c1.1045695 0 2-.8954305 2-2v-7c0-1.1045695-.8954305-2-2-2h-3.5"
-                        transform="matrix(0 1 -1 0 15 3)"
-                      />
-                      <path d="m11.5.5v6" />
-                      <path d="m11.5.5v6" transform="matrix(0 1 -1 0 15 -8)" />
-                    </g>
-                  </svg>
-                  <Label>Add</Label>
-                </Box>
-              )}
+              {previewing ? '' : <AddButtonIcon />}
             </IconButton>
           </Box>
         </Flex>
       )}
-      {viewingSettings && props.signedIn && (
-        <Settings
-          username={props.username}
-          metadata={props.metadata}
-          customerId={props.customerId}
-        />
+      {props.signedIn && !previewing && (
+        <Settings username={props.username} metadata={props.metadata} customerId={props.customerId} />
       )}
       <Box py={4} my={4} />
       <UserFooter />
