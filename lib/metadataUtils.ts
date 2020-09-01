@@ -1,4 +1,4 @@
-import { Metadata, MetadataValue, OrderItemOrderItem } from './typedefs';
+import { Metadata, MetadataValue, OrderItem } from './typedefs';
 import Stripe from 'stripe';
 import fetchJson from '../lib/fetchJson';
 

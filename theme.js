@@ -32,12 +32,6 @@ export default {
         primary: '#e6fffa',
         outline: '#edf2f7',
       },
-      darkNectarine: {
-        text: '#fff',
-        background: '#17223b',
-        primary: '#ff6768',
-        outline: '#263859',
-      },
     },
   },
   buttons: {

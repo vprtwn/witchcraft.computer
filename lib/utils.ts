@@ -29,15 +29,6 @@ export const generateCardId = (): string => {
   return `c.${id}`;
 };
 
-export const generateFriendlyId = (): string => {
-  const friendlyWords = require('friendly-words');
-  const predicates = friendlyWords.predicates;
-  const predicate = predicates[Math.floor(Math.random() * predicates.length)];
-  const objects = friendlyWords.objects;
-  const object = objects[Math.floor(Math.random() * objects.length)];
-  return `card.${predicate}-${object}`;
-};
-
 export const emailFromUsername = (username: string): string => {
   return `${username}+twitter@jar.bio`;
 };
