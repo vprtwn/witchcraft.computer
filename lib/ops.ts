@@ -189,7 +189,7 @@ const updateCustomerMetadata = async (
   return response;
 };
 
-// CONNECT STRIPE
+// Stripe Standard connect account setup
 
 export const connectStripeAccount = async (session: any, state: string, code: string): Promise<CustomerOpResponse> => {
   let customerResponse: Stripe.Customer | null = null;

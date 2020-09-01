@@ -1,7 +1,7 @@
-import { customAlphabet } from "nanoid";
-import { OrderItem } from "./typedefs";
+import { customAlphabet } from 'nanoid';
+import { OrderItem } from './typedefs';
 
-// list utils
+// list utils (for drag and drop)
 export const reorder = (list, startIndex, endIndex): OrderItem[] => {
   const result = Array.from(list) as OrderItem[];
   const [removed] = result.splice(startIndex, 1);
@@ -22,15 +22,15 @@ export const add = (list, newObject): OrderItem[] => {
 };
 
 // string utils
+// TODO: different cards for different types
 export const generateCardId = (): string => {
-  // generate secret
-  const nanoid = customAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 6);
+  const nanoid = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 6);
   const id = nanoid();
   return `c.${id}`;
 };
 
 export const generateFriendlyId = (): string => {
-  const friendlyWords = require("friendly-words");
+  const friendlyWords = require('friendly-words');
   const predicates = friendlyWords.predicates;
   const predicate = predicates[Math.floor(Math.random() * predicates.length)];
   const objects = friendlyWords.objects;
@@ -48,15 +48,15 @@ export const generateUserPath = (username: string): string => {
 
 export const unprefixUsername = (username: string): string => {
   let newUsername = username;
-  if (username.startsWith("@")) {
-    newUsername = username.replace("@", "");
+  if (username.startsWith('@')) {
+    newUsername = username.replace('@', '');
   }
   return newUsername;
 };
 
 export const validateStripeConnectParams = (
   state: string[] | string | null,
-  code: string[] | string | null
+  code: string[] | string | null,
 ): boolean => {
-  return code && code !== "undefined" && state && state !== "undefined";
+  return code && code !== 'undefined' && state && state !== 'undefined';
 };

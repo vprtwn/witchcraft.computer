@@ -1,20 +1,20 @@
-import { Metadata, MetadataValue, CardMeta, OrderItem } from "./typedefs";
-import Stripe from "stripe";
-import fetchJson from "../lib/fetchJson";
+import { Metadata, MetadataValue, OrderItemOrderItem } from './typedefs';
+import Stripe from 'stripe';
+import fetchJson from '../lib/fetchJson';
 
 export const postMetadataUpdate = async (
   key: string,
   value: MetadataValue,
   customerId: string,
   username: string,
-  removedKey: string | null = null // this is ugly
+  removedKey: string | null = null, // this is ugly
 ): Promise<MetadataValue> => {
   const update = {};
   update[key] = value;
   if (removedKey) {
     // TODO: refactor this & test
     update[removedKey] = null;
-    if (removedKey.startsWith("c.")) {
+    if (removedKey.startsWith('c.')) {
       update[`${removedKey}.meta`] = null;
     }
   }
@@ -24,7 +24,7 @@ export const postMetadataUpdate = async (
     customerId: customerId,
   };
   const newMetadata = await fetchJson(`/api/update_metadata`, {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify(params),
   });
   let newVal = newMetadata[key];
@@ -40,10 +40,7 @@ export const postMetadataUpdate = async (
  * Remote values are expected to be serialized strings: {foo: "[1,2]"}
  * Runs before POSTing a metadata update.
  */
-export const syncMetadata = (
-  local: Record<string, MetadataValue>,
-  remote: Stripe.Metadata
-): Metadata => {
+export const syncMetadata = (local: Record<string, MetadataValue>, remote: Stripe.Metadata): Metadata => {
   const merged: Record<string, MetadataValue> = {};
   Object.keys(remote).forEach((k) => {
     const value = local[k];
@@ -54,7 +51,7 @@ export const syncMetadata = (
       merged[k] = value;
     }
     // overwrite remote strings with local
-    else if (typeof value === "string") {
+    else if (typeof value === 'string') {
       merged[k] = value;
     } else {
       // merge remote dicts with local
@@ -82,7 +79,7 @@ export const syncMetadata = (
   // flatten
   Object.keys(merged).forEach((k) => {
     const value = merged[k];
-    if (typeof value === "string") {
+    if (typeof value === 'string') {
       flattened[k] = value;
     } else {
       if (value) {
@@ -98,7 +95,7 @@ export const syncMetadata = (
 export const readString = (
   metadata: Stripe.Metadata | null,
   key: string,
-  defaultVal: string | null = null
+  defaultVal: string | null = null,
 ): string | null => {
   if (!metadata) {
     return null;
@@ -120,7 +117,7 @@ export const readString = (
 export const readDict = (
   metadata: Stripe.Metadata | null,
   key: string,
-  defaultVal: Record<string, string> | null = null
+  defaultVal: Record<string, string> | null = null,
 ): Record<string, string> | null => {
   if (!metadata) {
     return null;
@@ -141,14 +138,14 @@ export const readDict = (
 
 export const readOrder = (
   metadata: Stripe.Metadata | null,
-  defaultVal: Array<OrderItem> | null = null
+  defaultVal: Array<OrderItem> | null = null,
 ): Array<OrderItem> | null => {
   if (!metadata) {
     return null;
   }
   let value = null;
-  if (metadata["order"]) {
-    value = metadata["order"];
+  if (metadata['order']) {
+    value = metadata['order'];
   } else {
     return defaultVal;
   }
@@ -165,7 +162,7 @@ export const readOrder = (
 // type transformations
 export const toDict = (metadataValue: MetadataValue): Record<string, string> => {
   const dict: Record<string, string> = {};
-  if (!metadataValue || typeof metadataValue === "string") {
+  if (!metadataValue || typeof metadataValue === 'string') {
     return dict;
   }
   Object.assign(dict, metadataValue);
