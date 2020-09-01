@@ -24,3 +24,4 @@
 
 ### UI
 - Using [theme-ui](https://theme-ui.com/components) for CSS-in-JS and pretty happy with it!
+- tldr: to edit style, either use `theme.js` or the `sx={{}}` prop
