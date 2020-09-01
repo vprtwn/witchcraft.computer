@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
-import Layout from "../components/Layout";
-import Header from "../components/Header";
-import HomeFooter from "../components/HomeFooter";
-import fetchJson from "../lib/fetchJson";
-import { Box, Button } from "theme-ui";
-import { GetServerSideProps } from "next";
-import Router, { useRouter } from "next/router";
-import { signIn, getSession, useSession } from "next-auth/client";
-import { generateUserPath, validateStripeConnectParams } from "../lib/utils";
+import React, { useEffect } from 'react';
+import Layout from '../components/Layout';
+import Header from '../components/Header';
+import MarketingFooter from '../components/MarketingFooter';
+import fetchJson from '../lib/fetchJson';
+import { Box, Button } from 'theme-ui';
+import { GetServerSideProps } from 'next';
+import Router, { useRouter } from 'next/router';
+import { signIn, getSession, useSession } from 'next-auth/client';
+import { generateUserPath, validateStripeConnectParams } from '../lib/utils';
 
 const IndexPage = () => {
   const {
@@ -18,8 +18,8 @@ const IndexPage = () => {
     const connectStripe = async function () {
       const body = { code: code, state: state };
       try {
-        await fetchJson("/api/connect_stripe", {
-          method: "POST",
+        await fetchJson('/api/connect_stripe', {
+          method: 'POST',
           body: JSON.stringify(body),
         });
         const path = generateUserPath(state as string);
@@ -36,22 +36,22 @@ const IndexPage = () => {
   return (
     <Layout>
       <Header />
-      <Box sx={{ bg: "transparent", borderRadius: 4, py: 2, px: 3 }}>
+      <Box sx={{ bg: 'transparent', borderRadius: 4, py: 2, px: 3 }}>
         <Button
-          onClick={() => signIn("twitter")}
+          onClick={() => signIn('twitter')}
           variant="small"
           sx={{
-            bg: "white",
+            bg: 'white',
           }}
         >
           <Box
             aria-hidden="true"
             sx={{
-              display: "inline-block",
-              width: "1.2em",
-              height: "1.2em",
-              marginRight: "0.4em",
-              verticalAlign: "sub",
+              display: 'inline-block',
+              width: '1.2em',
+              height: '1.2em',
+              marginRight: '0.4em',
+              verticalAlign: 'sub',
             }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -62,7 +62,7 @@ const IndexPage = () => {
         </Button>
       </Box>
       <Box></Box>
-      <HomeFooter />
+      <MarketingFooter />
     </Layout>
   );
 };
@@ -74,10 +74,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = await getSession(ctx);
 
   if (session && session.user.username && !validateStripeConnectParams(state, code)) {
-    console.log("redirecting");
+    console.log('redirecting');
     const { res } = ctx;
     const path = generateUserPath(session.user.username);
-    res.setHeader("location", path);
+    res.setHeader('location', path);
     res.statusCode = 302;
     res.end();
     return;

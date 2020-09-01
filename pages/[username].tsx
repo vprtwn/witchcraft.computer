@@ -3,7 +3,7 @@ import Layout from '../components/Layout';
 import Header from '../components/Header';
 import Widget from '../components/Widget';
 import Settings from '../components/Settings';
-import UserFooter from '../components/UserFooter';
+import PageFooter from '../components/PageFooter';
 import { getOrCreateCustomer, getCustomer } from '../lib/ops';
 import { reorder, remove, add, unprefixUsername, generateCardId } from '../lib/utils';
 import { postMetadataUpdate, readOrder } from '../lib/metadataUtils';
@@ -84,92 +84,97 @@ const UserPage = (props) => {
 
   return (
     <Layout>
-      <Header username={props.username} />
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="droppable">
-          {(provided, snapshot) => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
-              {order &&
-                order.map((item, index) => {
-                  return (
-                    <Draggable
-                      key={item.i}
-                      draggableId={item.i}
-                      index={index}
-                      isDragDisabled={!props.signedIn || editingWidgets[index] === true}
-                    >
-                      {(provided, snapshot) => (
-                        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                          <Widget
-                            id={item.i}
-                            hideUp={index === 0}
-                            hideDown={index === order.length - 1}
-                            hideToolbar={previewing}
-                            metadata={props.metadata}
-                            username={props.username}
-                            customerId={props.customerId}
-                            signedIn={props.signedIn}
-                            onDown={() => {
-                              moveItem(index, Direction.Down);
-                            }}
-                            onUp={() => {
-                              moveItem(index, Direction.Up);
-                            }}
-                            onDelete={() => {
-                              removeItem(index);
-                            }}
-                            onChangeEditing={(e) => {
-                              const newWidgets = editingWidgets;
-                              newWidgets[index] = e;
-                              setEditingWidgets([...newWidgets]);
-                            }}
-                          />
-                        </div>
-                      )}
-                    </Draggable>
-                  );
-                })}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+      {props.error && <pre>{JSON.stringify(props.error, null, 2)}</pre>}
+      {!props.error && (
+        <>
+          <Header profileImage={props.profileImage} name={props.name} username={props.username} />
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="droppable">
+              {(provided, snapshot) => (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  {order &&
+                    order.map((item, index) => {
+                      return (
+                        <Draggable
+                          key={item.i}
+                          draggableId={item.i}
+                          index={index}
+                          isDragDisabled={!props.signedIn || editingWidgets[index] === true}
+                        >
+                          {(provided, snapshot) => (
+                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                              <Widget
+                                id={item.i}
+                                hideUp={index === 0}
+                                hideDown={index === order.length - 1}
+                                hideToolbar={previewing}
+                                metadata={props.metadata}
+                                username={props.username}
+                                customerId={props.customerId}
+                                signedIn={props.signedIn}
+                                onDown={() => {
+                                  moveItem(index, Direction.Down);
+                                }}
+                                onUp={() => {
+                                  moveItem(index, Direction.Up);
+                                }}
+                                onDelete={() => {
+                                  removeItem(index);
+                                }}
+                                onChangeEditing={(e) => {
+                                  const newWidgets = editingWidgets;
+                                  newWidgets[index] = e;
+                                  setEditingWidgets([...newWidgets]);
+                                }}
+                              />
+                            </div>
+                          )}
+                        </Draggable>
+                      );
+                    })}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
 
-      {props.signedIn && (
-        <Flex sx={{ py: 3, mx: 1, justifyContent: 'space-between' }}>
-          <Box sx={{}}>
-            <IconButton
-              sx={
-                {
-                  // visibility: !order || (order && order.length > 0) ? "visible" : "hidden",
-                }
-              }
-              onClick={() => {
-                setPreviewing(!previewing);
-              }}
-            >
-              {previewing ? <EditButtonIcon /> : <ViewButtonIcon label="Preview" />}
-            </IconButton>
-          </Box>
-          <Box>
-            <IconButton
-              sx={{ fontSize: '24px' }}
-              onClick={() => {
-                if (!previewing) {
-                  addItem();
-                }
-              }}
-            >
-              {previewing ? '' : <AddButtonIcon />}
-            </IconButton>
-          </Box>
-        </Flex>
+          {props.signedIn && (
+            <Flex sx={{ py: 3, mx: 1, justifyContent: 'space-between' }}>
+              <Box sx={{}}>
+                <IconButton
+                  sx={
+                    {
+                      // visibility: !order || (order && order.length > 0) ? "visible" : "hidden",
+                    }
+                  }
+                  onClick={() => {
+                    setPreviewing(!previewing);
+                  }}
+                >
+                  {previewing ? <EditButtonIcon /> : <ViewButtonIcon label="Preview" />}
+                </IconButton>
+              </Box>
+              <Box>
+                <IconButton
+                  sx={{ fontSize: '24px' }}
+                  onClick={() => {
+                    if (!previewing) {
+                      addItem();
+                    }
+                  }}
+                >
+                  {previewing ? '' : <AddButtonIcon />}
+                </IconButton>
+              </Box>
+            </Flex>
+          )}
+          {props.signedIn && !previewing && (
+            <Settings username={props.username} metadata={props.metadata} customerId={props.customerId} />
+          )}
+          <Box py={4} my={4} />
+        </>
       )}
-      {props.signedIn && !previewing && (
-        <Settings username={props.username} metadata={props.metadata} customerId={props.customerId} />
-      )}
-      <Box py={4} my={4} />
-      <UserFooter />
+      <PageFooter />
     </Layout>
   );
 };
@@ -196,7 +201,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (response.errored) {
     return {
       props: {
-        username: username,
         error: response.data,
       },
     };
@@ -211,6 +215,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
     props: {
       username: username,
+      name: metadata.name,
+      profileImage: metadata.profile_image,
       metadata: metadata,
       customerId: customerId,
       signedIn: signedIn,
