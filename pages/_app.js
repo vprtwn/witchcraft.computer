@@ -1,9 +1,9 @@
-import { Provider } from "next-auth/client";
-import { ThemeProvider, Styled, Flex, Box, Link } from "theme-ui";
-import Head from "next/head";
-import theme from "../theme";
-import { MDXProvider } from "@mdx-js/react";
-import Layout from "../components/Layout";
+import { Provider } from 'next-auth/client';
+import { ThemeProvider, Styled, Flex, Box, Link } from 'theme-ui';
+import Head from 'next/head';
+import theme from '../theme';
+import { MDXProvider } from '@mdx-js/react';
+import Layout from '../components/Layout';
 
 const components = {
   wrapper: (props) => (
@@ -38,14 +38,8 @@ export default ({ Component, pageProps }) => {
           <Head>
             <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
             <link rel="icon" href="/favicon.png" />
-            <link
-              rel="stylesheet"
-              href="https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/inter.css"
-            />
-            <link
-              rel="stylesheet"
-              href="https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/hk-grotesk.min.css"
-            />
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/inter.css" />
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/hk-grotesk.min.css" />
             {/* Recursive font: sorta monospace but not, somewhat casual */}
             <link
               href="https://fonts.googleapis.com/css2?family=Recursive:CASL,CRSV,MONO@0.5,1,0.5&display=swap"
