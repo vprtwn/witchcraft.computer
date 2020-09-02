@@ -1,23 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Card, Box, IconButton, Button, Flex, Label } from 'theme-ui';
-import { useDebounce } from 'use-debounce';
-import { readString, postMetadataUpdate } from '../lib/metadataUtils';
-import Stripe from 'stripe';
-import Editor from 'rich-markdown-editor';
+import React from 'react';
+import { Box, IconButton, Flex } from 'theme-ui';
 import EditButtonIcon from './EditButtonIcon';
 import ViewButtonIcon from './ViewButtonIcon';
 import DeleteButtonIcon from './DeleteButtonIcon';
 import DownButtonIcon from './DownButtonIcon';
 import UpButtonIcon from './UpButtonIcon';
 
-const DEBOUNCE_MS = 700;
-
 export default (props) => {
-  const [editing, setEditing] = useState(false);
-
   return (
     <Flex sx={{ bg: 'outline', borderRadius: 4, py: 2 }}>
-      <Box sx={{ ml: 2, flexGrow: 1, visibility: editing ? 'visible' : 'hidden' }}>
+      <Box sx={{ ml: 2, flexGrow: 1 }} hidden={!props.editing}>
         <IconButton
           variant="icon"
           sx={{ left: 0 }}
@@ -28,24 +20,24 @@ export default (props) => {
           <DeleteButtonIcon />
         </IconButton>
       </Box>
-      <Box sx={{ flexGrow: 1 }} hidden={editing}>
-        <IconButton sx={{ left: 0, visibility: props.hideDown ? 'hidden' : 'visible' }} onClick={props.onDown}>
+      <Box sx={{ flexGrow: 1 }} hidden={props.editing}>
+        <IconButton onClick={props.onDown} hidden={props.editing || props.hideDown}>
           <DownButtonIcon />
         </IconButton>
       </Box>
-      <Box sx={{ visibility: props.hideUp ? 'hidden' : 'visible' }} hidden={editing}>
-        <IconButton sx={{ right: 0, mr: 2 }} onClick={props.onUp}>
+      <Box sx={{ flexGrow: 1 }} hidden={props.editing || props.hideUp}>
+        <IconButton onClick={props.onUp}>
           <UpButtonIcon />
         </IconButton>
       </Box>
       <Box>
         <IconButton
-          sx={{ mr: 3 }}
+          sx={{ mr: 2 }}
           onClick={() => {
-            setEditing(!editing);
+            props.onSwitchEditing();
           }}
         >
-          {editing ? <ViewButtonIcon /> : <EditButtonIcon />}
+          {props.editing ? <ViewButtonIcon /> : <EditButtonIcon />}
         </IconButton>
       </Box>
     </Flex>

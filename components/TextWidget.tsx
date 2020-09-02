@@ -62,11 +62,15 @@ export default (props) => {
       </Box>
       {showEditor && !props.hideToolbar && (
         <WidgetToolbar
+          editing={editing}
           onDelete={props.onDelete}
           hideDown={props.hideDown}
           hideUp={props.hideUp}
           onUp={props.onUp}
           onDown={props.onDown}
+          onSwitchEditing={() => {
+            setEditing(!editing);
+          }}
         />
       )}
     </Card>
