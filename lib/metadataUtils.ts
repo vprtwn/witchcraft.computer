@@ -36,6 +36,7 @@ export const postMetadataUpdate = async (
  * Local values are unserialized: {foo: [1, 2]}
  * Remote values are expected to be serialized strings: {foo: "[1,2]"}
  * Runs before POSTing a metadata update.
+ * This is a bit fiddly, but it's tested (see unit.test.js)
  */
 export const syncMetadata = (local: Record<string, MetadataValue>, remote: Stripe.Metadata): Metadata => {
   const merged: Record<string, MetadataValue> = {};
@@ -133,7 +134,7 @@ export const readDict = (
   return parsedValue;
 };
 
-export const readOrder = (
+export const readWidgetOrder = (
   metadata: Stripe.Metadata | null,
   defaultVal: Array<OrderItem> | null = null,
 ): Array<OrderItem> | null => {
@@ -141,8 +142,8 @@ export const readOrder = (
     return null;
   }
   let value = null;
-  if (metadata['order']) {
-    value = metadata['order'];
+  if (metadata['w.order']) {
+    value = metadata['w.order'];
   } else {
     return defaultVal;
   }

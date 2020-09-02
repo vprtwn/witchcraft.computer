@@ -20,8 +20,8 @@ export default (props) => {
           <DeleteButtonIcon />
         </IconButton>
       </Box>
-      <Box sx={{ flexGrow: 1 }} hidden={props.editing}>
-        <IconButton onClick={props.onDown} hidden={props.editing || props.hideDown}>
+      <Box sx={{ flexGrow: 1 }} hidden={props.editing || props.hideDown}>
+        <IconButton onClick={props.onDown}>
           <DownButtonIcon />
         </IconButton>
       </Box>

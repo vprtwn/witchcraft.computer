@@ -6,7 +6,7 @@ import Settings from '../components/Settings';
 import PageFooter from '../components/PageFooter';
 import { getOrCreateCustomer, getCustomer } from '../lib/ops';
 import { reorder, remove, add, unprefixUsername, generateWidgetId } from '../lib/utils';
-import { postMetadataUpdate, readOrder } from '../lib/metadataUtils';
+import { postMetadataUpdate, readWidgetOrder } from '../lib/metadataUtils';
 import { Direction, WidgetType } from '../lib/typedefs';
 import { useRouter } from 'next/router';
 import { Box, IconButton, Flex, Label, Text } from 'theme-ui';
@@ -23,7 +23,7 @@ const UserPage = (props) => {
   } = useRouter();
 
   // widget ordering, [{i: "w.text.A1B2"}, ...]
-  let remoteOrder = readOrder(props.metadata);
+  let remoteOrder = readWidgetOrder(props.metadata);
   const defaultOrder = [];
   const initialOrder = remoteOrder || defaultOrder;
   const [order, setOrder] = useState(initialOrder);
@@ -35,11 +35,11 @@ const UserPage = (props) => {
   const updateOrder = async function (newOrder: Record<string, string>[], removedId: string | null = null) {
     try {
       const metadata = {};
-      metadata['order'] = JSON.stringify(newOrder);
+      metadata['w.order'] = JSON.stringify(newOrder);
       if (removedId) {
         metadata[removedId] = null;
       }
-      await postMetadataUpdate('order', newOrder, props.customerId, props.username, removedId);
+      await postMetadataUpdate('w.order', newOrder, props.customerId, props.username, removedId);
     } catch (e) {
       console.error(e);
     }
@@ -73,6 +73,7 @@ const UserPage = (props) => {
   };
 
   const addWidget = () => {
+    // TODO: add a widget type picker (Text or Link)
     const newId = generateWidgetId(WidgetType.Text);
     const newObject = { i: newId };
     const newItems = add(order, newObject);
