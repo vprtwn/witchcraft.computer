@@ -14,9 +14,6 @@ export const postMetadataUpdate = async (
   if (removedKey) {
     // TODO: refactor this & test
     update[removedKey] = null;
-    if (removedKey.startsWith('c.')) {
-      update[`${removedKey}.meta`] = null;
-    }
   }
   const params = {
     username: username,

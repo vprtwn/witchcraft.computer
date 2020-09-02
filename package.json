@@ -1,9 +1,6 @@
 {
-  "name": "next-auth-example",
-  "version": "3.0.0-beta.19",
-  "description": "An example website that uses next-auth@beta",
-  "repository": "https://github.com/iaincollins/next-auth-example.git",
-  "homepage": "http://next-auth-example.now.sh",
+  "name": "flexjar",
+  "version": "0.1.0",
   "main": "",
   "scripts": {
     "dev": "next",
@@ -11,8 +8,6 @@
     "start": "next start",
     "test": "jest"
   },
-  "author": "Iain Collins <me@iaincollins.com>",
-  "license": "ISC",
   "dependencies": {
     "@mdx-js/loader": "^1.6.16",
     "@mdx-js/mdx": "^1.6.16",

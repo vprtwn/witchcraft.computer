@@ -26,3 +26,8 @@ export enum Direction {
   Up,
   Down,
 }
+
+export enum WidgetType {
+  Text,
+  Link,
+}

@@ -1,7 +1,7 @@
 import { customAlphabet } from 'nanoid';
-import { OrderItem } from './typedefs';
+import { OrderItem, WidgetType } from './typedefs';
 
-// list utils (for drag and drop)
+//====== list utils (for drag and drop) =======
 export const reorder = (list, startIndex, endIndex): OrderItem[] => {
   const result = Array.from(list) as OrderItem[];
   const [removed] = result.splice(startIndex, 1);
@@ -21,12 +21,20 @@ export const add = (list, newObject): OrderItem[] => {
   return result;
 };
 
-// string utils
-// TODO: different cards for different types
-export const generateCardId = (): string => {
+//====== string utils =======
+export const generateWidgetId = (type: WidgetType): string => {
   const nanoid = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 6);
   const id = nanoid();
-  return `c.${id}`;
+  let typeString: string;
+  switch (type) {
+    case WidgetType.Link:
+      typeString = 'link';
+      break;
+    case WidgetType.Text:
+      typeString = 'text';
+      break;
+  }
+  return `w.${typeString}.${id}`;
 };
 
 export const emailFromUsername = (username: string): string => {
