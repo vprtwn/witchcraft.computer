@@ -1,5 +1,12 @@
 # flexjar
 
+## Pattern Language
+
+A Flexjar ("Jar") is a stack of Blocks.
+Each Block can contain Text or a Link.
+Each Jar can also have one payment Block for collecting tips.
+Notes left with tips are displayed at the bottom of the Jar.
+
 ## Getting started
 
 - Create an `.env.local` using credentials
