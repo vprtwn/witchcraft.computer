@@ -99,27 +99,38 @@ const UserPage = (props) => {
                           isDragDisabled={!props.signedIn}
                         >
                           {(provided, snapshot) => (
-                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              style={{ outline: 'none !important' }}
+                            >
                               {orderItem.i.startsWith('w.text.') && (
-                                <TextWidget
-                                  id={orderItem.i}
-                                  hideUp={index === 0}
-                                  hideDown={index === order.length - 1}
-                                  hideToolbar={previewing}
-                                  metadata={props.metadata}
-                                  username={props.username}
-                                  customerId={props.customerId}
-                                  signedIn={props.signedIn}
-                                  onDown={() => {
-                                    moveWidget(index, Direction.Down);
+                                <Box
+                                  sx={{
+                                    py: 2,
                                   }}
-                                  onUp={() => {
-                                    moveWidget(index, Direction.Up);
-                                  }}
-                                  onDelete={() => {
-                                    removeWidget(index);
-                                  }}
-                                />
+                                >
+                                  <TextWidget
+                                    id={orderItem.i}
+                                    hideUp={index === 0}
+                                    hideDown={index === order.length - 1}
+                                    hideToolbar={previewing}
+                                    metadata={props.metadata}
+                                    username={props.username}
+                                    customerId={props.customerId}
+                                    signedIn={props.signedIn}
+                                    onDown={() => {
+                                      moveWidget(index, Direction.Down);
+                                    }}
+                                    onUp={() => {
+                                      moveWidget(index, Direction.Up);
+                                    }}
+                                    onDelete={() => {
+                                      removeWidget(index);
+                                    }}
+                                  />
+                                </Box>
                               )}
                             </div>
                           )}
