@@ -56,6 +56,7 @@ export default (props) => {
         <Editor
           ref={editorRef}
           defaultValue={text}
+          placeholder=""
           readOnly={!editing}
           onChange={(v) => {
             setText(v());

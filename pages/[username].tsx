@@ -99,12 +99,7 @@ const UserPage = (props) => {
                           isDragDisabled={!props.signedIn}
                         >
                           {(provided, snapshot) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              style={{ outline: 'none !important' }}
-                            >
+                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                               {orderItem.i.startsWith('w.text.') && (
                                 <Box
                                   sx={{
