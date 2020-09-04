@@ -27,8 +27,6 @@ const UserPage = (props) => {
   const defaultOrder = [];
   const initialOrder = remoteOrder || defaultOrder;
   const [order, setOrder] = useState(initialOrder);
-  const blankEditingArray = Array.from(Array(30).keys()) as Array<any>;
-  const [editingWidgets, setEditingWidgets] = useState(blankEditingArray);
 
   const [previewing, setPreviewing] = useState(true);
 
@@ -98,7 +96,7 @@ const UserPage = (props) => {
                           key={orderItem.i}
                           draggableId={orderItem.i}
                           index={index}
-                          isDragDisabled={!props.signedIn || editingWidgets[index] === true}
+                          isDragDisabled={!props.signedIn}
                         >
                           {(provided, snapshot) => (
                             <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
@@ -120,11 +118,6 @@ const UserPage = (props) => {
                                   }}
                                   onDelete={() => {
                                     removeWidget(index);
-                                  }}
-                                  onChangeEditing={(e) => {
-                                    const newWidgets = editingWidgets;
-                                    newWidgets[index] = e;
-                                    setEditingWidgets([...newWidgets]);
                                   }}
                                 />
                               )}

@@ -10,7 +10,7 @@ export default (props) => {
   const twitterProfileUrl = `https://twitter.com/${props.username}`;
 
   return (
-    <Container sx={{ mt: 0, py: 1 }}>
+    <Container sx={{ mt: 0, py: 1, mb: 2 }}>
       <Flex sx={{ justifyContent: 'center', py: 2 }}>
         {props.profileImage && (
           // <Link href={twitterProfileUrl}>

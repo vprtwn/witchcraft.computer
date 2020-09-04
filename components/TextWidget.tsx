@@ -19,12 +19,6 @@ export default (props) => {
   const [debouncedText] = useDebounce(text, DEBOUNCE_MS);
 
   useEffect(() => {
-    if (props.onChangeEditing) {
-      props.onChangeEditing(editing);
-    }
-  }, [editing]);
-
-  useEffect(() => {
     syncUpdatedText(debouncedText);
   }, [debouncedText]);
 
@@ -40,39 +34,40 @@ export default (props) => {
   };
 
   return (
-    <Card
-      sx={{
-        py: 0,
-        px: 0,
-        my: 4,
-        border: editing ? '2px solid' : '1px solid',
-        borderColor: 'text',
-        borderRadius: 4,
-        bg: 'white',
-      }}
-    >
-      <Box p={2}>
-        <Editor
-          defaultValue={text}
-          readOnly={!editing}
-          onChange={(v) => {
-            setText(v());
-          }}
-        />
-      </Box>
-      {showEditor && !props.hideToolbar && (
-        <WidgetToolbar
-          editing={editing}
-          onDelete={props.onDelete}
-          hideDown={props.hideDown}
-          hideUp={props.hideUp}
-          onUp={props.onUp}
-          onDown={props.onDown}
-          onSwitchEditing={() => {
-            setEditing(!editing);
-          }}
-        />
-      )}
-    </Card>
+    <Box sx={{ py: 2 }}>
+      <Card
+        sx={{
+          py: 0,
+          px: 0,
+          border: editing ? '2px solid' : '1px solid',
+          borderColor: 'text',
+          borderRadius: 4,
+          bg: 'white',
+        }}
+      >
+        <Box p={2}>
+          <Editor
+            defaultValue={text}
+            readOnly={!editing}
+            onChange={(v) => {
+              setText(v());
+            }}
+          />
+        </Box>
+        {showEditor && !props.hideToolbar && (
+          <WidgetToolbar
+            editing={editing}
+            onDelete={props.onDelete}
+            hideDown={props.hideDown}
+            hideUp={props.hideUp}
+            onUp={props.onUp}
+            onDown={props.onDown}
+            onSwitchEditing={() => {
+              setEditing(!editing);
+            }}
+          />
+        )}
+      </Card>
+    </Box>
   );
 };
