@@ -20,7 +20,9 @@ export default (props) => {
           as="form"
           onSubmit={(e) => {
             e.preventDefault();
-            console.log('submit');
+            const text = e.currentTarget.text.value;
+            const url = e.currentTarget.url.value;
+            props.onClick({ type: WidgetType.Link, text: text, url: url });
           }}
           sx={{ bg: 'background', p: 2, border: '1px solid', borderColor: 'text', borderRadius: 4 }}
         >
@@ -42,19 +44,19 @@ export default (props) => {
           <Button
             sx={{ flexGrow: 1, bg: 'white' }}
             onClick={() => {
-              props.onClick({ type: WidgetType.Text });
+              setShowingLinkInput(!showingLinkInput);
             }}
           >
-            + Text
+            + Link
           </Button>
           <Box px={1} />
           <Button
             sx={{ flexGrow: 1, bg: 'white' }}
             onClick={() => {
-              setShowingLinkInput(!showingLinkInput);
+              props.onClick({ type: WidgetType.Text });
             }}
           >
-            + Link
+            + Text
           </Button>
         </Flex>
       )}

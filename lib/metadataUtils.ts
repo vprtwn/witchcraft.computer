@@ -8,12 +8,16 @@ export const postMetadataUpdate = async (
   customerId: string,
   username: string,
   removedKey: string | null = null, // this is ugly
+  order: Record<string, string>[] | null = null,
 ): Promise<MetadataValue> => {
   const update = {};
   update[key] = value;
   if (removedKey) {
     // TODO: refactor this & test
     update[removedKey] = null;
+  }
+  if (order) {
+    update['w.order'] = order;
   }
   const params = {
     username: username,

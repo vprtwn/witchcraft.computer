@@ -99,6 +99,14 @@ export default {
     },
   },
   cards: {
+    widget: {
+      py: 0,
+      px: 0,
+      border: '1px solid',
+      borderColor: 'text',
+      borderRadius: 4,
+      bg: 'white',
+    },
     primary: {
       paddingX: 3,
       paddingY: 2,

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
 import Header from '../components/Header';
 import TextWidget from '../components/TextWidget';
+import LinkWidget from '../components/LinkWidget';
 import Settings from '../components/Settings';
 import PageFooter from '../components/PageFooter';
 import { getOrCreateCustomer, getCustomer } from '../lib/ops';
@@ -29,13 +30,15 @@ const UserPage = (props) => {
     query: {},
   } = useRouter();
 
+  const defaultText = 'edit me';
+
   // widget ordering, [{i: "w.text.A1B2"}, ...]
   const initialOrder = readWidgetOrder(props.metadata) || [];
   const [order, setOrder] = useState(initialOrder);
   const [showingNewMenu, setShowingNewMenu] = useState(false);
   const [previewing, setPreviewing] = useState(DEBUG ? false : true);
 
-  const updateOrder = async function (newOrder: Record<string, string>[], removedId: string | null = null) {
+  const syncOrder = async function (newOrder: Record<string, string>[], removedId: string | null = null) {
     try {
       const metadata = {};
       metadata['w.order'] = JSON.stringify(newOrder);
@@ -48,6 +51,14 @@ const UserPage = (props) => {
     }
   };
 
+  const syncNewWidget = async function (id: string, value: string, order: Record<string, string>[]) {
+    try {
+      await postMetadataUpdate(id, value, props.customerId, props.username, null, order);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const onDragEnd = (result) => {
     // dropped outside the list
     if (!result.destination) {
@@ -55,7 +66,7 @@ const UserPage = (props) => {
     }
     const newItems = reorder(order, result.source.index, result.destination.index);
     setOrder(newItems);
-    updateOrder(newItems);
+    syncOrder(newItems);
   };
 
   const moveWidget = (index: number, direction: Direction) => {
@@ -65,23 +76,31 @@ const UserPage = (props) => {
     const newIndex = direction === Direction.Up ? index - 1 : index + 1;
     const newItems = reorder(order, index, newIndex);
     setOrder(newItems);
-    updateOrder(newItems);
+    syncOrder(newItems);
   };
 
   const removeWidget = (index: number) => {
     const result = remove(order, index);
-    console.log('result', JSON.stringify(result, null, 2));
     setOrder(result.items);
-    updateOrder(result.items, result.removedId);
+    syncOrder(result.items, result.removedId);
   };
 
   const addTextWidget = () => {
-    const newId = generateWidgetId(WidgetType.Text);
-    const newObject = { i: newId };
+    const id = generateWidgetId(WidgetType.Text);
+    const newItem = { i: id };
     // TODO #28: updating order without persisting TextWidget can result in stale order data
-    const newItems = add(order, newObject);
+    const newItems = add(order, newItem);
     setOrder(newItems);
-    updateOrder(newItems);
+    syncNewWidget(id, defaultText, newItems);
+  };
+
+  const addLinkWidget = (content: any) => {
+    const id = generateWidgetId(WidgetType.Link);
+    const newItem = { i: id };
+    const newItems = add(order, newItem);
+    const value = JSON.stringify({ text: content.text, url: content.url });
+    setOrder(newItems);
+    syncNewWidget(id, value, newItems);
   };
 
   return (
@@ -101,7 +120,7 @@ const UserPage = (props) => {
                           key={orderItem.i}
                           draggableId={orderItem.i}
                           index={index}
-                          isDragDisabled={!props.signedIn}
+                          isDragDisabled={!props.signedIn || previewing}
                         >
                           {(provided, snapshot) => (
                             <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
@@ -112,6 +131,34 @@ const UserPage = (props) => {
                                   }}
                                 >
                                   <TextWidget
+                                    default={defaultText}
+                                    id={orderItem.i}
+                                    hideUp={index === 0}
+                                    hideDown={index === order.length - 1}
+                                    hideToolbar={previewing}
+                                    metadata={props.metadata}
+                                    username={props.username}
+                                    customerId={props.customerId}
+                                    signedIn={props.signedIn}
+                                    onDown={() => {
+                                      moveWidget(index, Direction.Down);
+                                    }}
+                                    onUp={() => {
+                                      moveWidget(index, Direction.Up);
+                                    }}
+                                    onDelete={() => {
+                                      removeWidget(index);
+                                    }}
+                                  />
+                                </Box>
+                              )}
+                              {orderItem.i.startsWith('w.link.') && (
+                                <Box
+                                  sx={{
+                                    py: 2,
+                                  }}
+                                >
+                                  <LinkWidget
                                     id={orderItem.i}
                                     hideUp={index === 0}
                                     hideDown={index === order.length - 1}
@@ -151,6 +198,7 @@ const UserPage = (props) => {
                     addTextWidget();
                     break;
                   case WidgetType.Link:
+                    addLinkWidget(result);
                     break;
                 }
               }}

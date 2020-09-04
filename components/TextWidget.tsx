@@ -4,17 +4,15 @@ import { useDebounce } from 'use-debounce';
 import { readString, postMetadataUpdate } from '../lib/metadataUtils';
 import Stripe from 'stripe';
 import Editor from 'rich-markdown-editor';
-import WidgetToolbar from './WidgetToolbar';
+import EditToolbar from './EditToolbar';
 import RichMarkdownEditor from 'rich-markdown-editor';
 
 const DEBOUNCE_MS = 700;
 
 export default (props) => {
-  const defaultMd = 'edit me';
   const signedIn = props.signedIn;
-  // currently, widget reads its own value from all the metadata. seems ~fine
-  let initialMd = readString(props.metadata, props.id, props.signedIn ? defaultMd : null);
-  let showEditor = signedIn;
+  // widgets read from all metadata, which is meh but ok
+  let initialMd = readString(props.metadata, props.id, props.signedIn ? props.default : null);
   const [editing, setEditing] = useState(false);
   const [text, setText] = useState(initialMd);
   const [debouncedText] = useDebounce(text, DEBOUNCE_MS);
@@ -42,16 +40,7 @@ export default (props) => {
   };
 
   return (
-    <Card
-      sx={{
-        py: 0,
-        px: 0,
-        border: editing ? '2px solid' : '1px solid',
-        borderColor: 'text',
-        borderRadius: 4,
-        bg: 'white',
-      }}
-    >
+    <Card variant="widget">
       <Box p={2}>
         <Editor
           ref={editorRef}
@@ -63,8 +52,8 @@ export default (props) => {
           }}
         />
       </Box>
-      {showEditor && !props.hideToolbar && (
-        <WidgetToolbar
+      {signedIn && !props.hideToolbar && (
+        <EditToolbar
           editing={editing}
           onDelete={props.onDelete}
           hideDown={props.hideDown}
