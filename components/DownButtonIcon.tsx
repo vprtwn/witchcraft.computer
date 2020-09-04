@@ -8,26 +8,25 @@ export default () => {
         alignItems: 'center',
       }}
     >
-      <svg display="block" height="15" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
+      <svg height="21" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
         <g
           fill="none"
           fill-rule="evenodd"
           stroke="#2a2e3b"
           stroke-linecap="round"
           stroke-linejoin="round"
-          transform="matrix(0 1 -1 0 20 2)"
+          transform="translate(6 4)"
         >
-          <circle cx="8.5" cy="8.5" r="8" />
           <path
-            d="m11.621 6.379v4.242h-4.242"
-            transform="matrix(.70710678 .70710678 .70710678 -.70710678 -3.227683 7.792317)"
+            d="m7.328 6.67.001 5.658-5.658-.001"
+            transform="matrix(-.70710678 .70710678 .70710678 .70710678 .965201 -.399799)"
           />
-          <path d="m8.5 4.5v8" transform="matrix(0 1 -1 0 17 0)" />
+          <path d="m4.5.5v13" />
         </g>
       </svg>
-      <Box>
+      {/* <Box>
         <Label variant="buttonlabel">Down</Label>
-      </Box>
+      </Box> */}
     </Flex>
   );
 };

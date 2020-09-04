@@ -8,26 +8,22 @@ export default () => {
         alignItems: 'center',
       }}
     >
-      <svg display="block" height="15" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
+      <svg xmlns="http://www.w3.org/2000/svg" height="21" viewBox="0 0 21 21">
         <g
           fill="none"
           fill-rule="evenodd"
-          stroke="#2a2e3b"
+          stroke="#2A2E3B"
           stroke-linecap="round"
           stroke-linejoin="round"
-          transform="matrix(0 -1 1 0 2 19)"
+          transform="translate(6 3)"
         >
-          <circle cx="8.5" cy="8.5" r="8" />
-          <path
-            d="m11.621 6.379v4.242h-4.242"
-            transform="matrix(.70710678 .70710678 .70710678 -.70710678 -3.227683 7.792317)"
-          />
-          <path d="m8.5 4.5v8" transform="matrix(0 1 -1 0 17 0)" />
+          <polyline points="7.324 1.661 7.324 7.318 1.647 7.339" transform="scale(1 -1) rotate(45 15.35 0)" />
+          <line x1="4.5" x2="4.5" y1=".5" y2="13.5" />
         </g>
       </svg>
-      <Box>
+      {/* <Box>
         <Label variant="buttonlabel">Up</Label>
-      </Box>
+      </Box> */}
     </Flex>
   );
 };

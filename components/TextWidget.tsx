@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card, Box } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
 import { readString, postMetadataUpdate } from '../lib/metadataUtils';
 import Stripe from 'stripe';
 import Editor from 'rich-markdown-editor';
 import WidgetToolbar from './WidgetToolbar';
+import RichMarkdownEditor from 'rich-markdown-editor';
 
 const DEBOUNCE_MS = 700;
 
@@ -17,10 +18,17 @@ export default (props) => {
   const [editing, setEditing] = useState(false);
   const [text, setText] = useState(initialMd);
   const [debouncedText] = useDebounce(text, DEBOUNCE_MS);
+  const editorRef = useRef<RichMarkdownEditor | null>(null);
 
   useEffect(() => {
     syncUpdatedText(debouncedText);
   }, [debouncedText]);
+
+  useEffect(() => {
+    if (editing) {
+      editorRef.current.focusAtEnd();
+    }
+  }, [editing]);
 
   const syncUpdatedText = async function (value) {
     try {
@@ -47,6 +55,7 @@ export default (props) => {
       >
         <Box p={2}>
           <Editor
+            ref={editorRef}
             defaultValue={text}
             readOnly={!editing}
             onChange={(v) => {

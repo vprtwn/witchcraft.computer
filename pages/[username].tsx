@@ -15,7 +15,7 @@ import { useSession, getSession } from 'next-auth/client';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import EditButtonIcon from '../components/EditButtonIcon';
 import ViewButtonIcon from '../components/ViewButtonIcon';
-import AddButtonIcon from '../components/AddButtonIcon';
+import AddButtonIcon from '../components/NewButtonIcon';
 
 const UserPage = (props) => {
   const {
