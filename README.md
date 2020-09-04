@@ -20,8 +20,8 @@
 ### Updating the TextWidget Editor
 
 - TextWidget uses a [forked rich-markdown-editor](https://github.com/mysterious-technology/rich-markdown-editor)
-- First pushing updates to the `flexjar` branch of the fork.
-  - I'm not sure if you have to run `yarn build` also, or if that happens as part of yarn...
+- First, push to the `flexjar` branch of the fork.
+  - I'm not sure if you have to run `yarn build` and commit those changes, or if that happens as part of yarn...
 - When you're done, run
   - `yarn remove rich-markdown-editor`
   - `yarn cache clean`
