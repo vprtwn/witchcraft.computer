@@ -11,7 +11,7 @@ const DEBOUNCE_MS = 700;
 
 export default (props) => {
   const signedIn = props.signedIn;
-  // widgets read from all metadata, which is meh but ok
+  // blocks read from all metadata, which is meh but ok
   let initialMd = readString(props.metadata, props.id, props.signedIn ? props.default : null);
   const [editing, setEditing] = useState(false);
   const [text, setText] = useState(initialMd);
@@ -39,7 +39,7 @@ export default (props) => {
   };
 
   return (
-    <Card variant="widget">
+    <Card variant="block">
       <Box sx={{ px: 3, py: 2 }}>
         <Editor
           ref={editorRef}

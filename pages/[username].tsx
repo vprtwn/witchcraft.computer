@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
 import Header from '../components/Header';
-import TextWidget from '../components/TextWidget';
-import LinkWidget from '../components/LinkWidget';
+import TextBlock from '../components/TextBlock';
+import LinkBlock from '../components/LinkBlock';
 import Settings from '../components/Settings';
 import PageFooter from '../components/PageFooter';
 import { getOrCreateCustomer, getCustomer } from '../lib/ops';
-import { reorder, remove, add, unprefixUsername, generateWidgetId } from '../lib/utils';
-import { postMetadataUpdate, readWidgetOrder } from '../lib/metadataUtils';
-import { Direction, WidgetType } from '../lib/typedefs';
+import { reorder, remove, add, unprefixUsername, generateBlockId } from '../lib/utils';
+import { postMetadataUpdate, readBlockOrder } from '../lib/metadataUtils';
+import { Direction, BlockType } from '../lib/typedefs';
 import { useRouter } from 'next/router';
 import { Box, IconButton, Flex, Label, Text } from 'theme-ui';
 import { GetServerSideProps } from 'next';
@@ -32,8 +32,8 @@ const UserPage = (props) => {
 
   const defaultText = 'edit me';
 
-  // widget ordering, [{i: "w.text.A1B2"}, ...]
-  const initialOrder = readWidgetOrder(props.metadata) || [];
+  // block ordering, [{i: "b.text.A1B2"}, ...]
+  const initialOrder = readBlockOrder(props.metadata) || [];
   const [order, setOrder] = useState(initialOrder);
   const [showingNewMenu, setShowingNewMenu] = useState(false);
   const [previewing, setPreviewing] = useState(DEBUG ? false : true);
@@ -41,14 +41,14 @@ const UserPage = (props) => {
 
   const syncOrder = async function (newOrder: Record<string, string>[], removedId: string | null = null) {
     try {
-      await postMetadataUpdate('w.order', newOrder, props.customerId, props.username, removedId);
+      await postMetadataUpdate('b.order', newOrder, props.customerId, props.username, removedId);
       // don't need to call setMetadata if updating order only
     } catch (e) {
       console.error(e);
     }
   };
 
-  const syncNewWidget = async function (id: string, value: string, order: Record<string, string>[]) {
+  const syncNewBlock = async function (id: string, value: string, order: Record<string, string>[]) {
     try {
       setShowingNewMenu(false);
       const newMetadata = await postMetadataUpdate(id, value, props.customerId, props.username, null, order);
@@ -69,7 +69,7 @@ const UserPage = (props) => {
     syncOrder(newItems);
   };
 
-  const moveWidget = (index: number, direction: Direction) => {
+  const moveBlock = (index: number, direction: Direction) => {
     if (index === 0 && direction === Direction.Up) {
       return;
     }
@@ -79,28 +79,28 @@ const UserPage = (props) => {
     syncOrder(newItems);
   };
 
-  const removeWidget = (index: number) => {
+  const removeBlock = (index: number) => {
     const result = remove(order, index);
     setOrder(result.items);
     syncOrder(result.items, result.removedId);
   };
 
-  const addTextWidget = () => {
-    const id = generateWidgetId(WidgetType.Text);
+  const addTextBlock = () => {
+    const id = generateBlockId(BlockType.Text);
     const newItem = { i: id };
-    // TODO #28: updating order without persisting TextWidget can result in stale order data
+    // TODO #28: updating order without persisting TextBlock can result in stale order data
     const newItems = add(order, newItem);
     setOrder(newItems);
-    syncNewWidget(id, defaultText, newItems);
+    syncNewBlock(id, defaultText, newItems);
   };
 
-  const addLinkWidget = (content: any) => {
-    const id = generateWidgetId(WidgetType.Link);
+  const addLinkBlock = (content: any) => {
+    const id = generateBlockId(BlockType.Link);
     const newItem = { i: id };
     const newItems = add(order, newItem);
     const value = JSON.stringify({ text: content.text, url: content.url });
     setOrder(newItems);
-    syncNewWidget(id, value, newItems);
+    syncNewBlock(id, value, newItems);
   };
 
   return (
@@ -124,13 +124,13 @@ const UserPage = (props) => {
                         >
                           {(provided, snapshot) => (
                             <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                              {orderItem.i.startsWith('w.text.') && (
+                              {orderItem.i.startsWith('b.text.') && (
                                 <Box
                                   sx={{
                                     py: 2,
                                   }}
                                 >
-                                  <TextWidget
+                                  <TextBlock
                                     default={defaultText}
                                     previewing={previewing}
                                     id={orderItem.i}
@@ -142,24 +142,24 @@ const UserPage = (props) => {
                                     customerId={props.customerId}
                                     signedIn={props.signedIn}
                                     onDown={() => {
-                                      moveWidget(index, Direction.Down);
+                                      moveBlock(index, Direction.Down);
                                     }}
                                     onUp={() => {
-                                      moveWidget(index, Direction.Up);
+                                      moveBlock(index, Direction.Up);
                                     }}
                                     onDelete={() => {
-                                      removeWidget(index);
+                                      removeBlock(index);
                                     }}
                                   />
                                 </Box>
                               )}
-                              {orderItem.i.startsWith('w.link.') && (
+                              {orderItem.i.startsWith('b.link.') && (
                                 <Box
                                   sx={{
                                     py: 2,
                                   }}
                                 >
-                                  <LinkWidget
+                                  <LinkBlock
                                     id={orderItem.i}
                                     hideUp={index === 0}
                                     hideDown={index === order.length - 1}
@@ -169,13 +169,13 @@ const UserPage = (props) => {
                                     customerId={props.customerId}
                                     signedIn={props.signedIn}
                                     onDown={() => {
-                                      moveWidget(index, Direction.Down);
+                                      moveBlock(index, Direction.Down);
                                     }}
                                     onUp={() => {
-                                      moveWidget(index, Direction.Up);
+                                      moveBlock(index, Direction.Up);
                                     }}
                                     onDelete={() => {
-                                      removeWidget(index);
+                                      removeBlock(index);
                                     }}
                                   />
                                 </Box>
@@ -191,15 +191,15 @@ const UserPage = (props) => {
             </Droppable>
           </DragDropContext>
 
-          {showingNewMenu && (
+          {showingNewMenu && !previewing && (
             <NewMenu
               onClick={(result) => {
-                switch (result.type as WidgetType) {
-                  case WidgetType.Text:
-                    addTextWidget();
+                switch (result.type as BlockType) {
+                  case BlockType.Text:
+                    addTextBlock();
                     break;
-                  case WidgetType.Link:
-                    addLinkWidget(result);
+                  case BlockType.Link:
+                    addLinkBlock(result);
                     break;
                 }
               }}

@@ -17,9 +17,9 @@
 - You get 40? keys and values of 500 chars, so it's pretty workable (and free).
 - Maybe these limitations drive what's possible in the free tier of the product.
 
-### Updating the TextWidget Editor
+### Updating the TextBlock Editor
 
-- TextWidget uses a [forked rich-markdown-editor](https://github.com/mysterious-technology/rich-markdown-editor)
+- TextBlock uses a [forked rich-markdown-editor](https://github.com/mysterious-technology/rich-markdown-editor)
 - First, push to the `flexjar` branch of the fork.
   - I'm not sure if you have to run `yarn build` and commit those changes, or if that happens as part of yarn...
 - When you're done, run

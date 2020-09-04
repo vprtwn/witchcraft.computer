@@ -27,7 +27,7 @@ export enum Direction {
   Down,
 }
 
-export enum WidgetType {
+export enum BlockType {
   Text = 'text',
   Link = 'link',
 }

@@ -1,5 +1,5 @@
 import { customAlphabet } from 'nanoid';
-import { OrderItem, WidgetType } from './typedefs';
+import { OrderItem, BlockType } from './typedefs';
 
 //====== list utils (for drag and drop) =======
 export const reorder = (list, startIndex, endIndex): OrderItem[] => {
@@ -22,19 +22,19 @@ export const add = (list, newObject): OrderItem[] => {
 };
 
 //====== string utils =======
-export const generateWidgetId = (type: WidgetType): string => {
+export const generateBlockId = (type: BlockType): string => {
   const nanoid = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 6);
   const id = nanoid();
   let typeString: string;
   switch (type) {
-    case WidgetType.Link:
+    case BlockType.Link:
       typeString = 'link';
       break;
-    case WidgetType.Text:
+    case BlockType.Text:
       typeString = 'text';
       break;
   }
-  return `w.${typeString}.${id}`;
+  return `b.${typeString}.${id}`;
 };
 
 export const emailFromUsername = (username: string): string => {

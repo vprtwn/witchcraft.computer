@@ -17,7 +17,7 @@ export const postMetadataUpdate = async (
     update[removedKey] = null;
   }
   if (order) {
-    update['w.order'] = order;
+    update['b.order'] = order;
   }
   const params = {
     username: username,
@@ -134,7 +134,7 @@ export const readDict = (
   return parsedValue;
 };
 
-export const readWidgetOrder = (
+export const readBlockOrder = (
   metadata: Stripe.Metadata | null,
   defaultVal: Array<OrderItem> | null = null,
 ): Array<OrderItem> | null => {
@@ -142,8 +142,8 @@ export const readWidgetOrder = (
     return null;
   }
   let value = null;
-  if (metadata['w.order']) {
-    value = metadata['w.order'];
+  if (metadata['b.order']) {
+    value = metadata['b.order'];
   } else {
     return defaultVal;
   }

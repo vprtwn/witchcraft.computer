@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, Box, Button, Flex, Label, Input } from 'theme-ui';
-import { WidgetType } from '../lib/typedefs';
+import { BlockType } from '../lib/typedefs';
 
 const DEBOUNCE_MS = 700;
 
@@ -22,7 +22,7 @@ export default (props) => {
             e.preventDefault();
             const text = e.currentTarget.text.value;
             const url = e.currentTarget.url.value;
-            props.onClick({ type: WidgetType.Link, text: text, url: url });
+            props.onClick({ type: BlockType.Link, text: text, url: url });
           }}
           sx={{ bg: 'background', p: 2, border: '1px solid', borderColor: 'text', borderRadius: 4 }}
         >
@@ -53,7 +53,7 @@ export default (props) => {
           <Button
             sx={{ flexGrow: 1, bg: 'white' }}
             onClick={() => {
-              props.onClick({ type: WidgetType.Text });
+              props.onClick({ type: BlockType.Text });
             }}
           >
             + Text

@@ -5,11 +5,11 @@ import { readDict } from '../lib/metadataUtils';
 
 export default (props) => {
   const signedIn = props.signedIn;
-  // widgets read from all metadata, which is meh but ok
+  // blocks read from all metadata, which is meh but ok
   let content = readDict(props.metadata, props.id, null);
 
   return (
-    <Card variant="widget">
+    <Card variant="block">
       {content && (
         <Flex
           onClick={() => {

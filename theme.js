@@ -99,7 +99,7 @@ export default {
     },
   },
   cards: {
-    widget: {
+    block: {
       py: 0,
       px: 0,
       border: '1px solid',

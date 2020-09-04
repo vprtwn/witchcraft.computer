@@ -1,4 +1,4 @@
-import { readDict, readString, readWidgetOrder, syncMetadata } from '../lib/metadataUtils';
+import { readDict, readString, readBlockOrder, syncMetadata } from '../lib/metadataUtils';
 
 test('syncMetadata', () => {
   let local = {};
@@ -59,15 +59,15 @@ test('readDict', () => {
   expect(readDict(d, 'qux')).toBeNull();
 });
 
-test('readWidgetOrder', () => {
-  expect(readWidgetOrder(null, 'foo')).toBeNull();
+test('readBlockOrder', () => {
+  expect(readBlockOrder(null, 'foo')).toBeNull();
   let d = { foo: 'val', order: '[{"foo":1}, {"bar":2}]' };
-  expect(readWidgetOrder(d)).toBeNull();
-  expect(readWidgetOrder(d, [1])).toStrictEqual([1]);
-  d = { 'w.order': 'foo' };
-  expect(readWidgetOrder(d)).toBeNull();
-  d = { 'w.order': '{}' };
-  expect(readWidgetOrder(d)).toBeNull();
-  d = { 'w.order': '[{"foo":1}, {"bar":2}]' };
-  expect(readWidgetOrder(d)).toStrictEqual([{ foo: 1 }, { bar: 2 }]);
+  expect(readBlockOrder(d)).toBeNull();
+  expect(readBlockOrder(d, [1])).toStrictEqual([1]);
+  d = { 'b.order': 'foo' };
+  expect(readBlockOrder(d)).toBeNull();
+  d = { 'b.order': '{}' };
+  expect(readBlockOrder(d)).toBeNull();
+  d = { 'b.order': '[{"foo":1}, {"bar":2}]' };
+  expect(readBlockOrder(d)).toStrictEqual([{ foo: 1 }, { bar: 2 }]);
 });
