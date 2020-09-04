@@ -43,7 +43,7 @@ export default (props) => {
             <Text variant="small">Connect a Stripe account to get started. </Text>
             <Text variant="small">
               <Button
-                variant="tinywide"
+                variant="tiny"
                 mr={2}
                 onClick={() => {
                   window.location.assign(connectUrl);
@@ -52,7 +52,7 @@ export default (props) => {
                 Connect Stripe
               </Button>{' '}
               <Button
-                variant="tinywide"
+                variant="tiny"
                 onClick={() => {
                   console.log('TODO');
                 }}

@@ -16,6 +16,13 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import EditButtonIcon from '../components/EditButtonIcon';
 import ViewButtonIcon from '../components/ViewButtonIcon';
 import AddButtonIcon from '../components/NewButtonIcon';
+import BackButtonIcon from '../components/BackButtonIcon';
+import NewMenu from '../components/NewMenu';
+
+let DEBUG = true;
+if (process.env.NODE_ENV === 'production') {
+  DEBUG = false;
+}
 
 const UserPage = (props) => {
   const {
@@ -23,12 +30,10 @@ const UserPage = (props) => {
   } = useRouter();
 
   // widget ordering, [{i: "w.text.A1B2"}, ...]
-  let remoteOrder = readWidgetOrder(props.metadata);
-  const defaultOrder = [];
-  const initialOrder = remoteOrder || defaultOrder;
+  const initialOrder = readWidgetOrder(props.metadata) || [];
   const [order, setOrder] = useState(initialOrder);
-
-  const [previewing, setPreviewing] = useState(true);
+  const [showingNewMenu, setShowingNewMenu] = useState(false);
+  const [previewing, setPreviewing] = useState(DEBUG ? false : true);
 
   const updateOrder = async function (newOrder: Record<string, string>[], removedId: string | null = null) {
     try {
@@ -70,10 +75,10 @@ const UserPage = (props) => {
     updateOrder(result.items, result.removedId);
   };
 
-  const addWidget = () => {
-    // TODO: add a widget type picker (Text or Link)
+  const addTextWidget = () => {
     const newId = generateWidgetId(WidgetType.Text);
     const newObject = { i: newId };
+    // TODO #28: updating order without persisting TextWidget can result in stale order data
     const newItems = add(order, newObject);
     setOrder(newItems);
     updateOrder(newItems);
@@ -138,6 +143,20 @@ const UserPage = (props) => {
             </Droppable>
           </DragDropContext>
 
+          {showingNewMenu && (
+            <NewMenu
+              onClick={(result) => {
+                switch (result.type as WidgetType) {
+                  case WidgetType.Text:
+                    addTextWidget();
+                    break;
+                  case WidgetType.Link:
+                    break;
+                }
+              }}
+            />
+          )}
+
           {props.signedIn && (
             <Flex sx={{ py: 3, mx: 1, justifyContent: 'space-between' }}>
               <Box sx={{}}>
@@ -151,14 +170,13 @@ const UserPage = (props) => {
               </Box>
               <Box>
                 <IconButton
-                  sx={{ fontSize: '24px' }}
+                  sx={{ fontSize: '24px', visibility: previewing ? 'hidden' : 'visible' }}
+                  variant={showingNewMenu ? 'iconselected' : 'icon'}
                   onClick={() => {
-                    if (!previewing) {
-                      addWidget();
-                    }
+                    setShowingNewMenu(!showingNewMenu);
                   }}
                 >
-                  {previewing ? '' : <AddButtonIcon />}
+                  {showingNewMenu ? <BackButtonIcon /> : <AddButtonIcon />}
                 </IconButton>
               </Box>
             </Flex>

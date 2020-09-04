@@ -28,6 +28,6 @@ export enum Direction {
 }
 
 export enum WidgetType {
-  Text,
-  Link,
+  Text = 'text',
+  Link = 'link',
 }

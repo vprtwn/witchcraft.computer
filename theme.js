@@ -35,6 +35,20 @@ export default {
     },
   },
   buttons: {
+    primary: {
+      px: 2,
+      py: 1,
+      color: 'text',
+      border: 'solid',
+      borderWidth: 1,
+      bg: 'transparent',
+      fontSize: 13,
+      fontFamily: 'Recursive',
+      cursor: 'pointer',
+      '&:hover': {
+        bg: 'outline',
+      },
+    },
     small: {
       px: 2,
       py: 1,
@@ -45,19 +59,11 @@ export default {
       fontSize: 13,
       fontFamily: 'Recursive',
       cursor: 'pointer',
+      '&:hover': {
+        bg: 'outline',
+      },
     },
     tiny: {
-      px: 1,
-      py: 0,
-      color: 'text',
-      border: 'solid',
-      borderWidth: 1,
-      bg: 'transparent',
-      fontSize: 10,
-      fontFamily: 'Recursive',
-      cursor: 'pointer',
-    },
-    tinywide: {
       px: 2,
       py: 0,
       color: 'text',
@@ -67,25 +73,19 @@ export default {
       fontSize: 10,
       fontFamily: 'Recursive',
       cursor: 'pointer',
-    },
-    tip: {
-      px: 2,
-      py: 0,
-      color: 'text',
-      border: 'solid',
-      borderWidth: 1,
-      bg: 'transparent',
-      fontSize: '12px',
-      fontFamily: 'Recursive',
-      cursor: 'pointer',
+      '&:hover': {
+        bg: 'outline',
+      },
     },
     icon: {
-      px: 2,
-      py: 1,
-      color: 'primary',
-      bg: 'transparent',
-      fontSize: 13,
       cursor: 'pointer',
+      '&:hover': {
+        bg: 'outline',
+      },
+    },
+    iconselected: {
+      cursor: 'pointer',
+      bg: 'outline',
     },
   },
   links: {
@@ -137,6 +137,15 @@ export default {
       fontSize: '10px',
       fontFamily: 'Recursive',
       color: 'text',
+    },
+    formlabel: {
+      fontSize: '13px',
+      fontFamily: 'Recursive',
+      color: 'text',
+    },
+    input: {
+      bg: 'white',
+      py: 1,
     },
     buttonlabel: {
       fontSize: '11px',

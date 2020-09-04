@@ -10,7 +10,7 @@ import RichMarkdownEditor from 'rich-markdown-editor';
 const DEBOUNCE_MS = 700;
 
 export default (props) => {
-  const defaultMd = '_edit me_';
+  const defaultMd = 'edit me';
   const signedIn = props.signedIn;
   // currently, widget reads its own value from all the metadata. seems ~fine
   let initialMd = readString(props.metadata, props.id, props.signedIn ? defaultMd : null);
