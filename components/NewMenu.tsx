@@ -6,10 +6,10 @@ const DEBOUNCE_MS = 700;
 
 export default (props) => {
   const [showingLinkInput, setShowingLinkInput] = useState(false);
-  const nameInputRef = useRef<HTMLInputElement | null>(null);
+  const firstInputRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
     if (showingLinkInput) {
-      nameInputRef.current.focus();
+      firstInputRef.current.focus();
     }
   }, [showingLinkInput]);
 
@@ -26,14 +26,14 @@ export default (props) => {
           }}
           sx={{ bg: 'background', p: 2, border: '1px solid', borderColor: 'text', borderRadius: 4 }}
         >
-          <Label htmlFor="text" variant="formlabel">
-            Link Text
-          </Label>
-          <Input name="text" id="text" mb={3} ref={nameInputRef} required />
           <Label htmlFor="url" variant="formlabel">
             Link URL
           </Label>
-          <Input name="url" id="url" type="url" mb={3} required />
+          <Input name="url" id="url" type="url" mb={3} ref={firstInputRef} required />
+          <Label htmlFor="text" variant="formlabel">
+            Link Text
+          </Label>
+          <Input name="text" id="text" mb={3} required />
           <Flex sx={{ justifyContent: 'right' }}>
             <Button>Add link</Button>
           </Flex>

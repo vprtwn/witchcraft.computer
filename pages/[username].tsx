@@ -37,15 +37,12 @@ const UserPage = (props) => {
   const [order, setOrder] = useState(initialOrder);
   const [showingNewMenu, setShowingNewMenu] = useState(false);
   const [previewing, setPreviewing] = useState(DEBUG ? false : true);
+  const [metadata, setMetadata] = useState(props.metadata);
 
   const syncOrder = async function (newOrder: Record<string, string>[], removedId: string | null = null) {
     try {
-      const metadata = {};
-      metadata['w.order'] = JSON.stringify(newOrder);
-      if (removedId) {
-        metadata[removedId] = null;
-      }
       await postMetadataUpdate('w.order', newOrder, props.customerId, props.username, removedId);
+      // don't need to call setMetadata if updating order only
     } catch (e) {
       console.error(e);
     }
@@ -53,7 +50,9 @@ const UserPage = (props) => {
 
   const syncNewWidget = async function (id: string, value: string, order: Record<string, string>[]) {
     try {
-      await postMetadataUpdate(id, value, props.customerId, props.username, null, order);
+      const newMetadata = await postMetadataUpdate(id, value, props.customerId, props.username, null, order);
+      console.table(newMetadata);
+      setMetadata(newMetadata);
     } catch (e) {
       console.error(e);
     }
@@ -101,6 +100,7 @@ const UserPage = (props) => {
     const value = JSON.stringify({ text: content.text, url: content.url });
     setOrder(newItems);
     syncNewWidget(id, value, newItems);
+    setShowingNewMenu(false);
   };
 
   return (
@@ -132,11 +132,12 @@ const UserPage = (props) => {
                                 >
                                   <TextWidget
                                     default={defaultText}
+                                    previewing={previewing}
                                     id={orderItem.i}
                                     hideUp={index === 0}
                                     hideDown={index === order.length - 1}
                                     hideToolbar={previewing}
-                                    metadata={props.metadata}
+                                    metadata={metadata}
                                     username={props.username}
                                     customerId={props.customerId}
                                     signedIn={props.signedIn}
@@ -163,7 +164,7 @@ const UserPage = (props) => {
                                     hideUp={index === 0}
                                     hideDown={index === order.length - 1}
                                     hideToolbar={previewing}
-                                    metadata={props.metadata}
+                                    metadata={metadata}
                                     username={props.username}
                                     customerId={props.customerId}
                                     signedIn={props.signedIn}
@@ -230,7 +231,7 @@ const UserPage = (props) => {
             </Flex>
           )}
           {props.signedIn && !previewing && (
-            <Settings username={props.username} metadata={props.metadata} customerId={props.customerId} />
+            <Settings username={props.username} metadata={metadata} customerId={props.customerId} />
           )}
           <Box py={4} my={4} />
         </>

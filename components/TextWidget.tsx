@@ -30,10 +30,9 @@ export default (props) => {
 
   const syncUpdatedText = async function (value) {
     try {
-      const newVal = (await postMetadataUpdate(props.id, value, props.customerId, props.username)) as Stripe.Metadata;
-      if (newVal && typeof newVal === 'string') {
-        setText(newVal);
-      }
+      await postMetadataUpdate(props.id, value, props.customerId, props.username);
+      // TODO: handle errors
+      setText(value);
     } catch (e) {
       console.error(e);
     }
@@ -41,12 +40,12 @@ export default (props) => {
 
   return (
     <Card variant="widget">
-      <Box p={2}>
+      <Box sx={{ px: 3, py: 2 }}>
         <Editor
           ref={editorRef}
           defaultValue={text}
           placeholder=""
-          readOnly={!editing}
+          readOnly={props.previewing || !editing}
           onChange={(v) => {
             setText(v());
           }}

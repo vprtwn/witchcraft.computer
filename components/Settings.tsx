@@ -14,15 +14,6 @@ export default (props) => {
     setColorMode(colorMode);
   }
 
-  const updateStyle = async function (style) {
-    try {
-      const newVal = await postMetadataUpdate('style', style, props.customerId, props.username);
-      setStyle(toDict(newVal));
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
   const connectUrl = `https://connect.stripe.com/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_STRIPE_CONNECT_CLIENT_ID}&scope=read_write&state=${props.username}`;
 
   return (

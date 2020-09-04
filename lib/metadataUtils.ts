@@ -28,11 +28,7 @@ export const postMetadataUpdate = async (
     method: 'POST',
     body: JSON.stringify(params),
   });
-  let newVal = newMetadata[key];
-  try {
-    newVal = JSON.parse(newVal);
-  } catch (e) {}
-  return newVal;
+  return newMetadata;
 };
 
 /**
