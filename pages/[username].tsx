@@ -50,6 +50,7 @@ const UserPage = (props) => {
 
   const syncNewWidget = async function (id: string, value: string, order: Record<string, string>[]) {
     try {
+      setShowingNewMenu(false);
       const newMetadata = await postMetadataUpdate(id, value, props.customerId, props.username, null, order);
       console.table(newMetadata);
       setMetadata(newMetadata);
@@ -100,7 +101,6 @@ const UserPage = (props) => {
     const value = JSON.stringify({ text: content.text, url: content.url });
     setOrder(newItems);
     syncNewWidget(id, value, newItems);
-    setShowingNewMenu(false);
   };
 
   return (
@@ -233,7 +233,7 @@ const UserPage = (props) => {
           {props.signedIn && !previewing && (
             <Settings username={props.username} metadata={metadata} customerId={props.customerId} />
           )}
-          <Box py={4} my={4} />
+          <Box my={4} />
         </>
       )}
       <PageFooter />

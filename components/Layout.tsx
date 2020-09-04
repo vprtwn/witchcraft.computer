@@ -1,4 +1,4 @@
-import { Container, Box } from "theme-ui";
+import { Container, Box } from 'theme-ui';
 
 const Layout = ({ children }) => (
   <Container sx={{ maxWidth: 400 }}>

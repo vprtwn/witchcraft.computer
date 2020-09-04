@@ -7,13 +7,6 @@ export default (props) => {
       <Flex sx={{ alignItems: 'center' }}>
         <Box sx={{ flex: '1 1 auto' }} />
         <Flex sx={{ bg: 'transparent', borderRadius: 4, border: '1px solid gray', alignItems: 'center' }}>
-          <Flex sx={{ alignItems: 'center', color: 'gray' }}>
-            <Box sx={{ pl: 2, pr: 4, fontWeight: 'bold', fontSize: '11px' }}>
-              <Link href="/" variant="nav">
-                <i>flexjar</i>
-              </Link>
-            </Box>
-          </Flex>
           <Link href="/policies" variant="nav" sx={{ mx: 2, py: 1, fontSize: '10px', color: 'gray' }}>
             Policies
           </Link>

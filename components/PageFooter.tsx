@@ -10,7 +10,7 @@ export default (props) => {
           <Flex sx={{ alignItems: 'center', color: 'gray' }}>
             <Text sx={{ fontSize: '9px', ml: 2, mr: 1 }}>made with</Text>
             <Box sx={{ fontWeight: 'bold', fontSize: '11px', mr: 2 }}>
-              <Link href="/" variant="nav">
+              <Link href="/about" variant="nav">
                 <i>flexjar</i>
               </Link>
             </Box>
