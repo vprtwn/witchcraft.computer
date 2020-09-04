@@ -8,7 +8,7 @@ export default (props) => {
         alignItems: 'center',
       }}
     >
-      <svg height="21" viewBox="0 0 21 21" width="21" xmlns="http://www.w3.org/2000/svg">
+      <svg height="17" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
         <g
           fill="none"
           fill-rule="evenodd"
@@ -30,7 +30,7 @@ export default (props) => {
         </g>
       </svg>
       <Box>
-        <Label>{props.label ? props.label : 'View'}</Label>
+        <Label variant="buttonlabel">View</Label>
       </Box>
     </Flex>
   );

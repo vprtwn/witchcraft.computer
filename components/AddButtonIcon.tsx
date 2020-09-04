@@ -2,8 +2,13 @@ import { Label, Box, Flex } from 'theme-ui';
 
 export default () => {
   return (
-    <Box sx={{}}>
-      <svg display="block" height="21" viewBox="0 0 21 21" width="21" xmlns="http://www.w3.org/2000/svg">
+    <Flex
+      sx={{
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
+      <svg display="block" height="17" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
         <g
           fill="none"
           fill-rule="evenodd"
@@ -20,7 +25,7 @@ export default () => {
           <path d="m11.5.5v6" transform="matrix(0 1 -1 0 15 -8)" />
         </g>
       </svg>
-      <Label>Add</Label>
-    </Box>
+      <Label variant="buttonlabel">Add</Label>
+    </Flex>
   );
 };

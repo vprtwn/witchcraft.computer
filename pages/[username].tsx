@@ -147,7 +147,7 @@ const UserPage = (props) => {
                     setPreviewing(!previewing);
                   }}
                 >
-                  {previewing ? <EditButtonIcon /> : <ViewButtonIcon label="Preview" />}
+                  {previewing ? <EditButtonIcon /> : <ViewButtonIcon />}
                 </IconButton>
               </Box>
               <Box>

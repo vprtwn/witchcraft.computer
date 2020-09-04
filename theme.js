@@ -138,6 +138,12 @@ export default {
       fontFamily: 'Recursive',
       color: 'text',
     },
+    buttonlabel: {
+      fontSize: '11px',
+      fontFamily: 'Recursive',
+      color: 'text',
+      // fontWeight: 'bold',
+    },
     settingslabel: {
       fontSize: '15px',
       fontWeight: 'bold',

@@ -8,7 +8,7 @@ export default () => {
         alignItems: 'center',
       }}
     >
-      <svg display="block" height="21" viewBox="0 0 21 21" width="21" xmlns="http://www.w3.org/2000/svg">
+      <svg display="block" height="17" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
         <g
           fill="none"
           fill-rule="evenodd"
@@ -25,7 +25,7 @@ export default () => {
         </g>
       </svg>
       <Box>
-        <Label>Edit</Label>
+        <Label variant="buttonlabel">Edit</Label>
       </Box>
     </Flex>
   );

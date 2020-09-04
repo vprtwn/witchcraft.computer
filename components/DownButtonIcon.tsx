@@ -2,8 +2,13 @@ import { Label, Box, Flex } from 'theme-ui';
 
 export default () => {
   return (
-    <Box>
-      <svg display="block" height="21" viewBox="0 0 21 21" width="21" xmlns="http://www.w3.org/2000/svg">
+    <Flex
+      sx={{
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
+      <svg display="block" height="15" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
         <g
           fill="none"
           fill-rule="evenodd"
@@ -20,7 +25,9 @@ export default () => {
           <path d="m8.5 4.5v8" transform="matrix(0 1 -1 0 17 0)" />
         </g>
       </svg>
-      <Label>Down</Label>
-    </Box>
+      <Box>
+        <Label variant="buttonlabel">Down</Label>
+      </Box>
+    </Flex>
   );
 };
