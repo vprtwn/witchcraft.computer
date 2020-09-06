@@ -37,6 +37,23 @@ export const generateBlockId = (type: BlockType): string => {
   return `b.${typeString}.${id}`;
 };
 
+export const parseBlockId = (id: string): BlockType => {
+  if (!id.startsWith('b.')) {
+    return BlockType.Unknown;
+  }
+  const comps = id.split('.');
+  if (comps.length < 2) {
+    return BlockType.Unknown;
+  }
+  const type = comps[1];
+  if (type === 'link') {
+    return BlockType.Link;
+  } else if (type === 'text') {
+    return BlockType.Text;
+  }
+  return BlockType.Unknown;
+};
+
 export const emailFromUsername = (username: string): string => {
   return `${username}+twitter@jar.bio`;
 };

@@ -30,4 +30,5 @@ export enum Direction {
 export enum BlockType {
   Text = 'text',
   Link = 'link',
+  Unknown = 'unknown',
 }

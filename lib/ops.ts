@@ -1,7 +1,7 @@
 import Stripe from 'stripe';
 import { ErrorResponse, CustomerOpResponse, StripeAccountData, Metadata } from './typedefs';
 import { emailFromUsername } from './utils';
-import { syncMetadata } from './metadataUtils';
+import { syncMetadata, readBlockOrder } from './metadataUtils';
 const LOGSYM = '🔄';
 
 const logCustomerOp = (name: string, response: CustomerOpResponse) => {
@@ -228,10 +228,32 @@ export const connectStripeAccount = async (session: any, state: string, code: st
         name: businessName,
         email: stripeAccount.email,
       };
+      // Note: PaymentBlock gets reset after disconnecting & reconnecting Stripe
+      const paymentBlockData = {
+        text: 'Leave me a tip',
+        defaultAmount: 500,
+      };
+      let blockOrder = readBlockOrder(customer.metadata);
+      const paymentBlockOrderItem = { i: 'b.payment' };
+      if (blockOrder) {
+        let hasPaymentBlock = false;
+        blockOrder.forEach((o) => {
+          if (o.i === 'b.payment') {
+            hasPaymentBlock = true;
+          }
+        });
+        if (!hasPaymentBlock) {
+          blockOrder.push(paymentBlockOrderItem);
+        }
+      } else {
+        blockOrder = [paymentBlockOrderItem];
+      }
 
       // update customer
       const metadata = {
         stripeAccount: JSON.stringify(accountData),
+        'b.payment': JSON.stringify(paymentBlockData),
+        'b.order': JSON.stringify(blockOrder),
       };
       const updateResponse = await updateMetadataForCustomer(session, customer, metadata);
       if (updateResponse.errored) {
