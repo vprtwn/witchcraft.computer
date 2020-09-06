@@ -24,7 +24,7 @@ const IndexPage = () => {
           body: JSON.stringify(body),
         });
         const path = generateUserPath(state as string);
-        window.location.assign(`${path}?v=settings`);
+        window.location.assign(`${path}`);
       } catch (e) {
         return { props: { error: e.message } };
       }
@@ -40,7 +40,7 @@ const IndexPage = () => {
       <Box sx={{ bg: 'transparent', borderRadius: 4, py: 2, px: 3 }}>
         <Button
           onClick={() => signIn('twitter')}
-          variant="small"
+          variant="tiny"
           sx={{
             bg: 'white',
           }}

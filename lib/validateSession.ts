@@ -1,6 +1,6 @@
 import { ErrorResponse } from './typedefs';
 
-export const validateSession = (session, username: string): ErrorResponse | null => {
+export const validateSession = (session, username: string | null): ErrorResponse | null => {
   let response: ErrorResponse | null;
   if (!session || !session.user) {
     response = {
@@ -16,7 +16,7 @@ export const validateSession = (session, username: string): ErrorResponse | null
       errorMessage: 'no username in session',
     };
   }
-  if (session && session.user.username !== username) {
+  if (username && session && session.user.username !== username) {
     response = {
       httpStatus: 401,
       errorCode: 'session_username_mismatch',

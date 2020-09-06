@@ -1,14 +1,10 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "next-auth/client";
-import { validateSession } from "../../lib/validateSession";
-import { connectStripeAccount } from "../../lib/ops";
-import { ErrorResponse } from "../../lib/typedefs";
-import jwt from "next-auth/jwt";
-const secret = process.env.SECRET;
-import Stripe from "stripe";
+import { NextApiRequest, NextApiResponse } from 'next';
+import { getSession } from 'next-auth/client';
+import { validateSession } from '../../lib/validateSession';
+import { connectStripeAccount } from '../../lib/ops';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method !== "POST") {
+  if (req.method !== 'POST') {
     return;
   }
   // TODO: use JWT – more secure?

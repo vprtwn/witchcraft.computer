@@ -49,28 +49,14 @@ export default {
         bg: 'outline',
       },
     },
-    small: {
+    tiny: {
       px: 2,
       py: 1,
       color: 'text',
       border: 'solid',
       borderWidth: 1,
       bg: 'transparent',
-      fontSize: 13,
-      fontFamily: 'Recursive',
-      cursor: 'pointer',
-      '&:hover': {
-        bg: 'outline',
-      },
-    },
-    tiny: {
-      px: 2,
-      py: 0,
-      color: 'text',
-      border: 'solid',
-      borderWidth: 1,
-      bg: 'transparent',
-      fontSize: 10,
+      fontSize: 12,
       fontFamily: 'Recursive',
       cursor: 'pointer',
       '&:hover': {
@@ -79,8 +65,8 @@ export default {
     },
     newblock: {
       boxShadow: '0 0 8px rgba(0, 0, 0, 0.125)',
-      // border: 'solid',
-      borderWidth: 1,
+      border: 'solid 1px outline',
+      borderRadius: 8,
       bg: 'white',
       color: 'text',
       fontFamily: 'Recursive',
@@ -173,6 +159,7 @@ export default {
       fontSize: '11px',
       fontFamily: 'Recursive',
       color: 'text',
+      cursor: 'pointer',
       // fontWeight: 'bold',
     },
     settingslabel: {

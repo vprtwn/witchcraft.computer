@@ -244,6 +244,39 @@ export const connectStripeAccount = async (session: any, state: string, code: st
     errored: errorResponse != null,
     data: errorResponse ? errorResponse : customerResponse,
   };
-  logCustomerOp('getOrCreateCustomer', response);
+  logCustomerOp('connectStripeAccount', response);
+  return response;
+};
+
+export const disconnectStripeAccount = async (session: any): Promise<CustomerOpResponse> => {
+  let customerResponse: Stripe.Customer | null = null;
+  let errorResponse: ErrorResponse | null = null;
+  if (!session || !session.user || !session.user.username) {
+    errorResponse = {
+      httpStatus: 401,
+      errorMessage: `Invalid session: ${JSON.stringify(session)}`,
+      errorCode: 'invalid_session',
+    };
+  } else {
+    const getResponse = await getOrCreateCustomer(session, true);
+    if (getResponse.errored) {
+      errorResponse = getResponse.data as ErrorResponse;
+    } else {
+      const customer = getResponse.data as Stripe.Customer;
+      const metadata = {
+        stripeAccount: null,
+      };
+      const updateResponse = await updateMetadataForCustomer(session, customer, metadata);
+      if (updateResponse.errored) {
+        errorResponse = updateResponse.data as ErrorResponse;
+      }
+      customerResponse = updateResponse.data as Stripe.Customer;
+    }
+  }
+  const response = {
+    errored: errorResponse != null,
+    data: errorResponse ? errorResponse : customerResponse,
+  };
+  logCustomerOp('disconnectStripeAccount', response);
   return response;
 };
