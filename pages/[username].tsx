@@ -207,7 +207,7 @@ const UserPage = (props) => {
           )}
 
           {props.signedIn && (
-            <Flex sx={{ py: 3, mx: 1, justifyContent: 'space-between' }}>
+            <Flex sx={{ py: 3, mx: 2, justifyContent: 'space-between' }}>
               <Box sx={{}}>
                 <IconButton
                   onClick={() => {

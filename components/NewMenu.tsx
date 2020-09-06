@@ -40,9 +40,10 @@ export default (props) => {
         </Card>
       )}
       {!showingLinkInput && (
-        <Flex sx={{ justifyContent: 'space-between' }}>
+        <Flex sx={{ justifyContent: 'space-between', mt: 3, mb: 2 }}>
           <Button
-            sx={{ flexGrow: 1, bg: 'white' }}
+            variant="newblock"
+            sx={{ flexGrow: 1 }}
             onClick={() => {
               setShowingLinkInput(!showingLinkInput);
             }}
@@ -51,7 +52,8 @@ export default (props) => {
           </Button>
           <Box px={1} />
           <Button
-            sx={{ flexGrow: 1, bg: 'white' }}
+            variant="newblock"
+            sx={{ flexGrow: 1 }}
             onClick={() => {
               props.onClick({ type: BlockType.Text });
             }}

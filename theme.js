@@ -77,6 +77,20 @@ export default {
         bg: 'outline',
       },
     },
+    newblock: {
+      boxShadow: '0 0 8px rgba(0, 0, 0, 0.125)',
+      // border: 'solid',
+      borderWidth: 1,
+      bg: 'white',
+      color: 'text',
+      fontFamily: 'Recursive',
+      fontSize: 13,
+      cursor: 'pointer',
+      py: 2,
+      '&:hover': {
+        bg: 'outline',
+      },
+    },
     icon: {
       cursor: 'pointer',
       '&:hover': {

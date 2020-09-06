@@ -22,8 +22,9 @@ export default (props) => {
         p: 3,
         my: 2,
         bg: 'white',
-        border: '2px solid',
-        borderColor: 'text',
+        boxShadow: '0 0 8px rgba(0, 0, 0, 0.125)',
+        // border: '2px solid',
+        // borderColor: 'text',
       }}
     >
       <Box pb={2}>

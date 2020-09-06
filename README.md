@@ -2,10 +2,12 @@
 
 ## Pattern Language
 
-A Flexjar ("Jar") is a stack of Blocks.
-Each Block can contain Text or a Link.
-Each Jar can also have one payment Block for collecting tips.
-Notes left with tips are displayed at the bottom of the Jar.
+- A Flexjar ("Jar") is a stack of Blocks.
+- Each Block can contain Text or a Link.
+- Each Jar can have one Payment Block.
+- The Payment Block can accept messages.
+- Payment Messages are displayed at the bottom of the Jar.
+- Special messages change the state of the Jar.
 
 ## Getting started
 

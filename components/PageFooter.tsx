@@ -6,7 +6,15 @@ export default (props) => {
       <Box sx={{ flex: '1 1 auto' }} />
       <Flex sx={{ alignItems: 'center' }}>
         <Box sx={{ flex: '1 1 auto' }} />
-        <Flex sx={{ bg: 'transparent', borderRadius: 4, border: '1px solid gray', alignItems: 'center' }}>
+        <Flex
+          sx={{
+            bg: 'white',
+            borderRadius: 4,
+            // border: '1px solid gray',
+            alignItems: 'center',
+            boxShadow: '0 0 8px rgba(0, 0, 0, 0.125)',
+          }}
+        >
           <Flex sx={{ alignItems: 'center', color: 'gray' }}>
             <Text sx={{ fontSize: '9px', ml: 2, mr: 1 }}>made with</Text>
             <Box sx={{ fontWeight: 'bold', fontSize: '11px', mr: 2 }}>
