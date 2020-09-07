@@ -3,6 +3,7 @@ import Layout from '../components/Layout';
 import Header from '../components/Header';
 import TextBlock from '../components/TextBlock';
 import LinkBlock from '../components/LinkBlock';
+import PaymentBlock from '../components/PaymentBlock';
 import PageFooter from '../components/PageFooter';
 import { getOrCreateCustomer, getCustomer } from '../lib/ops';
 import { reorder, remove, add, unprefixUsername, generateBlockId, parseBlockId } from '../lib/utils';
@@ -65,6 +66,9 @@ const UserPage = (props) => {
   };
 
   const syncNewBlock = async function (id: string, value: string, order: Record<string, string>[]) {
+    if (id === 'b.payment') {
+      return;
+    }
     try {
       setShowingNewMenu(false);
       const newMetadata = await postMetadataUpdate(id, value, props.customerId, props.username, null, order);
@@ -104,7 +108,6 @@ const UserPage = (props) => {
   const addTextBlock = () => {
     const id = generateBlockId(BlockType.Text);
     const newItem = { i: id };
-    // TODO #28: updating order without persisting TextBlock can result in stale order data
     const newItems = add(order, newItem);
     setOrder(newItems);
     syncNewBlock(id, defaultText, newItems);
@@ -196,8 +199,33 @@ const UserPage = (props) => {
                                   />
                                 </Box>
                               )}
-                              {/* TODO: hide payment block if payments disabled */}
-                              {parseBlockId(orderItem.i) === BlockType.Unknown && (
+                              {stripeAccount && parseBlockId(orderItem.i) === BlockType.Payment && (
+                                <Box
+                                  sx={{
+                                    py: 2,
+                                  }}
+                                >
+                                  <PaymentBlock
+                                    hideUp={index === 0}
+                                    hideDown={index === order.length - 1}
+                                    hideToolbar={previewing}
+                                    metadata={metadata}
+                                    username={props.username}
+                                    customerId={props.customerId}
+                                    signedIn={props.signedIn}
+                                    onDown={() => {
+                                      moveBlock(index, Direction.Down);
+                                    }}
+                                    onUp={() => {
+                                      moveBlock(index, Direction.Up);
+                                    }}
+                                    onDelete={() => {
+                                      removeBlock(index);
+                                    }}
+                                  />
+                                </Box>
+                              )}
+                              {/* {parseBlockId(orderItem.i) === BlockType.Unknown && (
                                 <Box
                                   sx={{
                                     py: 2,
@@ -208,7 +236,7 @@ const UserPage = (props) => {
                                     <pre>{props.metadata[orderItem.i]}</pre>
                                   </Card>
                                 </Box>
-                              )}
+                              )} */}
                             </div>
                           )}
                         </Draggable>
@@ -263,19 +291,9 @@ const UserPage = (props) => {
             </Flex>
           )}
           {props.signedIn && !previewing && (
-            <Card
-              sx={{
-                p: 3,
-                my: 2,
-                bg: 'white',
-                boxShadow: '0 0 8px rgba(0, 0, 0, 0.125)',
-                borderRadius: 8,
-                border: '1px solid outline',
-                // borderColor: 'text',
-              }}
-            >
+            <Card variant="shadowBlock">
               <Box pb={2}>
-                <Label variant="settingslabel">{stripeAccount ? 'Payments enabled' : '💸 Add payments'}</Label>
+                <Label variant="settingsLabel">{stripeAccount ? '💸 Payments enabled' : '💸 Add payments'}</Label>
                 {!stripeAccount && (
                   <Box pt={2}>
                     <Text variant="small">Flexjar makes it easy to collect tips on your page.</Text>
@@ -307,11 +325,13 @@ const UserPage = (props) => {
                       Disconnect Stripe
                     </Button>{' '}
                     {errorMessage && <Text variant="small">{errorMessage}</Text>}
+                    <Label variant="settingsLabel">"Payment settings"</Label>
+                    <Text variant="small">Payment settings</Text>
                   </Box>
                 )}
               </Box>
 
-              <Flex sx={{ bg: 'transparent', borderRadius: 4, pt: 4, flexDirection: 'row-reverse' }}>
+              <Flex sx={{ bg: 'transparent', pt: 4, flexDirection: 'row-reverse' }}>
                 <Button onClick={() => signOut()} variant="tiny" sx={{ color: 'outline', cursor: 'pointer' }}>
                   <SignOutButtonIcon />
                 </Button>

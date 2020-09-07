@@ -8,7 +8,7 @@ import UpButtonIcon from './UpButtonIcon';
 
 export default (props) => {
   return (
-    <Flex sx={{ bg: 'background', borderRadius: 4, py: 2, px: 2 }}>
+    <Flex sx={{ bg: 'offWhite', borderRadius: 4, py: 2, px: 2 }}>
       <Box
         sx={{ flexGrow: 1, visibility: props.editing ? 'visible' : 'hidden' }}
         hidden={!props.editing && !props.hideDown && !props.hideUp}

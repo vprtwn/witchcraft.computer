@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Card, Box } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
 import { readString, postMetadataUpdate } from '../lib/metadataUtils';
-import Stripe from 'stripe';
 import Editor from 'rich-markdown-editor';
 import EditToolbar from './EditToolbar';
 import RichMarkdownEditor from 'rich-markdown-editor';
@@ -39,7 +38,7 @@ export default (props) => {
   };
 
   return (
-    <Card variant="block">
+    <Card variant="block" sx={{}}>
       <Box sx={{ px: 3, py: 2 }}>
         <Editor
           ref={editorRef}

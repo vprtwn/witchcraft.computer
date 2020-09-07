@@ -22,14 +22,14 @@ export default {
     text: '#000',
     gray: '#718096',
     white: '#fff',
+    offWhite: '#f7fafc',
     background: '#f7fafc',
-    primary: '#e6fffa',
+    darkGray: '#2d3748',
     outline: '#edf2f7',
     modes: {
       light: {
         text: '#000',
         background: '#fff',
-        primary: '#e6fffa',
         outline: '#edf2f7',
       },
     },
@@ -63,7 +63,7 @@ export default {
         bg: 'outline',
       },
     },
-    newblock: {
+    shadowButton: {
       boxShadow: '0 0 8px rgba(0, 0, 0, 0.125)',
       border: 'solid 1px outline',
       borderRadius: 8,
@@ -73,6 +73,46 @@ export default {
       fontSize: 13,
       cursor: 'pointer',
       py: 2,
+      '&:hover': {
+        bg: 'outline',
+      },
+    },
+    payment: {
+      boxShadow: '0 0 12px rgba(0, 0, 0, 0.25)',
+      border: 'solid 1px outline',
+      borderRadius: 16,
+      bg: 'text',
+      color: 'white',
+      fontFamily: 'Inter',
+      fontSize: 18,
+      cursor: 'pointer',
+      '&:hover': {
+        bg: 'darkGray',
+      },
+    },
+    paymentContinue: {
+      boxShadow: '0 0 12px rgba(0, 0, 0, 0.25)',
+      border: 'solid 1px outline',
+      borderRadius: 16,
+      bg: 'text',
+      color: 'white',
+      fontFamily: 'Inter',
+      fontSize: 16,
+      cursor: 'pointer',
+      '&:hover': {
+        bg: 'darkGray',
+      },
+    },
+    paymentCancel: {
+      border: 'solid 1px',
+      borderColor: 'outline',
+      borderWidth: 1,
+      borderRadius: 16,
+      bg: 'transparent',
+      color: 'text',
+      fontFamily: 'Inter',
+      fontSize: 16,
+      cursor: 'pointer',
       '&:hover': {
         bg: 'outline',
       },
@@ -107,6 +147,14 @@ export default {
       borderRadius: 4,
       bg: 'white',
     },
+    shadowBlock: {
+      p: 3,
+      my: 2,
+      bg: 'white',
+      boxShadow: '0 0 8px rgba(0, 0, 0, 0.125)',
+      borderRadius: 8,
+      border: '1px solid outline',
+    },
     primary: {
       paddingX: 3,
       paddingY: 2,
@@ -116,21 +164,7 @@ export default {
   badges: {
     primary: {
       color: 'white',
-      bg: 'primary',
-    },
-    tiny: {
-      px: 2,
-      py: 0,
-      color: 'text',
-      border: 'solid',
-      borderWidth: 1,
-      bg: 'transparent',
-      fontSize: 10,
-      fontFamily: 'Recursive',
-    },
-    invisible: {
-      color: 'transparent',
-      bg: 'transparent',
+      bg: 'text',
     },
   },
   images: {
@@ -146,23 +180,32 @@ export default {
       fontFamily: 'Recursive',
       color: 'text',
     },
-    formlabel: {
+    formLabel: {
       fontSize: '13px',
       fontFamily: 'Recursive',
       color: 'text',
     },
     input: {
-      bg: 'white',
-      py: 1,
+      // PaymentBlock amount input
+      fontSize: 30,
+      bg: 'transparent',
+      borderWidth: 0,
+      textAlign: 'center',
+      py: 2,
     },
-    buttonlabel: {
+    standardInput: {
+      // standard input
+      bg: 'white',
+      py: 2,
+    },
+    buttonLabel: {
       fontSize: '11px',
       fontFamily: 'Recursive',
       color: 'text',
       cursor: 'pointer',
       // fontWeight: 'bold',
     },
-    settingslabel: {
+    settingsLabel: {
       fontSize: '15px',
       fontWeight: 'bold',
       fontFamily: 'Recursive',
@@ -184,7 +227,7 @@ export default {
       color: '#4299e1',
     },
     progress: {
-      color: 'primary',
+      color: 'text',
       bg: 'outline',
     },
     root: {

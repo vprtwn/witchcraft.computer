@@ -17,15 +17,8 @@ export default (props) => {
           <UpButtonIcon />
         </IconButton>
       </Box>
-      <Box>
-        <IconButton
-          sx={{ left: 0 }}
-          onClick={() => {
-            props.onDelete();
-          }}
-        >
-          <DeleteButtonIcon />
-        </IconButton>
+      <Box sx={{ flexGrow: 1 }}>
+        <IconButton sx={{ left: 0, visible: 'hidden' }}></IconButton>
       </Box>
     </Flex>
   );

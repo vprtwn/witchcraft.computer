@@ -30,7 +30,7 @@ export default (props) => {
         </g>
       </svg>
       <Box>
-        <Label variant="buttonlabel">View</Label>
+        <Label variant="buttonLabel">View</Label>
       </Box>
     </Flex>
   );

@@ -25,7 +25,7 @@ export default () => {
         </g>
       </svg>
       <Box>
-        <Label variant="buttonlabel">Edit</Label>
+        <Label variant="buttonLabel">Edit</Label>
       </Box>
     </Flex>
   );
