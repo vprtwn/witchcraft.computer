@@ -3,6 +3,8 @@ import { OrderItem, BlockType } from './typedefs';
 const psl = require('psl');
 const isUrl = require('is-url');
 
+let DEBUG = false;
+
 //====== list utils (for drag and drop) =======
 export const reorder = (list, startIndex, endIndex): OrderItem[] => {
   const result = Array.from(list) as OrderItem[];
@@ -61,7 +63,7 @@ export const parseBlockId = (id: string): BlockType => {
 // twitter username from url
 export const usernameFromUrl = (inputUrl: string): string | null => {
   if (!isUrl(inputUrl)) {
-    console.error('not a url');
+    DEBUG && console.error('not a url');
     return null;
   }
   let url = inputUrl;
@@ -73,7 +75,7 @@ export const usernameFromUrl = (inputUrl: string): string | null => {
   const parsedHost = psl.parse(parsedUrl.host);
   const domain = parsedHost.domain;
   if (!domain) {
-    console.error('failed to parse domain: ', url);
+    DEBUG && console.error('failed to parse domain: ', url);
     return null;
   }
   let allowedDomains = ['jar.bio', 'flexjar.co', 'cash.bio'];
@@ -81,7 +83,7 @@ export const usernameFromUrl = (inputUrl: string): string | null => {
     allowedDomains = allowedDomains.concat(['127.0.0.1:3000', 'localhost:3000']);
   }
   if (!allowedDomains.includes(domain)) {
-    console.error('not an allowed domain: ', domain);
+    DEBUG && console.error('not an allowed domain: ', domain);
     return null;
   }
 
@@ -89,7 +91,7 @@ export const usernameFromUrl = (inputUrl: string): string | null => {
 
   const pathComps = pathname.split('/');
   if (pathComps.length !== 2) {
-    console.error('not enough path components');
+    DEBUG && console.error('not enough path components');
     return null;
   }
   const username = pathComps[pathComps.length - 1];

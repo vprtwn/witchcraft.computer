@@ -1,6 +1,6 @@
 import { readDict, readString, readBlockOrder, syncMetadata } from '../lib/metadataUtils';
 import { BlockType } from '../lib/typedefs';
-import { parseBlockId, emailFromUrl } from '../lib/utils';
+import { parseBlockId, usernameFromUrl } from '../lib/utils';
 
 test('syncMetadata', () => {
   let local = {};
@@ -82,9 +82,9 @@ test('parseBlockId', () => {
   expect(parseBlockId('b.text.123')).toEqual(BlockType.Text);
 });
 
-test('emailFromUrl', () => {
-  expect(emailFromUrl('http://127.0.0.1:3000/@benzguo')).toEqual('benzguo+twitter@jar.bio');
-  expect(emailFromUrl('https://jar.bio/@benzguo/foo')).toBeNull();
-  expect(emailFromUrl('https://flexjar.co/@shreyans')).toEqual('shreyans+twitter@jar.bio');
-  expect(emailFromUrl('https://twitter.com/shreyans')).toBeNull();
+test('usernameFromUrl', () => {
+  expect(usernameFromUrl('http://127.0.0.1:3000/@benzguo')).toEqual('benzguo');
+  expect(usernameFromUrl('https://jar.bio/@benzguo/foo')).toBeNull();
+  expect(usernameFromUrl('https://flexjar.co/@shreyans')).toEqual('shreyans');
+  expect(usernameFromUrl('https://twitter.com/shreyans')).toBeNull();
 });
