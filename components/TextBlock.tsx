@@ -39,7 +39,15 @@ export default (props) => {
 
   return (
     <Card variant="block" sx={{}}>
-      <Box sx={{ px: 3, py: 2 }}>
+      <Box
+        sx={{ px: 3, py: 2, cursor: 'crosshair' }}
+        onClick={() => {
+          if (!props.previewing && !editing) {
+            setEditing(true);
+            editorRef.current.focusAtEnd();
+          }
+        }}
+      >
         <Editor
           ref={editorRef}
           defaultValue={text}

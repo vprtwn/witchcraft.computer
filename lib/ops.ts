@@ -223,11 +223,29 @@ export const connectStripeAccount = async (session: any, state: string, code: st
       if (!businessName) {
         businessName = stripeAccount.settings.dashboard.display_name;
       }
+
+      // create customer on stripe account
+      // TODO: creating connected customer doesn't really work
+      // checkout still tries to collect email
+      const username = session.user.username;
+      const email = `${username}@jar.bio`;
+      const connectedCustomer = await stripe.customers.create(
+        {
+          email: email,
+          description: `flexjar.co/@${username}`,
+        },
+        {
+          stripeAccount: stripeAccount.id,
+        },
+      );
+
       const accountData: StripeAccountData = {
         id: stripeAccountId,
         name: businessName,
         email: stripeAccount.email,
+        customer_id: connectedCustomer.id,
       };
+      console.dir(accountData);
       // Note: PaymentBlock gets reset after disconnecting & reconnecting Stripe
       const paymentBlockData = {
         text: 'Leave me a tip',

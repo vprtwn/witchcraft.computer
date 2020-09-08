@@ -78,13 +78,15 @@ export default {
       },
     },
     payment: {
-      boxShadow: '0 0 12px rgba(0, 0, 0, 0.25)',
-      border: 'solid 1px outline',
+      boxShadow: '0 0 12px rgba(0, 0, 0, 0.5)',
+      py: 2,
+      border: 'solid 1.5px',
+      borderColor: 'outline',
       borderRadius: 16,
       bg: 'text',
       color: 'white',
       fontFamily: 'Inter',
-      fontSize: 18,
+      fontSize: 17,
       cursor: 'pointer',
       '&:hover': {
         bg: 'darkGray',

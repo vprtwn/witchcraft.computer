@@ -1,6 +1,6 @@
 import { ErrorResponse } from './typedefs';
 
-export const validateSession = (session, username: string | null): ErrorResponse | null => {
+export const validateSession = (session, username: string | null = null): ErrorResponse | null => {
   let response: ErrorResponse | null;
   if (!session || !session.user) {
     response = {

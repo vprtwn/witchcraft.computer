@@ -1,5 +1,7 @@
 import { customAlphabet } from 'nanoid';
 import { OrderItem, BlockType } from './typedefs';
+const psl = require('psl');
+const isUrl = require('is-url');
 
 //====== list utils (for drag and drop) =======
 export const reorder = (list, startIndex, endIndex): OrderItem[] => {
@@ -46,14 +48,52 @@ export const parseBlockId = (id: string): BlockType => {
     return BlockType.Unknown;
   }
   const type = comps[1];
-  if (type === 'link') {
+  if (type === 'link' && comps.length === 3) {
     return BlockType.Link;
-  } else if (type === 'text') {
+  } else if (type === 'text' && comps.length === 3) {
     return BlockType.Text;
-  } else if (type === 'payment') {
+  } else if (type === 'payment' && comps.length === 2) {
     return BlockType.Payment;
   }
   return BlockType.Unknown;
+};
+
+// twitter username from url
+export const usernameFromUrl = (inputUrl: string): string | null => {
+  if (!isUrl(inputUrl)) {
+    console.error('not a url');
+    return null;
+  }
+  let url = inputUrl;
+  const localhostDomain = 'http://127.0.0.1:3000';
+  if (url.startsWith(localhostDomain)) {
+    url = url.replace(localhostDomain, 'https://jar.bio');
+  }
+  const parsedUrl = new URL(url);
+  const parsedHost = psl.parse(parsedUrl.host);
+  const domain = parsedHost.domain;
+  if (!domain) {
+    console.error('failed to parse domain: ', url);
+    return null;
+  }
+  let allowedDomains = ['jar.bio', 'flexjar.co', 'cash.bio'];
+  if (process.env.NODE_ENV !== 'production') {
+    allowedDomains = allowedDomains.concat(['127.0.0.1:3000', 'localhost:3000']);
+  }
+  if (!allowedDomains.includes(domain)) {
+    console.error('not an allowed domain: ', domain);
+    return null;
+  }
+
+  const pathname = parsedUrl.pathname; // /benzguo/status/12345
+
+  const pathComps = pathname.split('/');
+  if (pathComps.length !== 2) {
+    console.error('not enough path components');
+    return null;
+  }
+  const username = pathComps[pathComps.length - 1];
+  return unprefixUsername(username);
 };
 
 export const emailFromUsername = (username: string): string => {
