@@ -48,11 +48,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     };
     return res.status(error.httpStatus).json(error);
   }
+  let connectedCustomerId = null;
+  if (session.user.email) {
+    // TODO: create customer using session user's email
+    console.error('TODO CREATE CUSTOMER ', session.user.email);
+  }
 
   // create checkout session
   const checkoutParams = {
     payment_method_types: ['card'],
-    customer: stripeAccount.customer_id,
+    customer: connectedCustomerId,
     line_items: [
       {
         price_data: {

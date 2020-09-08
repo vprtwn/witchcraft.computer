@@ -9,7 +9,6 @@ export interface StripeAccountData {
   id: string;
   name: string;
   email: string;
-  customer_id: string;
 }
 
 export interface ErrorResponse {
