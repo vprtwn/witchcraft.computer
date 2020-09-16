@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth';
 import Providers from 'next-auth/providers';
 
-const DEBUG = true;
+const DEBUG = false;
 const LOGSYM = '🔑';
 
 // For more information on each option (and a full list of options) go to

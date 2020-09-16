@@ -10,7 +10,7 @@ import { reorder, remove, add, unprefixUsername, generateBlockId, parseBlockId }
 import { postMetadataUpdate, readBlockOrder, readDict } from '../lib/metadataUtils';
 import { Direction, BlockType } from '../lib/typedefs';
 import { useRouter } from 'next/router';
-import { Box, IconButton, Flex, Card, Button, Text, Label, Badge } from 'theme-ui';
+import { Box, IconButton, Flex, Card, Button, Text, Label, Textarea } from 'theme-ui';
 import { GetServerSideProps } from 'next';
 import { signOut, getSession } from 'next-auth/client';
 import fetchJson from '../lib/fetchJson';
@@ -21,6 +21,9 @@ import AddButtonIcon from '../components/NewButtonIcon';
 import BackButtonIcon from '../components/BackButtonIcon';
 import SignOutButtonIcon from '../components/SignOutButtonIcon';
 import NewMenu from '../components/NewMenu';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import PaymentMessagesBlock from '../components/PaymentMessagesBlock';
 
 let DEBUG = true;
 if (process.env.NODE_ENV === 'production') {
@@ -55,6 +58,16 @@ const UserPage = (props) => {
   const initialStripeAccount = readDict(props.metadata, 'stripeAccount');
   const [stripeAccount, setStripeAccount] = useState(initialStripeAccount);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const stripeOpts = {};
+  if (stripeAccount) {
+    stripeOpts['stripeAccount'] = stripeAccount.id;
+  }
+  let stripeKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+  if (props.signedIn) {
+    stripeKey = process.env.NEXT_PUBLIC_STRIPE_TEST_PUBLISHABLE_KEY;
+  }
+  const stripePromise = loadStripe(stripeKey, stripeOpts);
 
   const syncOrder = async function (newOrder: Record<string, string>[], removedId: string | null = null) {
     try {
@@ -123,109 +136,114 @@ const UserPage = (props) => {
   };
 
   return (
-    <Layout>
-      {props.error && <pre>{JSON.stringify(props.error, null, 2)}</pre>}
-      {!props.error && (
-        <>
-          <Header profileImage={props.profileImage} name={props.name} username={props.username} />
-          <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="droppable">
-              {(provided, snapshot) => (
-                <div {...provided.droppableProps} ref={provided.innerRef}>
-                  {order &&
-                    order.map((orderItem, index) => {
-                      return (
-                        <Draggable
-                          key={orderItem.i}
-                          draggableId={orderItem.i}
-                          index={index}
-                          isDragDisabled={!props.signedIn || previewing}
-                        >
-                          {(provided, snapshot) => (
-                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                              {parseBlockId(orderItem.i) === BlockType.Text && (
-                                <Box
-                                  sx={{
-                                    py: 2,
-                                  }}
-                                >
-                                  <TextBlock
-                                    default={defaultText}
-                                    previewing={previewing}
-                                    id={orderItem.i}
-                                    hideUp={index === 0}
-                                    hideDown={index === order.length - 1}
-                                    hideToolbar={previewing}
-                                    metadata={metadata}
-                                    username={props.username}
-                                    customerId={props.customerId}
-                                    signedIn={props.signedIn}
-                                    onDown={() => {
-                                      moveBlock(index, Direction.Down);
+    <Elements stripe={stripePromise}>
+      <Layout>
+        {props.error && (
+          <Textarea my={4} rows={10}>
+            {JSON.stringify(props.error, null, 2)}
+          </Textarea>
+        )}
+        {!props.error && (
+          <>
+            <Header profileImage={props.profileImage} name={props.name} username={props.username} />
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="droppable">
+                {(provided, snapshot) => (
+                  <div {...provided.droppableProps} ref={provided.innerRef}>
+                    {order &&
+                      order.map((orderItem, index) => {
+                        return (
+                          <Draggable
+                            key={orderItem.i}
+                            draggableId={orderItem.i}
+                            index={index}
+                            isDragDisabled={!props.signedIn || previewing}
+                          >
+                            {(provided, snapshot) => (
+                              <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                {parseBlockId(orderItem.i) === BlockType.Text && (
+                                  <Box
+                                    sx={{
+                                      py: 2,
                                     }}
-                                    onUp={() => {
-                                      moveBlock(index, Direction.Up);
+                                  >
+                                    <TextBlock
+                                      default={defaultText}
+                                      previewing={previewing}
+                                      id={orderItem.i}
+                                      hideUp={index === 0}
+                                      hideDown={index === order.length - 1}
+                                      hideToolbar={previewing}
+                                      metadata={metadata}
+                                      username={props.username}
+                                      customerId={props.customerId}
+                                      signedIn={props.signedIn}
+                                      onDown={() => {
+                                        moveBlock(index, Direction.Down);
+                                      }}
+                                      onUp={() => {
+                                        moveBlock(index, Direction.Up);
+                                      }}
+                                      onDelete={() => {
+                                        removeBlock(index);
+                                      }}
+                                    />
+                                  </Box>
+                                )}
+                                {parseBlockId(orderItem.i) === BlockType.Link && (
+                                  <Box
+                                    sx={{
+                                      py: 2,
                                     }}
-                                    onDelete={() => {
-                                      removeBlock(index);
+                                  >
+                                    <LinkBlock
+                                      id={orderItem.i}
+                                      hideUp={index === 0}
+                                      hideDown={index === order.length - 1}
+                                      hideToolbar={previewing}
+                                      metadata={metadata}
+                                      username={props.username}
+                                      customerId={props.customerId}
+                                      signedIn={props.signedIn}
+                                      onDown={() => {
+                                        moveBlock(index, Direction.Down);
+                                      }}
+                                      onUp={() => {
+                                        moveBlock(index, Direction.Up);
+                                      }}
+                                      onDelete={() => {
+                                        removeBlock(index);
+                                      }}
+                                    />
+                                  </Box>
+                                )}
+                                {stripeAccount && parseBlockId(orderItem.i) === BlockType.Payment && (
+                                  <Box
+                                    sx={{
+                                      py: 2,
                                     }}
-                                  />
-                                </Box>
-                              )}
-                              {parseBlockId(orderItem.i) === BlockType.Link && (
-                                <Box
-                                  sx={{
-                                    py: 2,
-                                  }}
-                                >
-                                  <LinkBlock
-                                    id={orderItem.i}
-                                    hideUp={index === 0}
-                                    hideDown={index === order.length - 1}
-                                    hideToolbar={previewing}
-                                    metadata={metadata}
-                                    username={props.username}
-                                    customerId={props.customerId}
-                                    signedIn={props.signedIn}
-                                    onDown={() => {
-                                      moveBlock(index, Direction.Down);
-                                    }}
-                                    onUp={() => {
-                                      moveBlock(index, Direction.Up);
-                                    }}
-                                    onDelete={() => {
-                                      removeBlock(index);
-                                    }}
-                                  />
-                                </Box>
-                              )}
-                              {stripeAccount && parseBlockId(orderItem.i) === BlockType.Payment && (
-                                <Box
-                                  sx={{
-                                    py: 2,
-                                  }}
-                                >
-                                  <PaymentBlock
-                                    hideUp={index === 0}
-                                    hideDown={index === order.length - 1}
-                                    hideToolbar={previewing}
-                                    metadata={metadata}
-                                    username={props.username}
-                                    customerId={props.customerId}
-                                    signedIn={props.signedIn}
-                                    onDown={() => {
-                                      moveBlock(index, Direction.Down);
-                                    }}
-                                    onUp={() => {
-                                      moveBlock(index, Direction.Up);
-                                    }}
-                                    onDelete={() => {
-                                      removeBlock(index);
-                                    }}
-                                  />
-                                </Box>
-                              )}
-                              {/* {parseBlockId(orderItem.i) === BlockType.Unknown && (
+                                  >
+                                    <PaymentBlock
+                                      hideUp={index === 0}
+                                      hideDown={index === order.length - 1}
+                                      hideToolbar={previewing}
+                                      metadata={metadata}
+                                      username={props.username}
+                                      customerId={props.customerId}
+                                      signedIn={props.signedIn}
+                                      onDown={() => {
+                                        moveBlock(index, Direction.Down);
+                                      }}
+                                      onUp={() => {
+                                        moveBlock(index, Direction.Up);
+                                      }}
+                                      onDelete={() => {
+                                        removeBlock(index);
+                                      }}
+                                    />
+                                  </Box>
+                                )}
+                                {/* {parseBlockId(orderItem.i) === BlockType.Unknown && (
                                 <Box
                                   sx={{
                                     py: 2,
@@ -237,112 +255,115 @@ const UserPage = (props) => {
                                   </Card>
                                 </Box>
                               )} */}
-                            </div>
-                          )}
-                        </Draggable>
-                      );
-                    })}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
+                              </div>
+                            )}
+                          </Draggable>
+                        );
+                      })}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
 
-          {showingNewMenu && !previewing && (
-            <NewMenu
-              onClick={(result) => {
-                switch (result.type as BlockType) {
-                  case BlockType.Text:
-                    addTextBlock();
-                    break;
-                  case BlockType.Link:
-                    addLinkBlock(result);
-                    break;
-                  case BlockType.Unknown:
-                    // no-op
-                    break;
-                }
-              }}
-            />
-          )}
+            {stripeAccount && <PaymentMessagesBlock />}
 
-          {props.signedIn && (
-            <Flex sx={{ py: 3, mx: 2, justifyContent: 'space-between' }}>
-              <Box sx={{}}>
-                <IconButton
-                  onClick={() => {
-                    setPreviewing(!previewing);
-                  }}
-                >
-                  {previewing ? <EditButtonIcon /> : <ViewButtonIcon />}
-                </IconButton>
-              </Box>
-              <Box>
-                <IconButton
-                  sx={{ fontSize: '24px', visibility: previewing ? 'hidden' : 'visible' }}
-                  variant={showingNewMenu ? 'iconselected' : 'icon'}
-                  onClick={() => {
-                    setShowingNewMenu(!showingNewMenu);
-                  }}
-                >
-                  {showingNewMenu ? <BackButtonIcon /> : <AddButtonIcon />}
-                </IconButton>
-              </Box>
-            </Flex>
-          )}
-          {props.signedIn && !previewing && (
-            <Card variant="shadowBlock">
-              <Box pb={2}>
-                <Label variant="settingsLabel">{stripeAccount ? '💸 Payments enabled' : '💸 Add payments'}</Label>
-                {!stripeAccount && (
-                  <Box pt={2}>
-                    <Text variant="small">Flexjar makes it easy to collect tips on your page.</Text>
-                    <Text variant="small">Connect a Stripe account to get started. </Text>
-                    <Box pt={3}>
+            {showingNewMenu && !previewing && (
+              <NewMenu
+                onClick={(result) => {
+                  switch (result.type as BlockType) {
+                    case BlockType.Text:
+                      addTextBlock();
+                      break;
+                    case BlockType.Link:
+                      addLinkBlock(result);
+                      break;
+                    case BlockType.Unknown:
+                      // no-op
+                      break;
+                  }
+                }}
+              />
+            )}
+
+            {props.signedIn && (
+              <Flex sx={{ py: 3, mx: 2, justifyContent: 'space-between' }}>
+                <Box sx={{}}>
+                  <IconButton
+                    onClick={() => {
+                      setPreviewing(!previewing);
+                    }}
+                  >
+                    {previewing ? <EditButtonIcon /> : <ViewButtonIcon />}
+                  </IconButton>
+                </Box>
+                <Box>
+                  <IconButton
+                    sx={{ fontSize: '24px', visibility: previewing ? 'hidden' : 'visible' }}
+                    variant={showingNewMenu ? 'iconselected' : 'icon'}
+                    onClick={() => {
+                      setShowingNewMenu(!showingNewMenu);
+                    }}
+                  >
+                    {showingNewMenu ? <BackButtonIcon /> : <AddButtonIcon />}
+                  </IconButton>
+                </Box>
+              </Flex>
+            )}
+            {props.signedIn && !previewing && (
+              <Card variant="shadowBlock">
+                <Box pb={2}>
+                  <Label variant="settingsLabel">{stripeAccount ? '💸 Payments enabled' : '💸 Add payments'}</Label>
+                  {!stripeAccount && (
+                    <Box pt={2}>
+                      <Text variant="small">Flexjar makes it easy to collect tips on your page.</Text>
+                      <Text variant="small">Connect a Stripe account to get started. </Text>
+                      <Box pt={3}>
+                        <Button
+                          variant="tiny"
+                          mr={2}
+                          onClick={() => {
+                            window.location.assign(connectUrl);
+                          }}
+                        >
+                          Connect Stripe
+                        </Button>{' '}
+                      </Box>
+                    </Box>
+                  )}
+                  {stripeAccount && (
+                    <Box>
+                      <Text variant="small">Flexjar is connected to your Stripe account:</Text>
+                      <pre>{JSON.stringify(stripeAccount, null, 2)}</pre>
                       <Button
                         variant="tiny"
                         mr={2}
                         onClick={() => {
-                          window.location.assign(connectUrl);
+                          disconnectStripe();
                         }}
                       >
-                        Connect Stripe
+                        Disconnect Stripe
                       </Button>{' '}
+                      {errorMessage && <Text variant="small">{errorMessage}</Text>}
+                      <Label variant="settingsLabel">"Payment settings"</Label>
+                      <Text variant="small">Payment settings</Text>
                     </Box>
-                  </Box>
-                )}
-                {stripeAccount && (
-                  <Box>
-                    <Text variant="small">Flexjar is connected to your Stripe account:</Text>
-                    <pre>{JSON.stringify(stripeAccount, null, 2)}</pre>
-                    <Button
-                      variant="tiny"
-                      mr={2}
-                      onClick={() => {
-                        disconnectStripe();
-                      }}
-                    >
-                      Disconnect Stripe
-                    </Button>{' '}
-                    {errorMessage && <Text variant="small">{errorMessage}</Text>}
-                    <Label variant="settingsLabel">"Payment settings"</Label>
-                    <Text variant="small">Payment settings</Text>
-                  </Box>
-                )}
-              </Box>
+                  )}
+                </Box>
 
-              <Flex sx={{ bg: 'transparent', pt: 4, flexDirection: 'row-reverse' }}>
-                <Button onClick={() => signOut()} variant="tiny" sx={{ color: 'outline', cursor: 'pointer' }}>
-                  <SignOutButtonIcon />
-                </Button>
-              </Flex>
-            </Card>
-          )}
-          <Box my={4} />
-        </>
-      )}
-      <PageFooter />
-    </Layout>
+                <Flex sx={{ bg: 'transparent', pt: 4, flexDirection: 'row-reverse' }}>
+                  <Button onClick={() => signOut()} variant="tiny" sx={{ color: 'outline', cursor: 'pointer' }}>
+                    <SignOutButtonIcon />
+                  </Button>
+                </Flex>
+              </Card>
+            )}
+            <Box my={4} />
+          </>
+        )}
+        <PageFooter />
+      </Layout>
+    </Elements>
   );
 };
 

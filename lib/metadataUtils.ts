@@ -115,8 +115,8 @@ export const readString = (
 export const readDict = (
   metadata: Stripe.Metadata | null,
   key: string,
-  defaultVal: Record<string, string> | null = null,
-): Record<string, string> | null => {
+  defaultVal: Record<string, string | number | null> | null = null,
+): Record<string, string | number | null> | null => {
   if (!metadata) {
     return null;
   }
@@ -155,14 +155,4 @@ export const readBlockOrder = (
     return parsedValue as Array<OrderItem>;
   }
   return defaultVal;
-};
-
-// type transformations
-export const toDict = (metadataValue: MetadataValue): Record<string, string> => {
-  const dict: Record<string, string> = {};
-  if (!metadataValue || typeof metadataValue === 'string') {
-    return dict;
-  }
-  Object.assign(dict, metadataValue);
-  return dict;
 };

@@ -1,39 +1,65 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, Box, Button, Flex, IconButton, Input } from 'theme-ui';
 import { readDict } from '../lib/metadataUtils';
+import fetchJson from '../lib/fetchJson';
 import NumberFormat from 'react-number-format';
 import MinusButtonIcon from './MinusButtonIcon';
 import PlusButtonIcon from './PlusButtonIcon';
+import { useStripe } from '@stripe/react-stripe-js';
 
 export default (props) => {
   // blocks read from all metadata, which is meh but ok
-  console.dir(props.metadata);
   let content = readDict(props.metadata, 'b.payment');
-  // TODO: initialize amount field with content.defaultAmount
 
   const [showingForm, setShowingForm] = useState(false);
+  const [amount, setAmount] = useState(content.defaultAmount as number);
   const firstInputRef = useRef<HTMLInputElement | null>(null);
+  const stripe = useStripe();
+
   useEffect(() => {
     if (showingForm) {
       firstInputRef.current.focus();
     }
   }, [showingForm]);
 
+  const handleCheckout = async (e) => {
+    if (e) {
+      e.preventDefault();
+    }
+    const message = e.currentTarget.message.value;
+    const body = { amount: amount, message: message };
+    let checkoutSessionId = null;
+    try {
+      const response = await fetchJson('/api/create_checkout_session', {
+        method: 'POST',
+        body: JSON.stringify(body),
+      });
+      checkoutSessionId = response.id;
+      console.dir(response);
+    } catch (e) {
+      // TODO: handle errors (in this entire function)
+      console.error(e);
+      return;
+    }
+
+    if (!checkoutSessionId) {
+      console.error('create checkout session failed');
+      return;
+    }
+
+    const { error } = await stripe!.redirectToCheckout({
+      sessionId: checkoutSessionId,
+    });
+    if (error) {
+      console.error(error);
+      return;
+    }
+  };
+
   return (
     <>
       {showingForm && (
-        <Card
-          variant="shadowBlock"
-          as="form"
-          onSubmit={(e) => {
-            e.preventDefault();
-            // TODO: convert to number
-            const amount = e.currentTarget.amount.value;
-            const message = e.currentTarget.message.value;
-            props.onClick({ amount: amount, message: message });
-          }}
-          sx={{}}
-        >
+        <Card variant="shadowBlock" as="form" onSubmit={handleCheckout} sx={{ borderRadius: 16 }}>
           <Flex sx={{ justifyContent: 'center', alignItems: 'center' }}>
             <IconButton
               type="button"
@@ -52,12 +78,13 @@ export default (props) => {
                 allowEmptyFormatting={true}
                 allowNegative={false}
                 type="tel"
-                value={content ? content.amount : 5}
+                defaultValue={(content.defaultAmount as number) / 100.0}
                 displayType={'input'}
                 thousandSeparator={true}
                 prefix={'$'}
                 customInput={Input}
                 renderText={(value) => <Input value={value}></Input>}
+                onValueChange={(values) => setAmount(~~(values.floatValue * 100))}
               />
             </Box>
             <IconButton

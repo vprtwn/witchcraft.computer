@@ -1,4 +1,6 @@
 import { readDict, readString, readBlockOrder, syncMetadata } from '../lib/metadataUtils';
+import { BlockType } from '../lib/typedefs';
+import { parseBlockId, usernameFromUrl } from '../lib/utils';
 
 test('syncMetadata', () => {
   let local = {};
@@ -70,4 +72,19 @@ test('readBlockOrder', () => {
   expect(readBlockOrder(d)).toBeNull();
   d = { 'b.order': '[{"foo":1}, {"bar":2}]' };
   expect(readBlockOrder(d)).toStrictEqual([{ foo: 1 }, { bar: 2 }]);
+});
+
+test('parseBlockId', () => {
+  expect(parseBlockId('foo')).toEqual(BlockType.Unknown);
+  expect(parseBlockId('b.link')).toEqual(BlockType.Unknown);
+  expect(parseBlockId('b.payment')).toEqual(BlockType.Payment);
+  expect(parseBlockId('b.link.123')).toEqual(BlockType.Link);
+  expect(parseBlockId('b.text.123')).toEqual(BlockType.Text);
+});
+
+test('usernameFromUrl', () => {
+  expect(usernameFromUrl('http://127.0.0.1:3000/@benzguo')).toEqual('benzguo');
+  expect(usernameFromUrl('https://jar.bio/@benzguo/foo')).toBeNull();
+  expect(usernameFromUrl('https://flexjar.co/@shreyans')).toEqual('shreyans');
+  expect(usernameFromUrl('https://twitter.com/shreyans')).toBeNull();
 });

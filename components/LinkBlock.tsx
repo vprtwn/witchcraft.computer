@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Card, Text, Flex, Box } from 'theme-ui';
+import { Card, Text, Flex } from 'theme-ui';
 import DeleteToolbar from './DeleteToolbar';
 import { readDict } from '../lib/metadataUtils';
 
@@ -13,19 +13,12 @@ export default (props) => {
       {content && (
         <Flex
           onClick={() => {
-            window.location.assign(content.url);
+            window.location.assign(content.url as string);
           }}
-          sx={{
-            px: 3,
-            py: 2,
-            justifyContent: 'space-between',
-            bg: 'text',
-            color: 'offWhite',
-            cursor: 'pointer',
-            alignItems: 'center',
-          }}
+          sx={{ px: 3, py: 2, justifyContent: 'space-between', bg: 'text', color: 'background', cursor: 'pointer' }}
         >
           <Text sx={{ fontFamily: 'Inter' }}>{content.text}</Text>
+          <Text sx={{ fontSize: 18 }}>➤</Text>
         </Flex>
       )}
       {signedIn && !props.hideToolbar && (
