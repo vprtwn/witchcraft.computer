@@ -10,7 +10,7 @@ import { reorder, remove, add, unprefixUsername, generateBlockId, parseBlockId }
 import { postMetadataUpdate, readBlockOrder, readDict } from '../lib/metadataUtils';
 import { Direction, BlockType } from '../lib/typedefs';
 import { useRouter } from 'next/router';
-import { Box, IconButton, Flex, Card, Button, Text, Label, Badge } from 'theme-ui';
+import { Box, IconButton, Flex, Card, Button, Text, Label, Textarea } from 'theme-ui';
 import { GetServerSideProps } from 'next';
 import { signOut, getSession } from 'next-auth/client';
 import fetchJson from '../lib/fetchJson';
@@ -138,7 +138,11 @@ const UserPage = (props) => {
   return (
     <Elements stripe={stripePromise}>
       <Layout>
-        {props.error && <pre>{JSON.stringify(props.error, null, 2)}</pre>}
+        {props.error && (
+          <Textarea my={4} rows={10}>
+            {JSON.stringify(props.error, null, 2)}
+          </Textarea>
+        )}
         {!props.error && (
           <>
             <Header profileImage={props.profileImage} name={props.name} username={props.username} />
@@ -262,7 +266,7 @@ const UserPage = (props) => {
               </Droppable>
             </DragDropContext>
 
-            <PaymentMessagesBlock />
+            {stripeAccount && <PaymentMessagesBlock />}
 
             {showingNewMenu && !previewing && (
               <NewMenu

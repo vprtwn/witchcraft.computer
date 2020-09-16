@@ -20,8 +20,18 @@ const logCustomerOp = (name: string, response: CustomerOpResponse) => {
   console.log(`${sym} ${name}`, JSON.stringify(logResponse, null, 2));
 };
 
-// GET CUSTOMER
-export const getOrCreateCustomer = async (session: any, allowCreate: boolean = false): Promise<CustomerOpResponse> => {
+/**
+ * Get or create a Stripe customer.
+ * Default behavior: creates a customer on the Flexjar platform account,
+ * using the session user's *username*.
+ * If stripeAccountId is provided, creates a customer on the the connected account,
+ * using the sesssion user's *email*
+ */
+export const getOrCreateCustomer = async (
+  session: any,
+  allowCreate: boolean = false,
+  stripeAccountId: string | null = null,
+): Promise<CustomerOpResponse> => {
   let customer: Stripe.Customer | null = null;
   let errorResponse: ErrorResponse | null = null;
   if (!session || !session.user || !session.user.username) {
@@ -32,23 +42,34 @@ export const getOrCreateCustomer = async (session: any, allowCreate: boolean = f
     };
   } else {
     const username = session.user.username;
-    const jarEmail = emailFromUsername(username);
+    let customerEmail = emailFromUsername(username);
+    if (stripeAccountId) {
+      customerEmail = session.user.email;
+    }
     try {
       const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-      const response = await stripe.customers.list({ email: jarEmail });
+      const response = await stripe.customers.list({ email: customerEmail });
       if (response.data.length > 0) {
         customer = response.data[0];
       }
-      if (!customer && allowCreate) {
+      if (!customer && allowCreate && session.user) {
         const metadata = {
           email: session.user.email,
           name: session.user.name,
           profile_image: session.user.picture,
+          twitter_username: session.user.username,
         };
-        customer = await stripe.customers.create({
-          email: jarEmail,
-          metadata: metadata,
-        });
+        let opts = null;
+        if (stripeAccountId) {
+          opts = { stripeAccount: stripeAccountId };
+        }
+        customer = await stripe.customers.create(
+          {
+            email: customerEmail,
+            metadata: metadata,
+          },
+          opts,
+        );
       }
       if (!customer) {
         errorResponse = {
@@ -155,7 +176,7 @@ const updateCustomerMetadata = async (
     };
   }
   if (!errorResponse) {
-    const getResponse = await getOrCreateCustomer(session, false);
+    const getResponse = await getOrCreateCustomer(session);
     if (getResponse.errored) {
       errorResponse = getResponse.data as ErrorResponse;
     } else {
@@ -207,7 +228,8 @@ export const connectStripeAccount = async (session: any, state: string, code: st
       errorCode: 'session_user_state_mismatch',
     };
   } else {
-    const getResponse = await getOrCreateCustomer(session, true);
+    // assumption: a customer already exists (doesn't allow create)
+    const getResponse = await getOrCreateCustomer(session);
     if (getResponse.errored) {
       errorResponse = getResponse.data as ErrorResponse;
     } else {
@@ -219,9 +241,9 @@ export const connectStripeAccount = async (session: any, state: string, code: st
       });
       const stripeAccountId = oauthResponse.stripe_user_id;
       const stripeAccount = await stripe.accounts.retrieve(stripeAccountId);
-      let businessName = stripeAccount.business_profile.name;
-      if (!businessName) {
-        businessName = stripeAccount.settings.dashboard.display_name;
+      let businessName = stripeAccount.settings.dashboard.display_name;
+      if (stripeAccount.business_profile && stripeAccount.business_profile.name) {
+        businessName = stripeAccount.business_profile.name;
       }
 
       const accountData: StripeAccountData = {
@@ -282,7 +304,8 @@ export const disconnectStripeAccount = async (session: any): Promise<CustomerOpR
       errorCode: 'invalid_session',
     };
   } else {
-    const getResponse = await getOrCreateCustomer(session, true);
+    // assumption: a customer already exists
+    const getResponse = await getOrCreateCustomer(session);
     if (getResponse.errored) {
       errorResponse = getResponse.data as ErrorResponse;
     } else {

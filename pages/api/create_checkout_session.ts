@@ -1,9 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
-import { validateSession } from '../../lib/validateSession';
 import { readDict } from '../../lib/metadataUtils';
 import { usernameFromUrl } from '../../lib/utils';
-import { getCustomer } from '../../lib/ops';
+import { getCustomer, getOrCreateCustomer } from '../../lib/ops';
 import { ErrorResponse } from '../../lib/typedefs';
 import Stripe from 'stripe';
 
@@ -18,11 +17,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const params = JSON.parse(req.body);
   const amount = params.amount;
   const message = params.message;
-  const authError = validateSession(session);
 
-  if (authError) {
-    return res.status(authError.httpStatus).json(authError);
-  }
   const returnUrl = req.headers.referer;
   const username = usernameFromUrl(returnUrl);
 
@@ -33,12 +28,22 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const stripe = require('stripe')(stripeKey);
 
   // get stripe account id
-  const customerRes = await getCustomer(username);
-  if (customerRes.errored) {
-    const error = customerRes.data as ErrorResponse;
+  let customer = null;
+  try {
+    const customerRes = await getCustomer(username);
+    if (customerRes.errored) {
+      const error = customerRes.data as ErrorResponse;
+      return res.status(error.httpStatus).json(error);
+    }
+    customer = customerRes.data as Stripe.Customer;
+  } catch (e) {
+    const error: ErrorResponse = {
+      errorCode: 'get_account_id_error',
+      errorMessage: e.message,
+      httpStatus: 500,
+    };
     return res.status(error.httpStatus).json(error);
   }
-  const customer = customerRes.data as Stripe.Customer;
   const stripeAccount = readDict(customer.metadata, 'stripeAccount');
   if (!stripeAccount) {
     const error: ErrorResponse = {
@@ -48,10 +53,19 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     };
     return res.status(error.httpStatus).json(error);
   }
+  const stripeAccountId = stripeAccount.id as string;
   let connectedCustomerId = null;
-  if (session.user.email) {
-    // TODO: create customer using session user's email
-    console.error('TODO CREATE CUSTOMER ', session.user.email);
+  let metadata = { from_flexjar_url: returnUrl };
+  if (session.user) {
+    metadata['from_flexjar_user'] = session.user.username;
+
+    const getResponse = await getOrCreateCustomer(session, true, stripeAccountId);
+    if (getResponse.errored) {
+      const eRes = getResponse.data as ErrorResponse;
+      return res.status(eRes.httpStatus).json(eRes);
+    }
+    const customer = getResponse.data as Stripe.Customer;
+    connectedCustomerId = customer.id;
   }
 
   // create checkout session
@@ -74,17 +88,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     mode: 'payment',
     payment_intent_data: {
       description: message,
-      metadata: { from_flexjar_url: returnUrl, from_flexjar_user: session.user.username },
+      metadata: metadata,
     },
     success_url: returnUrl,
     cancel_url: returnUrl,
     submit_type: 'donate',
   };
-  console.dir(checkoutParams);
 
   try {
     const checkoutSession = await stripe.checkout.sessions.create(checkoutParams, {
-      stripeAccount: stripeAccount.id,
+      stripeAccount: stripeAccountId,
     });
     const checkoutSessionId = checkoutSession.id;
     res.json({ id: checkoutSessionId });
