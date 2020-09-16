@@ -8,7 +8,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
     return;
   }
-  // TODO: use JWT – more secure?
+  // TODO(#39): use JWT – more secure?
   // const token = await jwt.getToken({ req, secret });
   const session = await getSession({ req });
   const params = JSON.parse(req.body);

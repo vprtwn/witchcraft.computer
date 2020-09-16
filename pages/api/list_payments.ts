@@ -11,7 +11,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'GET') {
     return;
   }
-  // TODO: use JWT – more secure?
+  // TODO(#39): use JWT – more secure?
   // const token = await jwt.getToken({ req, secret });
   // const session = await getSession({ req });
   // const params = JSON.parse(req.body);
@@ -39,6 +39,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
+    // TODO(#38): this should use the Search API in the future
     const listRes = await stripe.paymentIntents.list(
       {
         limit: 100,
