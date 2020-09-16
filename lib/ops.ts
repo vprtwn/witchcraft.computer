@@ -48,7 +48,11 @@ export const getOrCreateCustomer = async (
     }
     try {
       const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-      const response = await stripe.customers.list({ email: customerEmail });
+      let opts = null;
+      if (stripeAccountId) {
+        opts = { stripeAccount: stripeAccountId };
+      }
+      const response = await stripe.customers.list({ email: customerEmail }, opts);
       if (response.data.length > 0) {
         customer = response.data[0];
       }
@@ -59,10 +63,6 @@ export const getOrCreateCustomer = async (
           profile_image: session.user.picture,
           twitter_username: session.user.username,
         };
-        let opts = null;
-        if (stripeAccountId) {
-          opts = { stripeAccount: stripeAccountId };
-        }
         customer = await stripe.customers.create(
           {
             email: customerEmail,

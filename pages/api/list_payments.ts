@@ -39,16 +39,29 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    const payments = await stripe.paymentIntents.list(
+    const listRes = await stripe.paymentIntents.list(
       {
-        customer: stripeAccount.customer_id,
         limit: 100,
       },
       {
         stripeAccount: stripeAccount.id,
       },
     );
-    res.json({ payments: payments });
+    const rawPIs = listRes.data;
+    const results = rawPIs
+      .filter((p) => {
+        return p.metadata && p.metadata.from_flexjar_origin_url && p.amount_received > 0;
+      })
+      .map((p) => {
+        return {
+          amount: p.amount_received,
+          message: p.description,
+          originUrl: p.metadata.from_flexjar_origin_url,
+          twitterUsername: p.metadata.from_flexjar_twitter_username,
+          profileImage: p.metadata.from_flexjar_profile_image,
+        };
+      });
+    res.json({ payments: results });
   } catch (e) {
     const response: ErrorResponse = {
       errorCode: 'stripe_error',
