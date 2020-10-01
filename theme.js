@@ -214,6 +214,12 @@ export default {
       py: 2,
       border: '1px solid lightGray',
     },
+    linkInput: {
+      fontFamily: 'Inter',
+      bg: 'transparent',
+      border: 'none',
+      py: 2,
+    },
     buttonLabel: {
       fontSize: 11,
       fontFamily: 'Recursive',

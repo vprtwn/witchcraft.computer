@@ -1,24 +1,29 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Card, Text, Flex, Box } from 'theme-ui';
-import DeleteToolbar from './DeleteToolbar';
+import { Card, Input, Flex, Box } from 'theme-ui';
+import EditToolbar from './EditToolbar';
+import LinkView from './LinkView';
 import { readDict } from '../lib/metadataUtils';
 
 export default (props) => {
   const signedIn = props.signedIn;
   // blocks read from all metadata, which is meh but ok
+  const [editing, setEditing] = useState(false);
+  const inputRef = useRef<HTMLInputElement | null>(null);
   let content = readDict(props.metadata, props.id);
 
   return (
     <Card variant="block">
-      {content && (
+      <>
         <Flex
           onClick={() => {
-            window.location.assign(content.url as string);
+            if (content && !editing) {
+              window.location.assign(content.url as string);
+            }
           }}
           sx={{
-            pl: 3,
+            pl: 2,
             pr: 1,
-            py: 2,
+            py: 1,
             justifyContent: 'space-between',
             alignItems: 'center',
             borderRadius: 4,
@@ -27,8 +32,13 @@ export default (props) => {
             cursor: 'pointer',
           }}
         >
-          <Box>
-            <Text sx={{ fontFamily: 'Inter' }}>{content.text}</Text>
+          <Box sx={{ flexGrow: 1 }}>
+            <Input
+              ref={inputRef}
+              variant="linkInput"
+              sx={{ pointerEvents: !editing && !props.newMenu ? 'none' : 'auto' }}
+              defaultValue={content ? content.text : 'Link text'}
+            ></Input>
           </Box>
           <Flex>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24" width="24">
@@ -42,14 +52,36 @@ export default (props) => {
             </svg>
           </Flex>
         </Flex>
-      )}
+        {(editing || props.newMenu) && (
+          <Box>
+            <Input
+              ref={inputRef}
+              variant="linkInput"
+              defaultValue={content ? content.url : null}
+              placeholder="Link url"
+              sx={{ bg: 'lightGray' }}
+            ></Input>
+          </Box>
+        )}
+      </>
       {signedIn && !props.hideToolbar && (
-        <DeleteToolbar
+        <EditToolbar
+          editing={editing}
           onDelete={props.onDelete}
           hideDown={props.hideDown}
           hideUp={props.hideUp}
           onUp={props.onUp}
           onDown={props.onDown}
+          onSwitchEditing={() => {
+            setEditing(!editing);
+            if (inputRef.current) {
+              if (!editing) {
+                inputRef.current.focus();
+              } else {
+                inputRef.current.blur();
+              }
+            }
+          }}
         />
       )}
     </Card>
