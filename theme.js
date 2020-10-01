@@ -23,6 +23,8 @@ export default {
     gray: '#718096',
     white: '#fff',
     offWhite: '#f7fafc',
+    primary: '#000',
+    green: '#68d391',
     // background: '#f7fafc',
     background: '#fff',
     darkGray: '#2d3748',
@@ -165,16 +167,20 @@ export default {
       borderRadius: 8,
       border: '1px solid lightGray',
     },
+    moneyCard: {
+      py: 0,
+      px: 1,
+      my: 2,
+      fontSize: 10,
+      fontFamily: 'Inter',
+      borderRadius: 8,
+      color: 'white',
+      bg: 'green',
+    },
     primary: {
       paddingX: 3,
       paddingY: 2,
       borderRadius: 4,
-    },
-  },
-  badges: {
-    primary: {
-      color: 'white',
-      bg: 'text',
     },
   },
   images: {
@@ -226,6 +232,13 @@ export default {
     small: {
       fontSize: '13px',
     },
+    paymentMessage: {
+      py: 2,
+      color: 'gray',
+      fontSize: 13,
+      fontFamily: 'Inter',
+    },
+
     heading: {
       fontFamily: 'heading',
       lineHeight: 'heading',

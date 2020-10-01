@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, Box, Button, Flex, Label, Input } from 'theme-ui';
 import { BlockType } from '../lib/typedefs';
+import TextButtonIcon from '../components/TextButtonIcon';
+import LinkButtonIcon from '../components/LinkButtonIcon';
+import CollectionButtonIcon from '../components/CollectionButtonIcon';
 
 export default (props) => {
   const [showingForm, setShowingForm] = useState(false);
@@ -42,14 +45,22 @@ export default (props) => {
         <Flex sx={{ justifyContent: 'space-between', mt: 3, mb: 2 }}>
           <Button
             variant="shadowButton"
-            sx={{ flexGrow: 1 }}
+            sx={{ flexGrow: 1, mr: 1 }}
             onClick={() => {
               setShowingForm(!showingForm);
             }}
           >
-            + Link
+            <LinkButtonIcon />
           </Button>
-          <Box px={1} />
+          <Button
+            variant="shadowButton"
+            sx={{ flexGrow: 1, mr: 1 }}
+            onClick={() => {
+              props.onClick({ type: BlockType.Text });
+            }}
+          >
+            <TextButtonIcon />
+          </Button>
           <Button
             variant="shadowButton"
             sx={{ flexGrow: 1 }}
@@ -57,7 +68,7 @@ export default (props) => {
               props.onClick({ type: BlockType.Text });
             }}
           >
-            + Text
+            <CollectionButtonIcon />
           </Button>
         </Flex>
       )}

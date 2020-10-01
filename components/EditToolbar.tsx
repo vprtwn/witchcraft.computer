@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, IconButton, Flex } from 'theme-ui';
-import EditButtonIcon from './EditButtonIcon';
-import ViewButtonIcon from './ViewButtonIcon';
+import EditGrayButtonIcon from './EditGrayButtonIcon';
+import ViewGrayButtonIcon from './ViewGrayButtonIcon';
 import DeleteButtonIcon from './DeleteButtonIcon';
 import DownButtonIcon from './DownButtonIcon';
 import UpButtonIcon from './UpButtonIcon';
@@ -34,11 +34,12 @@ export default (props) => {
       </Box>
       <Box>
         <IconButton
+          variant={props.editing ? 'iconselected' : 'icon'}
           onClick={() => {
             props.onSwitchEditing();
           }}
         >
-          {props.editing ? <ViewButtonIcon /> : <EditButtonIcon />}
+          {props.editing ? <ViewGrayButtonIcon /> : <EditGrayButtonIcon />}
         </IconButton>
       </Box>
     </Flex>

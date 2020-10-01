@@ -19,7 +19,7 @@ export default (props) => {
         )}
       </Flex>
       <Flex sx={{ justifyContent: 'center' }}>
-        {props.name && <Text sx={{ fontWeight: 'bold', fontSize: '16px' }}>{props.name}</Text>}
+        {props.name && <Text sx={{ fontWeight: 'bold', fontSize: '16px', fontFamily: 'Inter' }}>{props.name}</Text>}
       </Flex>
       <Flex sx={{ justifyContent: 'center' }}>
         {props.username && (

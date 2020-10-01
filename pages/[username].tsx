@@ -23,7 +23,7 @@ import SignOutButtonIcon from '../components/SignOutButtonIcon';
 import NewMenu from '../components/NewMenu';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import PaymentMessagesBlock from '../components/PaymentMessagesBlock';
+import PaymentFeedBlock from '../components/PaymentFeedBlock';
 
 let DEBUG = true;
 if (process.env.NODE_ENV === 'production') {
@@ -266,7 +266,7 @@ const UserPage = (props) => {
               </Droppable>
             </DragDropContext>
 
-            {stripeAccount && <PaymentMessagesBlock />}
+            {stripeAccount && <PaymentFeedBlock />}
 
             {showingNewMenu && !previewing && (
               <NewMenu
@@ -290,6 +290,7 @@ const UserPage = (props) => {
               <Flex sx={{ py: 3, mx: 2, justifyContent: 'space-between' }}>
                 <Box sx={{}}>
                   <IconButton
+                    variant={!previewing && !showingNewMenu ? 'iconselected' : 'icon'}
                     onClick={() => {
                       setPreviewing(!previewing);
                     }}
@@ -312,7 +313,7 @@ const UserPage = (props) => {
             )}
             {props.signedIn && !previewing && (
               <Card variant="shadowBlock">
-                <Box pb={2}>
+                <Box py={5}>
                   <Label variant="settingsLabel">{stripeAccount ? '💸 Payments enabled' : '💸 Add payments'}</Label>
                   {!stripeAccount && (
                     <Box pt={2}>

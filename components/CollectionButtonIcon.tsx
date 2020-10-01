@@ -1,4 +1,4 @@
-import { Flex } from 'theme-ui';
+import { Label, Box, Flex } from 'theme-ui';
 
 export default () => {
   return (
@@ -13,10 +13,13 @@ export default () => {
           xmlns="http://www.w3.org/2000/svg"
           fill-rule="evenodd"
           clip-rule="evenodd"
-          d="M12 4C12.5523 4 13 4.44772 13 5V11H19C19.5523 11 20 11.4477 20 12C20 12.5523 19.5523 13 19 13H13V19C13 19.5523 12.5523 20 12 20C11.4477 20 11 19.5523 11 19V13H5C4.44772 13 4 12.5523 4 12C4 11.4477 4.44772 11 5 11H11V5C11 4.44772 11.4477 4 12 4Z"
+          d="M4 4C4 2.89543 4.89543 2 6 2H14C14.2652 2 14.5196 2.10536 14.7071 2.29289L19.7071 7.29289C19.8946 7.48043 20 7.73478 20 8V20C20 21.1046 19.1046 22 18 22H6C4.89543 22 4 21.1046 4 20V4ZM17.5858 8H14V4.41421L17.5858 8ZM12 4V9C12 9.55228 12.4477 10 13 10H18V20H6V4L12 4Z"
           fill="black"
         ></path>
       </svg>
+      <Box>
+        <Label variant="buttonLabel">Page</Label>
+      </Box>
     </Flex>
   );
 };
