@@ -59,7 +59,7 @@ export default (props) => {
   return (
     <>
       {showingForm && (
-        <Card variant="shadowBlock" as="form" onSubmit={handleCheckout} sx={{ borderRadius: 16 }}>
+        <Card variant="formBlock" as="form" onSubmit={handleCheckout}>
           <Flex sx={{ justifyContent: 'center', alignItems: 'center' }}>
             <IconButton
               type="button"

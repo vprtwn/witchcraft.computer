@@ -38,7 +38,7 @@ export default (props) => {
   };
 
   return (
-    <Card variant="block" sx={{}}>
+    <Card variant="textBlock" sx={{}}>
       <Box
         sx={{ px: 3, py: 2, cursor: 'crosshair' }}
         onClick={() => {

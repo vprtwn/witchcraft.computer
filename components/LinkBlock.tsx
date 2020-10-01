@@ -15,7 +15,15 @@ export default (props) => {
           onClick={() => {
             window.location.assign(content.url as string);
           }}
-          sx={{ px: 3, py: 2, justifyContent: 'space-between', bg: 'text', color: 'background', cursor: 'pointer' }}
+          sx={{
+            px: 3,
+            py: 2,
+            justifyContent: 'space-between',
+            borderRadius: 4,
+            bg: 'text',
+            color: 'background',
+            cursor: 'pointer',
+          }}
         >
           <Text sx={{ fontFamily: 'Inter' }}>{content.text}</Text>
           <Text sx={{ fontSize: 18 }}>➤</Text>

@@ -345,14 +345,12 @@ const UserPage = (props) => {
                         Disconnect Stripe
                       </Button>{' '}
                       {errorMessage && <Text variant="small">{errorMessage}</Text>}
-                      <Label variant="settingsLabel">"Payment settings"</Label>
-                      <Text variant="small">Payment settings</Text>
                     </Box>
                   )}
                 </Box>
 
                 <Flex sx={{ bg: 'transparent', pt: 4, flexDirection: 'row-reverse' }}>
-                  <Button onClick={() => signOut()} variant="tiny" sx={{ color: 'outline', cursor: 'pointer' }}>
+                  <Button onClick={() => signOut()} variant="tiny" sx={{ color: 'lightGray', cursor: 'pointer' }}>
                     <SignOutButtonIcon />
                   </Button>
                 </Flex>

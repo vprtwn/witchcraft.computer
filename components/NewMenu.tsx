@@ -15,6 +15,7 @@ export default (props) => {
     <Box sx={{ py: 2 }}>
       {showingForm && (
         <Card
+          variant="formBlock"
           as="form"
           onSubmit={(e) => {
             e.preventDefault();
@@ -22,7 +23,7 @@ export default (props) => {
             const url = e.currentTarget.url.value;
             props.onClick({ type: BlockType.Link, text: text, url: url });
           }}
-          sx={{ bg: 'offWhite', p: 2, border: '1px solid', borderColor: 'text', borderRadius: 4 }}
+          // sx={{ bg: 'offWhite', p: 2, border: '1px solid', borderColor: 'text', borderRadius: 4 }}
         >
           <Label htmlFor="url" variant="formLabel">
             Link URL
@@ -33,7 +34,7 @@ export default (props) => {
           </Label>
           <Input name="text" id="text" mb={3} variant="standardInput" required />
           <Flex sx={{ justifyContent: 'right' }}>
-            <Button>Add link</Button>
+            <Button variant="shadowButton">Add link</Button>
           </Flex>
         </Card>
       )}
