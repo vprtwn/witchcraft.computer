@@ -28,6 +28,7 @@
     "react-beautiful-dnd": "13.0.0",
     "react-dom": "^16.13.1",
     "react-number-format": "^4.4.1",
+    "react-textarea-autosize": "^8.2.0",
     "rich-markdown-editor": "mysterious-technology/rich-markdown-editor#flexjar",
     "stripe": "^8.78.0",
     "theme-ui": "^0.3.1",

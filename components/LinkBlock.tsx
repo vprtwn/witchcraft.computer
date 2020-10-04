@@ -5,6 +5,7 @@ import EditToolbar from './EditToolbar';
 import { postMetadataUpdate } from '../lib/metadataUtils';
 import { readDict } from '../lib/metadataUtils';
 import isUrl from 'is-url';
+import TextareaAutosize from 'react-textarea-autosize';
 
 const DEBOUNCE_MS = 700;
 
@@ -14,18 +15,21 @@ export default (props) => {
   const [editing, setEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   let content = readDict(props.metadata, props.id);
-  const [text, setText] = useState(content ? content.text : '');
-  const [link, setLink] = useState(content ? content.link : '');
+  const [text, setText] = useState<string>(content ? (content.text as string) : '');
+  const [link, setLink] = useState<string>(content ? (content.link as string) : '');
+  const [comment, setComment] = useState<string>(content ? (content.comment as string) : '');
   const [debouncedText] = useDebounce(text, DEBOUNCE_MS);
   const [debouncedLink] = useDebounce(link, DEBOUNCE_MS);
+  const [debouncedComment] = useDebounce(comment, DEBOUNCE_MS);
 
   useEffect(() => {
     const value = {
       link: debouncedLink,
       text: debouncedText,
+      comment: debouncedComment,
     };
     syncUpdates(value);
-  }, [debouncedText, debouncedLink]);
+  }, [debouncedText, debouncedLink, debouncedComment]);
 
   const syncUpdates = async function (value) {
     try {
@@ -38,7 +42,7 @@ export default (props) => {
   };
 
   return (
-    <Card variant="block">
+    <Card variant="block" sx={{ bg: 'offWhite' }}>
       <>
         <Flex
           onClick={() => {
@@ -84,14 +88,14 @@ export default (props) => {
           </Flex>
         </Flex>
         {editing && !props.hideToolbar && (
-          <Box sx={{ p: 1, bg: 'lightGray' }}>
+          <Box sx={{ py: 1, px: 2, bg: 'lightGray' }}>
             <Input
               ref={inputRef}
               type="url"
               variant="linkInput"
               defaultValue={link}
               placeholder="Link url"
-              sx={{}}
+              sx={{ fontSize: '14px', px: 2 }}
               onChange={(t) => {
                 const val = t.target.value;
                 if (isUrl(val)) {
@@ -102,6 +106,38 @@ export default (props) => {
           </Box>
         )}
       </>
+      {((!props.hideToolbar && (editing || (!editing && comment && comment.length > 0))) ||
+        (props.hideToolbar && comment && comment.length > 0)) && (
+        <Flex
+          sx={{ py: 1, px: 2, bg: 'offWhite' }}
+          onClick={() => {
+            if (!props.hideToolbar) {
+              setEditing(true);
+            }
+          }}
+        >
+          <TextareaAutosize
+            defaultValue={comment}
+            style={{
+              background: 'none',
+              width: '100%',
+              resize: 'none',
+              fontFamily: 'Inter',
+              fontSize: '15px',
+              border: 'none',
+              paddingLeft: 8,
+              paddingTop: 4,
+              paddingBottom: 4,
+              overflow: 'hidden',
+              pointerEvents: props.hideToolbar ? 'none' : 'auto',
+            }}
+            placeholder="Comment (optional)"
+            onChange={(t) => {
+              setComment(t.target.value);
+            }}
+          />
+        </Flex>
+      )}
       {signedIn && !props.hideToolbar && (
         <EditToolbar
           editing={editing}

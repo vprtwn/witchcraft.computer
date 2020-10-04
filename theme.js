@@ -148,7 +148,7 @@ export default {
       px: 0,
       border: '1px solid',
       borderColor: 'lightGray',
-      borderRadius: 4,
+      borderRadius: 8,
       bg: 'white',
     },
     textBlock: {
@@ -175,7 +175,9 @@ export default {
       fontFamily: 'Inter',
       borderRadius: 8,
       color: 'white',
-      bg: 'green',
+      border: 'solid 1px black',
+      color: 'black',
+      // bg: 'black',
     },
     primary: {
       paddingX: 3,
@@ -240,7 +242,7 @@ export default {
     },
     paymentMessage: {
       py: 2,
-      color: 'gray',
+      color: 'black',
       fontSize: 13,
       fontFamily: 'Inter',
     },

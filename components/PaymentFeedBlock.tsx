@@ -24,7 +24,7 @@ export default (props) => {
   }, []);
 
   return (
-    <Card sx={{ py: 4 }}>
+    <Card variant="block" sx={{ my: 4, py: 2, px: 3, bg: 'offWhite' }}>
       {payments.length > 0 && (
         <>
           {payments.map((p: any) => {
