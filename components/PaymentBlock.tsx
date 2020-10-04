@@ -128,7 +128,7 @@ export default (props) => {
         </Card>
       )}
       {!showingForm && (
-        <Flex sx={{ justifyContent: 'space-between' }}>
+        <Flex sx={{ justifyContent: 'space-between', py: 2 }}>
           <Button
             variant="payment"
             sx={{ flexGrow: 1 }}

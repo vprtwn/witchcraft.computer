@@ -172,7 +172,7 @@ const updateCustomerMetadata = async (
     errorResponse = {
       httpStatus: 401,
       errorMessage: `Permission denied: ${expectedEmail} !== ${customer.email}`,
-      errorCode: 'session_user_not_custome_',
+      errorCode: 'session_user_not_customer',
     };
   }
   if (!errorResponse) {
@@ -257,27 +257,11 @@ export const connectStripeAccount = async (session: any, state: string, code: st
         text: 'Leave me a tip',
         defaultAmount: 500,
       };
-      let blockOrder = readBlockOrder(customer.metadata);
-      const paymentBlockOrderItem = { i: 'b.payment' };
-      if (blockOrder) {
-        let hasPaymentBlock = false;
-        blockOrder.forEach((o) => {
-          if (o.i === 'b.payment') {
-            hasPaymentBlock = true;
-          }
-        });
-        if (!hasPaymentBlock) {
-          blockOrder.push(paymentBlockOrderItem);
-        }
-      } else {
-        blockOrder = [paymentBlockOrderItem];
-      }
 
       // update customer
       const metadata = {
         stripeAccount: JSON.stringify(accountData),
         'b.payment': JSON.stringify(paymentBlockData),
-        'b.order': JSON.stringify(blockOrder),
       };
       const updateResponse = await updateMetadataForCustomer(session, customer, metadata);
       if (updateResponse.errored) {

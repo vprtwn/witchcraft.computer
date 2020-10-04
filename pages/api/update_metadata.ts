@@ -36,5 +36,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(error.httpStatus).json(error);
   }
   const customer = response.data as Stripe.Customer;
-  res.json(customer.metadata);
+  return res.json(customer.metadata);
 };

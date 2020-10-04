@@ -55,6 +55,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       })
       .map((p) => {
         return {
+          id: p.id,
           amount: p.amount_received,
           message: p.description,
           originUrl: p.metadata.from_flexjar_origin_url,

@@ -3,11 +3,16 @@ import { Card, Box, Button, Flex, Label, Input } from 'theme-ui';
 import { BlockType } from '../lib/typedefs';
 import TextButtonIcon from '../components/TextButtonIcon';
 import LinkButtonIcon from '../components/LinkButtonIcon';
-import LinkBlock from '../components/LinkBlock';
+import ChevronRightIcon from '../components/ChevronRightIcon';
 import CollectionButtonIcon from '../components/CollectionButtonIcon';
+import TextareaAutosize from 'react-textarea-autosize';
 
 export default (props) => {
   const [showingForm, setShowingForm] = useState(false);
+  const [text, setText] = useState<string>('');
+  const [url, setUrl] = useState<string>('');
+  const [comment, setComment] = useState<string>('');
+
   const inputRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
     if (showingForm) {
@@ -19,39 +24,71 @@ export default (props) => {
     <Box sx={{ pt: 2 }}>
       {showingForm && (
         <>
-          <Flex
-            sx={{
-              pl: 2,
-              pr: 1,
-              py: 1,
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              borderRadius: 4,
-              bg: 'text',
-              color: 'background',
-              cursor: 'pointer',
-            }}
-          >
-            <Box sx={{ flexGrow: 1, py: 1 }}>
-              <Input ref={inputRef} variant="linkInput" defaultValue={'Link text'}></Input>
-            </Box>
-            <Flex>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24" width="24">
-                <path
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M9.29289 18.7071C8.90237 18.3166 8.90237 17.6834 9.29289 17.2929L14.5858 12L9.29289 6.70711C8.90237 6.31658 8.90237 5.68342 9.29289 5.29289C9.68342 4.90237 10.3166 4.90237 10.7071 5.29289L16.7071 11.2929C17.0976 11.6834 17.0976 12.3166 16.7071 12.7071L10.7071 18.7071C10.3166 19.0976 9.68342 19.0976 9.29289 18.7071Z"
-                  fill="white"
-                ></path>
-              </svg>
+          <Card variant="block">
+            <Flex
+              sx={{
+                pl: 2,
+                pr: 1,
+                py: 1,
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                borderRadius: 4,
+                bg: 'text',
+                color: 'background',
+                cursor: 'pointer',
+              }}
+            >
+              <Box sx={{ flexGrow: 1, py: 1 }}>
+                <Input
+                  ref={inputRef}
+                  variant="linkInput"
+                  placeholder="Link text"
+                  onChange={(t) => setText(t.target.value)}
+                />
+              </Box>
+              <ChevronRightIcon />
             </Flex>
-          </Flex>
-          <Box sx={{ p: 1, bg: 'lightGray' }}>
-            <Input variant="linkInput" placeholder="Link url"></Input>
-          </Box>
+            <Box sx={{ py: 1, px: 2, bg: 'lightGray' }}>
+              <Input
+                variant="linkInput"
+                placeholder="Link address"
+                autocomplete="on"
+                type="url"
+                onChange={(t) => setUrl(t.target.value)}
+              />
+            </Box>
+            <Flex sx={{ py: 1, px: 2, bg: 'offWhite' }}>
+              <TextareaAutosize
+                style={{
+                  background: 'none',
+                  width: '100%',
+                  resize: 'none',
+                  fontFamily: 'Inter',
+                  fontSize: '15px',
+                  border: 'none',
+                  paddingLeft: 8,
+                  paddingTop: 4,
+                  paddingBottom: 4,
+                  overflow: 'hidden',
+                  pointerEvents: props.hideToolbar ? 'none' : 'auto',
+                }}
+                placeholder="Comment (optional)"
+                onChange={(t) => setComment(t.target.value)}
+              />
+            </Flex>
+          </Card>
           <Flex sx={{ justifyContent: 'right', pt: 1 }}>
-            <Button variant="shadowButton">Add link</Button>
+            <Button
+              variant="shadowButton"
+              onClick={() => {
+                console.log('text', text);
+                console.log('url', url);
+                console.log('comment', comment);
+                props.onClick({ type: 'link', text: text, url: url, comment: comment });
+              }}
+            >
+              Add link
+            </Button>
           </Flex>
         </>
       )}

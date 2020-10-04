@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Card, Box, Label, Flex, IconButton, Input, Text } from 'theme-ui';
+import { Card, Box, Flex, IconButton, Input, Text } from 'theme-ui';
 import fetchJson from '../lib/fetchJson';
 import NumberFormat from 'react-number-format';
 
@@ -24,12 +24,12 @@ export default (props) => {
   }, []);
 
   return (
-    <Card variant="block" sx={{ my: 4, py: 2, px: 3, bg: 'offWhite' }}>
+    <Box>
       {payments.length > 0 && (
         <>
           {payments.map((p: any) => {
             return (
-              <Flex sx={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
+              <Flex id={p.id} sx={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
                 <Text variant="paymentMessage">{p.message}</Text>
                 <Card variant="moneyCard">$5</Card>
               </Flex>
@@ -37,6 +37,6 @@ export default (props) => {
           })}
         </>
       )}
-    </Card>
+    </Box>
   );
 };

@@ -50,7 +50,6 @@ const UserPage = (props) => {
   };
 
   // block ordering, [{i: "b.text.A1B2"}, ...]
-  const menuContainer = useRef<HTMLElement | null>(null);
   const initialOrder = readBlockOrder(props.metadata) || [];
   const [order, setOrder] = useState(initialOrder);
   const [showingNewMenu, setShowingNewMenu] = useState(false);
@@ -119,21 +118,21 @@ const UserPage = (props) => {
     syncOrder(result.items, result.removedId);
   };
 
-  const addTextBlock = () => {
+  const addTextBlock = async () => {
     const id = generateBlockId(BlockType.Text);
     const newItem = { i: id };
     const newItems = add(order, newItem);
+    await syncNewBlock(id, defaultText, newItems);
     setOrder(newItems);
-    syncNewBlock(id, defaultText, newItems);
   };
 
-  const addLinkBlock = (content: any) => {
+  const addLinkBlock = async (content: any) => {
     const id = generateBlockId(BlockType.Link);
     const newItem = { i: id };
     const newItems = add(order, newItem);
-    const value = JSON.stringify({ text: content.text, url: content.url });
+    const value = JSON.stringify({ text: content.text, url: content.url, comment: content.comment });
+    await syncNewBlock(id, value, newItems);
     setOrder(newItems);
-    syncNewBlock(id, value, newItems);
   };
 
   return (
@@ -223,26 +222,7 @@ const UserPage = (props) => {
                                     sx={{
                                       py: 2,
                                     }}
-                                  >
-                                    <PaymentBlock
-                                      hideUp={index === 0}
-                                      hideDown={index === order.length - 1}
-                                      hideToolbar={previewing}
-                                      metadata={metadata}
-                                      username={props.username}
-                                      customerId={props.customerId}
-                                      signedIn={props.signedIn}
-                                      onDown={() => {
-                                        moveBlock(index, Direction.Down);
-                                      }}
-                                      onUp={() => {
-                                        moveBlock(index, Direction.Up);
-                                      }}
-                                      onDelete={() => {
-                                        removeBlock(index);
-                                      }}
-                                    />
-                                  </Box>
+                                  ></Box>
                                 )}
                                 {/* {parseBlockId(orderItem.i) === BlockType.Unknown && (
                                 <Box
@@ -270,6 +250,7 @@ const UserPage = (props) => {
             {showingNewMenu && !previewing && (
               <NewMenu
                 onClick={(result) => {
+                  console.log(result);
                   switch (result.type as BlockType) {
                     case BlockType.Text:
                       addTextBlock();
@@ -286,16 +267,13 @@ const UserPage = (props) => {
             )}
 
             {props.signedIn && (
-              <Flex ref={menuContainer} sx={{ pt: 4, mx: 2, justifyContent: 'space-between' }}>
+              <Flex sx={{ py: 4, mx: 2, justifyContent: 'space-between' }}>
                 <Box>
                   <IconButton
                     sx={{ fontSize: '24px', visibility: previewing ? 'hidden' : 'visible' }}
                     variant={showingNewMenu ? 'iconselected' : 'icon'}
                     onClick={() => {
                       setShowingNewMenu(!showingNewMenu);
-                      if (showingNewMenu && menuContainer) {
-                        menuContainer.current.scrollIntoView();
-                      }
                     }}
                   >
                     {showingNewMenu ? <BackButtonIcon /> : <AddButtonIcon />}
@@ -306,10 +284,6 @@ const UserPage = (props) => {
                     variant={!previewing && !showingNewMenu ? 'iconselected' : 'icon'}
                     onClick={() => {
                       setPreviewing(!previewing);
-                      if (!previewing && menuContainer) {
-                        console.log('scrolling');
-                        menuContainer.current.scrollIntoView(true);
-                      }
                     }}
                   >
                     {previewing ? <EditButtonIcon /> : <ViewButtonIcon />}
@@ -318,7 +292,12 @@ const UserPage = (props) => {
               </Flex>
             )}
 
-            {stripeAccount && <PaymentFeedBlock />}
+            {stripeAccount && (
+              <Card variant="block" sx={{ my: 4, py: 2, px: 3, bg: 'offWhite' }}>
+                <PaymentBlock metadata={metadata} />
+                <PaymentFeedBlock />
+              </Card>
+            )}
 
             <Box my={4} />
           </>

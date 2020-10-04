@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Card, Input, Flex, Box } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
 import EditToolbar from './EditToolbar';
+import ChevronRightIcon from './ChevronRightIcon';
 import { postMetadataUpdate } from '../lib/metadataUtils';
 import { readDict } from '../lib/metadataUtils';
 import isUrl from 'is-url';
@@ -14,22 +15,28 @@ export default (props) => {
   // blocks read from all metadata, which is meh but ok
   const [editing, setEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  let content = readDict(props.metadata, props.id);
-  const [text, setText] = useState<string>(content ? (content.text as string) : '');
-  const [link, setLink] = useState<string>(content ? (content.link as string) : '');
-  const [comment, setComment] = useState<string>(content ? (content.comment as string) : '');
+  const content = readDict(props.metadata, props.id);
+  console.log('content', JSON.stringify(content, null, 2));
+  const initialText = content ? (content.text as string) : '';
+  const initialUrl = content ? (content.url as string) : '';
+  const initialComment = content ? (content.comment as string) : '';
+  const [text, setText] = useState<string>(initialText);
+  const [url, setUrl] = useState<string>(initialUrl);
+  const [comment, setComment] = useState<string>(initialComment);
   const [debouncedText] = useDebounce(text, DEBOUNCE_MS);
-  const [debouncedLink] = useDebounce(link, DEBOUNCE_MS);
+  const [debouncedUrl] = useDebounce(url, DEBOUNCE_MS);
   const [debouncedComment] = useDebounce(comment, DEBOUNCE_MS);
 
   useEffect(() => {
-    const value = {
-      link: debouncedLink,
-      text: debouncedText,
-      comment: debouncedComment,
-    };
-    syncUpdates(value);
-  }, [debouncedText, debouncedLink, debouncedComment]);
+    if (isUrl(debouncedUrl) && text.length > 0) {
+      const value = {
+        url: debouncedUrl,
+        text: debouncedText,
+        comment: debouncedComment,
+      };
+      syncUpdates(value);
+    }
+  }, [debouncedText, debouncedUrl, debouncedComment]);
 
   const syncUpdates = async function (value) {
     try {
@@ -42,7 +49,7 @@ export default (props) => {
   };
 
   return (
-    <Card variant="block" sx={{ bg: 'offWhite' }}>
+    <Card variant="block" sx={{ borderColor: 'black' }}>
       <>
         <Flex
           onClick={() => {
@@ -69,37 +76,30 @@ export default (props) => {
               ref={inputRef}
               variant="linkInput"
               sx={{ pointerEvents: props.hideToolbar ? 'none' : 'auto' }}
-              defaultValue={content ? content.text : 'Link text'}
+              defaultValue={text}
+              placeholder="Link text"
               onChange={(t) => {
                 setText(t.target.value);
               }}
             />
           </Box>
-          <Flex>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24" width="24">
-              <path
-                xmlns="http://www.w3.org/2000/svg"
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M9.29289 18.7071C8.90237 18.3166 8.90237 17.6834 9.29289 17.2929L14.5858 12L9.29289 6.70711C8.90237 6.31658 8.90237 5.68342 9.29289 5.29289C9.68342 4.90237 10.3166 4.90237 10.7071 5.29289L16.7071 11.2929C17.0976 11.6834 17.0976 12.3166 16.7071 12.7071L10.7071 18.7071C10.3166 19.0976 9.68342 19.0976 9.29289 18.7071Z"
-                fill="white"
-              ></path>
-            </svg>
-          </Flex>
+          <ChevronRightIcon />
         </Flex>
         {editing && !props.hideToolbar && (
-          <Box sx={{ py: 1, px: 2, bg: 'lightGray' }}>
+          <Box sx={{ py: 1, px: 2, bg: 'transparent' }}>
             <Input
               ref={inputRef}
               type="url"
               variant="linkInput"
-              defaultValue={link}
-              placeholder="Link url"
-              sx={{ fontSize: '14px', px: 2 }}
+              defaultValue={url}
+              placeholder="Link address"
+              sx={{
+                fontSize: '15px',
+              }}
               onChange={(t) => {
                 const val = t.target.value;
                 if (isUrl(val)) {
-                  setLink(val);
+                  setUrl(val);
                 }
               }}
             ></Input>
@@ -109,7 +109,7 @@ export default (props) => {
       {((!props.hideToolbar && (editing || (!editing && comment && comment.length > 0))) ||
         (props.hideToolbar && comment && comment.length > 0)) && (
         <Flex
-          sx={{ py: 1, px: 2, bg: 'offWhite' }}
+          sx={{ py: 1, px: 2, bg: 'transparent' }}
           onClick={() => {
             if (!props.hideToolbar) {
               setEditing(true);

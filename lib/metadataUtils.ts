@@ -19,6 +19,7 @@ export const postMetadataUpdate = async (
   if (order) {
     update['b.order'] = order;
   }
+  console.log('postMetadataUpdate', JSON.stringify(update, null, 2));
   const params = {
     username: username,
     metadata: update,

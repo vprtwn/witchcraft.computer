@@ -11,14 +11,16 @@ const DEBOUNCE_MS = 700;
 export default (props) => {
   const signedIn = props.signedIn;
   // blocks read from all metadata, which is meh but ok
-  let initialMd = readString(props.metadata, props.id, props.signedIn ? props.default : null);
+  let initialText = readString(props.metadata, props.id, props.signedIn ? props.default : null);
   const [editing, setEditing] = useState(false);
-  const [text, setText] = useState(initialMd);
+  const [text, setText] = useState(initialText);
   const [debouncedText] = useDebounce(text, DEBOUNCE_MS);
   const editorRef = useRef<RichMarkdownEditor | null>(null);
 
   useEffect(() => {
-    syncUpdatedText(debouncedText);
+    if (debouncedText !== initialText) {
+      syncUpdatedText(debouncedText);
+    }
   }, [debouncedText]);
 
   useEffect(() => {
@@ -29,6 +31,7 @@ export default (props) => {
 
   const syncUpdatedText = async function (value) {
     try {
+      console.log('postMetadataUpdate');
       await postMetadataUpdate(props.id, value, props.customerId, props.username);
       // TODO: handle errors
       setText(value);
