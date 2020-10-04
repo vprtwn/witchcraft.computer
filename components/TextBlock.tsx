@@ -40,7 +40,7 @@ export default (props) => {
   return (
     <Card variant="textBlock" sx={{}}>
       <Box
-        sx={{ px: 3, py: 2, cursor: 'crosshair' }}
+        sx={{ px: 3, py: 2, cursor: 'text' }}
         onClick={() => {
           if (!props.previewing && !editing) {
             setEditing(true);

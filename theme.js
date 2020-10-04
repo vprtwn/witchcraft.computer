@@ -154,7 +154,7 @@ export default {
     textBlock: {
       py: 0,
       px: 0,
-      border: '1px solid',
+      border: '0px solid',
       borderColor: 'lightGray',
       borderRadius: 4,
       bg: 'white',
@@ -218,7 +218,7 @@ export default {
       fontFamily: 'Inter',
       bg: 'transparent',
       border: 'none',
-      py: 2,
+      py: 1,
     },
     buttonLabel: {
       fontSize: 11,

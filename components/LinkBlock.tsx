@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, Input, Flex, Box } from 'theme-ui';
+import { useDebounce } from 'use-debounce';
 import EditToolbar from './EditToolbar';
-import LinkView from './LinkView';
+import { postMetadataUpdate } from '../lib/metadataUtils';
 import { readDict } from '../lib/metadataUtils';
+import isUrl from 'is-url';
+
+const DEBOUNCE_MS = 700;
 
 export default (props) => {
   const signedIn = props.signedIn;
@@ -10,14 +14,38 @@ export default (props) => {
   const [editing, setEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   let content = readDict(props.metadata, props.id);
+  const [text, setText] = useState(content ? content.text : '');
+  const [link, setLink] = useState(content ? content.link : '');
+  const [debouncedText] = useDebounce(text, DEBOUNCE_MS);
+  const [debouncedLink] = useDebounce(link, DEBOUNCE_MS);
+
+  useEffect(() => {
+    const value = {
+      link: debouncedLink,
+      text: debouncedText,
+    };
+    syncUpdates(value);
+  }, [debouncedText, debouncedLink]);
+
+  const syncUpdates = async function (value) {
+    try {
+      await postMetadataUpdate(props.id, value, props.customerId, props.username);
+      // TODO: handle errors
+      // setText(value);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
     <Card variant="block">
       <>
         <Flex
           onClick={() => {
-            if (content && !editing) {
+            if (content && props.hideToolbar) {
               window.location.assign(content.url as string);
+            } else {
+              setEditing(true);
             }
           }}
           sx={{
@@ -32,13 +60,16 @@ export default (props) => {
             cursor: 'pointer',
           }}
         >
-          <Box sx={{ flexGrow: 1 }}>
+          <Box sx={{ flexGrow: 1, py: 1 }}>
             <Input
               ref={inputRef}
               variant="linkInput"
-              sx={{ pointerEvents: !editing && !props.newMenu ? 'none' : 'auto' }}
+              sx={{ pointerEvents: props.hideToolbar ? 'none' : 'auto' }}
               defaultValue={content ? content.text : 'Link text'}
-            ></Input>
+              onChange={(t) => {
+                setText(t.target.value);
+              }}
+            />
           </Box>
           <Flex>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24" width="24">
@@ -52,14 +83,21 @@ export default (props) => {
             </svg>
           </Flex>
         </Flex>
-        {(editing || props.newMenu) && (
-          <Box>
+        {editing && !props.hideToolbar && (
+          <Box sx={{ p: 1, bg: 'lightGray' }}>
             <Input
               ref={inputRef}
+              type="url"
               variant="linkInput"
-              defaultValue={content ? content.url : null}
+              defaultValue={link}
               placeholder="Link url"
-              sx={{ bg: 'lightGray' }}
+              sx={{}}
+              onChange={(t) => {
+                const val = t.target.value;
+                if (isUrl(val)) {
+                  setLink(val);
+                }
+              }}
             ></Input>
           </Box>
         )}

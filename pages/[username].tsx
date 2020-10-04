@@ -266,8 +266,6 @@ const UserPage = (props) => {
               </Droppable>
             </DragDropContext>
 
-            {stripeAccount && <PaymentFeedBlock />}
-
             {showingNewMenu && !previewing && (
               <NewMenu
                 onClick={(result) => {
@@ -287,17 +285,7 @@ const UserPage = (props) => {
             )}
 
             {props.signedIn && (
-              <Flex sx={{ py: 3, mx: 2, justifyContent: 'space-between' }}>
-                <Box sx={{}}>
-                  <IconButton
-                    variant={!previewing && !showingNewMenu ? 'iconselected' : 'icon'}
-                    onClick={() => {
-                      setPreviewing(!previewing);
-                    }}
-                  >
-                    {previewing ? <EditButtonIcon /> : <ViewButtonIcon />}
-                  </IconButton>
-                </Box>
+              <Flex sx={{ pt: 4, mx: 2, justifyContent: 'space-between' }}>
                 <Box>
                   <IconButton
                     sx={{ fontSize: '24px', visibility: previewing ? 'hidden' : 'visible' }}
@@ -309,8 +297,20 @@ const UserPage = (props) => {
                     {showingNewMenu ? <BackButtonIcon /> : <AddButtonIcon />}
                   </IconButton>
                 </Box>
+                <Box>
+                  <IconButton
+                    variant={!previewing && !showingNewMenu ? 'iconselected' : 'icon'}
+                    onClick={() => {
+                      setPreviewing(!previewing);
+                    }}
+                  >
+                    {previewing ? <EditButtonIcon /> : <ViewButtonIcon />}
+                  </IconButton>
+                </Box>
               </Flex>
             )}
+
+            {stripeAccount && <PaymentFeedBlock />}
             {props.signedIn && !previewing && (
               <Card variant="shadowBlock">
                 <Box py={5}>

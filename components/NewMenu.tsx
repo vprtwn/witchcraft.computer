@@ -16,7 +16,7 @@ export default (props) => {
   }, [showingForm]);
 
   return (
-    <Box sx={{ py: 2 }}>
+    <Box sx={{ pt: 2 }}>
       {showingForm && (
         <>
           <Flex
@@ -32,7 +32,7 @@ export default (props) => {
               cursor: 'pointer',
             }}
           >
-            <Box sx={{ flexGrow: 1 }}>
+            <Box sx={{ flexGrow: 1, py: 1 }}>
               <Input ref={inputRef} variant="linkInput" defaultValue={'Link text'}></Input>
             </Box>
             <Flex>
@@ -47,8 +47,8 @@ export default (props) => {
               </svg>
             </Flex>
           </Flex>
-          <Box>
-            <Input variant="linkInput" placeholder="Link url" sx={{ bg: 'lightGray' }}></Input>
+          <Box sx={{ p: 1, bg: 'lightGray' }}>
+            <Input variant="linkInput" placeholder="Link url"></Input>
           </Box>
           <Flex sx={{ justifyContent: 'right', pt: 1 }}>
             <Button variant="shadowButton">Add link</Button>
@@ -79,7 +79,7 @@ export default (props) => {
             variant="shadowButton"
             sx={{ flexGrow: 1 }}
             onClick={() => {
-              props.onClick({ type: BlockType.Text });
+              // props.onClick({ type: BlockType.Text });
             }}
           >
             <CollectionButtonIcon />
