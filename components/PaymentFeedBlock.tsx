@@ -28,8 +28,6 @@ export default (props) => {
       {payments.length > 0 && (
         <>
           {payments.map((p: any) => {
-            // debugger;
-            console.dir(p);
             return (
               <Flex sx={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
                 <Text variant="paymentMessage">{p.message}</Text>

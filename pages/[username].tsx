@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import Layout from '../components/Layout';
 import Header from '../components/Header';
 import TextBlock from '../components/TextBlock';
@@ -50,6 +50,7 @@ const UserPage = (props) => {
   };
 
   // block ordering, [{i: "b.text.A1B2"}, ...]
+  const menuContainer = useRef<HTMLElement | null>(null);
   const initialOrder = readBlockOrder(props.metadata) || [];
   const [order, setOrder] = useState(initialOrder);
   const [showingNewMenu, setShowingNewMenu] = useState(false);
@@ -85,7 +86,7 @@ const UserPage = (props) => {
     try {
       setShowingNewMenu(false);
       const newMetadata = await postMetadataUpdate(id, value, props.customerId, props.username, null, order);
-      console.table(newMetadata);
+      DEBUG && console.table(newMetadata);
       setMetadata(newMetadata);
     } catch (e) {
       console.error(e);
@@ -266,8 +267,6 @@ const UserPage = (props) => {
               </Droppable>
             </DragDropContext>
 
-            {stripeAccount && <PaymentFeedBlock />}
-
             {showingNewMenu && !previewing && (
               <NewMenu
                 onClick={(result) => {
@@ -287,80 +286,90 @@ const UserPage = (props) => {
             )}
 
             {props.signedIn && (
-              <Flex sx={{ py: 3, mx: 2, justifyContent: 'space-between' }}>
-                <Box sx={{}}>
-                  <IconButton
-                    variant={!previewing && !showingNewMenu ? 'iconselected' : 'icon'}
-                    onClick={() => {
-                      setPreviewing(!previewing);
-                    }}
-                  >
-                    {previewing ? <EditButtonIcon /> : <ViewButtonIcon />}
-                  </IconButton>
-                </Box>
+              <Flex ref={menuContainer} sx={{ pt: 4, mx: 2, justifyContent: 'space-between' }}>
                 <Box>
                   <IconButton
                     sx={{ fontSize: '24px', visibility: previewing ? 'hidden' : 'visible' }}
                     variant={showingNewMenu ? 'iconselected' : 'icon'}
                     onClick={() => {
                       setShowingNewMenu(!showingNewMenu);
+                      if (showingNewMenu && menuContainer) {
+                        menuContainer.current.scrollIntoView();
+                      }
                     }}
                   >
                     {showingNewMenu ? <BackButtonIcon /> : <AddButtonIcon />}
                   </IconButton>
                 </Box>
+                <Box>
+                  <IconButton
+                    variant={!previewing && !showingNewMenu ? 'iconselected' : 'icon'}
+                    onClick={() => {
+                      setPreviewing(!previewing);
+                      if (!previewing && menuContainer) {
+                        console.log('scrolling');
+                        menuContainer.current.scrollIntoView(true);
+                      }
+                    }}
+                  >
+                    {previewing ? <EditButtonIcon /> : <ViewButtonIcon />}
+                  </IconButton>
+                </Box>
               </Flex>
             )}
-            {props.signedIn && !previewing && (
-              <Card variant="shadowBlock">
-                <Box py={5}>
-                  <Label variant="settingsLabel">{stripeAccount ? '💸 Payments enabled' : '💸 Add payments'}</Label>
-                  {!stripeAccount && (
-                    <Box pt={2}>
-                      <Text variant="small">Flexjar makes it easy to collect tips on your page.</Text>
-                      <Text variant="small">Connect a Stripe account to get started. </Text>
-                      <Box pt={3}>
-                        <Button
-                          variant="tiny"
-                          mr={2}
-                          onClick={() => {
-                            window.location.assign(connectUrl);
-                          }}
-                        >
-                          Connect Stripe
-                        </Button>{' '}
-                      </Box>
-                    </Box>
-                  )}
-                  {stripeAccount && (
-                    <Box>
-                      <Text variant="small">Flexjar is connected to your Stripe account:</Text>
-                      <pre>{JSON.stringify(stripeAccount, null, 2)}</pre>
-                      <Button
-                        variant="tiny"
-                        mr={2}
-                        onClick={() => {
-                          disconnectStripe();
-                        }}
-                      >
-                        Disconnect Stripe
-                      </Button>{' '}
-                      {errorMessage && <Text variant="small">{errorMessage}</Text>}
-                    </Box>
-                  )}
-                </Box>
 
-                <Flex sx={{ bg: 'transparent', pt: 4, flexDirection: 'row-reverse' }}>
-                  <Button onClick={() => signOut()} variant="tiny" sx={{ color: 'lightGray', cursor: 'pointer' }}>
-                    <SignOutButtonIcon />
-                  </Button>
-                </Flex>
-              </Card>
-            )}
+            {stripeAccount && <PaymentFeedBlock />}
+
             <Box my={4} />
           </>
         )}
         <PageFooter />
+        {props.signedIn && (
+          <Card variant="shadowBlock">
+            <Box py={5}>
+              <Label variant="settingsLabel">{stripeAccount ? '💸 Payments enabled' : '💸 Add payments'}</Label>
+              {!stripeAccount && (
+                <Box pt={2}>
+                  <Text variant="small">Flexjar makes it easy to collect tips on your page.</Text>
+                  <Text variant="small">Connect a Stripe account to get started. </Text>
+                  <Box pt={3}>
+                    <Button
+                      variant="tiny"
+                      mr={2}
+                      onClick={() => {
+                        window.location.assign(connectUrl);
+                      }}
+                    >
+                      Connect Stripe
+                    </Button>{' '}
+                  </Box>
+                </Box>
+              )}
+              {stripeAccount && (
+                <Box>
+                  <Text variant="small">Flexjar is connected to your Stripe account:</Text>
+                  <pre>{JSON.stringify(stripeAccount, null, 2)}</pre>
+                  <Button
+                    variant="tiny"
+                    mr={2}
+                    onClick={() => {
+                      disconnectStripe();
+                    }}
+                  >
+                    Disconnect Stripe
+                  </Button>{' '}
+                  {errorMessage && <Text variant="small">{errorMessage}</Text>}
+                </Box>
+              )}
+            </Box>
+
+            <Flex sx={{ bg: 'transparent', pt: 4, flexDirection: 'row-reverse' }}>
+              <Button onClick={() => signOut()} variant="tiny" sx={{ color: 'lightGray', cursor: 'pointer' }}>
+                <SignOutButtonIcon />
+              </Button>
+            </Flex>
+          </Card>
+        )}
       </Layout>
     </Elements>
   );
