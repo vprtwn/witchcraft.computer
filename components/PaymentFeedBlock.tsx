@@ -30,8 +30,28 @@ export default (props) => {
           {payments.map((p: any) => {
             return (
               <Flex id={p.id} sx={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                <Text variant="paymentMessage">{p.message}</Text>
-                <Card variant="moneyCard">$5</Card>
+                <Text
+                  sx={{
+                    py: 2,
+                    color: 'black',
+                    fontSize: 12,
+                  }}
+                >
+                  {p.message}
+                </Text>
+                <Card
+                  sx={{
+                    py: 0,
+                    px: 2,
+                    my: 2,
+                    fontSize: 10,
+                    borderRadius: 8,
+                    color: 'black',
+                    bg: 'white',
+                  }}
+                >
+                  $5
+                </Card>
               </Flex>
             );
           })}

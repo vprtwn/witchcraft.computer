@@ -254,7 +254,7 @@ export const connectStripeAccount = async (session: any, state: string, code: st
       console.dir(accountData);
       // Note: PaymentBlock gets reset after disconnecting & reconnecting Stripe
       const paymentBlockData = {
-        text: 'Leave me a tip',
+        text: 'Leave a tip',
         defaultAmount: 500,
       };
 

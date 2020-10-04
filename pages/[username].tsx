@@ -55,7 +55,7 @@ const UserPage = (props) => {
   const [showingNewMenu, setShowingNewMenu] = useState(false);
   const [previewing, setPreviewing] = useState(DEBUG ? false : true);
   const [metadata, setMetadata] = useState(props.metadata);
-  const initialStripeAccount = readDict(props.metadata, 'stripeAccount');
+  const initialStripeAccount = readDict(props.metadata, 'stripe_account');
   const [stripeAccount, setStripeAccount] = useState(initialStripeAccount);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 

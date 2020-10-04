@@ -25,9 +25,7 @@ export default {
     offWhite: '#f7fafc',
     primary: '#000',
     green: '#68d391',
-    // background: '#f7fafc',
     background: '#fff',
-    darkGray: '#2d3748',
     lightGray: '#edf2f7',
     modes: {
       light: {
@@ -80,47 +78,6 @@ export default {
         boxShadow: '0 0 16px rgba(0, 0, 0, 0.125)',
       },
     },
-    payment: {
-      py: 2,
-      border: '1px solid lightGray',
-      borderRadius: 12,
-      bg: 'white',
-      color: 'black',
-      fontFamily: 'Inter',
-      fontSize: 16,
-      cursor: 'pointer',
-      boxShadow: '0 0 4px rgba(0, 0, 0, 0.125)',
-      '&:hover': {
-        boxShadow: '0 0 16px rgba(0, 0, 0, 0.125)',
-      },
-    },
-    paymentContinue: {
-      boxShadow: '0 0 12px rgba(0, 0, 0, 0.25)',
-      border: 'solid 1px lightGray',
-      borderRadius: 16,
-      bg: 'text',
-      color: 'white',
-      fontFamily: 'Inter',
-      fontSize: 16,
-      cursor: 'pointer',
-      '&:hover': {
-        bg: 'darkGray',
-      },
-    },
-    paymentCancel: {
-      border: 'solid 1px',
-      borderColor: 'lightGray',
-      borderWidth: 1,
-      borderRadius: 16,
-      bg: 'transparent',
-      color: 'text',
-      fontFamily: 'Inter',
-      fontSize: 16,
-      cursor: 'pointer',
-      '&:hover': {
-        bg: 'lightGray',
-      },
-    },
     icon: {
       cursor: 'pointer',
       '&:hover': {
@@ -159,25 +116,13 @@ export default {
       borderRadius: 4,
       bg: 'white',
     },
-    formBlock: {
+    shadowCard: {
       p: 3,
       my: 2,
       bg: 'white',
       boxShadow: '0 0 8px rgba(0, 0, 0, 0.125)',
       borderRadius: 12,
       border: '1px solid lightGray',
-    },
-    moneyCard: {
-      py: 0,
-      px: 2,
-      my: 2,
-      fontSize: 10,
-      fontFamily: 'Inter',
-      borderRadius: 8,
-      color: 'white',
-      border: 'solid 1px darkGray',
-      color: 'darkGray',
-      // bg: 'black',
     },
     primary: {
       paddingX: 3,
@@ -241,13 +186,6 @@ export default {
     small: {
       fontSize: '13px',
     },
-    paymentMessage: {
-      py: 2,
-      color: 'black',
-      fontSize: 13,
-      fontFamily: 'Inter',
-    },
-
     heading: {
       fontFamily: 'heading',
       lineHeight: 'heading',

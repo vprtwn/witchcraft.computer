@@ -28,7 +28,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(error.httpStatus).json(error);
   }
   const customer = customerRes.data as Stripe.Customer;
-  const stripeAccount = readDict(customer.metadata, 'stripeAccount');
+  const stripeAccount = readDict(customer.metadata, 'stripe_account');
   if (!stripeAccount) {
     const error: ErrorResponse = {
       errorCode: 'no_payment_setup',

@@ -9,7 +9,7 @@ import { useStripe } from '@stripe/react-stripe-js';
 
 export default (props) => {
   // blocks read from all metadata, which is meh but ok
-  let content = readDict(props.metadata, 'b.payment');
+  let content = readDict(props.metadata, 'payment_settings');
 
   const [showingForm, setShowingForm] = useState(false);
   const [amount, setAmount] = useState(content.defaultAmount as number);
@@ -59,7 +59,7 @@ export default (props) => {
   return (
     <>
       {showingForm && (
-        <Card variant="formBlock" as="form" onSubmit={handleCheckout}>
+        <Card variant="shadowCard" as="form" onSubmit={handleCheckout}>
           <Flex sx={{ justifyContent: 'center', alignItems: 'center' }}>
             <IconButton
               type="button"
@@ -109,7 +109,7 @@ export default (props) => {
           <Flex sx={{ justifyContent: 'space-between' }}>
             <Button
               type="button"
-              variant="paymentCancel"
+              variant="shadowButton"
               onClick={() => {
                 setShowingForm(false);
               }}
@@ -117,7 +117,7 @@ export default (props) => {
               Cancel
             </Button>
             <Button
-              variant="paymentContinue"
+              variant="shadowButton"
               onClick={() => {
                 //todo
               }}
@@ -130,7 +130,7 @@ export default (props) => {
       {!showingForm && (
         <Flex sx={{ justifyContent: 'space-between', py: 2 }}>
           <Button
-            variant="payment"
+            variant="shadowButton"
             sx={{ flexGrow: 1 }}
             onClick={() => {
               setShowingForm(true);

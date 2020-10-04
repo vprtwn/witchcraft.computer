@@ -24,7 +24,7 @@ export default (props) => {
     <Box sx={{ pt: 2 }}>
       {showingForm && (
         <>
-          <Card variant="block">
+          <Card variant="block" sx={{ borderColor: 'black' }}>
             <Flex
               sx={{
                 pl: 2,
@@ -48,16 +48,18 @@ export default (props) => {
               </Box>
               <ChevronRightIcon />
             </Flex>
-            <Box sx={{ py: 1, px: 2, bg: 'lightGray' }}>
+            <Box sx={{ py: 1, px: 2, bg: 'transparent' }}>
               <Input
                 variant="linkInput"
                 placeholder="Link address"
-                autocomplete="on"
                 type="url"
+                sx={{
+                  fontSize: '15px',
+                }}
                 onChange={(t) => setUrl(t.target.value)}
               />
             </Box>
-            <Flex sx={{ py: 1, px: 2, bg: 'offWhite' }}>
+            <Flex sx={{ py: 1, px: 2, bg: 'transparent' }}>
               <TextareaAutosize
                 style={{
                   background: 'none',
