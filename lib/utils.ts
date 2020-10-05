@@ -54,8 +54,6 @@ export const parseBlockId = (id: string): BlockType => {
     return BlockType.Link;
   } else if (type === 'text' && comps.length === 3) {
     return BlockType.Text;
-  } else if (type === 'payment' && comps.length === 2) {
-    return BlockType.Payment;
   }
   return BlockType.Unknown;
 };

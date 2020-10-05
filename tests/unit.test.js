@@ -77,7 +77,6 @@ test('readBlockOrder', () => {
 test('parseBlockId', () => {
   expect(parseBlockId('foo')).toEqual(BlockType.Unknown);
   expect(parseBlockId('b.link')).toEqual(BlockType.Unknown);
-  expect(parseBlockId('b.payment')).toEqual(BlockType.Payment);
   expect(parseBlockId('b.link.123')).toEqual(BlockType.Link);
   expect(parseBlockId('b.text.123')).toEqual(BlockType.Text);
 });

@@ -99,6 +99,13 @@ export default {
       },
     },
   },
+  badges: {
+    outline: {
+      color: 'primary',
+      bg: 'transparent',
+      boxShadow: 'inset 0 0 0 1px',
+    },
+  },
   cards: {
     block: {
       py: 0,
@@ -139,7 +146,7 @@ export default {
   },
   forms: {
     label: {
-      fontSize: '10px',
+      fontSize: '12px',
       fontFamily: 'Recursive',
       color: 'text',
     },
@@ -150,7 +157,8 @@ export default {
     },
     input: {
       // PaymentBlock amount input
-      fontSize: 30,
+      fontSize: 24,
+      fontWeight: 'bold',
       bg: 'transparent',
       borderWidth: 0,
       textAlign: 'center',
@@ -158,6 +166,8 @@ export default {
       py: 2,
     },
     standardInput: {
+      fontFamily: 'Recursive',
+      fontSize: 13,
       bg: 'white',
       py: 2,
       border: '1px solid lightGray',

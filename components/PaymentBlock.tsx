@@ -102,9 +102,9 @@ export default (props) => {
             name="message"
             id="message"
             placeholder="Leave a message"
-            mt={2}
+            mt={1}
             mb={3}
-            sx={{ fontSize: 14 }}
+            sx={{ fontSize: 14, fontWeight: 'normal' }}
             ref={firstInputRef}
             required
           />

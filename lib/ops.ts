@@ -251,17 +251,15 @@ export const connectStripeAccount = async (session: any, state: string, code: st
         name: businessName,
         email: stripeAccount.email,
       };
-      console.dir(accountData);
-      // Note: PaymentBlock gets reset after disconnecting & reconnecting Stripe
-      const paymentBlockData = {
+      const paymentSettings = {
         text: 'Leave a tip',
         defaultAmount: 500,
       };
 
       // update customer
       const metadata = {
-        stripeAccount: JSON.stringify(accountData),
-        'b.payment': JSON.stringify(paymentBlockData),
+        stripe_account: JSON.stringify(accountData),
+        payment_settings: JSON.stringify(paymentSettings),
       };
       const updateResponse = await updateMetadataForCustomer(session, customer, metadata);
       if (updateResponse.errored) {

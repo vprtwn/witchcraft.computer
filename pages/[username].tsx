@@ -10,7 +10,8 @@ import { reorder, remove, add, unprefixUsername, generateBlockId, parseBlockId }
 import { postMetadataUpdate, readBlockOrder, readDict } from '../lib/metadataUtils';
 import { Direction, BlockType } from '../lib/typedefs';
 import { useRouter } from 'next/router';
-import { Box, IconButton, Flex, Card, Button, Text, Label, Textarea } from 'theme-ui';
+import { Box, Checkbox, Badge, Input, IconButton, Flex, Card, Button, Text, Label, Textarea } from 'theme-ui';
+import NumberFormat from 'react-number-format';
 import { GetServerSideProps } from 'next';
 import { signOut, getSession } from 'next-auth/client';
 import fetchJson from '../lib/fetchJson';
@@ -79,9 +80,6 @@ const UserPage = (props) => {
   };
 
   const syncNewBlock = async function (id: string, value: string, order: Record<string, string>[]) {
-    if (id === 'b.payment') {
-      return;
-    }
     try {
       setShowingNewMenu(false);
       const newMetadata = await postMetadataUpdate(id, value, props.customerId, props.username, null, order);
@@ -304,9 +302,8 @@ const UserPage = (props) => {
         )}
         <PageFooter />
         {props.signedIn && (
-          <Card variant="shadowBlock">
-            <Box py={5}>
-              <Label variant="settingsLabel">{stripeAccount ? '💸 Payments enabled' : '💸 Add payments'}</Label>
+          <Card variant="block" sx={{ p: 3, mb: 4 }}>
+            <Box>
               {!stripeAccount && (
                 <Box pt={2}>
                   <Text variant="small">Flexjar makes it easy to collect tips on your page.</Text>
@@ -326,23 +323,77 @@ const UserPage = (props) => {
               )}
               {stripeAccount && (
                 <Box>
-                  <Text variant="small">Flexjar is connected to your Stripe account:</Text>
-                  <pre>{JSON.stringify(stripeAccount, null, 2)}</pre>
-                  <Button
-                    variant="tiny"
-                    mr={2}
-                    onClick={() => {
-                      disconnectStripe();
+                  <Text variant="small" sx={{ pb: 1 }}>
+                    Tip jar
+                  </Text>
+                  <Box
+                    sx={{
+                      px: 2,
+                      mb: 3,
+                      borderRadius: 4,
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      border: '1px solid',
+                      borderColor: 'lightGray',
                     }}
                   >
-                    Disconnect Stripe
-                  </Button>{' '}
+                    <Flex sx={{ alignItems: 'center' }}>
+                      <Checkbox defaultChecked={true} sx={{ my: 2 }} />
+                      <Text variant="small">Enabled</Text>
+                    </Flex>
+                    <Box sx={{ alignItems: 'center', mb: 2 }}>
+                      <Label sx={{ mb: 2 }}>Button text</Label>
+                      <Input variant="standardInput" sx={{ textAlign: 'center' }} defaultValue={''} />
+                    </Box>
+                    <Box sx={{ alignItems: 'center', mb: 2 }}>
+                      <Label sx={{ mb: -3 }}>Default amount</Label>
+                      <NumberFormat
+                        name="amount"
+                        id="amount"
+                        decimalScale={0}
+                        allowEmptyFormatting={true}
+                        allowNegative={false}
+                        type="tel"
+                        defaultValue={5}
+                        displayType={'input'}
+                        thousandSeparator={true}
+                        prefix={'$'}
+                        customInput={Input}
+                        renderText={(value) => <Input value={value} />}
+                        // onValueChange={(values) => setAmount(~~(values.floatValue * 100))}
+                      />
+                    </Box>
+                  </Box>
+                  <Text variant="small" sx={{ pb: 1 }}>
+                    Flexjar is connected to your Stripe account.
+                  </Text>
+                  <Flex
+                    sx={{
+                      p: 2,
+                      borderRadius: 4,
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      border: '1px solid',
+                      borderColor: 'lightGray',
+                    }}
+                  >
+                    <Text sx={{ fontSize: 13, fontWeight: 'bold' }}>{stripeAccount.name}</Text>
+                    <Button
+                      variant="tiny"
+                      sx={{ ml: 2 }}
+                      onClick={() => {
+                        disconnectStripe();
+                      }}
+                    >
+                      Disconnect Stripe
+                    </Button>{' '}
+                  </Flex>
                   {errorMessage && <Text variant="small">{errorMessage}</Text>}
                 </Box>
               )}
             </Box>
 
-            <Flex sx={{ bg: 'transparent', pt: 4, flexDirection: 'row-reverse' }}>
+            <Flex sx={{ bg: 'transparent', flexDirection: 'row-reverse', mt: 3 }}>
               <Button onClick={() => signOut()} variant="tiny" sx={{ color: 'lightGray', cursor: 'pointer' }}>
                 <SignOutButtonIcon />
               </Button>
