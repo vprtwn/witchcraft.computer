@@ -254,6 +254,8 @@ export const connectStripeAccount = async (session: any, state: string, code: st
       const paymentSettings = {
         text: 'Leave a tip',
         defaultAmount: 500,
+        enabled: true,
+        hideFeed: false,
       };
 
       // update customer

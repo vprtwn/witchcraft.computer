@@ -9,11 +9,8 @@ import { useStripe } from '@stripe/react-stripe-js';
 import TextareaAutosize from 'react-textarea-autosize';
 
 export default (props) => {
-  // blocks read from all metadata, which is meh but ok
-  let content = readDict(props.metadata, 'payment_settings');
-
   const [showingForm, setShowingForm] = useState(false);
-  const [amount, setAmount] = useState(content.defaultAmount as number);
+  const [amount, setAmount] = useState(props.defaultAmount as number);
   const firstInputRef = useRef<HTMLInputElement | null>(null);
   const stripe = useStripe();
 
@@ -79,7 +76,7 @@ export default (props) => {
                 allowEmptyFormatting={true}
                 allowNegative={false}
                 type="tel"
-                defaultValue={(content.defaultAmount as number) / 100.0}
+                defaultValue={(props.defaultAmount as number) / 100.0}
                 displayType={'input'}
                 thousandSeparator={true}
                 prefix={'$'}
@@ -138,7 +135,7 @@ export default (props) => {
               setShowingForm(true);
             }}
           >
-            {content ? content.text : 'Pay me'}
+            {props.text}
           </Button>
         </Flex>
       )}

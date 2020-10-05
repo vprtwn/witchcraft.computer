@@ -52,6 +52,11 @@ const UserPage = (props) => {
 
   // block ordering, [{i: "b.text.A1B2"}, ...]
   const initialOrder = readBlockOrder(props.metadata) || [];
+  const paymentSettings = readDict(props.metadata, 'payment_settings');
+  const [tipsEnabled, setTipsEnabled] = useState(paymentSettings.enabled || false);
+  const [tipText, setTipText] = useState(paymentSettings.text || 'Leave a tip');
+  const [defaultTipAmount, setDefaultTipAmount] = useState(paymentSettings.defaultAmount || 500);
+  const [hideTipsFeed, setHideTipsFeed] = useState(paymentSettings.hideFeed || false);
   const [order, setOrder] = useState(initialOrder);
   const [showingNewMenu, setShowingNewMenu] = useState(false);
   const [previewing, setPreviewing] = useState(DEBUG ? false : true);
@@ -290,10 +295,10 @@ const UserPage = (props) => {
               </Flex>
             )}
 
-            {stripeAccount && (
+            {stripeAccount && tipsEnabled && (
               <Card variant="block" sx={{ my: 4, py: 2, px: 3, bg: 'offWhite' }}>
-                <PaymentBlock metadata={metadata} />
-                <PaymentFeedBlock />
+                <PaymentBlock text={tipText} defaultAmount={defaultTipAmount} />
+                {!hideTipsFeed && <PaymentFeedBlock />}
               </Card>
             )}
 
@@ -323,7 +328,7 @@ const UserPage = (props) => {
               )}
               {stripeAccount && (
                 <Box>
-                  <Text variant="small" sx={{ pb: 1 }}>
+                  <Text variant="small" sx={{ pb: 1, fontWeight: 'bold' }}>
                     Tip jar
                   </Text>
                   <Box
@@ -335,17 +340,29 @@ const UserPage = (props) => {
                       justifyContent: 'space-between',
                       border: '1px solid',
                       borderColor: 'lightGray',
+                      bg: 'offWhite',
                     }}
                   >
-                    <Flex sx={{ alignItems: 'center' }}>
-                      <Checkbox defaultChecked={true} sx={{ my: 2 }} />
-                      <Text variant="small">Enabled</Text>
-                    </Flex>
+                    <Label>
+                      <Flex sx={{ alignItems: 'center' }}>
+                        <Checkbox
+                          defaultChecked={tipsEnabled}
+                          sx={{ my: 2 }}
+                          onChange={(e) => setTipsEnabled(e.target.checked)}
+                        />
+                        <Text variant="small">Enabled</Text>
+                      </Flex>
+                    </Label>
                     <Box sx={{ alignItems: 'center', mb: 2 }}>
                       <Label sx={{ mb: 2 }}>Button text</Label>
-                      <Input variant="standardInput" sx={{ textAlign: 'center' }} defaultValue={''} />
+                      <Input
+                        variant="standardInput"
+                        sx={{ textAlign: 'center' }}
+                        defaultValue={tipText}
+                        onChange={(e) => setTipText(e.target.value)}
+                      />
                     </Box>
-                    <Box sx={{ alignItems: 'center', mb: 2 }}>
+                    <Box sx={{ alignItems: 'center', mb: 0 }}>
                       <Label sx={{ mb: -3 }}>Default amount</Label>
                       <NumberFormat
                         name="amount"
@@ -354,15 +371,25 @@ const UserPage = (props) => {
                         allowEmptyFormatting={true}
                         allowNegative={false}
                         type="tel"
-                        defaultValue={5}
+                        defaultValue={(defaultTipAmount as number) / 100.0}
                         displayType={'input'}
                         thousandSeparator={true}
                         prefix={'$'}
                         customInput={Input}
                         renderText={(value) => <Input value={value} />}
-                        // onValueChange={(values) => setAmount(~~(values.floatValue * 100))}
+                        onValueChange={(values) => setDefaultTipAmount(~~(values.floatValue * 100))}
                       />
                     </Box>
+                    <Label>
+                      <Flex sx={{ alignItems: 'center' }}>
+                        <Checkbox
+                          defaultChecked={hideTipsFeed}
+                          sx={{ my: 2 }}
+                          onChange={(e) => setHideTipsFeed(e.target.checked)}
+                        />
+                        <Text variant="small">Hide feed</Text>
+                      </Flex>
+                    </Label>
                   </Box>
                   <Text variant="small" sx={{ pb: 1 }}>
                     Flexjar is connected to your Stripe account.
@@ -375,9 +402,10 @@ const UserPage = (props) => {
                       justifyContent: 'space-between',
                       border: '1px solid',
                       borderColor: 'lightGray',
+                      bg: 'offWhite',
                     }}
                   >
-                    <Text sx={{ fontSize: 13, fontWeight: 'bold' }}>{stripeAccount.name}</Text>
+                    <Text sx={{ fontSize: 13 }}>{stripeAccount.name}</Text>
                     <Button
                       variant="tiny"
                       sx={{ ml: 2 }}

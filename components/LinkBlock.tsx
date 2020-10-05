@@ -96,8 +96,8 @@ export default (props) => {
               sx={{
                 fontSize: '15px',
               }}
-              onChange={(t) => {
-                const val = t.target.value;
+              onChange={(e) => {
+                const val = e.target.value;
                 if (isUrl(val)) {
                   setUrl(val);
                 }
