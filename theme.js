@@ -154,6 +154,7 @@ export default {
       bg: 'transparent',
       borderWidth: 0,
       textAlign: 'center',
+      fontFamily: 'Recursive',
       py: 2,
     },
     standardInput: {

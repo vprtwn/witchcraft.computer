@@ -6,6 +6,7 @@ import NumberFormat from 'react-number-format';
 import MinusButtonIcon from './MinusButtonIcon';
 import PlusButtonIcon from './PlusButtonIcon';
 import { useStripe } from '@stripe/react-stripe-js';
+import TextareaAutosize from 'react-textarea-autosize';
 
 export default (props) => {
   // blocks read from all metadata, which is meh but ok
@@ -101,8 +102,9 @@ export default (props) => {
             name="message"
             id="message"
             placeholder="Leave a message"
-            my={3}
-            sx={{ fontSize: 16 }}
+            mt={2}
+            mb={3}
+            sx={{ fontSize: 14 }}
             ref={firstInputRef}
             required
           />
