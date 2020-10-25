@@ -22,7 +22,7 @@ const logCustomerOp = (name: string, response: CustomerOpResponse) => {
 
 /**
  * Get or create a Stripe customer.
- * Default behavior: creates a customer on the Flexjar platform account,
+ * Default behavior: creates a customer on the Tray platform account,
  * using the session user's *username*.
  * If stripeAccountId is provided, creates a customer on the the connected account,
  * using the sesssion user's *email*

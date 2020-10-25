@@ -76,7 +76,7 @@ export const usernameFromUrl = (inputUrl: string): string | null => {
     DEBUG && console.error('failed to parse domain: ', url);
     return null;
   }
-  let allowedDomains = ['jar.bio', 'flexjar.co', 'cash.bio'];
+  let allowedDomains = ['tray.club'];
   if (process.env.NODE_ENV !== 'production') {
     allowedDomains = allowedDomains.concat(['127.0.0.1:3000', 'localhost:3000']);
   }

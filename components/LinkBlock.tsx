@@ -49,7 +49,7 @@ export default (props) => {
   };
 
   return (
-    <Card variant="block" sx={{ borderColor: 'black' }}>
+    <Card variant="block" sx={{ borderColor: 'black', fontSize: '15px' }}>
       <>
         <Flex
           onClick={() => {

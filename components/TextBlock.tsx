@@ -41,7 +41,7 @@ export default (props) => {
   };
 
   return (
-    <Card variant="textBlock" sx={{}}>
+    <Card variant="textBlock" sx={{ fontSize: '15px' }}>
       <Box
         sx={{ px: 3, py: 2, cursor: 'text' }}
         onClick={() => {

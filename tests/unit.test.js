@@ -83,7 +83,7 @@ test('parseBlockId', () => {
 
 test('usernameFromUrl', () => {
   expect(usernameFromUrl('http://127.0.0.1:3000/@benzguo')).toEqual('benzguo');
-  expect(usernameFromUrl('https://jar.bio/@benzguo/foo')).toBeNull();
-  expect(usernameFromUrl('https://flexjar.co/@shreyans')).toEqual('shreyans');
+  expect(usernameFromUrl('https://tray.club/@benzguo/foo')).toBeNull();
+  expect(usernameFromUrl('https://tray.club/@shreyans')).toEqual('shreyans');
   expect(usernameFromUrl('https://twitter.com/shreyans')).toBeNull();
 });

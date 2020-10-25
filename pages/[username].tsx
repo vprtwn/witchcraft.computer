@@ -300,11 +300,11 @@ const UserPage = (props) => {
         )}
         <PageFooter />
         {props.signedIn && (
-          <Card variant="block" sx={{ p: 3, mb: 4 }}>
+          <Card variant="block" sx={{ p: 3, mb: 4, border: '1px dotted lightGray' }}>
             <Box>
               {!stripeAccount && (
                 <Box pt={2}>
-                  <Text variant="small">Flexjar makes it easy to collect tips on your page.</Text>
+                  <Text variant="small">Tray makes it easy to collect tips on your page.</Text>
                   <Text variant="small">Connect a Stripe account to get started. </Text>
                   <Box pt={3}>
                     <Button
@@ -321,36 +321,37 @@ const UserPage = (props) => {
               )}
               {stripeAccount && (
                 <Box>
-                  <Text variant="small" sx={{ pb: 1, fontWeight: 'bold' }}>
-                    Tip jar
-                  </Text>
+                  <Flex sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Text variant="small" sx={{}}>
+                      Tip jar
+                    </Text>
+                    <Flex>
+                      <Label sx={{ bg: 'offWhite', p: 1, borderRadius: 8 }}>
+                        <Flex sx={{ alignItems: 'center' }}>
+                          <Checkbox defaultChecked={tipsEnabled} onChange={(e) => setTipsEnabled(e.target.checked)} />
+                          <Text variant="tiny">Enabled</Text>
+                        </Flex>
+                      </Label>
+                    </Flex>
+                  </Flex>
                   <Box
                     sx={{
                       px: 2,
-                      mb: 3,
+                      py: 1,
+                      my: 2,
                       borderRadius: 4,
                       alignItems: 'center',
                       justifyContent: 'space-between',
-                      border: '1px solid',
-                      borderColor: 'lightGray',
+                      border: `1px ${tipsEnabled ? 'dashed' : 'none'} lightGray`,
                       bg: 'offWhite',
                     }}
                   >
-                    <Label>
-                      <Flex sx={{ alignItems: 'center' }}>
-                        <Checkbox
-                          defaultChecked={tipsEnabled}
-                          sx={{ my: 2 }}
-                          onChange={(e) => setTipsEnabled(e.target.checked)}
-                        />
-                        <Text variant="small">Enabled</Text>
-                      </Flex>
-                    </Label>
                     <Box sx={{ alignItems: 'center', mb: 2 }}>
                       <Label sx={{ mb: 2 }}>Button text</Label>
                       <Input
+                        disabled={!tipsEnabled}
                         variant="standardInput"
-                        sx={{ textAlign: 'center' }}
+                        sx={{ textAlign: 'center', bg: 'transparent', border: `1px dotted lightGray` }}
                         defaultValue={tipText}
                         onChange={(e) => setTipText(e.target.value)}
                       />
@@ -358,6 +359,7 @@ const UserPage = (props) => {
                     <Box sx={{ alignItems: 'center', mb: 0 }}>
                       <Label sx={{ mb: -3 }}>Default amount</Label>
                       <NumberFormat
+                        disabled={!tipsEnabled}
                         name="amount"
                         id="amount"
                         decimalScale={0}
@@ -376,16 +378,16 @@ const UserPage = (props) => {
                     <Label>
                       <Flex sx={{ alignItems: 'center' }}>
                         <Checkbox
+                          disabled={!tipsEnabled}
                           defaultChecked={hideTipsFeed}
-                          sx={{ my: 2 }}
                           onChange={(e) => setHideTipsFeed(e.target.checked)}
                         />
-                        <Text variant="small">Hide feed</Text>
+                        <Text variant="tiny">Hide feed</Text>
                       </Flex>
                     </Label>
                   </Box>
-                  <Text variant="small" sx={{ pb: 1 }}>
-                    Flexjar is connected to your Stripe account.
+                  <Text variant="tiny" sx={{ pt: 2, pb: 1 }}>
+                    Connected to Stripe:
                   </Text>
                   <Flex
                     sx={{
@@ -393,8 +395,7 @@ const UserPage = (props) => {
                       borderRadius: 4,
                       alignItems: 'center',
                       justifyContent: 'space-between',
-                      border: '1px solid',
-                      borderColor: 'lightGray',
+                      border: `1px dashed lightGray`,
                       bg: 'offWhite',
                     }}
                   >

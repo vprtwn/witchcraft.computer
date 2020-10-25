@@ -51,16 +51,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const rawPIs = listRes.data;
     const results = rawPIs
       .filter((p) => {
-        return p.metadata && p.metadata.from_flexjar_origin_url && p.amount_received > 0;
+        return p.metadata && p.metadata.from_tray_origin_url && p.amount_received > 0;
       })
       .map((p) => {
         return {
           id: p.id,
           amount: p.amount_received,
           message: p.description,
-          originUrl: p.metadata.from_flexjar_origin_url,
-          twitterUsername: p.metadata.from_flexjar_twitter_username,
-          profileImage: p.metadata.from_flexjar_profile_image,
+          originUrl: p.metadata.from_tray_origin_url,
+          twitterUsername: p.metadata.from_tray_twitter_username,
+          profileImage: p.metadata.from_tray_profile_image,
         };
       });
     res.json({ payments: results });

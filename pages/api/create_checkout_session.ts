@@ -55,10 +55,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
   const stripeAccountId = stripeAccount.id as string;
   let connectedCustomerId = null;
-  let metadata = { from_flexjar_origin_url: returnUrl };
+  let metadata = { from_tray_origin_url: returnUrl };
   if (session.user) {
-    metadata['from_flexjar_twitter_username'] = session.user.username;
-    metadata['from_flexjar_profile_image'] = session.user.picture;
+    metadata['from_tray_twitter_username'] = session.user.username;
+    metadata['from_tray_profile_image'] = session.user.picture;
 
     const getResponse = await getOrCreateCustomer(session, true, stripeAccountId);
     if (getResponse.errored) {

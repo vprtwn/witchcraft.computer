@@ -145,6 +145,9 @@ export default {
     },
   },
   forms: {
+    checkbox: {
+      color: 'black',
+    },
     label: {
       fontSize: '12px',
       fontFamily: 'Recursive',
@@ -194,6 +197,9 @@ export default {
     },
   },
   text: {
+    tiny: {
+      fontSize: '11px',
+    },
     small: {
       fontSize: '13px',
     },

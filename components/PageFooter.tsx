@@ -19,7 +19,7 @@ export default (props) => {
             <Text sx={{ fontSize: '9px', ml: 2, mr: 1 }}>made with</Text>
             <Box sx={{ fontWeight: 'bold', fontSize: '11px', mr: 2 }}>
               <Link href="/about" variant="nav">
-                <i>flexjar</i>
+                tray
               </Link>
             </Box>
           </Flex>

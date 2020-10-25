@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Layout from '../components/Layout';
 import Header from '../components/Header';
-import AboutFlexjar from '../components/AboutFlexjar';
+import AboutTray from '../components/AboutTray';
 import MarketingFooter from '../components/MarketingFooter';
 import fetchJson from '../lib/fetchJson';
 import { Box, Button } from 'theme-ui';
@@ -62,7 +62,7 @@ const IndexPage = () => {
           Sign in
         </Button>
       </Box>
-      <AboutFlexjar />
+      <AboutTray />
       <MarketingFooter />
     </Layout>
   );
