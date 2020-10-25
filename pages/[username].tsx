@@ -220,13 +220,6 @@ const UserPage = (props) => {
                                     />
                                   </Box>
                                 )}
-                                {stripeAccount && parseBlockId(orderItem.i) === BlockType.Payment && (
-                                  <Box
-                                    sx={{
-                                      py: 2,
-                                    }}
-                                  ></Box>
-                                )}
                                 {/* {parseBlockId(orderItem.i) === BlockType.Unknown && (
                                 <Box
                                   sx={{
