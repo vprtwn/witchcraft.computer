@@ -12,7 +12,15 @@ export default (props) => {
             variant="nav"
             sx={{ mx: 2, py: 1, fontSize: '11px', color: 'black', fontWeight: 'normal' }}
           >
-            terms of service, privacy, etc
+            policies
+          </Link>
+          |
+          <Link
+            href="https://twitter.com/trayclub"
+            variant="nav"
+            sx={{ mx: 2, py: 1, fontSize: '11px', color: 'black', fontWeight: 'normal' }}
+          >
+            twitter
           </Link>
         </Flex>
         <Box sx={{ flex: '1 1 auto' }} />

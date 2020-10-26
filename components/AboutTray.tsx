@@ -7,14 +7,14 @@ export default (props) => {
         <strong>tray</strong> is a simple way to publish text, links, and audio.
       </Text>
       <Text pb={3}>
-        tray is <strong>free</strong> to use. if you accept tips, there is a small{' '}
+        tray is <strong>free</strong> to use. if you accept tips, there is a credit card{' '}
         <Link href="https://stripe.com/pricing#pricing-details">fee charged by Stripe</Link>, our payments provider.
       </Text>
-      <Box pb={3}>
-        feedback? tell us on <Link href="https://twitter.com/trayclub">twitter</Link>
-      </Box>
       <Box>
-        ➔ <Link href="/">Create your tray</Link>
+        ➔{' '}
+        <Link href="/">
+          <strong>Get started</strong>
+        </Link>
       </Box>
     </Box>
   );

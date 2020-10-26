@@ -4,7 +4,7 @@ import Head from 'next/head';
 import theme from '../theme';
 import { MDXProvider } from '@mdx-js/react';
 import Layout from '../components/Layout';
-import '../styles.css'
+import '../styles.css';
 
 const components = {
   wrapper: (props) => (
@@ -18,7 +18,7 @@ const components = {
               </Link>
             </Box>
             <Box flex="1 1 auto" mx={1}>
-              /
+              |
             </Box>
             <Box>
               <Link href="/policies" variant="nav">
