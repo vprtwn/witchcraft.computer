@@ -39,7 +39,20 @@ export default (props) => {
   };
 
   return (
-    <Card variant="block" sx={{ borderColor: 'black', bg: 'white', '&:hover': { bg: 'lightGray', cursor: 'pointer' } }}>
+    <Card
+      variant="block"
+      sx={{
+        borderColor: 'black',
+        bg: 'white',
+        '&:hover': {
+          // bg: 'lightGray',
+          cursor: 'pointer',
+          background: 'linear-gradient(-45deg, #ebf8ff, #f7fafc, #ebf4ff)',
+          backgroundSize: '400% 400%',
+          animation: 'gradient 10s ease infinite',
+        },
+      }}
+    >
       <Flex
         sx={{ py: 2, px: 2, bg: 'transparent' }}
         onClick={() => {

@@ -221,31 +221,33 @@ const UserPage = (props) => {
                                     />
                                   </Box>
                                 )}
-                                <Box
-                                  sx={{
-                                    py: 2,
-                                  }}
-                                >
-                                  <PageBlock
-                                    id={orderItem.i}
-                                    hideUp={index === 0}
-                                    hideDown={index === order.length - 1}
-                                    hideToolbar={previewing}
-                                    metadata={metadata}
-                                    username={props.username}
-                                    customerId={props.customerId}
-                                    signedIn={props.signedIn}
-                                    onDown={() => {
-                                      moveBlock(index, Direction.Down);
+                                {true && (
+                                  <Box
+                                    sx={{
+                                      py: 2,
                                     }}
-                                    onUp={() => {
-                                      moveBlock(index, Direction.Up);
-                                    }}
-                                    onDelete={() => {
-                                      removeBlock(index);
-                                    }}
-                                  />
-                                </Box>
+                                  >
+                                    <PageBlock
+                                      id={orderItem.i}
+                                      hideUp={index === 0}
+                                      hideDown={index === order.length - 1}
+                                      hideToolbar={previewing}
+                                      metadata={metadata}
+                                      username={props.username}
+                                      customerId={props.customerId}
+                                      signedIn={props.signedIn}
+                                      onDown={() => {
+                                        moveBlock(index, Direction.Down);
+                                      }}
+                                      onUp={() => {
+                                        moveBlock(index, Direction.Up);
+                                      }}
+                                      onDelete={() => {
+                                        removeBlock(index);
+                                      }}
+                                    />
+                                  </Box>
+                                )}
                               </div>
                             )}
                           </Draggable>

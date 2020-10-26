@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, Box, Button, Flex, Label, Input } from 'theme-ui';
 import { BlockType } from '../lib/typedefs';
-import TextButtonIcon from '../components/TextButtonIcon';
-import LinkButtonIcon from '../components/LinkButtonIcon';
-import ChevronRightIcon from '../components/ChevronRightIcon';
-import CollectionButtonIcon from '../components/CollectionButtonIcon';
+import TextButtonIcon from './TextButtonIcon';
+import LinkButtonIcon from './LinkButtonIcon';
+import ChevronRightIcon from './ChevronRightIcon';
+import AudioButtonIcon from './AudioButtonIcon';
+import PageButtonIcon from './PageButtonIcon';
 import TextareaAutosize from 'react-textarea-autosize';
 
 export default (props) => {
@@ -98,7 +99,7 @@ export default (props) => {
         <Flex sx={{ justifyContent: 'space-between', mt: 3, mb: 2 }}>
           <Button
             variant="shadowButton"
-            sx={{ flexGrow: 1, mr: 1 }}
+            sx={{ flexGrow: 1, mr: 2 }}
             onClick={() => {
               setShowingForm(!showingForm);
             }}
@@ -107,7 +108,7 @@ export default (props) => {
           </Button>
           <Button
             variant="shadowButton"
-            sx={{ flexGrow: 1, mr: 1 }}
+            sx={{ flexGrow: 1, mr: 2 }}
             onClick={() => {
               props.onClick({ type: BlockType.Text });
             }}
@@ -116,12 +117,21 @@ export default (props) => {
           </Button>
           <Button
             variant="shadowButton"
+            sx={{ flexGrow: 1, mr: 2 }}
+            onClick={() => {
+              // props.onClick({ type: BlockType.Text });
+            }}
+          >
+            <AudioButtonIcon />
+          </Button>
+          <Button
+            variant="shadowButton"
             sx={{ flexGrow: 1 }}
             onClick={() => {
               // props.onClick({ type: BlockType.Text });
             }}
           >
-            <CollectionButtonIcon />
+            <PageButtonIcon />
           </Button>
         </Flex>
       )}

@@ -4,6 +4,7 @@ import Head from 'next/head';
 import theme from '../theme';
 import { MDXProvider } from '@mdx-js/react';
 import Layout from '../components/Layout';
+import '../styles.css'
 
 const components = {
   wrapper: (props) => (
