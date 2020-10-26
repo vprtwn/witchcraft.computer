@@ -1,0 +1,32 @@
+import { Label, Box, Flex } from 'theme-ui';
+
+export default () => {
+  return (
+    <Flex
+      sx={{
+        flexDirection: 'row',
+        alignItems: 'stretch',
+        alignContent: 'stretch',
+        background: 'linear-gradient(-45deg, #e6fffa, #faf5ff, #ebf8ff)',
+        backgroundSize: '400% 400%',
+        animation: 'gradient 10s ease infinite',
+      }}
+    >
+      <Box sx={{ bg: 'white', flexGrow: 1 }} />
+      <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 0H33L23 36V72H0V0Z" fill="white" />
+        <path d="M38 0H72V72H49V36L38 0Z" fill="white" />
+        <rect x="5" width="62" height="25" fill="white" />
+        <rect x="5" y="47" width="62" height="25" fill="white" />
+        <path d="M43.5 23H46.2228L51 40.55H48L43.5 23Z" fill="black" />
+        <path d="M25.2391 23H28L24 40.55H21L25.2391 23Z" fill="black" />
+        <path d="M25.2391 23H46.2228L46.2228 25H25.2391L25.2391 23Z" fill="black" />
+        <path
+          d="M21 40.55H31.6928C31.6928 40.55 32.159 42.0216 33 42.5C33.841 42.9784 34.8123 43 36 43C37.1877 43 38.157 42.9784 39 42.5C39.843 42.0216 40.3173 40.55 40.3173 40.55H51V45C51 47.2092 49.2091 49 47 49H25C22.7909 49 21 47.2092 21 45V40.55Z"
+          fill="black"
+        />
+      </svg>
+      <Box sx={{ bg: 'white', flexGrow: 1 }} />
+    </Flex>
+  );
+};

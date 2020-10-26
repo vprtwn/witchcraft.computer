@@ -4,17 +4,18 @@ import { signIn } from 'next-auth/client';
 export default (props) => {
   return (
     <Box>
-      <Text pb={3}>
-        <strong>tray</strong> is a simple way to publish text, links, and audio.
+      <Text>
+        <strong>tray</strong> is a simple way to publish text, links, and audio. (still working on the audio part 😅)
       </Text>
 
-      <Box sx={{ bg: 'transparent', borderRadius: 4, pt: 1, pb: 3, fontSize: 11 }}>
+      <Box sx={{ bg: 'transparent', borderRadius: 4, py: 3, fontSize: 11 }}>
         <Button
           onClick={() => signIn('twitter')}
           variant="tiny"
           sx={{
+            py: 2,
             bg: 'white',
-            background: 'linear-gradient(-45deg, #ebf8ff, #ffffff, #ebf8ff)',
+            background: 'linear-gradient(-45deg, #e6fffa, #faf5ff, #ebf8ff)',
             backgroundSize: '400% 400%',
             animation: 'gradient 10s ease infinite',
           }}

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Layout from '../components/Layout';
-import Header from '../components/Header';
 import AboutTray from '../components/AboutTray';
+import TrayIcon from '../components/TrayIcon';
 import MarketingFooter from '../components/MarketingFooter';
 import fetchJson from '../lib/fetchJson';
 import { Box, Button, Card } from 'theme-ui';
@@ -36,11 +36,9 @@ const IndexPage = () => {
 
   return (
     <Layout>
-      <Header />
-
-      <Card variant="shadowCard" mt={3}>
+      <TrayIcon />
+      <Card variant="shadowCard">
         <AboutTray />
-        
       </Card>
       <MarketingFooter />
     </Layout>
