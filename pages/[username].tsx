@@ -3,6 +3,7 @@ import Layout from '../components/Layout';
 import Header from '../components/Header';
 import TextBlock from '../components/TextBlock';
 import LinkBlock from '../components/LinkBlock';
+import PageBlock from '../components/PageBlock';
 import PaymentBlock from '../components/PaymentBlock';
 import PageFooter from '../components/PageFooter';
 import { getOrCreateCustomer, getCustomer } from '../lib/ops';
@@ -220,18 +221,31 @@ const UserPage = (props) => {
                                     />
                                   </Box>
                                 )}
-                                {/* {parseBlockId(orderItem.i) === BlockType.Unknown && (
                                 <Box
                                   sx={{
                                     py: 2,
                                   }}
                                 >
-                                  <Card variant="block">
-                                    <Box>{`Unsupported block type ${orderItem.i}`}</Box>
-                                    <pre>{props.metadata[orderItem.i]}</pre>
-                                  </Card>
+                                  <PageBlock
+                                    id={orderItem.i}
+                                    hideUp={index === 0}
+                                    hideDown={index === order.length - 1}
+                                    hideToolbar={previewing}
+                                    metadata={metadata}
+                                    username={props.username}
+                                    customerId={props.customerId}
+                                    signedIn={props.signedIn}
+                                    onDown={() => {
+                                      moveBlock(index, Direction.Down);
+                                    }}
+                                    onUp={() => {
+                                      moveBlock(index, Direction.Up);
+                                    }}
+                                    onDelete={() => {
+                                      removeBlock(index);
+                                    }}
+                                  />
                                 </Box>
-                              )} */}
                               </div>
                             )}
                           </Draggable>
@@ -289,10 +303,9 @@ const UserPage = (props) => {
             )}
 
             {stripeAccount && tipsEnabled && (
-              <Card variant="block" sx={{ my: 4, py: 2, px: 3, bg: 'offWhite' }}>
-                <PaymentBlock text={tipText} defaultAmount={defaultTipAmount} />
-                {!hideTipsFeed && <PaymentFeedBlock />}
-              </Card>
+              <>
+                <PaymentBlock text={tipText} defaultAmount={defaultTipAmount} hideTipsFeed={hideTipsFeed} />
+              </>
             )}
 
             <Box my={4} />
@@ -326,7 +339,7 @@ const UserPage = (props) => {
                       <Label sx={{ bg: tipsEnabled ? 'lightGreen' : 'offWhite', p: 1, borderRadius: 8 }}>
                         <Flex sx={{ alignItems: 'center' }}>
                           <Checkbox defaultChecked={tipsEnabled} onChange={(e) => setTipsEnabled(e.target.checked)} />
-                          <Text variant="small">Accept tips</Text>
+                          <Text variant="small">Enable tips</Text>
                         </Flex>
                       </Label>
                     </Flex>

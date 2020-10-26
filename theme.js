@@ -45,7 +45,7 @@ export default {
       borderWidth: 1,
       bg: 'transparent',
       fontSize: 13,
-      fontFamily: 'Recursive',
+      fontFamily: 'monospace',
       cursor: 'pointer',
       '&:hover': {
         bg: 'lightGray',
@@ -59,7 +59,7 @@ export default {
       borderWidth: 1,
       bg: 'transparent',
       fontSize: 11,
-      fontFamily: 'Recursive',
+      fontFamily: 'monospace',
       cursor: 'pointer',
       '&:hover': {
         bg: 'lightGray',
@@ -70,7 +70,7 @@ export default {
       borderRadius: 8,
       bg: 'white',
       color: 'text',
-      fontFamily: 'Recursive',
+      fontFamily: 'monospace',
       fontSize: 13,
       cursor: 'pointer',
       py: 2,
@@ -151,12 +151,12 @@ export default {
     },
     label: {
       fontSize: '12px',
-      fontFamily: 'Recursive',
+      fontFamily: 'monospace',
       color: 'text',
     },
     formLabel: {
       fontSize: '13px',
-      fontFamily: 'Recursive',
+      fontFamily: 'monospace',
       color: 'text',
     },
     input: {
@@ -166,11 +166,11 @@ export default {
       bg: 'transparent',
       borderWidth: 0,
       textAlign: 'center',
-      fontFamily: 'Recursive',
+      fontFamily: 'monospace',
       py: 2,
     },
     standardInput: {
-      fontFamily: 'Recursive',
+      fontFamily: 'monospace',
       fontSize: 13,
       bg: 'white',
       py: 2,
@@ -185,7 +185,7 @@ export default {
     },
     buttonLabel: {
       fontSize: 11,
-      fontFamily: 'Recursive',
+      fontFamily: 'monospace',
       color: 'text',
       cursor: 'pointer',
       // fontWeight: 'bold',
@@ -193,7 +193,7 @@ export default {
     settingsLabel: {
       fontSize: 15,
       fontWeight: 'bold',
-      fontFamily: 'Recursive',
+      fontFamily: 'monospace',
       color: 'text',
     },
   },

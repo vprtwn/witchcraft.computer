@@ -95,6 +95,7 @@ export default (props) => {
               placeholder="Link address"
               sx={{
                 fontSize: '15px',
+                fontFamily: 'monospace',
               }}
               onChange={(e) => {
                 const val = e.target.value;
@@ -122,8 +123,8 @@ export default (props) => {
               background: 'transparent',
               width: '100%',
               resize: 'none',
-              fontFamily: 'Inter',
-              fontSize: '15px',
+              fontFamily: 'monospace',
+              fontSize: '14px',
               border: 'none',
               paddingLeft: 8,
               paddingTop: 4,

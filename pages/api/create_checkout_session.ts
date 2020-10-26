@@ -20,7 +20,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const returnUrl = req.headers.referer;
   const username = usernameFromUrl(returnUrl);
-  console.log('username', returnUrl);
 
   let stripeKey = process.env.STRIPE_SECRET_KEY;
   if (session.user.username === username) {

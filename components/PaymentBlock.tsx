@@ -4,9 +4,9 @@ import { readDict } from '../lib/metadataUtils';
 import fetchJson from '../lib/fetchJson';
 import NumberFormat from 'react-number-format';
 import MinusButtonIcon from './MinusButtonIcon';
+import PaymentFeedBlock from './PaymentFeedBlock';
 import PlusButtonIcon from './PlusButtonIcon';
 import { useStripe } from '@stripe/react-stripe-js';
-import TextareaAutosize from 'react-textarea-autosize';
 
 export default (props) => {
   const [showingForm, setShowingForm] = useState(false);
@@ -55,15 +55,17 @@ export default (props) => {
   };
 
   return (
-    <>
+    <Card variant="block" sx={{ my: 4, py: 2, px: 3, bg: showingForm ? 'lightGreen' : 'offWhite' }}>
       {showingForm && (
-        <Card variant="shadowCard" as="form" onSubmit={handleCheckout}>
+        <Card variant="shadowCard" as="form" onSubmit={handleCheckout} sx={{}}>
           <Flex sx={{ justifyContent: 'center', alignItems: 'center' }}>
             <IconButton
               type="button"
               sx={{ p: 4 }}
               onClick={() => {
-                //todo
+                if (amount > 100) {
+                  setAmount(amount - 100);
+                }
               }}
             >
               <MinusButtonIcon />
@@ -76,11 +78,12 @@ export default (props) => {
                 allowEmptyFormatting={true}
                 allowNegative={false}
                 type="tel"
-                defaultValue={(props.defaultAmount as number) / 100.0}
+                // defaultValue={(props.defaultAmount as number) / 100.0}
                 displayType={'input'}
                 thousandSeparator={true}
                 prefix={'$'}
                 customInput={Input}
+                value={(amount as number) / 100.0}
                 renderText={(value) => <Input value={value}></Input>}
                 onValueChange={(values) => setAmount(~~(values.floatValue * 100))}
               />
@@ -89,7 +92,7 @@ export default (props) => {
               type="button"
               sx={{ p: 4 }}
               onClick={() => {
-                //todo
+                setAmount(amount + 100);
               }}
             >
               <PlusButtonIcon />
@@ -116,6 +119,7 @@ export default (props) => {
             </Button>
             <Button
               variant="shadowButton"
+              type="submit"
               onClick={() => {
                 //todo
               }}
@@ -129,7 +133,7 @@ export default (props) => {
         <Flex sx={{ justifyContent: 'space-between', py: 2 }}>
           <Button
             variant="shadowButton"
-            sx={{ flexGrow: 1 }}
+            sx={{ flexGrow: 1, fontSize: 15 }}
             onClick={() => {
               setShowingForm(true);
             }}
@@ -138,6 +142,7 @@ export default (props) => {
           </Button>
         </Flex>
       )}
-    </>
+      {!props.hideTipsFeed && <PaymentFeedBlock />}
+    </Card>
   );
 };
