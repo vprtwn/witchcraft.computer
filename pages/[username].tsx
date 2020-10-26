@@ -321,15 +321,12 @@ const UserPage = (props) => {
               )}
               {stripeAccount && (
                 <Box>
-                  <Flex sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Text variant="small" sx={{}}>
-                      Tip jar
-                    </Text>
+                  <Flex sx={{ alignItems: 'center' }}>
                     <Flex>
-                      <Label sx={{ bg: 'offWhite', p: 1, borderRadius: 8 }}>
+                      <Label sx={{ bg: tipsEnabled ? 'lightGreen' : 'offWhite', p: 1, borderRadius: 8 }}>
                         <Flex sx={{ alignItems: 'center' }}>
                           <Checkbox defaultChecked={tipsEnabled} onChange={(e) => setTipsEnabled(e.target.checked)} />
-                          <Text variant="tiny">Enabled</Text>
+                          <Text variant="small">Accept tips</Text>
                         </Flex>
                       </Label>
                     </Flex>
@@ -338,11 +335,11 @@ const UserPage = (props) => {
                     sx={{
                       px: 2,
                       py: 1,
-                      my: 2,
+                      mb: 2,
                       borderRadius: 4,
                       alignItems: 'center',
                       justifyContent: 'space-between',
-                      border: `1px ${tipsEnabled ? 'dashed' : 'none'} lightGray`,
+                      border: `1px ${tipsEnabled ? 'dashed' : 'none'} lightGreen`,
                       bg: 'offWhite',
                     }}
                   >
@@ -386,16 +383,20 @@ const UserPage = (props) => {
                       </Flex>
                     </Label>
                   </Box>
-                  <Text variant="tiny" sx={{ pt: 2, pb: 1 }}>
-                    Connected to Stripe:
-                  </Text>
+                  <Flex sx={{ mt: 3 }}>
+                    <Flex>
+                      <Label sx={{ bg: 'lightBlue', p: 1, borderRadius: 8 }}>
+                        <Text variant="small">Connected to Stripe</Text>
+                      </Label>
+                    </Flex>
+                  </Flex>
                   <Flex
                     sx={{
                       p: 2,
                       borderRadius: 4,
                       alignItems: 'center',
                       justifyContent: 'space-between',
-                      border: `1px dashed lightGray`,
+                      border: `1px dashed lightBlue`,
                       bg: 'offWhite',
                     }}
                   >

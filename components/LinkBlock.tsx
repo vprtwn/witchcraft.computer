@@ -119,7 +119,7 @@ export default (props) => {
           <TextareaAutosize
             defaultValue={comment}
             style={{
-              background: 'none',
+              background: 'transparent',
               width: '100%',
               resize: 'none',
               fontFamily: 'Inter',

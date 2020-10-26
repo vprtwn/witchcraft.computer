@@ -67,7 +67,7 @@ export const usernameFromUrl = (inputUrl: string): string | null => {
   let url = inputUrl;
   const localhostDomain = 'http://127.0.0.1:3000';
   if (url.startsWith(localhostDomain)) {
-    url = url.replace(localhostDomain, 'https://jar.bio');
+    url = url.replace(localhostDomain, 'https://tray.club');
   }
   const parsedUrl = new URL(url);
   const parsedHost = psl.parse(parsedUrl.host);

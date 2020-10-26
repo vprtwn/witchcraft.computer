@@ -97,10 +97,10 @@ export const getOrCreateCustomer = async (
 export const getCustomer = async (username: string): Promise<CustomerOpResponse> => {
   let customer: Stripe.Customer | null = null;
   let errorResponse: ErrorResponse | null = null;
-  const jarEmail = emailFromUsername(username);
+  const email = emailFromUsername(username);
   try {
     const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-    const response = await stripe.customers.list({ email: jarEmail });
+    const response = await stripe.customers.list({ email: email });
     if (response.data.length > 0) {
       customer = response.data[0];
     } else {
