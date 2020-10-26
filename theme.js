@@ -58,7 +58,7 @@ export default {
       border: 'solid 1px lightGray',
       borderWidth: 1,
       bg: 'transparent',
-      fontSize: 11,
+      fontSize: 13,
       fontFamily: 'monospace',
       cursor: 'pointer',
       '&:hover': {
