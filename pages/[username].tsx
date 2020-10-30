@@ -9,7 +9,7 @@ import PageFooter from '../components/PageFooter';
 import { getOrCreateCustomer, getCustomer } from '../lib/ops';
 import { reorder, remove, add, unprefixUsername, generateBlockId, parseBlockId } from '../lib/utils';
 import { postMetadataUpdate, readBlockOrder, readDict } from '../lib/metadataUtils';
-import { Direction, BlockType } from '../lib/typedefs';
+import { Direction, BlockType, MetadataValue } from '../lib/typedefs';
 import { useRouter } from 'next/router';
 import { Box, Checkbox, Link, Badge, Input, IconButton, Flex, Card, Button, Text, Label, Textarea } from 'theme-ui';
 import NumberFormat from 'react-number-format';
@@ -85,6 +85,25 @@ const UserPage = (props) => {
   const [metadata, setMetadata] = useState(props.metadata);
   const [stripeAccount, setStripeAccount] = useState<object | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const newSettings: MetadataValue = {
+      text: tipText,
+      defaultAmount: defaultTipAmount,
+      enabled: tipsEnabled,
+      hideFeed: hideTipsFeed,
+    };
+    syncTipSettings(newSettings);
+  }, [tipText, tipsEnabled, defaultTipAmount, hideTipsFeed]);
+
+  const syncTipSettings = async function (newSettings: MetadataValue) {
+    try {
+      await postMetadataUpdate('payment_settings', newSettings, props.customerId, props.username);
+      // don't need to call setMetadata if updating order only
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const syncOrder = async function (newOrder: Record<string, string>[], removedId: string | null = null) {
     try {
