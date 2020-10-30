@@ -11,22 +11,19 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   // TODO(#39): use JWT – more secure?
   // const token = await jwt.getToken({ req, secret });
   const session = await getSession({ req });
-  const params = JSON.parse(req.body);
-  const state = params.state;
-  const code = params.code;
-  const authError = validateSession(session, state);
+  const authError = validateSession(session, null);
   if (authError) {
     return res.status(authError.httpStatus).json(authError);
   }
   try {
-    const updateResponse = await connectStripeAccount(session, state, code);
-    res.json(updateResponse.data);
+    const response = await connectStripeAccount(session);
+    return res.json(response.data);
   } catch (e) {
     const response: ErrorResponse = {
       errorCode: 'op_error',
       errorMessage: e.message,
       httpStatus: 500,
     };
-    res.status(response.httpStatus).json(response);
+    return res.status(response.httpStatus).json(response);
   }
 };

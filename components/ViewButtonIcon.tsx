@@ -1,6 +1,6 @@
 import { Label, Box, Flex } from 'theme-ui';
 
-export default (props) => {
+const ViewButtonIcon = (props) => {
   return (
     <Flex
       sx={{
@@ -28,3 +28,4 @@ export default (props) => {
     </Flex>
   );
 };
+export default ViewButtonIcon;

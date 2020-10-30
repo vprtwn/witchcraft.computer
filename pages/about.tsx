@@ -3,7 +3,7 @@ import Layout from '../components/Layout';
 import Header from '../components/Header';
 import MarketingFooter from '../components/MarketingFooter';
 import fetchJson from '../lib/fetchJson';
-import { Box, Card, Flex, Link } from 'theme-ui';
+import { Text, Card, Flex, Link } from 'theme-ui';
 import AboutTray from '../components/AboutTray';
 import TrayIcon from '../components/TrayIcon';
 import { useSession } from 'next-auth/client';
@@ -22,6 +22,7 @@ const AboutPage = (props) => {
       {!signedIn && <SignInButton />}
       {signedIn && (
         <Flex sx={{ justifyContent: 'center', mt: 3 }}>
+          <Text sx={{ pr: 1 }}>Your tray ➜</Text>
           <Link href={`/@${session.user.username}`} variant="primary" sx={{ fontWeight: 'bold' }}>
             {`tray.club/@${session.user.username}`}
           </Link>

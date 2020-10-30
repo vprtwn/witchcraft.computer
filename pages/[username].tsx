@@ -38,7 +38,6 @@ const UserPage = (props) => {
   } = useRouter();
 
   const defaultText = 'edit me';
-  const connectUrl = `https://connect.stripe.com/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_STRIPE_CONNECT_CLIENT_ID}&scope=read_write&state=${props.username}`;
 
   const disconnectStripe = async function () {
     try {
@@ -54,10 +53,10 @@ const UserPage = (props) => {
   // block ordering, [{i: "b.text.A1B2"}, ...]
   const initialOrder = readBlockOrder(props.metadata) || [];
   const paymentSettings = readDict(props.metadata, 'payment_settings');
-  const [tipsEnabled, setTipsEnabled] = useState(paymentSettings.enabled || false);
-  const [tipText, setTipText] = useState(paymentSettings.text || 'Leave a tip');
-  const [defaultTipAmount, setDefaultTipAmount] = useState(paymentSettings.defaultAmount || 500);
-  const [hideTipsFeed, setHideTipsFeed] = useState(paymentSettings.hideFeed || false);
+  const [tipsEnabled, setTipsEnabled] = useState(paymentSettings ? paymentSettings.enabled : false);
+  const [tipText, setTipText] = useState(paymentSettings ? paymentSettings.text : 'Leave a tip');
+  const [defaultTipAmount, setDefaultTipAmount] = useState(paymentSettings ? paymentSettings.defaultAmount : 500);
+  const [hideTipsFeed, setHideTipsFeed] = useState(paymentSettings ? paymentSettings.hideFeed : false);
   const [order, setOrder] = useState(initialOrder);
   const [showingNewMenu, setShowingNewMenu] = useState(false);
   const [previewing, setPreviewing] = useState(DEBUG ? false : true);
@@ -343,8 +342,16 @@ const UserPage = (props) => {
                       <Button
                         variant="shadowButton"
                         mr={2}
-                        onClick={() => {
-                          window.location.assign(connectUrl);
+                        onClick={async () => {
+                          try {
+                            const response = await fetchJson('/api/connect_stripe', {
+                              method: 'POST',
+                            });
+                            const url = response.url;
+                            window.location.assign(url);
+                          } catch (e) {
+                            // TODO: handle error
+                          }
                         }}
                       >
                         Get started
@@ -443,6 +450,7 @@ const UserPage = (props) => {
                       bg: 'offWhite',
                     }}
                   >
+                    {/* TODO: check if Stripe account has payments enabled */}
                     <Text sx={{ fontSize: 13 }}>{stripeAccount.name}</Text>
                     <Button
                       variant="tiny"

@@ -60,10 +60,12 @@ const options = {
     session: async (session, token) => {
       DEBUG && console.log(`${LOGSYM}  next-auth.callback.session.token`, JSON.stringify(token, null, 2));
       if (token.username) {
+        session.user.id = token.id_str;
         session.user.name = token.name;
         session.user.picture = token.picture;
         session.user.username = token.username;
         session.user.email = token.email;
+        session.user.description = token.description;
       }
       DEBUG && console.log(`${LOGSYM} next-auth.callback.session.session`, JSON.stringify(session, null, 2));
 
@@ -72,8 +74,10 @@ const options = {
     jwt: async (token, profile) => {
       if (profile) {
         DEBUG && console.log('👤 profile', JSON.stringify(profile, null, 2));
+        token.id_str = profile.id_str;
         token.username = profile.screen_name;
         token.email = profile.email;
+        token.description = profile.description;
       }
       // DEBUG && console.log(`${LOGSYM} next-auth.callback.jwt.token`, JSON.stringify(token, null, 2));
       return Promise.resolve(token);

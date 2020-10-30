@@ -12,15 +12,14 @@ const AboutTray = (props) => {
         </Link>
         . On the roadmap: nested pages, audio, analytics, subscriptions, and subscriber-only content.
       </Text>
-      <Text variant="tiny" sx={{ pt: 3, pb: 2 }}>
-        <Badge variant="outline" sx={{ fontSize: 11 }}>
+      <Text variant="tiny" sx={{ pt: 3, pb: 2, color: 'gray' }}>
+        <Badge variant="outline" sx={{ fontSize: 10, color: 'gray' }}>
           tray
         </Badge>{' '}
-        is free to use. We may add a paid plan in the future. If you accept tips, there is a credit card{' '}
-        <Link variant="primary" href="https://stripe.com/pricing#pricing-details">
-          fee charged by Stripe
+        is free software, made by{' '}
+        <Link variant="primary" href="https://tray.club/@bgdotjpg">
+          @bgdotjpg
         </Link>
-        , our payments provider.
       </Text>
     </Box>
   );

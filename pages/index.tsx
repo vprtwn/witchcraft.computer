@@ -18,25 +18,6 @@ const IndexPage = () => {
   const [session, loading] = useSession();
   const signedIn = session && session.user.username;
 
-  useEffect(() => {
-    const connectStripe = async function () {
-      const body = { code: code, state: state };
-      try {
-        await fetchJson('/api/connect_stripe', {
-          method: 'POST',
-          body: JSON.stringify(body),
-        });
-        const path = generateUserPath(state as string);
-        window.location.assign(`${path}`);
-      } catch (e) {
-        return { props: { error: e.message } };
-      }
-    };
-    if (validateStripeConnectParams(state, code)) {
-      connectStripe();
-    }
-  }, [code, state]);
-
   return (
     <Layout>
       <TrayIcon />

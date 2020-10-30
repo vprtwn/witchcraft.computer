@@ -114,7 +114,7 @@ const NewMenu = (props) => {
           >
             <TextButtonIcon />
           </Button>
-          <Button
+          {/* <Button
             variant="newMenuButton"
             sx={{ flexGrow: 1, mr: 2 }}
             onClick={() => {
@@ -131,7 +131,7 @@ const NewMenu = (props) => {
             }}
           >
             <PageButtonIcon />
-          </Button>
+          </Button> */}
         </Flex>
       )}
     </Box>

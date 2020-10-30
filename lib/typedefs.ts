@@ -22,6 +22,12 @@ export interface CustomerOpResponse {
   data: Stripe.Customer | ErrorResponse;
 }
 
+export interface AnyResponse {
+  errored: boolean;
+  data: object | ErrorResponse;
+}
+
+
 export enum Direction {
   Up,
   Down,
