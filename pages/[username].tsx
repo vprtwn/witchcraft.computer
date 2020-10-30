@@ -355,40 +355,6 @@ const UserPage = (props) => {
                     bg: 'offWhite',
                   }}
                 >
-                  {!stripeAccount && (
-                    <Box>
-                      <Text variant="small" sx={{ fontFamily: 'mono' }}>
-                        Monetize your <Badge variant="outline">tray</Badge> by collecting tips.
-                      </Text>
-                      <Box pt={3}>
-                        <Button
-                          variant="shadowButton"
-                          mr={2}
-                          onClick={async () => {
-                            try {
-                              const response = await fetchJson('/api/connect_stripe', {
-                                method: 'POST',
-                              });
-                              const url = response.url;
-                              window.location.assign(url);
-                            } catch (e) {
-                              // TODO: handle error
-                            }
-                          }}
-                        >
-                          Get started
-                        </Button>{' '}
-                      </Box>
-                      <Text variant="tiny" sx={{ fontFamily: 'mono', pt: 3, color: 'gray' }}>
-                        ^ You'll be redirected to create an account with Stripe, our payments provider. Stripe collects
-                        a{' '}
-                        <Link variant="primary" href="https://stripe.com/pricing#pricing-details">
-                          fee
-                        </Link>{' '}
-                        on payments.
-                      </Text>
-                    </Box>
-                  )}
                   <Flex sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
                     {stripeAccount && (
                       <Text variant="tiny" sx={{ fontFamily: 'mono' }}>
@@ -407,6 +373,48 @@ const UserPage = (props) => {
                       </Button>
                     )}
                   </Flex>
+                  {!stripeAccount && (
+                    <Text variant="small" sx={{ fontFamily: 'mono' }}>
+                      Monetize your <Badge variant="outline">tray</Badge> by collecting tips.
+                    </Text>
+                  )}
+                  {!stripeAccount ||
+                    (stripeAccount && !stripeAccount['charges_enabled'] && (
+                      <Box pt={2}>
+                        <Button
+                          variant="shadowButton"
+                          mr={2}
+                          onClick={async () => {
+                            try {
+                              const response = await fetchJson('/api/connect_stripe', {
+                                method: 'POST',
+                              });
+                              const url = response.url;
+                              window.location.assign(url);
+                            } catch (e) {
+                              // TODO: handle error
+                            }
+                          }}
+                        >
+                          {stripeAccount && !stripeAccount['charges_enabled'] ? 'Complete onboarding' : 'Get started'}
+                        </Button>{' '}
+                      </Box>
+                    ))}
+                  {!stripeAccount && (
+                    <Text variant="tiny" sx={{ fontFamily: 'mono', pt: 3, color: 'gray' }}>
+                      ^ You'll be redirected to create an account with Stripe, our payments provider. Stripe collects a{' '}
+                      <Link variant="primary" href="https://stripe.com/pricing#pricing-details">
+                        fee
+                      </Link>{' '}
+                      on payments.
+                    </Text>
+                  )}
+                  {stripeAccount && !stripeAccount['charges_enabled'] && (
+                    <Text variant="tiny" sx={{ fontFamily: 'mono', pt: 2, color: 'gray' }}>
+                      ^ Payments are not yet enabled on your Stripe account. You'll be redirected to Stripe to continue
+                      setting up your account.
+                    </Text>
+                  )}
                 </Box>
               </Box>
               {stripeAccount && (

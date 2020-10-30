@@ -28,10 +28,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(error.httpStatus).json(error);
   }
   const customer = customerRes.data as Stripe.Customer;
-  const stripeAccountId = readDict(customer.metadata, 'stripe_account_id');
+  const stripeAccountId = customer.metadata['stripe_account_id'];
   try {
     const account = await stripe.accounts.retrieve(stripeAccountId);
-    res.json({ connected: account.charges_enabled, account: account });
+    res.json({ account: account });
   } catch (e) {
     const response: ErrorResponse = {
       errorCode: 'stripe_error',

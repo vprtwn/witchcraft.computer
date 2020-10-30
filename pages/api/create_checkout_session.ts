@@ -44,8 +44,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     };
     return res.status(error.httpStatus).json(error);
   }
-  const stripeAccount = readDict(customer.metadata, 'stripeAccount');
-  if (!stripeAccount) {
+  const stripeAccountId = customer.metadata['stripe_account_id'] as string;
+  if (!stripeAccountId) {
     const error: ErrorResponse = {
       errorCode: 'no_payment_setup',
       errorMessage: "This account hasn't enabled payments.",
@@ -53,7 +53,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     };
     return res.status(error.httpStatus).json(error);
   }
-  const stripeAccountId = stripeAccount.id as string;
+  console.log('accountId', stripeAccountId);
   let connectedCustomerId = null;
   let metadata = { from_tray_origin_url: returnUrl };
   if (session.user) {
@@ -69,6 +69,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     connectedCustomerId = customer.id;
   }
 
+  const productData = {
+    name: `@${username}`,
+  };
+  if (message) {
+    productData['description'] = message;
+  }
+
   // create checkout session
   const checkoutParams = {
     payment_method_types: ['card'],
@@ -77,10 +84,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       {
         price_data: {
           currency: 'usd',
-          product_data: {
-            name: `@${username}`,
-            description: message,
-          },
+          product_data: productData,
           unit_amount: amount,
         },
         quantity: 1,
