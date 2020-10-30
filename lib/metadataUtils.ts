@@ -4,12 +4,12 @@ import fetchJson from '../lib/fetchJson';
 
 export const postMetadataUpdate = async (
   key: string,
-  value: MetadataValue,
+  value: object,
   customerId: string,
   username: string,
   removedKey: string | null = null, // this is ugly
   order: Record<string, string>[] | null = null,
-): Promise<MetadataValue> => {
+): Promise<object> => {
   const update = {};
   update[key] = value;
   if (removedKey) {

@@ -87,7 +87,7 @@ const UserPage = (props) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    const newSettings: MetadataValue = {
+    const newSettings = {
       text: tipText,
       defaultAmount: defaultTipAmount,
       enabled: tipsEnabled,
@@ -96,7 +96,7 @@ const UserPage = (props) => {
     syncTipSettings(newSettings);
   }, [tipText, tipsEnabled, defaultTipAmount, hideTipsFeed]);
 
-  const syncTipSettings = async function (newSettings: MetadataValue) {
+  const syncTipSettings = async function (newSettings: object) {
     try {
       await postMetadataUpdate('payment_settings', newSettings, props.customerId, props.username);
       // don't need to call setMetadata if updating order only
