@@ -11,7 +11,7 @@ import { reorder, remove, add, unprefixUsername, generateBlockId, parseBlockId }
 import { postMetadataUpdate, readBlockOrder, readDict } from '../lib/metadataUtils';
 import { Direction, BlockType } from '../lib/typedefs';
 import { useRouter } from 'next/router';
-import { Box, Checkbox, Badge, Input, IconButton, Flex, Card, Button, Text, Label, Textarea } from 'theme-ui';
+import { Box, Checkbox, Link, Badge, Input, IconButton, Flex, Card, Button, Text, Label, Textarea } from 'theme-ui';
 import NumberFormat from 'react-number-format';
 import { GetServerSideProps } from 'next';
 import { signOut, getSession } from 'next-auth/client';
@@ -279,7 +279,7 @@ const UserPage = (props) => {
             )}
 
             {props.signedIn && (
-              <Flex sx={{ py: 4, mx: 2, justifyContent: 'space-between' }}>
+              <Flex sx={{ pt: 4, mx: 2, justifyContent: 'space-between' }}>
                 <Box>
                   <IconButton
                     sx={{ fontSize: '24px', visibility: previewing ? 'hidden' : 'visible' }}
@@ -309,8 +309,6 @@ const UserPage = (props) => {
                 <PaymentBlock text={tipText} defaultAmount={defaultTipAmount} hideTipsFeed={hideTipsFeed} />
               </>
             )}
-
-            <Box my={4} />
           </>
         )}
         <PageFooter />
@@ -318,19 +316,47 @@ const UserPage = (props) => {
           <Card variant="block" sx={{ p: 3, mb: 4, border: '1px dotted lightGray' }}>
             <Box>
               {!stripeAccount && (
-                <Box pt={2}>
-                  <Text variant="small">Tray makes it easy to collect tips on your page.</Text>
-                  <Text variant="small">Connect a Stripe account to get started. </Text>
-                  <Box pt={3}>
-                    <Button
-                      variant="tiny"
-                      mr={2}
-                      onClick={() => {
-                        window.location.assign(connectUrl);
-                      }}
-                    >
-                      Connect Stripe
-                    </Button>{' '}
+                <Box>
+                  <Flex sx={{ alignItems: 'center' }}>
+                    <Flex>
+                      <Label sx={{ bg: 'lightBlue', p: 1, borderRadius: '8px 8px 0px 0px' }}>
+                        <Flex sx={{ alignItems: 'center' }}>
+                          <Text variant="small">Connect Stripe account</Text>
+                        </Flex>
+                      </Label>
+                    </Flex>
+                  </Flex>
+                  <Box
+                    sx={{
+                      p: 2,
+                      borderRadius: 4,
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      border: `1px dashed lightBlue`,
+                      bg: 'offWhite',
+                    }}
+                  >
+                    <Text variant="small" sx={{ fontFamily: 'mono' }}>
+                      Monetize your <Badge variant="outline">tray</Badge> by collecting tips.
+                    </Text>
+                    <Box pt={3}>
+                      <Button
+                        variant="shadowButton"
+                        mr={2}
+                        onClick={() => {
+                          window.location.assign(connectUrl);
+                        }}
+                      >
+                        Get started
+                      </Button>{' '}
+                    </Box>
+                    <Text variant="tiny" sx={{ fontFamily: 'mono', pt: 3, color: 'gray' }}>
+                      ^ You'll be redirected to create an account with Stripe, our payments provider. Stripe collects a{' '}
+                      <Link variant="primary" href="https://stripe.com/pricing#pricing-details">
+                        fee
+                      </Link>{' '}
+                      on payments.
+                    </Text>
                   </Box>
                 </Box>
               )}
@@ -338,7 +364,9 @@ const UserPage = (props) => {
                 <Box>
                   <Flex sx={{ alignItems: 'center' }}>
                     <Flex>
-                      <Label sx={{ bg: tipsEnabled ? 'lightGreen' : 'offWhite', p: 1, borderRadius: 8 }}>
+                      <Label
+                        sx={{ bg: tipsEnabled ? 'lightGreen' : 'offWhite', p: 1, borderRadius: '8px 8px 0px 0px' }}
+                      >
                         <Flex sx={{ alignItems: 'center' }}>
                           <Checkbox defaultChecked={tipsEnabled} onChange={(e) => setTipsEnabled(e.target.checked)} />
                           <Text variant="small">Enable tips</Text>
@@ -400,7 +428,7 @@ const UserPage = (props) => {
                   </Box>
                   <Flex sx={{ mt: 3 }}>
                     <Flex>
-                      <Label sx={{ bg: 'lightBlue', p: 1, borderRadius: 8 }}>
+                      <Label sx={{ bg: 'lightBlue', p: 1, borderRadius: '8px 8px 0px 0px' }}>
                         <Text variant="small">Connected to Stripe</Text>
                       </Label>
                     </Flex>
@@ -488,5 +516,4 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     },
   };
 };
-
 export default UserPage;

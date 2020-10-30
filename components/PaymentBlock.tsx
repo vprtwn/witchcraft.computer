@@ -8,7 +8,7 @@ import PaymentFeedBlock from './PaymentFeedBlock';
 import PlusButtonIcon from './PlusButtonIcon';
 import { useStripe } from '@stripe/react-stripe-js';
 
-export default (props) => {
+const PaymentBlock = (props) => {
   const [showingForm, setShowingForm] = useState(false);
   const [amount, setAmount] = useState(props.defaultAmount as number);
   const firstInputRef = useRef<HTMLInputElement | null>(null);
@@ -55,11 +55,10 @@ export default (props) => {
   };
 
   return (
-    // <Card variant="block" sx={{  mb: 4, py: 2, px: 3, bg: showingForm ? 'lightGreen' : 'offWhite' }}>
     <Card
       variant="block"
       sx={{
-        mb: 4,
+        mt: 4,
         py: 2,
         px: 3,
         background: showingForm ? 'linear-gradient(-45deg, #e6fffa, #ffffff, #f0fff4)' : 'none',
@@ -144,7 +143,7 @@ export default (props) => {
         <Flex sx={{ justifyContent: 'space-between', py: 2 }}>
           <Button
             variant="shadowButton"
-            sx={{ flexGrow: 1, fontSize: 15 }}
+            sx={{ flexGrow: 1, fontSize: 14, color: 'gray' }}
             onClick={() => {
               setShowingForm(true);
             }}
@@ -157,3 +156,4 @@ export default (props) => {
     </Card>
   );
 };
+export default PaymentBlock;

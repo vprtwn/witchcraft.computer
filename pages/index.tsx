@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Layout from '../components/Layout';
 import AboutTray from '../components/AboutTray';
 import TrayIcon from '../components/TrayIcon';
+import SignInButton from '../components/SignInButton';
 import MarketingFooter from '../components/MarketingFooter';
 import fetchJson from '../lib/fetchJson';
 import { Box, Button, Card } from 'theme-ui';
@@ -14,6 +15,8 @@ const IndexPage = () => {
   const {
     query: { code, state },
   } = useRouter();
+  const [session, loading] = useSession();
+  const signedIn = session && session.user.username;
 
   useEffect(() => {
     const connectStripe = async function () {
@@ -37,8 +40,9 @@ const IndexPage = () => {
   return (
     <Layout>
       <TrayIcon />
-      <Card variant="shadowCard">
+      <Card variant="aboutCard">
         <AboutTray />
+        {signedIn && <SignInButton />}
       </Card>
       <MarketingFooter />
     </Layout>

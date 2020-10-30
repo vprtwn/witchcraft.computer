@@ -3,12 +3,11 @@ import { Card, Box, Button, Flex, Label, Input } from 'theme-ui';
 import { BlockType } from '../lib/typedefs';
 import TextButtonIcon from './TextButtonIcon';
 import LinkButtonIcon from './LinkButtonIcon';
-import ChevronRightIcon from './ChevronRightIcon';
 import AudioButtonIcon from './AudioButtonIcon';
 import PageButtonIcon from './PageButtonIcon';
 import TextareaAutosize from 'react-textarea-autosize';
 
-export default (props) => {
+const NewMenu = (props) => {
   const [showingForm, setShowingForm] = useState(false);
   const [text, setText] = useState<string>('');
   const [url, setUrl] = useState<string>('');
@@ -25,15 +24,14 @@ export default (props) => {
     <Box sx={{ pt: 2 }}>
       {showingForm && (
         <>
-          <Card variant="block" sx={{ borderColor: 'black' }}>
+          <Card variant="block" sx={{ border: 'dotted 1px black', borderRadius: 8, fontSize: '15px' }}>
             <Flex
               sx={{
                 pl: 2,
                 pr: 1,
-                py: 1,
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                borderRadius: 4,
+                borderRadius: 8,
                 bg: 'text',
                 color: 'background',
                 cursor: 'pointer',
@@ -47,7 +45,6 @@ export default (props) => {
                   onChange={(t) => setText(t.target.value)}
                 />
               </Box>
-              <ChevronRightIcon />
             </Flex>
             <Box sx={{ py: 1, px: 2, bg: 'transparent' }}>
               <Input
@@ -56,6 +53,7 @@ export default (props) => {
                 type="url"
                 sx={{
                   fontSize: '15px',
+                  fontFamily: 'mono',
                 }}
                 onChange={(t) => setUrl(t.target.value)}
               />
@@ -66,8 +64,9 @@ export default (props) => {
                   background: 'none',
                   width: '100%',
                   resize: 'none',
-                  fontFamily: 'Inter',
-                  fontSize: '15px',
+                  fontFamily:
+                    '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+                  fontSize: '13px',
                   border: 'none',
                   paddingLeft: 8,
                   paddingTop: 4,
@@ -82,7 +81,7 @@ export default (props) => {
           </Card>
           <Flex sx={{ justifyContent: 'right', pt: 1 }}>
             <Button
-              variant="shadowButton"
+              variant="newMenuButton"
               onClick={() => {
                 console.log('text', text);
                 console.log('url', url);
@@ -98,7 +97,7 @@ export default (props) => {
       {!showingForm && (
         <Flex sx={{ justifyContent: 'space-between', mt: 3, mb: 2 }}>
           <Button
-            variant="shadowButton"
+            variant="newMenuButton"
             sx={{ flexGrow: 1, mr: 2 }}
             onClick={() => {
               setShowingForm(!showingForm);
@@ -107,7 +106,7 @@ export default (props) => {
             <LinkButtonIcon />
           </Button>
           <Button
-            variant="shadowButton"
+            variant="newMenuButton"
             sx={{ flexGrow: 1, mr: 2 }}
             onClick={() => {
               props.onClick({ type: BlockType.Text });
@@ -116,7 +115,7 @@ export default (props) => {
             <TextButtonIcon />
           </Button>
           <Button
-            variant="shadowButton"
+            variant="newMenuButton"
             sx={{ flexGrow: 1, mr: 2 }}
             onClick={() => {
               // props.onClick({ type: BlockType.Text });
@@ -125,7 +124,7 @@ export default (props) => {
             <AudioButtonIcon />
           </Button>
           <Button
-            variant="shadowButton"
+            variant="newMenuButton"
             sx={{ flexGrow: 1 }}
             onClick={() => {
               // props.onClick({ type: BlockType.Text });
@@ -138,3 +137,4 @@ export default (props) => {
     </Box>
   );
 };
+export default NewMenu;

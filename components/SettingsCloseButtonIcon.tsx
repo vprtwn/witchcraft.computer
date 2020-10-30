@@ -1,6 +1,6 @@
 import { Label, Box, Flex } from 'theme-ui';
 
-export default () => {
+const SettingsCloseButtonIcon = () => {
   return (
     <Flex
       sx={{
@@ -31,3 +31,4 @@ export default () => {
     </Flex>
   );
 };
+export default SettingsCloseButtonIcon;

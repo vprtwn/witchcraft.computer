@@ -1,6 +1,6 @@
 import { Label, Box, Flex } from 'theme-ui';
 
-export default () => {
+const SignOutButtonIcon = () => {
   return (
     <Flex
       sx={{
@@ -35,3 +35,4 @@ export default () => {
     </Flex>
   );
 };
+export default SignOutButtonIcon;

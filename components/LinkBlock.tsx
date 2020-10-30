@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Card, Input, Flex, Box } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
 import EditToolbar from './EditToolbar';
-import ChevronRightIcon from './ChevronRightIcon';
 import { postMetadataUpdate } from '../lib/metadataUtils';
 import { readDict } from '../lib/metadataUtils';
 import isUrl from 'is-url';
@@ -10,7 +9,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 
 const DEBOUNCE_MS = 700;
 
-export default (props) => {
+const LinkBlock = (props) => {
   const signedIn = props.signedIn;
   // blocks read from all metadata, which is meh but ok
   const [editing, setEditing] = useState(false);
@@ -49,7 +48,7 @@ export default (props) => {
   };
 
   return (
-    <Card variant="block" sx={{ borderColor: 'black', fontSize: '15px' }}>
+    <Card variant="block" sx={{ border: 'solid 1px black', fontSize: '15px' }}>
       <>
         <Flex
           onClick={() => {
@@ -62,12 +61,12 @@ export default (props) => {
           sx={{
             pl: 2,
             pr: 1,
-            py: 1,
+            py: 0,
             justifyContent: 'space-between',
             alignItems: 'center',
-            borderRadius: 4,
-            bg: 'text',
-            color: 'background',
+            borderRadius: 8,
+            bg: 'white',
+            color: 'black',
             cursor: 'pointer',
           }}
         >
@@ -83,7 +82,6 @@ export default (props) => {
               }}
             />
           </Box>
-          <ChevronRightIcon />
         </Flex>
         {editing && !props.hideToolbar && (
           <Box sx={{ py: 1, px: 2, bg: 'transparent' }}>
@@ -95,7 +93,7 @@ export default (props) => {
               placeholder="Link address"
               sx={{
                 fontSize: '15px',
-                fontFamily: 'monospace',
+                fontFamily: 'mono',
               }}
               onChange={(e) => {
                 const val = e.target.value;
@@ -110,7 +108,7 @@ export default (props) => {
       {((!props.hideToolbar && (editing || (!editing && comment && comment.length > 0))) ||
         (props.hideToolbar && comment && comment.length > 0)) && (
         <Flex
-          sx={{ py: 1, px: 2, bg: 'transparent' }}
+          sx={{ py: 1, px: 2, bg: 'lightGray', borderRadius: '0px 0px 8px 8px' }}
           onClick={() => {
             if (!props.hideToolbar) {
               setEditing(true);
@@ -123,8 +121,9 @@ export default (props) => {
               background: 'transparent',
               width: '100%',
               resize: 'none',
-              fontFamily: 'monospace',
-              fontSize: '14px',
+              fontFamily:
+                '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+              fontSize: '13px',
               border: 'none',
               paddingLeft: 8,
               paddingTop: 4,
@@ -162,3 +161,4 @@ export default (props) => {
     </Card>
   );
 };
+export default LinkBlock;

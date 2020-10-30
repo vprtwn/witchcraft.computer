@@ -1,6 +1,6 @@
 import { Label, Box, Flex } from 'theme-ui';
 
-export default () => {
+const EditButtonIcon = () => {
   return (
     <Flex
       sx={{
@@ -23,3 +23,4 @@ export default () => {
     </Flex>
   );
 };
+export default EditButtonIcon;

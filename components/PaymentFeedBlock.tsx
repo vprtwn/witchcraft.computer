@@ -3,7 +3,7 @@ import { Card, Box, Flex, IconButton, Input, Text } from 'theme-ui';
 import fetchJson from '../lib/fetchJson';
 import NumberFormat from 'react-number-format';
 
-export default (props) => {
+const PaymentFeedBlock = (props) => {
   const [payments, setPayments] = useState<Array<object>>([]);
 
   const fetchPayments = async () => {
@@ -60,3 +60,4 @@ export default (props) => {
     </Box>
   );
 };
+export default PaymentFeedBlock;

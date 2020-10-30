@@ -6,7 +6,7 @@ import DeleteButtonIcon from './DeleteButtonIcon';
 import DownButtonIcon from './DownButtonIcon';
 import UpButtonIcon from './UpButtonIcon';
 
-export default (props) => {
+const EditToolbar = (props) => {
   return (
     <Flex sx={{ bg: 'offWhite', borderRadius: 8, py: 1, px: 2 }}>
       <Box
@@ -45,3 +45,4 @@ export default (props) => {
     </Flex>
   );
 };
+export default EditToolbar;

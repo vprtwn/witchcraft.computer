@@ -1,24 +1,26 @@
 import { Provider } from 'next-auth/client';
-import { ThemeProvider, Card, Styled, Flex, Box, Link } from 'theme-ui';
+import { ThemeProvider, Badge, Card, Styled, Flex, Box, Link } from 'theme-ui';
 import Head from 'next/head';
 import theme from '../theme';
 import { MDXProvider } from '@mdx-js/react';
 import Layout from '../components/Layout';
+import TrayIcon from '../components/TrayIcon';
 import '../styles.css';
 
 const components = {
   wrapper: (props) => (
     <div>
+      <TrayIcon />
       <Layout>
-        <Card variant="shadowCard" mt={3}>
+        <Card variant="aboutCard">
           <Flex>
             <Box>
               <Link href="/about" variant="nav">
-                tray
+                <Badge variant="outline">tray</Badge>
               </Link>
             </Box>
-            <Box flex="1 1 auto" mx={1}>
-              |
+            <Box flex="1 1 auto" mx={1} sx={{ fontWeight: 'bold' }}>
+              :
             </Box>
             <Box>
               <Link href="/policies" variant="nav">

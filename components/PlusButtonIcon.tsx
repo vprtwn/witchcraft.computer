@@ -1,6 +1,6 @@
 import { Flex } from 'theme-ui';
 
-export default () => {
+const PlusButtonIcon = () => {
   return (
     <Flex
       sx={{
@@ -20,3 +20,4 @@ export default () => {
     </Flex>
   );
 };
+export default PlusButtonIcon;

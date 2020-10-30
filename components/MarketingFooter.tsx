@@ -1,6 +1,6 @@
 import { Flex, Box, Container, IconButton, Button, Text, Image, Link } from 'theme-ui';
 
-export default (props) => {
+const MarketingFooter = (props) => {
   return (
     <Box sx={{ textAlign: 'center', my: 2, py: 1, px: 2 }}>
       <Box sx={{ flex: '1 1 auto' }} />
@@ -29,3 +29,4 @@ export default (props) => {
     </Box>
   );
 };
+export default MarketingFooter;

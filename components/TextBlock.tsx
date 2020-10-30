@@ -8,7 +8,7 @@ import RichMarkdownEditor from 'rich-markdown-editor';
 
 const DEBOUNCE_MS = 700;
 
-export default (props) => {
+const TextBlock = (props) => {
   const signedIn = props.signedIn;
   // blocks read from all metadata, which is meh but ok
   let initialText = readString(props.metadata, props.id, props.signedIn ? props.default : null);
@@ -43,7 +43,7 @@ export default (props) => {
   return (
     <Card variant="textBlock" sx={{ fontSize: '15px' }}>
       <Box
-        sx={{ px: 3, py: 2, cursor: 'text' }}
+        sx={{ px: 0, py: 2, cursor: 'text' }}
         onClick={() => {
           if (!props.previewing && !editing) {
             setEditing(true);
@@ -77,3 +77,4 @@ export default (props) => {
     </Card>
   );
 };
+export default TextBlock;

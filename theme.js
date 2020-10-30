@@ -4,8 +4,12 @@ export default {
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
     heading: 'inherit',
-    monospace: 'Recursive, Menlo, monospace',
-    body: 'Recursive, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
+    mono:
+      'Recursive, San Francisco Mono, Monaco, "Consolas", "Lucida Console", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace',
+    sans:
+      '-apple-system, BlinkMacSystemFont, "avenir next", avenir, helvetica, "helvetica neue", ubuntu, roboto, noto, "segoe ui", arial, sans-serif',
+    body:
+      '-apple-system, BlinkMacSystemFont, "avenir next", avenir, helvetica, "helvetica neue", ubuntu, roboto, noto, "segoe ui", arial, sans-serif',
   },
   fontSizes: [12, 14, 16, 20, 24, 32, 48, 64, 96],
   fontWeights: {
@@ -45,7 +49,7 @@ export default {
       borderWidth: 1,
       bg: 'transparent',
       fontSize: 13,
-      fontFamily: 'monospace',
+      fontFamily: 'mono',
       cursor: 'pointer',
       '&:hover': {
         bg: 'lightGray',
@@ -59,7 +63,7 @@ export default {
       borderWidth: 1,
       bg: 'transparent',
       fontSize: 13,
-      fontFamily: 'monospace',
+      fontFamily: 'mono',
       cursor: 'pointer',
       '&:hover': {
         bg: 'lightGray',
@@ -67,10 +71,24 @@ export default {
     },
     shadowButton: {
       border: 'solid 1px lightGray',
+      borderRadius: 12,
+      bg: 'white',
+      color: 'text',
+      fontFamily: 'mono',
+      fontSize: 13,
+      cursor: 'pointer',
+      py: 2,
+      boxShadow: '0 0 4px rgba(0, 0, 0, 0.125)',
+      '&:hover': {
+        boxShadow: '0 0 16px rgba(0, 0, 0, 0.125)',
+      },
+    },
+    newMenuButton: {
+      border: 'dotted 1px lightGray',
       borderRadius: 8,
       bg: 'white',
       color: 'text',
-      fontFamily: 'monospace',
+      fontFamily: 'mono',
       fontSize: 13,
       cursor: 'pointer',
       py: 2,
@@ -91,6 +109,9 @@ export default {
     },
   },
   links: {
+    primary: {
+      color: 'inherit',
+    },
     nav: {
       fontWeight: 'bold',
       color: 'inherit',
@@ -102,6 +123,7 @@ export default {
   },
   badges: {
     outline: {
+      fontFamily: 'mono',
       color: 'primary',
       bg: 'transparent',
       boxShadow: 'inset 0 0 0 1px',
@@ -132,6 +154,12 @@ export default {
       borderRadius: 12,
       border: '1px solid lightGray',
     },
+    aboutCard: {
+      p: 3,
+      bg: 'white',
+      borderRadius: 12,
+      border: '1px solid black',
+    },
     primary: {
       paddingX: 3,
       paddingY: 2,
@@ -151,12 +179,12 @@ export default {
     },
     label: {
       fontSize: '12px',
-      fontFamily: 'monospace',
+      fontFamily: 'mono',
       color: 'text',
     },
     formLabel: {
       fontSize: '13px',
-      fontFamily: 'monospace',
+      fontFamily: 'mono',
       color: 'text',
     },
     input: {
@@ -166,11 +194,11 @@ export default {
       bg: 'transparent',
       borderWidth: 0,
       textAlign: 'center',
-      fontFamily: 'monospace',
+      fontFamily: 'mono',
       py: 2,
     },
     standardInput: {
-      fontFamily: 'monospace',
+      fontFamily: 'mono',
       fontSize: 13,
       bg: 'white',
       py: 2,
@@ -178,14 +206,13 @@ export default {
     },
     linkInput: {
       px: 2,
-      fontFamily: 'Inter',
       bg: 'transparent',
       border: 'none',
       py: 1,
     },
     buttonLabel: {
       fontSize: 11,
-      fontFamily: 'monospace',
+      fontFamily: 'mono',
       color: 'text',
       cursor: 'pointer',
       // fontWeight: 'bold',
@@ -193,7 +220,7 @@ export default {
     settingsLabel: {
       fontSize: 15,
       fontWeight: 'bold',
-      fontFamily: 'monospace',
+      fontFamily: 'mono',
       color: 'text',
     },
   },
@@ -248,14 +275,14 @@ export default {
       fontSize: 0,
     },
     pre: {
-      fontFamily: 'monospace',
+      fontFamily: 'mono',
       overflowX: 'auto',
       code: {
         color: 'inherit',
       },
     },
     code: {
-      fontFamily: 'monospace',
+      fontFamily: 'mono',
       fontSize: 'inherit',
     },
     table: {

@@ -235,6 +235,19 @@ export const connectStripeAccount = async (session: any, state: string, code: st
     } else {
       const customer = getResponse.data as Stripe.Customer;
       const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
+      const email = customer.metadata['email'];
+      const name = customer.metadata['name'];
+      const username = customer.metadata['twitter_username'];
+      const bizName = `tray.club/@${username}`;
+      const account = await stripe.accounts.create({
+        type: 'standard',
+        business_type: 'individual',
+        email: email,
+        individual: { email: email },
+        // todo: get twitter bio for product description
+        business_profile: { name: bizName, product_description: 'todo' },
+      });
       const oauthResponse = await stripe.oauth.token({
         grant_type: 'authorization_code',
         code: code,
@@ -295,7 +308,7 @@ export const disconnectStripeAccount = async (session: any): Promise<CustomerOpR
     } else {
       const customer = getResponse.data as Stripe.Customer;
       const metadata = {
-        stripeAccount: null,
+        stripe_account: null,
       };
       const updateResponse = await updateMetadataForCustomer(session, customer, metadata);
       if (updateResponse.errored) {

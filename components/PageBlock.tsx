@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Card, Input, Flex, Box } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
 import EditToolbar from './EditToolbar';
-import ChevronRightIcon from './ChevronRightIcon';
 import { postMetadataUpdate } from '../lib/metadataUtils';
 import { readDict } from '../lib/metadataUtils';
 import isUrl from 'is-url';
@@ -10,7 +9,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 
 const DEBOUNCE_MS = 700;
 
-export default (props) => {
+const PageBlock = (props) => {
   const signedIn = props.signedIn;
   // blocks read from all metadata, which is meh but ok
   const [editing, setEditing] = useState(false);
@@ -42,7 +41,7 @@ export default (props) => {
     <Card
       variant="block"
       sx={{
-        borderColor: 'black',
+        border: 'solid 2px black',
         bg: 'white',
         '&:hover': {
           // bg: 'lightGray',
@@ -67,7 +66,8 @@ export default (props) => {
             background: 'transparent',
             width: '100%',
             resize: 'none',
-            fontFamily: 'Inter',
+            fontFamily:
+              '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
             fontSize: '17px',
             border: 'none',
             paddingLeft: 8,
@@ -105,3 +105,4 @@ export default (props) => {
     </Card>
   );
 };
+export default PageBlock;

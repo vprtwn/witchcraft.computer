@@ -1,6 +1,6 @@
 import { Label, Box, Flex } from 'theme-ui';
 
-export default () => {
+const SettingsOpenButtonIcon = () => {
   return (
     <Flex
       sx={{
@@ -29,3 +29,4 @@ export default () => {
     </Flex>
   );
 };
+export default SettingsOpenButtonIcon;

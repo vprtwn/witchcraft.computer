@@ -1,6 +1,6 @@
 import { Flex, Box, Container, IconButton, Button, Text, Image, Link } from 'theme-ui';
 
-export default (props) => {
+const PageFooter = (props) => {
   return (
     <Box sx={{ textAlign: 'center', my: 4, py: 1, px: 2 }}>
       <Box sx={{ flex: '1 1 auto' }} />
@@ -16,7 +16,7 @@ export default (props) => {
         >
           <Link href="/about" variant="nav">
             <Flex sx={{ alignItems: 'center', color: 'gray' }}>
-              <Text sx={{ fontWeight: 'normal', fontSize: '10px', mx: 2 }}>
+              <Text sx={{ fontWeight: 'normal', fontSize: '10px', fontFamily: 'mono', mx: 2 }}>
                 made with <strong>tray</strong>
               </Text>
             </Flex>
@@ -28,3 +28,4 @@ export default (props) => {
     </Box>
   );
 };
+export default PageFooter;

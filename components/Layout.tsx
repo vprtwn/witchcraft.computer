@@ -7,5 +7,4 @@ const Layout = ({ children }) => (
     </Box>
   </Container>
 );
-
 export default Layout;
