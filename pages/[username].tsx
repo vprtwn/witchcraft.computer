@@ -86,16 +86,6 @@ const UserPage = (props) => {
   const [stripeAccount, setStripeAccount] = useState<object | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const stripeOpts = {};
-  if (stripeAccount) {
-    stripeOpts['stripeAccount'] = stripeAccount['id'];
-  }
-  let stripeKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
-  if (props.signedIn) {
-    stripeKey = process.env.NEXT_PUBLIC_STRIPE_TEST_PUBLISHABLE_KEY;
-  }
-  const stripePromise = loadStripe(stripeKey, stripeOpts);
-
   const syncOrder = async function (newOrder: Record<string, string>[], removedId: string | null = null) {
     try {
       await postMetadataUpdate('b.order', newOrder, props.customerId, props.username, removedId);
@@ -160,344 +150,346 @@ const UserPage = (props) => {
   };
 
   return (
-    <Elements stripe={stripePromise}>
-      <Layout>
-        {props.error && (
-          <Textarea my={4} rows={10}>
-            {JSON.stringify(props.error, null, 2)}
-          </Textarea>
-        )}
-        {!props.error && (
-          <>
-            <Header profileImage={props.profileImage} name={props.name} username={props.username} />
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="droppable">
-                {(provided, snapshot) => (
-                  <div {...provided.droppableProps} ref={provided.innerRef}>
-                    {order &&
-                      order.map((orderItem, index) => {
-                        return (
-                          <Draggable
-                            key={orderItem.i}
-                            draggableId={orderItem.i}
-                            index={index}
-                            isDragDisabled={!props.signedIn || previewing}
-                          >
-                            {(provided, snapshot) => (
-                              <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                {parseBlockId(orderItem.i) === BlockType.Text && (
-                                  <Box
-                                    sx={{
-                                      py: 2,
+    <Layout>
+      {props.error && (
+        <Textarea my={4} rows={10}>
+          {JSON.stringify(props.error, null, 2)}
+        </Textarea>
+      )}
+      {!props.error && (
+        <>
+          <Header profileImage={props.profileImage} name={props.name} username={props.username} />
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="droppable">
+              {(provided, snapshot) => (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  {order &&
+                    order.map((orderItem, index) => {
+                      return (
+                        <Draggable
+                          key={orderItem.i}
+                          draggableId={orderItem.i}
+                          index={index}
+                          isDragDisabled={!props.signedIn || previewing}
+                        >
+                          {(provided, snapshot) => (
+                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                              {parseBlockId(orderItem.i) === BlockType.Text && (
+                                <Box
+                                  sx={{
+                                    py: 2,
+                                  }}
+                                >
+                                  <TextBlock
+                                    default={defaultText}
+                                    previewing={previewing}
+                                    id={orderItem.i}
+                                    hideUp={index === 0}
+                                    hideDown={index === order.length - 1}
+                                    hideToolbar={previewing}
+                                    metadata={metadata}
+                                    username={props.username}
+                                    customerId={props.customerId}
+                                    signedIn={props.signedIn}
+                                    onDown={() => {
+                                      moveBlock(index, Direction.Down);
                                     }}
-                                  >
-                                    <TextBlock
-                                      default={defaultText}
-                                      previewing={previewing}
-                                      id={orderItem.i}
-                                      hideUp={index === 0}
-                                      hideDown={index === order.length - 1}
-                                      hideToolbar={previewing}
-                                      metadata={metadata}
-                                      username={props.username}
-                                      customerId={props.customerId}
-                                      signedIn={props.signedIn}
-                                      onDown={() => {
-                                        moveBlock(index, Direction.Down);
-                                      }}
-                                      onUp={() => {
-                                        moveBlock(index, Direction.Up);
-                                      }}
-                                      onDelete={() => {
-                                        removeBlock(index);
-                                      }}
-                                    />
-                                  </Box>
-                                )}
-                                {parseBlockId(orderItem.i) === BlockType.Link && (
-                                  <Box
-                                    sx={{
-                                      py: 2,
+                                    onUp={() => {
+                                      moveBlock(index, Direction.Up);
                                     }}
-                                  >
-                                    <LinkBlock
-                                      id={orderItem.i}
-                                      hideUp={index === 0}
-                                      hideDown={index === order.length - 1}
-                                      hideToolbar={previewing}
-                                      metadata={metadata}
-                                      username={props.username}
-                                      customerId={props.customerId}
-                                      signedIn={props.signedIn}
-                                      onDown={() => {
-                                        moveBlock(index, Direction.Down);
-                                      }}
-                                      onUp={() => {
-                                        moveBlock(index, Direction.Up);
-                                      }}
-                                      onDelete={() => {
-                                        removeBlock(index);
-                                      }}
-                                    />
-                                  </Box>
-                                )}
-                                {false && (
-                                  <Box
-                                    sx={{
-                                      py: 2,
+                                    onDelete={() => {
+                                      removeBlock(index);
                                     }}
-                                  >
-                                    <PageBlock
-                                      id={orderItem.i}
-                                      hideUp={index === 0}
-                                      hideDown={index === order.length - 1}
-                                      hideToolbar={previewing}
-                                      metadata={metadata}
-                                      username={props.username}
-                                      customerId={props.customerId}
-                                      signedIn={props.signedIn}
-                                      onDown={() => {
-                                        moveBlock(index, Direction.Down);
-                                      }}
-                                      onUp={() => {
-                                        moveBlock(index, Direction.Up);
-                                      }}
-                                      onDelete={() => {
-                                        removeBlock(index);
-                                      }}
-                                    />
-                                  </Box>
-                                )}
-                              </div>
-                            )}
-                          </Draggable>
-                        );
-                      })}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
+                                  />
+                                </Box>
+                              )}
+                              {parseBlockId(orderItem.i) === BlockType.Link && (
+                                <Box
+                                  sx={{
+                                    py: 2,
+                                  }}
+                                >
+                                  <LinkBlock
+                                    id={orderItem.i}
+                                    hideUp={index === 0}
+                                    hideDown={index === order.length - 1}
+                                    hideToolbar={previewing}
+                                    metadata={metadata}
+                                    username={props.username}
+                                    customerId={props.customerId}
+                                    signedIn={props.signedIn}
+                                    onDown={() => {
+                                      moveBlock(index, Direction.Down);
+                                    }}
+                                    onUp={() => {
+                                      moveBlock(index, Direction.Up);
+                                    }}
+                                    onDelete={() => {
+                                      removeBlock(index);
+                                    }}
+                                  />
+                                </Box>
+                              )}
+                              {false && (
+                                <Box
+                                  sx={{
+                                    py: 2,
+                                  }}
+                                >
+                                  <PageBlock
+                                    id={orderItem.i}
+                                    hideUp={index === 0}
+                                    hideDown={index === order.length - 1}
+                                    hideToolbar={previewing}
+                                    metadata={metadata}
+                                    username={props.username}
+                                    customerId={props.customerId}
+                                    signedIn={props.signedIn}
+                                    onDown={() => {
+                                      moveBlock(index, Direction.Down);
+                                    }}
+                                    onUp={() => {
+                                      moveBlock(index, Direction.Up);
+                                    }}
+                                    onDelete={() => {
+                                      removeBlock(index);
+                                    }}
+                                  />
+                                </Box>
+                              )}
+                            </div>
+                          )}
+                        </Draggable>
+                      );
+                    })}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
 
-            {showingNewMenu && !previewing && (
-              <NewMenu
-                onClick={(result) => {
-                  console.log(result);
-                  switch (result.type as BlockType) {
-                    case BlockType.Text:
-                      addTextBlock();
-                      break;
-                    case BlockType.Link:
-                      addLinkBlock(result);
-                      break;
-                    case BlockType.Unknown:
-                      // no-op
-                      break;
-                  }
-                }}
+          {showingNewMenu && !previewing && (
+            <NewMenu
+              onClick={(result) => {
+                console.log(result);
+                switch (result.type as BlockType) {
+                  case BlockType.Text:
+                    addTextBlock();
+                    break;
+                  case BlockType.Link:
+                    addLinkBlock(result);
+                    break;
+                  case BlockType.Unknown:
+                    // no-op
+                    break;
+                }
+              }}
+            />
+          )}
+
+          {props.signedIn && (
+            <Flex sx={{ pt: 4, mx: 2, justifyContent: 'space-between' }}>
+              <Box>
+                <IconButton
+                  sx={{ fontSize: '24px', visibility: previewing ? 'hidden' : 'visible' }}
+                  variant={showingNewMenu ? 'iconselected' : 'icon'}
+                  onClick={() => {
+                    setShowingNewMenu(!showingNewMenu);
+                  }}
+                >
+                  {showingNewMenu ? <BackButtonIcon /> : <AddButtonIcon />}
+                </IconButton>
+              </Box>
+              <Box>
+                <IconButton
+                  variant={!previewing && !showingNewMenu ? 'iconselected' : 'icon'}
+                  onClick={() => {
+                    setPreviewing(!previewing);
+                  }}
+                >
+                  {previewing ? <EditButtonIcon /> : <ViewButtonIcon />}
+                </IconButton>
+              </Box>
+            </Flex>
+          )}
+
+          {stripeAccount && tipsEnabled && (
+            <>
+              <PaymentBlock
+                signedIn={signedIn}
+                stripeAccount={stripeAccount}
+                text={tipText}
+                defaultAmount={defaultTipAmount}
+                hideTipsFeed={hideTipsFeed}
               />
-            )}
-
-            {props.signedIn && (
-              <Flex sx={{ pt: 4, mx: 2, justifyContent: 'space-between' }}>
-                <Box>
-                  <IconButton
-                    sx={{ fontSize: '24px', visibility: previewing ? 'hidden' : 'visible' }}
-                    variant={showingNewMenu ? 'iconselected' : 'icon'}
-                    onClick={() => {
-                      setShowingNewMenu(!showingNewMenu);
-                    }}
-                  >
-                    {showingNewMenu ? <BackButtonIcon /> : <AddButtonIcon />}
-                  </IconButton>
-                </Box>
-                <Box>
-                  <IconButton
-                    variant={!previewing && !showingNewMenu ? 'iconselected' : 'icon'}
-                    onClick={() => {
-                      setPreviewing(!previewing);
-                    }}
-                  >
-                    {previewing ? <EditButtonIcon /> : <ViewButtonIcon />}
-                  </IconButton>
-                </Box>
-              </Flex>
-            )}
-
-            {stripeAccount && tipsEnabled && (
-              <>
-                <PaymentBlock text={tipText} defaultAmount={defaultTipAmount} hideTipsFeed={hideTipsFeed} />
-              </>
-            )}
-          </>
-        )}
-        <PageFooter />
-        {props.signedIn && (
-          <Card variant="block" sx={{ p: 3, mb: 4, border: '1px dotted lightGray' }}>
+            </>
+          )}
+        </>
+      )}
+      <PageFooter />
+      {props.signedIn && (
+        <Card variant="block" sx={{ p: 3, mb: 4, border: '1px dotted lightGray' }}>
+          <Box>
             <Box>
+              <Flex sx={{ alignItems: 'center' }}>
+                <Flex>
+                  <Label sx={{ bg: 'lightBlue', p: 1, borderRadius: '8px 8px 0px 0px' }}>
+                    <Flex sx={{ alignItems: 'center' }}>
+                      <Text variant="small">{stripeAccount ? 'Connected to Stripe' : 'Connect Stripe account'}</Text>
+                    </Flex>
+                  </Label>
+                </Flex>
+              </Flex>
+              <Box
+                sx={{
+                  p: 2,
+                  borderRadius: 4,
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  border: `1px dashed lightBlue`,
+                  bg: 'offWhite',
+                }}
+              >
+                <Flex sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
+                  {stripeAccount && (
+                    <Text variant="tiny" sx={{ fontFamily: 'mono' }}>
+                      {stripeAccount['id']}
+                    </Text>
+                  )}
+                  {session && ADMINS.includes(session.user.username) && (
+                    <Button
+                      variant="tiny"
+                      sx={{ fontSize: 11 }}
+                      onClick={() => {
+                        disconnectStripe();
+                      }}
+                    >
+                      Disconnect Stripe
+                    </Button>
+                  )}
+                </Flex>
+                {!stripeAccount && (
+                  <Text variant="small" sx={{ fontFamily: 'mono' }}>
+                    Monetize your <Badge variant="outline">tray</Badge> by collecting tips.
+                  </Text>
+                )}
+                {!stripeAccount ||
+                  (stripeAccount && !stripeAccount['charges_enabled'] && (
+                    <Box pt={2}>
+                      <Button
+                        variant="shadowButton"
+                        mr={2}
+                        onClick={async () => {
+                          try {
+                            const response = await fetchJson('/api/connect_stripe', {
+                              method: 'POST',
+                            });
+                            const url = response.url;
+                            window.location.assign(url);
+                          } catch (e) {
+                            // TODO: handle error
+                          }
+                        }}
+                      >
+                        {stripeAccount && !stripeAccount['charges_enabled'] ? 'Complete onboarding' : 'Get started'}
+                      </Button>{' '}
+                    </Box>
+                  ))}
+                {!stripeAccount && (
+                  <Text variant="tiny" sx={{ fontFamily: 'mono', pt: 3, color: 'gray' }}>
+                    ^ You'll be redirected to create an account with Stripe, our payments provider. Stripe collects a{' '}
+                    <Link variant="primary" href="https://stripe.com/pricing#pricing-details">
+                      fee
+                    </Link>{' '}
+                    on payments.
+                  </Text>
+                )}
+                {stripeAccount && !stripeAccount['charges_enabled'] && (
+                  <Text variant="tiny" sx={{ fontFamily: 'mono', pt: 2, color: 'gray' }}>
+                    ^ Payments are not yet enabled on your Stripe account. You'll be redirected to Stripe to continue
+                    setting up your account.
+                  </Text>
+                )}
+              </Box>
+            </Box>
+            {stripeAccount && (
               <Box>
                 <Flex sx={{ alignItems: 'center' }}>
                   <Flex>
-                    <Label sx={{ bg: 'lightBlue', p: 1, borderRadius: '8px 8px 0px 0px' }}>
+                    <Label sx={{ bg: tipsEnabled ? 'lightGreen' : 'offWhite', p: 1, borderRadius: '8px 8px 0px 0px' }}>
                       <Flex sx={{ alignItems: 'center' }}>
-                        <Text variant="small">{stripeAccount ? 'Connected to Stripe' : 'Connect Stripe account'}</Text>
+                        <Checkbox defaultChecked={tipsEnabled} onChange={(e) => setTipsEnabled(e.target.checked)} />
+                        <Text variant="small">Enable tips</Text>
                       </Flex>
                     </Label>
                   </Flex>
                 </Flex>
                 <Box
                   sx={{
-                    p: 2,
+                    px: 2,
+                    py: 1,
+                    mb: 2,
                     borderRadius: 4,
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    border: `1px dashed lightBlue`,
+                    border: `1px ${tipsEnabled ? 'dashed' : 'none'} lightGreen`,
                     bg: 'offWhite',
                   }}
                 >
-                  <Flex sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
-                    {stripeAccount && (
-                      <Text variant="tiny" sx={{ fontFamily: 'mono' }}>
-                        {stripeAccount['id']}
-                      </Text>
-                    )}
-                    {session && ADMINS.includes(session.user.username) && (
-                      <Button
-                        variant="tiny"
-                        sx={{ fontSize: 11 }}
-                        onClick={() => {
-                          disconnectStripe();
-                        }}
-                      >
-                        Disconnect Stripe
-                      </Button>
-                    )}
-                  </Flex>
-                  {!stripeAccount && (
-                    <Text variant="small" sx={{ fontFamily: 'mono' }}>
-                      Monetize your <Badge variant="outline">tray</Badge> by collecting tips.
-                    </Text>
-                  )}
-                  {!stripeAccount ||
-                    (stripeAccount && !stripeAccount['charges_enabled'] && (
-                      <Box pt={2}>
-                        <Button
-                          variant="shadowButton"
-                          mr={2}
-                          onClick={async () => {
-                            try {
-                              const response = await fetchJson('/api/connect_stripe', {
-                                method: 'POST',
-                              });
-                              const url = response.url;
-                              window.location.assign(url);
-                            } catch (e) {
-                              // TODO: handle error
-                            }
-                          }}
-                        >
-                          {stripeAccount && !stripeAccount['charges_enabled'] ? 'Complete onboarding' : 'Get started'}
-                        </Button>{' '}
-                      </Box>
-                    ))}
-                  {!stripeAccount && (
-                    <Text variant="tiny" sx={{ fontFamily: 'mono', pt: 3, color: 'gray' }}>
-                      ^ You'll be redirected to create an account with Stripe, our payments provider. Stripe collects a{' '}
-                      <Link variant="primary" href="https://stripe.com/pricing#pricing-details">
-                        fee
-                      </Link>{' '}
-                      on payments.
-                    </Text>
-                  )}
-                  {stripeAccount && !stripeAccount['charges_enabled'] && (
-                    <Text variant="tiny" sx={{ fontFamily: 'mono', pt: 2, color: 'gray' }}>
-                      ^ Payments are not yet enabled on your Stripe account. You'll be redirected to Stripe to continue
-                      setting up your account.
-                    </Text>
+                  <Box sx={{ alignItems: 'center', mb: 2 }}>
+                    <Label sx={{ mb: 2 }}>Button text</Label>
+                    <Input
+                      disabled={!tipsEnabled}
+                      variant="standardInput"
+                      sx={{ textAlign: 'center', bg: 'transparent', border: `1px dotted lightGray` }}
+                      defaultValue={tipText}
+                      onChange={(e) => setTipText(e.target.value)}
+                    />
+                  </Box>
+                  <Box sx={{ alignItems: 'center', mb: 0 }}>
+                    <Label sx={{ mb: -3 }}>Default amount</Label>
+                    <NumberFormat
+                      disabled={!tipsEnabled}
+                      name="amount"
+                      id="amount"
+                      decimalScale={0}
+                      allowEmptyFormatting={true}
+                      allowNegative={false}
+                      type="tel"
+                      defaultValue={(defaultTipAmount as number) / 100.0}
+                      displayType={'input'}
+                      thousandSeparator={true}
+                      prefix={'$'}
+                      customInput={Input}
+                      renderText={(value) => <Input value={value} />}
+                      onValueChange={(values) => setDefaultTipAmount(~~(values.floatValue * 100))}
+                    />
+                  </Box>
+                  {tipsEnabled && (
+                    <Label>
+                      <Flex sx={{ alignItems: 'center' }}>
+                        <Checkbox
+                          disabled={!tipsEnabled}
+                          defaultChecked={hideTipsFeed}
+                          onChange={(e) => setHideTipsFeed(e.target.checked)}
+                        />
+                        <Text variant="tiny">Hide feed</Text>
+                      </Flex>
+                    </Label>
                   )}
                 </Box>
               </Box>
-              {stripeAccount && (
-                <Box>
-                  <Flex sx={{ alignItems: 'center' }}>
-                    <Flex>
-                      <Label
-                        sx={{ bg: tipsEnabled ? 'lightGreen' : 'offWhite', p: 1, borderRadius: '8px 8px 0px 0px' }}
-                      >
-                        <Flex sx={{ alignItems: 'center' }}>
-                          <Checkbox defaultChecked={tipsEnabled} onChange={(e) => setTipsEnabled(e.target.checked)} />
-                          <Text variant="small">Enable tips</Text>
-                        </Flex>
-                      </Label>
-                    </Flex>
-                  </Flex>
-                  <Box
-                    sx={{
-                      px: 2,
-                      py: 1,
-                      mb: 2,
-                      borderRadius: 4,
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      border: `1px ${tipsEnabled ? 'dashed' : 'none'} lightGreen`,
-                      bg: 'offWhite',
-                    }}
-                  >
-                    <Box sx={{ alignItems: 'center', mb: 2 }}>
-                      <Label sx={{ mb: 2 }}>Button text</Label>
-                      <Input
-                        disabled={!tipsEnabled}
-                        variant="standardInput"
-                        sx={{ textAlign: 'center', bg: 'transparent', border: `1px dotted lightGray` }}
-                        defaultValue={tipText}
-                        onChange={(e) => setTipText(e.target.value)}
-                      />
-                    </Box>
-                    <Box sx={{ alignItems: 'center', mb: 0 }}>
-                      <Label sx={{ mb: -3 }}>Default amount</Label>
-                      <NumberFormat
-                        disabled={!tipsEnabled}
-                        name="amount"
-                        id="amount"
-                        decimalScale={0}
-                        allowEmptyFormatting={true}
-                        allowNegative={false}
-                        type="tel"
-                        defaultValue={(defaultTipAmount as number) / 100.0}
-                        displayType={'input'}
-                        thousandSeparator={true}
-                        prefix={'$'}
-                        customInput={Input}
-                        renderText={(value) => <Input value={value} />}
-                        onValueChange={(values) => setDefaultTipAmount(~~(values.floatValue * 100))}
-                      />
-                    </Box>
-                    {tipsEnabled && (
-                      <Label>
-                        <Flex sx={{ alignItems: 'center' }}>
-                          <Checkbox
-                            disabled={!tipsEnabled}
-                            defaultChecked={hideTipsFeed}
-                            onChange={(e) => setHideTipsFeed(e.target.checked)}
-                          />
-                          <Text variant="tiny">Hide feed</Text>
-                        </Flex>
-                      </Label>
-                    )}
-                  </Box>
-                </Box>
-              )}
-            </Box>
+            )}
+          </Box>
 
-            <Flex sx={{ bg: 'transparent', flexDirection: 'row-reverse', mt: 3 }}>
-              <Button onClick={() => signOut()} variant="tiny" sx={{ color: 'lightGray', cursor: 'pointer' }}>
-                <SignOutButtonIcon />
-              </Button>
-            </Flex>
-          </Card>
-        )}
-      </Layout>
-    </Elements>
+          <Flex sx={{ bg: 'transparent', flexDirection: 'row-reverse', mt: 3 }}>
+            <Button onClick={() => signOut()} variant="tiny" sx={{ color: 'lightGray', cursor: 'pointer' }}>
+              <SignOutButtonIcon />
+            </Button>
+          </Flex>
+        </Card>
+      )}
+    </Layout>
   );
 };
 

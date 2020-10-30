@@ -6,13 +6,19 @@ import NumberFormat from 'react-number-format';
 import MinusButtonIcon from './MinusButtonIcon';
 import PaymentFeedBlock from './PaymentFeedBlock';
 import PlusButtonIcon from './PlusButtonIcon';
-import { useStripe } from '@stripe/react-stripe-js';
+// import { useStripe } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 
 const PaymentBlock = (props) => {
   const [showingForm, setShowingForm] = useState(false);
   const [amount, setAmount] = useState(props.defaultAmount as number);
   const firstInputRef = useRef<HTMLInputElement | null>(null);
-  const stripe = useStripe();
+  const stripeAccount = props.stripeAccount;
+  let stripeKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+  if (props.signedIn) {
+    stripeKey = process.env.NEXT_PUBLIC_STRIPE_TEST_PUBLISHABLE_KEY;
+  }
+  const stripePromise = loadStripe(stripeKey, { stripeAccount: stripeAccount['id'] });
 
   useEffect(() => {
     if (showingForm) {
@@ -24,8 +30,8 @@ const PaymentBlock = (props) => {
     if (e) {
       e.preventDefault();
     }
-    const message = e.currentTarget.message.value;
-    const body = { amount: amount, message: message };
+    const stripe = await stripePromise;
+    const body = { amount: amount, message: firstInputRef.current.value };
     let checkoutSessionId = null;
     try {
       const response = await fetchJson('/api/create_checkout_session', {
@@ -33,7 +39,6 @@ const PaymentBlock = (props) => {
         body: JSON.stringify(body),
       });
       checkoutSessionId = response.id;
-      console.dir(response);
     } catch (e) {
       // TODO: handle errors (in this entire function)
       console.error(e);
