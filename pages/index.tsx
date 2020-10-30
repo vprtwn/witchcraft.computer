@@ -5,7 +5,7 @@ import TrayIcon from '../components/TrayIcon';
 import SignInButton from '../components/SignInButton';
 import MarketingFooter from '../components/MarketingFooter';
 import fetchJson from '../lib/fetchJson';
-import { Box, Button, Card } from 'theme-ui';
+import { Flex, Text, Link, Box, Button, Card } from 'theme-ui';
 import { GetServerSideProps } from 'next';
 import Router, { useRouter } from 'next/router';
 import { signIn, getSession, useSession } from 'next-auth/client';
@@ -23,8 +23,8 @@ const IndexPage = () => {
       <TrayIcon />
       <Card variant="aboutCard">
         <AboutTray />
-        {signedIn && <SignInButton />}
       </Card>
+      {!signedIn && <SignInButton />}
       <MarketingFooter />
     </Layout>
   );
