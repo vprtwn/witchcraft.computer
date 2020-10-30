@@ -4,15 +4,18 @@ import { signIn } from 'next-auth/client';
 const AboutTray = (props) => {
   return (
     <Box>
-      <Text>
+      <Text variant="large">
         Welcome to <Badge variant="outline">tray</Badge>
-        <strong>:</strong> a minimal space to publish notes and links. This is{' '}
+        <strong>:</strong> a minimal space to publish notes and links. 
+      </Text>
+      <Text variant="large" mt={3}>
+        This is{' '}
         <Link href="http://paulgraham.com/early.html" variant="primary">
           early work
         </Link>
         . On the roadmap: nested pages, audio, analytics, subscriptions, and subscriber-only content.
       </Text>
-      <Text variant="tiny" sx={{ pt: 3, pb: 2, color: 'gray' }}>
+      {/* <Text variant="tiny" sx={{ pt: 3, pb: 2, color: 'gray' }}>
         <Badge variant="outline" sx={{ fontSize: 10, color: 'gray' }}>
           tray
         </Badge>{' '}
@@ -20,7 +23,7 @@ const AboutTray = (props) => {
         <Link variant="primary" href="https://tray.club/@bgdotjpg">
           @bgdotjpg
         </Link>
-      </Text>
+      </Text> */}
     </Box>
   );
 };

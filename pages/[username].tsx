@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
 import Header from '../components/Header';
 import TextBlock from '../components/TextBlock';
@@ -25,7 +25,9 @@ import SignOutButtonIcon from '../components/SignOutButtonIcon';
 import NewMenu from '../components/NewMenu';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import PaymentFeedBlock from '../components/PaymentFeedBlock';
+import { useSession } from 'next-auth/client';
+
+const ADMINS = ['bgdotjpg'];
 
 let DEBUG = true;
 if (process.env.NODE_ENV === 'production') {
@@ -50,6 +52,26 @@ const UserPage = (props) => {
     }
   };
 
+  const fetchStripeConnected = async () => {
+    try {
+      const response = await fetchJson('/api/stripe_connected', {
+        method: 'GET',
+      });
+      console.dir(response);
+      setStripeAccount(response.account);
+    } catch (e) {
+      console.error(e);
+      return;
+    }
+  };
+
+  useEffect(() => {
+    fetchStripeConnected();
+  }, []);
+
+  const [session, loading] = useSession();
+  const signedIn = session && session.user.username;
+
   // block ordering, [{i: "b.text.A1B2"}, ...]
   const initialOrder = readBlockOrder(props.metadata) || [];
   const paymentSettings = readDict(props.metadata, 'payment_settings');
@@ -61,13 +83,12 @@ const UserPage = (props) => {
   const [showingNewMenu, setShowingNewMenu] = useState(false);
   const [previewing, setPreviewing] = useState(DEBUG ? false : true);
   const [metadata, setMetadata] = useState(props.metadata);
-  const initialStripeAccount = readDict(props.metadata, 'stripe_account');
-  const [stripeAccount, setStripeAccount] = useState(initialStripeAccount);
+  const [stripeAccount, setStripeAccount] = useState<object | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const stripeOpts = {};
   if (stripeAccount) {
-    stripeOpts['stripeAccount'] = stripeAccount.id;
+    stripeOpts['stripeAccount'] = stripeAccount['id'];
   }
   let stripeKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
   if (props.signedIn) {
@@ -314,59 +335,80 @@ const UserPage = (props) => {
         {props.signedIn && (
           <Card variant="block" sx={{ p: 3, mb: 4, border: '1px dotted lightGray' }}>
             <Box>
-              {!stripeAccount && (
-                <Box>
-                  <Flex sx={{ alignItems: 'center' }}>
-                    <Flex>
-                      <Label sx={{ bg: 'lightBlue', p: 1, borderRadius: '8px 8px 0px 0px' }}>
-                        <Flex sx={{ alignItems: 'center' }}>
-                          <Text variant="small">Connect Stripe account</Text>
-                        </Flex>
-                      </Label>
-                    </Flex>
+              <Box>
+                <Flex sx={{ alignItems: 'center' }}>
+                  <Flex>
+                    <Label sx={{ bg: 'lightBlue', p: 1, borderRadius: '8px 8px 0px 0px' }}>
+                      <Flex sx={{ alignItems: 'center' }}>
+                        <Text variant="small">{stripeAccount ? 'Connected to Stripe' : 'Connect Stripe account'}</Text>
+                      </Flex>
+                    </Label>
                   </Flex>
-                  <Box
-                    sx={{
-                      p: 2,
-                      borderRadius: 4,
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      border: `1px dashed lightBlue`,
-                      bg: 'offWhite',
-                    }}
-                  >
-                    <Text variant="small" sx={{ fontFamily: 'mono' }}>
-                      Monetize your <Badge variant="outline">tray</Badge> by collecting tips.
-                    </Text>
-                    <Box pt={3}>
+                </Flex>
+                <Box
+                  sx={{
+                    p: 2,
+                    borderRadius: 4,
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    border: `1px dashed lightBlue`,
+                    bg: 'offWhite',
+                  }}
+                >
+                  {!stripeAccount && (
+                    <Box>
+                      <Text variant="small" sx={{ fontFamily: 'mono' }}>
+                        Monetize your <Badge variant="outline">tray</Badge> by collecting tips.
+                      </Text>
+                      <Box pt={3}>
+                        <Button
+                          variant="shadowButton"
+                          mr={2}
+                          onClick={async () => {
+                            try {
+                              const response = await fetchJson('/api/connect_stripe', {
+                                method: 'POST',
+                              });
+                              const url = response.url;
+                              window.location.assign(url);
+                            } catch (e) {
+                              // TODO: handle error
+                            }
+                          }}
+                        >
+                          Get started
+                        </Button>{' '}
+                      </Box>
+                      <Text variant="tiny" sx={{ fontFamily: 'mono', pt: 3, color: 'gray' }}>
+                        ^ You'll be redirected to create an account with Stripe, our payments provider. Stripe collects
+                        a{' '}
+                        <Link variant="primary" href="https://stripe.com/pricing#pricing-details">
+                          fee
+                        </Link>{' '}
+                        on payments.
+                      </Text>
+                    </Box>
+                  )}
+                  <Flex sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
+                    {stripeAccount && (
+                      <Text variant="tiny" sx={{ fontFamily: 'mono' }}>
+                        {stripeAccount['id']}
+                      </Text>
+                    )}
+                    {session && ADMINS.includes(session.user.username) && (
                       <Button
-                        variant="shadowButton"
-                        mr={2}
-                        onClick={async () => {
-                          try {
-                            const response = await fetchJson('/api/connect_stripe', {
-                              method: 'POST',
-                            });
-                            const url = response.url;
-                            window.location.assign(url);
-                          } catch (e) {
-                            // TODO: handle error
-                          }
+                        variant="tiny"
+                        sx={{ fontSize: 11 }}
+                        onClick={() => {
+                          disconnectStripe();
                         }}
                       >
-                        Get started
-                      </Button>{' '}
-                    </Box>
-                    <Text variant="tiny" sx={{ fontFamily: 'mono', pt: 3, color: 'gray' }}>
-                      ^ You'll be redirected to create an account with Stripe, our payments provider. Stripe collects a{' '}
-                      <Link variant="primary" href="https://stripe.com/pricing#pricing-details">
-                        fee
-                      </Link>{' '}
-                      on payments.
-                    </Text>
-                  </Box>
+                        Disconnect Stripe
+                      </Button>
+                    )}
+                  </Flex>
                 </Box>
-              )}
+              </Box>
               {stripeAccount && (
                 <Box>
                   <Flex sx={{ alignItems: 'center' }}>
@@ -422,47 +464,19 @@ const UserPage = (props) => {
                         onValueChange={(values) => setDefaultTipAmount(~~(values.floatValue * 100))}
                       />
                     </Box>
-                    <Label>
-                      <Flex sx={{ alignItems: 'center' }}>
-                        <Checkbox
-                          disabled={!tipsEnabled}
-                          defaultChecked={hideTipsFeed}
-                          onChange={(e) => setHideTipsFeed(e.target.checked)}
-                        />
-                        <Text variant="tiny">Hide feed</Text>
-                      </Flex>
-                    </Label>
-                  </Box>
-                  <Flex sx={{ mt: 3 }}>
-                    <Flex>
-                      <Label sx={{ bg: 'lightBlue', p: 1, borderRadius: '8px 8px 0px 0px' }}>
-                        <Text variant="small">Connected to Stripe</Text>
+                    {tipsEnabled && (
+                      <Label>
+                        <Flex sx={{ alignItems: 'center' }}>
+                          <Checkbox
+                            disabled={!tipsEnabled}
+                            defaultChecked={hideTipsFeed}
+                            onChange={(e) => setHideTipsFeed(e.target.checked)}
+                          />
+                          <Text variant="tiny">Hide feed</Text>
+                        </Flex>
                       </Label>
-                    </Flex>
-                  </Flex>
-                  <Flex
-                    sx={{
-                      p: 2,
-                      borderRadius: 4,
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      border: `1px dashed lightBlue`,
-                      bg: 'offWhite',
-                    }}
-                  >
-                    {/* TODO: check if Stripe account has payments enabled */}
-                    <Text sx={{ fontSize: 13 }}>{stripeAccount.name}</Text>
-                    <Button
-                      variant="tiny"
-                      sx={{ ml: 2 }}
-                      onClick={() => {
-                        disconnectStripe();
-                      }}
-                    >
-                      Disconnect Stripe
-                    </Button>{' '}
-                  </Flex>
-                  {errorMessage && <Text variant="small">{errorMessage}</Text>}
+                    )}
+                  </Box>
                 </Box>
               )}
             </Box>

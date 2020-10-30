@@ -245,8 +245,7 @@ export const connectStripeAccount = async (session: any): Promise<AnyResponse> =
       if (!stripeAccountId) {
         const email = customer.metadata['email'];
         const description = customer.metadata['twitter_description'];
-        const twitterId = customer.metadata['twitter_id'];
-        const twitterUrl = `https://twitter.com/i/user/${twitterId}`;
+        const twitterUrl = `https://twitter.com/${username}`;
         const bizName = `tray.club/@${username}`;
         try {
           console.log("Creating Stripe account");
@@ -255,8 +254,17 @@ export const connectStripeAccount = async (session: any): Promise<AnyResponse> =
             business_type: 'individual',
             email: email,
             individual: { email: email },
+            company: {
+              name: bizName,
+            },
+            settings: {
+              payments: {
+                statement_descriptor: bizName,
+              }
+            },
             business_profile: {
               name: bizName,
+              mcc: '5192',
               product_description: description,
               url: twitterUrl,
               // TODO: file stripe bug

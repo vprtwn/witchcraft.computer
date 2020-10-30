@@ -70,7 +70,7 @@ export default {
       },
     },
     shadowButton: {
-      border: 'solid 1px lightGray',
+      border: 'dotted 1px lightGray',
       borderRadius: 12,
       bg: 'white',
       color: 'text',
@@ -230,6 +230,9 @@ export default {
     },
     small: {
       fontSize: '13px',
+    },
+    large: {
+      fontSize: '14px',
     },
     heading: {
       fontFamily: 'heading',
