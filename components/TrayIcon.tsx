@@ -7,9 +7,7 @@ const TrayIcon = () => {
         flexDirection: 'row',
         alignItems: 'stretch',
         alignContent: 'stretch',
-        background: 'linear-gradient(-45deg, #e6fffa, #faf5ff, #ebf8ff)',
-        backgroundSize: '400% 400%',
-        animation: 'gradient 10s ease infinite',
+        
       }}
     >
       <Box sx={{ bg: 'white', flexGrow: 1 }} />
