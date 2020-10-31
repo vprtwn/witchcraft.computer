@@ -15,6 +15,10 @@ const MarketingFooter = (props) => {
             policies
           </Link>
           |
+          <Link href="/faq" variant="nav" sx={{ mx: 2, py: 1, fontSize: '11px', color: 'black', fontWeight: 'normal' }}>
+            FAQ
+          </Link>
+          |
           <Link
             href="https://twitter.com/trayclub"
             variant="nav"

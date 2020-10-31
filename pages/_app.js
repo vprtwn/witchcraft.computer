@@ -19,14 +19,6 @@ const components = {
                 <Badge variant="outline">tray</Badge>
               </Link>
             </Box>
-            <Box flex="1 1 auto" mx={1} sx={{ fontWeight: 'bold' }}>
-              :
-            </Box>
-            <Box>
-              <Link href="/policies" variant="nav">
-                policies
-              </Link>
-            </Box>
           </Flex>
           <main {...props} />
         </Card>
