@@ -85,6 +85,7 @@ const UserPage = (props) => {
   const [metadata, setMetadata] = useState(props.metadata);
   const [stripeAccount, setStripeAccount] = useState<object | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [debugObject, setDebugObject] = useState<string | null>(props);
 
   useEffect(() => {
     const newSettings = {
@@ -93,15 +94,25 @@ const UserPage = (props) => {
       enabled: tipsEnabled,
       hideFeed: hideTipsFeed,
     };
-    syncTipSettings(newSettings);
+    syncPaymentSettings(newSettings);
   }, [tipText, tipsEnabled, defaultTipAmount, hideTipsFeed]);
 
-  const syncTipSettings = async function (newSettings: object) {
+  const syncPaymentSettings = async function (newSettings: object) {
     try {
-      await postMetadataUpdate('payment_settings', newSettings, props.customerId, props.username);
-      // don't need to call setMetadata if updating order only
+      const payload = metadata;
+      payload['payment_settings'] = newSettings;
+      const params = {
+        uploadUrl: props.uploadUrl,
+        payload: payload,
+      };
+      const result = await fetchJson('api/upload', {
+        method: 'POST',
+        body: JSON.stringify(params),
+      });
+      setDebugObject(result);
     } catch (e) {
       console.error(e);
+      setDebugObject(e);
     }
   };
 
@@ -168,86 +179,13 @@ const UserPage = (props) => {
     setOrder(newItems);
   };
 
-  const generateUrl = async function () {
-    try {
-      const response = await fetchJson('/api/upload_url', {
-        method: 'GET',
-      });
-      console.dir(response);
-    } catch (e) {
-      setErrorMessage(e.message);
-    }
-  };
-
-  const upload = async function () {
-    const Uppy = require('@uppy/core');
-    const UppyS3 = require('@uppy/aws-s3');
-    const uppy = Uppy.Core({
-      id: 'uppyUpload', // use an id if you plan to use multiple Uppys (on different pages etc.)
-      autoProceed: false, // if true the file uploads as soon as you drag it into the upload area, or select it - your user cannot edit file name or add metadata or tags - for this reason, we use 'false'
-      restrictions: {
-        // we can add restrictions here:
-        maxFileSize: 31457280, //i.e. 30MB
-        maxNumberOfFiles: 20,
-        minNumberOfFiles: null, // if null, no minimum requirement
-        allowedFileTypes: null, // can use an array of extensions, i.e. ['.doc', '.docx', '.xls', '.xlsx']
-      },
-      logger: Uppy.debugLogger, // use this for debugging to see what's gone wrong
-    });
-    uppy.use(UppyS3, {
-      // use the AwsS3 plugin
-      fields: [], // empty array
-      getUploadParameters(file) {
-        // here we prepare our request to the server for the upload URL
-        return fetch('/uploader', {
-          // we'll send the info asynchronously via fetch to our nodejs server endpoint, '/uploader' in this case
-          method: 'POST', // all the examples I found via the Uppy site used 'PUT' and did not work
-          headers: {
-            'content-type': 'application/x-www-form-urlencoded', // examples I found via the Uppy site used 'content-type': 'application/json' and did not work
-          },
-          body: JSON.stringify({
-            filename: file.name, // here we are passing data to the server/back end
-            contentType: file.type,
-            metadata: {
-              name: file.meta['name'], // here we pass the 'name' variable to the back end, with 'file.meta['name']' referring to the 'name' from our metaFields id above
-              caption: file.meta['caption'], // here we pass the 'caption' variable to the back end, with 'file.meta['caption']' referring to the 'caption' from our metaFields id above
-            },
-          }),
-        })
-          .then((response) => {
-            return response.json(); // return the server's response as a JSON promise
-          })
-          .then((data) => {
-            console.log('>>>', data); // here you can have a look at the data the server sent back - get rid of this for production!
-            return {
-              method: data.method, // here we send method, url, fields and headers to the AWS S3 bucket
-              url: data.url,
-              fields: data.fields,
-              headers: data.headers,
-            };
-          });
-      },
-    });
-    uppy.on('complete', (result) => {
-      if (result.successful) {
-        console.log('Upload complete! We’ve uploaded these files:', result.successful); // if upload succeeds, let's see what we uploaded
-      } else {
-        console.log('Upload error: ', result.failed); // if upload failed, let's see what went wrong
-      }
-    });
-  };
-
   return (
     <Layout>
-      <Button
-        onClick={async () => {
-          await generateUrl();
-        }}
-      >
-        generate url
-      </Button>
+      <Textarea rows={10} sx={{ borderColor: 'blue', my: 4 }}>
+        {JSON.stringify(debugObject, null, 2)}
+      </Textarea>
       {props.error && (
-        <Textarea my={4} rows={10}>
+        <Textarea rows={10} sx={{ borderColor: 'red', my: 4 }}>
           {JSON.stringify(props.error, null, 2)}
         </Textarea>
       )}
@@ -595,6 +533,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   let error = null;
   let customer = null;
   let signedIn = false; // signed in as this user
+  let uploadUrl = null;
   let sessionUsername = null;
   // signedIn: check session against url
   if (session && session.user.username) {
@@ -604,6 +543,25 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   let response = null;
   if (signedIn) {
     response = await getOrCreateCustomer(session, signedIn);
+
+    try {
+      const AWS = require('aws-sdk');
+      const s3 = new AWS.S3();
+      const config = { accessKeyId: process.env.S3_ACCESS_KEY_ID, secretAccessKey: process.env.S3_SECRET };
+      AWS.config.update(config);
+
+      uploadUrl = await s3.getSignedUrlPromise('putObject', {
+        Bucket: 'traypages',
+        Key: `@${username}`,
+        ContentType: 'application/json',
+      });
+    } catch (e) {
+      return {
+        props: {
+          error: e,
+        },
+      };
+    }
   } else {
     response = await getCustomer(username);
   }
@@ -624,6 +582,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
     props: {
       username: username,
+      uploadUrl: uploadUrl,
       name: metadata.name,
       profileImage: metadata.profile_image,
       metadata: metadata,

@@ -4,7 +4,7 @@ import fetchJson from '../lib/fetchJson';
 
 export const postMetadataUpdate = async (
   key: string,
-  value: object,
+  value: object | string,
   customerId: string,
   username: string,
   removedKey: string | null = null, // this is ugly
