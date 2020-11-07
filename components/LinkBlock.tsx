@@ -3,7 +3,6 @@ import { Card, Input, Flex, Box } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
 import EditToolbar from './EditToolbar';
 import { updatePage } from '../lib/metadataUtils';
-import { readDict } from '../lib/metadataUtils';
 import isUrl from 'is-url';
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -11,11 +10,9 @@ const DEBOUNCE_MS = 700;
 
 const LinkBlock = (props) => {
   const signedIn = props.signedIn;
-  // blocks read from all metadata, which is meh but ok
   const [editing, setEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const content = readDict(props.metadata, props.id);
-  console.log('content', JSON.stringify(content, null, 2));
+  const content = props.metadata[props.id];
   const initialText = content ? (content.text as string) : '';
   const initialUrl = content ? (content.url as string) : '';
   const initialComment = content ? (content.comment as string) : '';

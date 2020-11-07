@@ -24,6 +24,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
   const customer = customerRes.data as Stripe.Customer;
   const stripeAccountId = customer.metadata['stripe_account_id'];
+  if (!stripeAccountId) {
+    return res.json({});
+  }
   try {
     const account = await stripe.accounts.retrieve(stripeAccountId);
     return res.json({ account: account });

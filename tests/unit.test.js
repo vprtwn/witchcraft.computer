@@ -1,4 +1,4 @@
-import { readDict, readString, readBlockOrder, syncMetadata } from '../lib/metadataUtils';
+import { readDict, readString, readBlockOrder } from '../lib/metadataUtils';
 import { BlockType } from '../lib/typedefs';
 import { parseBlockId, usernameFromUrl } from '../lib/utils';
 

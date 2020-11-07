@@ -1,8 +1,5 @@
 import Stripe from 'stripe';
 
-export type Metadata = Record<string, Record<string, string> | string | null>;
-export type MetadataValue = Record<string, string>[] | Record<string, string> | string | null;
-
 export type OrderItem = Record<string, string>;
 
 export interface StripeAccountData {

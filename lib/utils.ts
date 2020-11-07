@@ -97,7 +97,7 @@ export const usernameFromUrl = (inputUrl: string): string | null => {
 };
 
 export const emailFromUsername = (username: string): string => {
-  return `${username}+twitter@jar.bio`;
+  return `${username}+twitter@tray.club`;
 };
 
 export const generateUserPath = (username: string): string => {

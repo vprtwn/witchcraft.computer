@@ -11,7 +11,10 @@ const DEBOUNCE_MS = 700;
 const TextBlock = (props) => {
   const signedIn = props.signedIn;
   // blocks read from all metadata, which is meh but ok
-  let initialText = readString(props.metadata, props.id, props.signedIn ? props.default : null);
+  let initialText = props.metadata[props.id];
+  if (props.signedIn && !initialText) {
+    initialText = props.default;
+  }
   const [editing, setEditing] = useState(false);
   const [text, setText] = useState(initialText);
   const [debouncedText] = useDebounce(text, DEBOUNCE_MS);

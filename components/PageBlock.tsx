@@ -14,8 +14,7 @@ const PageBlock = (props) => {
   // blocks read from all metadata, which is meh but ok
   const [editing, setEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const content = readDict(props.metadata, props.id);
-  console.log('content', JSON.stringify(content, null, 2));
+  const content = props.metadata[props.id];
   const initialText = content ? (content.text as string) : '';
   const [text, setText] = useState<string>(initialText);
   const [debouncedText] = useDebounce(text, DEBOUNCE_MS);

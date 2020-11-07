@@ -1,4 +1,4 @@
-import { Metadata, MetadataValue, OrderItem } from './typedefs';
+import { OrderItem } from './typedefs';
 import Stripe from 'stripe';
 import fetchJson from '../lib/fetchJson';
 
@@ -34,11 +34,7 @@ export const updatePage = async (
   }
 };
 
-export const readString = (
-  metadata: Stripe.Metadata | null,
-  key: string,
-  defaultVal: string | null = null,
-): string | null => {
+export const readString = (metadata: object | null, key: string, defaultVal: string | null = null): string | null => {
   if (!metadata) {
     return null;
   }
@@ -57,7 +53,7 @@ export const readString = (
 };
 
 export const readDict = (
-  metadata: Stripe.Metadata | null,
+  metadata: object | null,
   key: string,
   defaultVal: Record<string, string | number | null> | null = null,
 ): Record<string, string | number | null> | null => {
@@ -79,11 +75,11 @@ export const readDict = (
 };
 
 export const readBlockOrder = (
-  metadata: Stripe.Metadata | null,
+  metadata: object | null,
   defaultVal: Array<OrderItem> | null = null,
 ): Array<OrderItem> | null => {
   if (!metadata) {
-    return null;
+    return defaultVal;
   }
   let value = null;
   if (metadata['b.order']) {

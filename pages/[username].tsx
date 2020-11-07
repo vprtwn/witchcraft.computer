@@ -53,8 +53,9 @@ const UserPage = (props) => {
       const response = await fetchJson('/api/stripe_connected', {
         method: 'GET',
       });
-      console.dir(response);
-      setStripeAccount(response.account);
+      if (response.account) {
+        setStripeAccount(response.account);
+      }
     } catch (e) {
       console.error(e);
       return;
@@ -69,12 +70,12 @@ const UserPage = (props) => {
   const signedIn = session && session.user.username;
 
   // block ordering, [{i: "b.text.A1B2"}, ...]
-  const initialOrder = readBlockOrder(props.metadata) || [];
   const paymentSettings = readDict(props.metadata, 'payment_settings');
   const [tipsEnabled, setTipsEnabled] = useState(paymentSettings ? paymentSettings.enabled : false);
   const [tipText, setTipText] = useState(paymentSettings ? paymentSettings.text : 'Leave a tip');
   const [defaultTipAmount, setDefaultTipAmount] = useState(paymentSettings ? paymentSettings.defaultAmount : 500);
   const [hideTipsFeed, setHideTipsFeed] = useState(paymentSettings ? paymentSettings.hideFeed : false);
+  const initialOrder = props.metadata['b.order'];
   const [order, setOrder] = useState(initialOrder);
   const [showingNewMenu, setShowingNewMenu] = useState(false);
   const [previewing, setPreviewing] = useState(DEBUG ? false : true);
@@ -163,6 +164,11 @@ const UserPage = (props) => {
 
   return (
     <Layout>
+      {DEBUG && (
+        <Textarea rows={10} sx={{ borderColor: 'blue', my: 4 }}>
+          {JSON.stringify(props.metadata, null, 2)}
+        </Textarea>
+      )}
       {props.error && (
         <Textarea rows={10} sx={{ borderColor: 'red', my: 4 }}>
           {JSON.stringify(props.error, null, 2)}
@@ -365,7 +371,7 @@ const UserPage = (props) => {
                       {stripeAccount['id']}
                     </Text>
                   )}
-                  {session && ['bgdotjpg'].includes(session.user.username) && (
+                  {stripeAccount && session && ['bgdotjpg'].includes(session.user.username) && (
                     <Button
                       variant="tiny"
                       sx={{ fontSize: 11 }}
@@ -382,30 +388,29 @@ const UserPage = (props) => {
                     Monetize your <Badge variant="outline">tray</Badge> by collecting tips.
                   </Text>
                 )}
-                {!stripeAccount ||
-                  (stripeAccount && !stripeAccount['charges_enabled'] && (
-                    <Box pt={2}>
-                      <Button
-                        variant="shadowButton"
-                        mr={2}
-                        onClick={async () => {
-                          try {
-                            const response = await fetchJson('/api/connect_stripe', {
-                              method: 'POST',
-                            });
-                            const url = response.url;
-                            window.location.assign(url);
-                          } catch (e) {
-                            // TODO: handle error
-                          }
-                        }}
-                      >
-                        {stripeAccount && !stripeAccount['charges_enabled'] ? 'Complete onboarding' : 'Get started'}
-                      </Button>{' '}
-                    </Box>
-                  ))}
+                {(!stripeAccount || (stripeAccount && !stripeAccount['charges_enabled'])) && (
+                  <Box pt={2}>
+                    <Button
+                      variant="shadowButton"
+                      mr={2}
+                      onClick={async () => {
+                        try {
+                          const response = await fetchJson('/api/connect_stripe', {
+                            method: 'POST',
+                          });
+                          const url = response.url;
+                          window.location.assign(url);
+                        } catch (e) {
+                          // TODO: handle error
+                        }
+                      }}
+                    >
+                      {stripeAccount && !stripeAccount['charges_enabled'] ? 'Complete onboarding' : 'Get started'}
+                    </Button>{' '}
+                  </Box>
+                )}
                 {!stripeAccount && (
-                  <Text variant="tiny" sx={{ fontFamily: 'mono', pt: 3, color: 'gray' }}>
+                  <Text variant="tiny" sx={{ fontFamily: 'mono', pt: 2, color: 'gray' }}>
                     ^ You'll be redirected to create an account with Stripe, our payments provider. Stripe collects a{' '}
                     <Link variant="primary" href="https://stripe.com/pricing#pricing-details">
                       fee
@@ -581,8 +586,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       })
       .promise();
     const object = data.Body.toString('utf-8');
-    metadata = object;
-    console.log(JSON.parse(metadata));
+    metadata = JSON.parse(object);
   } catch (e) {
     return {
       props: {

@@ -1,5 +1,5 @@
 import Stripe from 'stripe';
-import { ErrorResponse, CustomerOpResponse, AnyResponse, Metadata } from './typedefs';
+import { ErrorResponse, CustomerOpResponse, AnyResponse } from './typedefs';
 import { emailFromUsername } from './utils';
 
 /**
@@ -102,10 +102,11 @@ export const getCustomer = async (username: string): Promise<CustomerOpResponse>
   return response;
 };
 
-export const updateCustomerStripeAccountId = async (
+export const updateCustomerMetadata = async (
   session: any,
   customer: Stripe.Customer,
-  stripeAccountId: string | null,
+  key: string,
+  value: string | null,
 ): Promise<CustomerOpResponse> => {
   let errorResponse: ErrorResponse | null = null;
   let customerResponse: Stripe.Customer | null = null;
@@ -127,9 +128,11 @@ export const updateCustomerStripeAccountId = async (
   }
   if (!errorResponse) {
     try {
+      const metadata = {};
+      metadata[key] = value;
       const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
       customerResponse = await stripe.customers.update(customer.id, {
-        metadata: { stripe_account_id: stripeAccountId },
+        metadata: metadata,
       });
     } catch (e) {
       errorResponse = {
@@ -199,7 +202,7 @@ export const connectStripeAccount = async (session: any): Promise<AnyResponse> =
             },
           });
           stripeAccountId = account.id;
-          const updateResponse = await updateCustomerStripeAccountId(session, customer, stripeAccountId);
+          const updateResponse = await updateCustomerMetadata(session, customer, 'stripe_account_id', stripeAccountId);
           if (updateResponse.errored) {
             stripeAccountId = null;
             errorResponse = updateResponse.data as ErrorResponse;
@@ -265,7 +268,7 @@ export const disconnectStripeAccount = async (session: any): Promise<CustomerOpR
       errorResponse = getResponse.data as ErrorResponse;
     } else {
       const customer = getResponse.data as Stripe.Customer;
-      const updateResponse = await updateCustomerStripeAccountId(session, customer, null);
+      const updateResponse = await updateCustomerMetadata(session, customer, 'stripe_account_id', null);
       if (updateResponse.errored) {
         errorResponse = updateResponse.data as ErrorResponse;
       }
