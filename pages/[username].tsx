@@ -6,7 +6,7 @@ import LinkBlock from '../components/LinkBlock';
 import PageBlock from '../components/PageBlock';
 import PaymentBlock from '../components/PaymentBlock';
 import PageFooter from '../components/PageFooter';
-import { getOrCreateCustomer, getCustomer } from '../lib/ops';
+import { getOrCreateCustomer } from '../lib/ops';
 import { reorder, remove, add, unprefixUsername, generateBlockId, parseBlockId } from '../lib/utils';
 import { updatePage, readBlockOrder, readDict } from '../lib/metadataUtils';
 import { Direction, BlockType } from '../lib/typedefs';
@@ -32,7 +32,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const UserPage = (props) => {
   const {
-    query: {},
+    query: { username },
   } = useRouter();
 
   const defaultText = 'edit me';
@@ -55,15 +55,6 @@ const UserPage = (props) => {
       });
       console.dir(response);
       setStripeAccount(response.account);
-      if (response.account.charges_enabled && !metadata['payment_settings']) {
-        const defaultSettings = {
-          text: 'Leave a tip',
-          defaultAmount: 500,
-          enabled: false,
-          hideFeed: false,
-        };
-        await updatePage(props.uploadUrl, metadata, 'payment_settings', defaultSettings);
-      }
     } catch (e) {
       console.error(e);
       return;
@@ -179,7 +170,7 @@ const UserPage = (props) => {
       )}
       {!props.error && (
         <>
-          <Header profileImage={props.profileImage} name={props.name} username={props.username} />
+          <Header name={props.metadata.name} username={username} />
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="droppable">
               {(provided, snapshot) => (
@@ -210,8 +201,6 @@ const UserPage = (props) => {
                                     hideUp={index === 0}
                                     hideDown={index === order.length - 1}
                                     hideToolbar={previewing}
-                                    username={props.username}
-                                    customerId={props.customerId}
                                     signedIn={props.signedIn}
                                     onDown={() => {
                                       moveBlock(index, Direction.Down);
@@ -238,8 +227,6 @@ const UserPage = (props) => {
                                     hideUp={index === 0}
                                     hideDown={index === order.length - 1}
                                     hideToolbar={previewing}
-                                    username={props.username}
-                                    customerId={props.customerId}
                                     signedIn={props.signedIn}
                                     onDown={() => {
                                       moveBlock(index, Direction.Down);
@@ -266,8 +253,6 @@ const UserPage = (props) => {
                                     hideUp={index === 0}
                                     hideDown={index === order.length - 1}
                                     hideToolbar={previewing}
-                                    username={props.username}
-                                    customerId={props.customerId}
                                     signedIn={props.signedIn}
                                     onDown={() => {
                                       moveBlock(index, Direction.Down);
@@ -518,6 +503,11 @@ const UserPage = (props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const AWS = require('aws-sdk');
+  const s3 = new AWS.S3();
+  const config = { accessKeyId: process.env.S3_ACCESS_KEY_ID, secretAccessKey: process.env.S3_SECRET };
+  AWS.config.update(config);
+
   const query = ctx.query;
   const username = unprefixUsername(query.username as string);
   const session = await getSession(ctx);
@@ -526,20 +516,23 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   let signedIn = false; // signed in as this user
   let uploadUrl = null;
   let sessionUsername = null;
-  const AWS = require('aws-sdk');
-  const s3 = new AWS.S3();
-  const config = { accessKeyId: process.env.S3_ACCESS_KEY_ID, secretAccessKey: process.env.S3_SECRET };
-  AWS.config.update(config);
 
-  // signedIn: check session against url
   if (session && session.user.username) {
     sessionUsername = session.user.username;
     signedIn = sessionUsername === username;
   }
-  let response = null;
   if (signedIn) {
-    response = await getOrCreateCustomer(session, signedIn);
+    // get a Stripe Customer or create one
+    const customerResponse = await getOrCreateCustomer(session, signedIn);
+    if (customerResponse.errored) {
+      return {
+        props: {
+          error: customerResponse.data,
+        },
+      };
+    }
 
+    // create a signed S3 URL for page data updates
     try {
       uploadUrl = await s3.getSignedUrlPromise('putObject', {
         Bucket: 'traypages',
@@ -553,8 +546,32 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
       };
     }
-  } else {
-    response = await getCustomer(username);
+
+    // if this is a new user, populate initial page data
+    if (customerResponse.createdCustomer) {
+      const initialPageData = {
+        customer_id: customerResponse.data['id'],
+        email: session.user.email,
+        name: session.user.name,
+        profile_image: session.user.picture,
+        twitter_id: session.user.id,
+        twitter_username: session.user.username,
+        twitter_description: session.user.description,
+        payment_settings: {
+          text: 'Leave a tip',
+          defaultAmount: 500,
+          enabled: false,
+          hideFeed: false,
+        },
+      };
+      await fetch(uploadUrl, {
+        method: 'PUT',
+        body: JSON.stringify(initialPageData, null, 2),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    }
   }
   try {
     const data = await s3
@@ -573,21 +590,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   }
-  if (response.errored) {
-    return {
-      props: {
-        error: response.data,
-      },
-    };
-  }
+
   return {
     props: {
-      username: username,
       uploadUrl: uploadUrl,
-      // name: metadata.name,
-      // profileImage: metadata.profile_image,
       metadata: metadata,
-      // customerId: customerId,
       signedIn: signedIn,
       error: error,
     },

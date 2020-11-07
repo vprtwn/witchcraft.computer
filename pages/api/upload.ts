@@ -27,7 +27,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         'Content-Type': 'application/json',
       },
     });
-    console.log('response', response);
     return res.status(response.status).json(response.headers);
   } catch (e) {
     return res.status(500).json({

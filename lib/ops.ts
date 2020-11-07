@@ -16,6 +16,7 @@ export const getOrCreateCustomer = async (
 ): Promise<CustomerOpResponse> => {
   let customer: Stripe.Customer | null = null;
   let errorResponse: ErrorResponse | null = null;
+  let createdCustomer = false;
   if (!session || !session.user || !session.user.username) {
     errorResponse = {
       httpStatus: 401,
@@ -39,21 +40,13 @@ export const getOrCreateCustomer = async (
         customer = response.data[0];
       }
       if (!customer && allowCreate && session.user) {
-        const metadata = {
-          email: session.user.email,
-          name: session.user.name,
-          profile_image: session.user.picture,
-          twitter_id: session.user.id,
-          twitter_username: session.user.username,
-          twitter_description: session.user.description,
-        };
         customer = await stripe.customers.create(
           {
             email: customerEmail,
-            metadata: metadata,
           },
           opts,
         );
+        createdCustomer = true;
       }
       if (!customer) {
         errorResponse = {
@@ -72,6 +65,7 @@ export const getOrCreateCustomer = async (
   }
   const response = {
     errored: errorResponse != null,
+    createdCustomer: createdCustomer,
     data: errorResponse ? errorResponse : customer,
   };
   return response;
@@ -102,6 +96,7 @@ export const getCustomer = async (username: string): Promise<CustomerOpResponse>
   }
   const response = {
     errored: errorResponse != null,
+    createdCustomer: false,
     data: errorResponse ? errorResponse : customer,
   };
   return response;
@@ -146,6 +141,7 @@ export const updateCustomerStripeAccountId = async (
   }
   const response = {
     errored: errorResponse != null,
+    createdCustomer: false,
     data: errorResponse ? errorResponse : customerResponse,
   };
   return response;
@@ -278,6 +274,7 @@ export const disconnectStripeAccount = async (session: any): Promise<CustomerOpR
   }
   const response = {
     errored: errorResponse != null,
+    createdCustomer: false,
     data: errorResponse ? errorResponse : customerResponse,
   };
   return response;
