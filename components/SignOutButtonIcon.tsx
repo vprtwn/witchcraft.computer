@@ -13,14 +13,7 @@ const SignOutButtonIcon = () => {
         <Label variant="buttonLabel">Sign out</Label>
       </Box>
       <svg height="17" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
-        <g
-          fill="none"
-          fill-rule="evenodd"
-          stroke="#2a2e3b"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          transform="translate(4 3)"
-        >
+        <g fill="none" stroke="#2a2e3b" transform="translate(4 3)">
           <path
             d="m12.717 5.379-.068 4.175-4.175.067"
             transform="matrix(.70710678 .70710678 .70710678 -.70710678 -2.199921 5.311079)"
