@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Card, Input, Flex, Box } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
 import EditToolbar from './EditToolbar';
-import { postMetadataUpdate } from '../lib/metadataUtils';
+import { updatePage } from '../lib/metadataUtils';
 import { readDict } from '../lib/metadataUtils';
 import isUrl from 'is-url';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -29,9 +29,7 @@ const PageBlock = (props) => {
 
   const syncUpdates = async function (value) {
     try {
-      await postMetadataUpdate(props.id, value, props.customerId, props.username);
-      // TODO: handle errors
-      // setText(value);
+      await updatePage(props.uploadUrl, props.metadata, props.id, value);
     } catch (e) {
       console.error(e);
     }

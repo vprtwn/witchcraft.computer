@@ -8,8 +8,8 @@ import PaymentBlock from '../components/PaymentBlock';
 import PageFooter from '../components/PageFooter';
 import { getOrCreateCustomer, getCustomer } from '../lib/ops';
 import { reorder, remove, add, unprefixUsername, generateBlockId, parseBlockId } from '../lib/utils';
-import { postMetadataUpdate, readBlockOrder, readDict } from '../lib/metadataUtils';
-import { Direction, BlockType, MetadataValue } from '../lib/typedefs';
+import { updatePage, readBlockOrder, readDict } from '../lib/metadataUtils';
+import { Direction, BlockType } from '../lib/typedefs';
 import { useRouter } from 'next/router';
 import { Box, Checkbox, Link, Badge, Input, IconButton, Flex, Card, Button, Text, Label, Textarea } from 'theme-ui';
 import NumberFormat from 'react-number-format';
@@ -23,11 +23,7 @@ import AddButtonIcon from '../components/NewButtonIcon';
 import BackButtonIcon from '../components/BackButtonIcon';
 import SignOutButtonIcon from '../components/SignOutButtonIcon';
 import NewMenu from '../components/NewMenu';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
 import { useSession } from 'next-auth/client';
-
-const ADMINS = ['bgdotjpg'];
 
 let DEBUG = true;
 if (process.env.NODE_ENV === 'production') {
@@ -48,7 +44,7 @@ const UserPage = (props) => {
       });
       setStripeAccount(null);
     } catch (e) {
-      setErrorMessage(e.message);
+      console.error(e);
     }
   };
 
@@ -59,6 +55,15 @@ const UserPage = (props) => {
       });
       console.dir(response);
       setStripeAccount(response.account);
+      if (response.account.charges_enabled && !metadata['payment_settings']) {
+        const defaultSettings = {
+          text: 'Leave a tip',
+          defaultAmount: 500,
+          enabled: false,
+          hideFeed: false,
+        };
+        await updatePage(props.uploadUrl, metadata, 'payment_settings', defaultSettings);
+      }
     } catch (e) {
       console.error(e);
       return;
@@ -84,8 +89,6 @@ const UserPage = (props) => {
   const [previewing, setPreviewing] = useState(DEBUG ? false : true);
   const [metadata, setMetadata] = useState(props.metadata);
   const [stripeAccount, setStripeAccount] = useState<object | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [debugObject, setDebugObject] = useState<string | null>(props);
 
   useEffect(() => {
     const newSettings = {
@@ -99,27 +102,15 @@ const UserPage = (props) => {
 
   const syncPaymentSettings = async function (newSettings: object) {
     try {
-      const payload = metadata;
-      payload['payment_settings'] = newSettings;
-      const params = {
-        uploadUrl: props.uploadUrl,
-        payload: payload,
-      };
-      const result = await fetchJson('api/upload', {
-        method: 'POST',
-        body: JSON.stringify(params),
-      });
-      setDebugObject(result);
+      await updatePage(props.uploadUrl, metadata, 'payment_settings', newSettings);
     } catch (e) {
       console.error(e);
-      setDebugObject(e);
     }
   };
 
   const syncOrder = async function (newOrder: Record<string, string>[], removedId: string | null = null) {
     try {
-      await postMetadataUpdate('b.order', newOrder, props.customerId, props.username, removedId);
-      // don't need to call setMetadata if updating order only
+      await updatePage(props.uploadUrl, metadata, 'b.order', newOrder, removedId);
     } catch (e) {
       console.error(e);
     }
@@ -128,7 +119,7 @@ const UserPage = (props) => {
   const syncNewBlock = async function (id: string, value: string, order: Record<string, string>[]) {
     try {
       setShowingNewMenu(false);
-      const newMetadata = await postMetadataUpdate(id, value, props.customerId, props.username, null, order);
+      const newMetadata = await updatePage(props.uploadUrl, metadata, id, value, null, order);
       DEBUG && console.table(newMetadata);
       setMetadata(newMetadata);
     } catch (e) {
@@ -181,9 +172,6 @@ const UserPage = (props) => {
 
   return (
     <Layout>
-      <Textarea rows={10} sx={{ borderColor: 'blue', my: 4 }}>
-        {JSON.stringify(debugObject, null, 2)}
-      </Textarea>
       {props.error && (
         <Textarea rows={10} sx={{ borderColor: 'red', my: 4 }}>
           {JSON.stringify(props.error, null, 2)}
@@ -214,13 +202,14 @@ const UserPage = (props) => {
                                   }}
                                 >
                                   <TextBlock
+                                    id={orderItem.i}
+                                    uploadUrl={props.uploadUrl}
+                                    metadata={metadata}
                                     default={defaultText}
                                     previewing={previewing}
-                                    id={orderItem.i}
                                     hideUp={index === 0}
                                     hideDown={index === order.length - 1}
                                     hideToolbar={previewing}
-                                    metadata={metadata}
                                     username={props.username}
                                     customerId={props.customerId}
                                     signedIn={props.signedIn}
@@ -244,10 +233,11 @@ const UserPage = (props) => {
                                 >
                                   <LinkBlock
                                     id={orderItem.i}
+                                    uploadUrl={props.uploadUrl}
+                                    metadata={metadata}
                                     hideUp={index === 0}
                                     hideDown={index === order.length - 1}
                                     hideToolbar={previewing}
-                                    metadata={metadata}
                                     username={props.username}
                                     customerId={props.customerId}
                                     signedIn={props.signedIn}
@@ -270,11 +260,12 @@ const UserPage = (props) => {
                                   }}
                                 >
                                   <PageBlock
+                                    uploadUrl={props.uploadUrl}
+                                    metadata={metadata}
                                     id={orderItem.i}
                                     hideUp={index === 0}
                                     hideDown={index === order.length - 1}
                                     hideToolbar={previewing}
-                                    metadata={metadata}
                                     username={props.username}
                                     customerId={props.customerId}
                                     signedIn={props.signedIn}
@@ -389,7 +380,7 @@ const UserPage = (props) => {
                       {stripeAccount['id']}
                     </Text>
                   )}
-                  {session && ADMINS.includes(session.user.username) && (
+                  {session && ['bgdotjpg'].includes(session.user.username) && (
                     <Button
                       variant="tiny"
                       sx={{ fontSize: 11 }}
@@ -531,10 +522,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const username = unprefixUsername(query.username as string);
   const session = await getSession(ctx);
   let error = null;
-  let customer = null;
+  let metadata = null;
   let signedIn = false; // signed in as this user
   let uploadUrl = null;
   let sessionUsername = null;
+  const AWS = require('aws-sdk');
+  const s3 = new AWS.S3();
+  const config = { accessKeyId: process.env.S3_ACCESS_KEY_ID, secretAccessKey: process.env.S3_SECRET };
+  AWS.config.update(config);
+
   // signedIn: check session against url
   if (session && session.user.username) {
     sessionUsername = session.user.username;
@@ -545,11 +541,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     response = await getOrCreateCustomer(session, signedIn);
 
     try {
-      const AWS = require('aws-sdk');
-      const s3 = new AWS.S3();
-      const config = { accessKeyId: process.env.S3_ACCESS_KEY_ID, secretAccessKey: process.env.S3_SECRET };
-      AWS.config.update(config);
-
       uploadUrl = await s3.getSignedUrlPromise('putObject', {
         Bucket: 'traypages',
         Key: `@${username}`,
@@ -565,6 +556,23 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   } else {
     response = await getCustomer(username);
   }
+  try {
+    const data = await s3
+      .getObject({
+        Bucket: 'traypages',
+        Key: `@${username}`,
+      })
+      .promise();
+    const object = data.Body.toString('utf-8');
+    metadata = object;
+    console.log(JSON.parse(metadata));
+  } catch (e) {
+    return {
+      props: {
+        error: { message: e.message },
+      },
+    };
+  }
   if (response.errored) {
     return {
       props: {
@@ -572,21 +580,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   }
-  customer = response.data;
-  let metadata = null;
-  let customerId = null;
-  if (customer) {
-    metadata = customer.metadata || null;
-    customerId = customer.id || null;
-  }
   return {
     props: {
       username: username,
       uploadUrl: uploadUrl,
-      name: metadata.name,
-      profileImage: metadata.profile_image,
+      // name: metadata.name,
+      // profileImage: metadata.profile_image,
       metadata: metadata,
-      customerId: customerId,
+      // customerId: customerId,
       signedIn: signedIn,
       error: error,
     },

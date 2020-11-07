@@ -2,93 +2,36 @@ import { Metadata, MetadataValue, OrderItem } from './typedefs';
 import Stripe from 'stripe';
 import fetchJson from '../lib/fetchJson';
 
-export const postMetadataUpdate = async (
+export const updatePage = async (
+  uploadUrl: string,
+  currentPage: object,
   key: string,
   value: object | string,
-  customerId: string,
-  username: string,
   removedKey: string | null = null, // this is ugly
   order: Record<string, string>[] | null = null,
 ): Promise<object> => {
-  const update = {};
-  update[key] = value;
-  if (removedKey) {
-    // TODO: refactor this & test
-    update[removedKey] = null;
+  try {
+    const payload = currentPage;
+    payload[key] = value;
+    if (removedKey) {
+      // TODO: refactor this & test
+      payload[removedKey] = null;
+    }
+    if (order) {
+      payload['b.order'] = order;
+    }
+    const params = {
+      uploadUrl: uploadUrl,
+      payload: payload,
+    };
+    const result = await fetchJson('api/upload', {
+      method: 'POST',
+      body: JSON.stringify(params),
+    });
+    return payload;
+  } catch (e) {
+    return { error: e.message };
   }
-  if (order) {
-    update['b.order'] = order;
-  }
-  console.log('postMetadataUpdate', JSON.stringify(update, null, 2));
-  const params = {
-    username: username,
-    metadata: update,
-    customerId: customerId,
-  };
-  const newMetadata = await fetchJson(`/api/update_metadata`, {
-    method: 'POST',
-    body: JSON.stringify(params),
-  });
-  return newMetadata;
-};
-
-/**
- * Performs a deep merge, then flattens the result to [string:string].
- * Local values are unserialized: {foo: [1, 2]}
- * Remote values are expected to be serialized strings: {foo: "[1,2]"}
- * Runs before POSTing a metadata update.
- * This is a bit fiddly, but it's tested (see unit.test.js)
- */
-export const syncMetadata = (local: Record<string, MetadataValue>, remote: Stripe.Metadata): Metadata => {
-  const merged: Record<string, MetadataValue> = {};
-  Object.keys(remote).forEach((k) => {
-    const value = local[k];
-    let remoteValue = remote[k];
-    merged[k] = remoteValue;
-    // overwrite remote arrays with local
-    if (Array.isArray(value)) {
-      merged[k] = value;
-    }
-    // overwrite remote strings with local
-    else if (typeof value === 'string') {
-      merged[k] = value;
-    } else {
-      // merge remote dicts with local
-      let parsedValue = null;
-      try {
-        parsedValue = JSON.parse(remoteValue);
-      } catch (e) {}
-      if (parsedValue) {
-        const newValue = parsedValue;
-        const mergedValue = Object.assign(newValue, value);
-        merged[k] = mergedValue;
-      }
-    }
-  });
-  // clear remote keys if explicitly set to null
-  Object.keys(local).forEach((k) => {
-    if (local[k] === null) {
-      merged[k] = null;
-    } else if (!merged[k]) {
-      merged[k] = local[k];
-    }
-  });
-  // console.log("merged", JSON.stringify(merged, null, 2));
-  const flattened: Stripe.Metadata = {};
-  // flatten
-  Object.keys(merged).forEach((k) => {
-    const value = merged[k];
-    if (typeof value === 'string') {
-      flattened[k] = value;
-    } else {
-      if (value) {
-        flattened[k] = JSON.stringify(value);
-      } else {
-        flattened[k] = null;
-      }
-    }
-  });
-  return flattened;
 };
 
 export const readString = (

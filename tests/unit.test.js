@@ -2,39 +2,6 @@ import { readDict, readString, readBlockOrder, syncMetadata } from '../lib/metad
 import { BlockType } from '../lib/typedefs';
 import { parseBlockId, usernameFromUrl } from '../lib/utils';
 
-test('syncMetadata', () => {
-  let local = {};
-  let remote = {};
-  expect(syncMetadata(local, remote)).toStrictEqual({});
-  local = { foo: 'val' };
-  remote = {};
-  expect(syncMetadata(local, remote)).toStrictEqual({ foo: 'val' });
-  local = {};
-  remote = { foo: 'val' };
-  expect(syncMetadata(local, remote)).toStrictEqual({ foo: 'val' });
-  // clear remote keys if explicitly set to null
-  local = { foo: null };
-  remote = { foo: 'val' };
-  expect(syncMetadata(local, remote)).toStrictEqual({ foo: null });
-  // overwrite remote arrays with local
-  local = { foo: [1, 2] };
-  remote = { foo: '[1, 2, 3]' };
-  expect(syncMetadata(local, remote)).toStrictEqual({ foo: '[1,2]' });
-  // overwrite remote strings with local
-  local = { foo: 'bar' };
-  remote = { foo: 'baz' };
-  expect(syncMetadata(local, remote)).toStrictEqual({ foo: 'bar' });
-  // merge remote dicts with local
-  local = { meta: { tj_v: null } };
-  remote = { meta: '{"tj_t":"bar"}' };
-  let result = syncMetadata(local, remote);
-  expect(JSON.parse(result['meta'])).toStrictEqual({ tj_v: null, tj_t: 'bar' });
-  local = { meta: { tj_v: 1, tj_t: 'foo' } };
-  remote = { meta: '{"tj_v":null}' };
-  result = syncMetadata(local, remote);
-  expect(JSON.parse(result['meta'])).toStrictEqual({ tj_v: 1, tj_t: 'foo' });
-});
-
 test('readString', () => {
   expect(readString(null, 'foo')).toBeNull();
   let d = {};

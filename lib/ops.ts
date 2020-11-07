@@ -1,32 +1,6 @@
 import Stripe from 'stripe';
 import { ErrorResponse, CustomerOpResponse, AnyResponse, Metadata } from './typedefs';
 import { emailFromUsername } from './utils';
-import { syncMetadata, readBlockOrder } from './metadataUtils';
-const LOGSYM = '🔄';
-
-const logCustomerOp = (name: string, response: CustomerOpResponse) => {
-  let logResponse = response as any;
-  if (!response.errored) {
-    const customer = response.data as Stripe.Customer;
-    logResponse = { metadata: customer.metadata };
-  }
-  let sym = LOGSYM;
-  if (name.startsWith('get')) {
-    sym = '⬅️';
-  }
-  if (name.startsWith('update')) {
-    sym = '⤴️';
-  }
-  console.log(`${sym} ${name}`, JSON.stringify(logResponse, null, 2));
-};
-
-const logAnyOp = (name: string, response: AnyResponse) => {
-  let logResponse = response as any;
-  if (!response.errored) {
-    logResponse = response.data;
-  }
-  console.log(`${name}`, JSON.stringify(logResponse, null, 2));
-};
 
 /**
  * Get or create a Stripe customer.
@@ -100,7 +74,6 @@ export const getOrCreateCustomer = async (
     errored: errorResponse != null,
     data: errorResponse ? errorResponse : customer,
   };
-  logCustomerOp('getOrCreateCustomer', response);
   return response;
 };
 
@@ -131,44 +104,16 @@ export const getCustomer = async (username: string): Promise<CustomerOpResponse>
     errored: errorResponse != null,
     data: errorResponse ? errorResponse : customer,
   };
-  logCustomerOp('getOrCreateCustomer', response);
   return response;
 };
 
-// UPDATE METADATA
-
-export const updateMetadataForCustomerId = async (
+export const updateCustomerStripeAccountId = async (
   session: any,
-  customerId: string | null,
-  metadata: Stripe.Metadata,
-): Promise<CustomerOpResponse> => {
-  return updateCustomerMetadata(session, customerId, null, metadata);
-};
-
-export const updateMetadataForCustomer = async (
-  session: any,
-  customer: Stripe.Customer | null,
-  metadata: Stripe.Metadata,
-): Promise<CustomerOpResponse> => {
-  return updateCustomerMetadata(session, null, customer, metadata);
-};
-
-// get a customer. if signed in, create a customer if it doesn't exist.
-const updateCustomerMetadata = async (
-  session: any,
-  customerId: string | null,
-  customer: Stripe.Customer | null,
-  metadata: Stripe.Metadata,
+  customer: Stripe.Customer,
+  stripeAccountId: string | null,
 ): Promise<CustomerOpResponse> => {
   let errorResponse: ErrorResponse | null = null;
   let customerResponse: Stripe.Customer | null = null;
-  if (!customerId && !customer) {
-    errorResponse = {
-      httpStatus: 400,
-      errorMessage: 'Bad request',
-      errorCode: 'no_customer_or_id',
-    };
-  }
   if (!session || !session.user || !session.user.username) {
     errorResponse = {
       httpStatus: 401,
@@ -186,37 +131,23 @@ const updateCustomerMetadata = async (
     };
   }
   if (!errorResponse) {
-    const getResponse = await getOrCreateCustomer(session);
-    if (getResponse.errored) {
-      errorResponse = getResponse.data as ErrorResponse;
-    } else {
-      const remoteCustomer = getResponse.data as Stripe.Customer;
-      const remoteMetadata = remoteCustomer.metadata;
-      const mergedMetadata = syncMetadata(metadata, remoteMetadata);
-
-      try {
-        const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-        let cid = customerId;
-        if (!cid && customer) {
-          cid = customer.id;
-        }
-        if (cid) {
-          customerResponse = await stripe.customers.update(cid, { metadata: mergedMetadata });
-        }
-      } catch (e) {
-        errorResponse = {
-          httpStatus: 500,
-          errorMessage: e.message,
-          errorCode: 'stripe_exception',
-        };
-      }
+    try {
+      const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+      customerResponse = await stripe.customers.update(customer.id, {
+        metadata: { stripe_account_id: stripeAccountId },
+      });
+    } catch (e) {
+      errorResponse = {
+        httpStatus: 500,
+        errorMessage: e.message,
+        errorCode: 'stripe_exception',
+      };
     }
   }
   const response = {
     errored: errorResponse != null,
     data: errorResponse ? errorResponse : customerResponse,
   };
-  logCustomerOp(customerId ? 'updateMetadataForCustomerId' : 'updateMetadataForCustomer', response);
   return response;
 };
 
@@ -248,7 +179,7 @@ export const connectStripeAccount = async (session: any): Promise<AnyResponse> =
         const twitterUrl = `https://twitter.com/${username}`;
         const bizName = `tray.club/@${username}`;
         try {
-          console.log("Creating Stripe account");
+          console.log('Creating Stripe account');
           const account = await stripe.accounts.create({
             type: 'standard',
             business_type: 'individual',
@@ -260,7 +191,7 @@ export const connectStripeAccount = async (session: any): Promise<AnyResponse> =
             settings: {
               payments: {
                 statement_descriptor: bizName,
-              }
+              },
             },
             business_profile: {
               name: bizName,
@@ -268,14 +199,11 @@ export const connectStripeAccount = async (session: any): Promise<AnyResponse> =
               product_description: description,
               url: twitterUrl,
               // TODO: file stripe bug
-              // supportUrl: twitterUrl, 
+              // supportUrl: twitterUrl,
             },
           });
           stripeAccountId = account.id;
-          const metadata = {
-            stripe_account_id: stripeAccountId
-          };
-          const updateResponse = await updateMetadataForCustomer(session, customer, metadata);
+          const updateResponse = await updateCustomerStripeAccountId(session, customer, stripeAccountId);
           if (updateResponse.errored) {
             stripeAccountId = null;
             errorResponse = updateResponse.data as ErrorResponse;
@@ -289,9 +217,7 @@ export const connectStripeAccount = async (session: any): Promise<AnyResponse> =
         }
       }
       if (stripeAccountId) {
-        const account = await stripe.accounts.retrieve(
-          stripeAccountId
-        );
+        const account = await stripe.accounts.retrieve(stripeAccountId);
         // create an account link if charges aren't enabled
         if (!account.charges_enabled) {
           let returnUrl = `https://tray.club/@${username}`;
@@ -299,7 +225,7 @@ export const connectStripeAccount = async (session: any): Promise<AnyResponse> =
             returnUrl = `http://127.0.0.1:3000/@${username}`;
           }
           try {
-          console.log("Creating account link");
+            console.log('Creating account link');
             const accountLinks = await stripe.accountLinks.create({
               account: stripeAccountId,
               return_url: returnUrl,
@@ -325,7 +251,6 @@ export const connectStripeAccount = async (session: any): Promise<AnyResponse> =
     errored: errorResponse != null,
     data: errorResponse ? errorResponse : dataResponse,
   };
-  logAnyOp('connectStripeAccount', response);
   return response;
 };
 
@@ -339,16 +264,12 @@ export const disconnectStripeAccount = async (session: any): Promise<CustomerOpR
       errorCode: 'invalid_session',
     };
   } else {
-    // assumption: a customer already exists
     const getResponse = await getOrCreateCustomer(session);
     if (getResponse.errored) {
       errorResponse = getResponse.data as ErrorResponse;
     } else {
       const customer = getResponse.data as Stripe.Customer;
-      const metadata = {
-        stripe_account_id: null,
-      };
-      const updateResponse = await updateMetadataForCustomer(session, customer, metadata);
+      const updateResponse = await updateCustomerStripeAccountId(session, customer, null);
       if (updateResponse.errored) {
         errorResponse = updateResponse.data as ErrorResponse;
       }
@@ -359,6 +280,5 @@ export const disconnectStripeAccount = async (session: any): Promise<CustomerOpR
     errored: errorResponse != null,
     data: errorResponse ? errorResponse : customerResponse,
   };
-  logCustomerOp('disconnectStripeAccount', response);
   return response;
 };

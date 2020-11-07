@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, Box } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
-import { readString, postMetadataUpdate } from '../lib/metadataUtils';
+import { readString, updatePage } from '../lib/metadataUtils';
 import Editor from 'rich-markdown-editor';
 import EditToolbar from './EditToolbar';
 import RichMarkdownEditor from 'rich-markdown-editor';
@@ -31,9 +31,7 @@ const TextBlock = (props) => {
 
   const syncUpdatedText = async function (value) {
     try {
-      console.log('postMetadataUpdate');
-      await postMetadataUpdate(props.id, value, props.customerId, props.username);
-      // TODO: handle errors
+      await updatePage(props.uploadUrl, props.metadata, props.id, value);
       setText(value);
     } catch (e) {
       console.error(e);
