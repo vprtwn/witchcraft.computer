@@ -508,6 +508,8 @@ const UserPage = (props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  return { props: {} };
+  /** 
   const AWS = require('aws-sdk');
   const s3 = new AWS.S3();
   const config = { accessKeyId: process.env.S3_ACCESS_KEY_ID, secretAccessKey: process.env.S3_SECRET };
@@ -580,30 +582,30 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       }
     }
   }
-  return { props: { success: true } };
-  // try {
-  //   const s3data = await s3
-  //     .getObject({
-  //       Bucket: 'traypages',
-  //       Key: `@${username}`,
-  //     })
-  //     .promise();
-  //   const object = s3data.Body.toString('utf-8');
-  //   data = JSON.parse(object);
-  // } catch (e) {
-  //   return {
-  //     props: {
-  //       error: { message: e.message },
-  //     },
-  //   };
-  // }
-  // return {
-  //   props: {
-  //     uploadUrl: uploadUrl,
-  //     data: data,
-  //     signedIn: signedIn,
-  //     error: error,
-  //   },
-  // };
+  try {
+    const s3data = await s3
+      .getObject({
+        Bucket: 'traypages',
+        Key: `@${username}`,
+      })
+      .promise();
+    const object = s3data.Body.toString('utf-8');
+    data = JSON.parse(object);
+  } catch (e) {
+    return {
+      props: {
+        error: { message: e.message },
+      },
+    };
+  }
+  return {
+    props: {
+      uploadUrl: uploadUrl,
+      data: data,
+      signedIn: signedIn,
+      error: error,
+    },
+  };
+*/
 };
 export default UserPage;
