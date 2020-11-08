@@ -70,12 +70,12 @@ const UserPage = (props) => {
   const signedIn = session && session.user.username;
 
   // block ordering, [{i: "b.text.A1B2"}, ...]
-  const paymentSettings = props.data['payment_settings'];
+  const paymentSettings = props.data ? props.data['payment_settings'] : null;
   const [tipsEnabled, setTipsEnabled] = useState(paymentSettings ? paymentSettings.enabled : false);
   const [tipText, setTipText] = useState(paymentSettings ? paymentSettings.text : 'Leave a tip');
   const [defaultTipAmount, setDefaultTipAmount] = useState(paymentSettings ? paymentSettings.defaultAmount : 500);
   const [hideTipsFeed, setHideTipsFeed] = useState(paymentSettings ? paymentSettings.hideFeed : false);
-  const initialOrder = props.data['b.order'];
+  const initialOrder = props.data ? props.data['b.order'] : [];
   const [order, setOrder] = useState(initialOrder);
   const [showingNewMenu, setShowingNewMenu] = useState(false);
   const [previewing, setPreviewing] = useState(DEBUG ? false : true);
