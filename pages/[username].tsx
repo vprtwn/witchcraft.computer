@@ -522,6 +522,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   let uploadUrl = null;
   let sessionUsername = null;
 
+  return { props: { error: { message: 'uhh' } } };
+
   if (session && session.user.username) {
     sessionUsername = session.user.username;
     signedIn = sessionUsername === username;
