@@ -8,7 +8,7 @@
 - Run tests (jk who has time for tests): `jest`
 - Successful builds on master automatically deploy to Vercel
 
-## Tech
+## Tech overview
 
 ### Storage
 
