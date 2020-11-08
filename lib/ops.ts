@@ -3,11 +3,8 @@ import { ErrorResponse, CustomerOpResponse, AnyResponse } from './typedefs';
 import { emailFromUsername } from './utils';
 
 /**
- * Get or create a Stripe customer.
- * Default behavior: creates a customer on the Tray platform account,
- * using the session user's *username*.
- * If stripeAccountId is provided, creates a customer on the the connected account,
- * using the sesssion user's *email*.
+ * Default behavior: creates a customer on the Tray platform account with the session user's *username*.
+ * With stripeAccountId: creates a customer on the the connected account with the session user's *email*.
  */
 export const getOrCreateCustomer = async (
   session: any,

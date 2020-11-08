@@ -2,19 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Card, Input, Flex, Box } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
 import EditToolbar from './EditToolbar';
-import { updatePage } from '../lib/metadataUtils';
-import { readDict } from '../lib/metadataUtils';
-import isUrl from 'is-url';
+import { updatePage } from '../lib/updatePage';
 import TextareaAutosize from 'react-textarea-autosize';
 
 const DEBOUNCE_MS = 700;
 
 const PageBlock = (props) => {
   const signedIn = props.signedIn;
-  // blocks read from all metadata, which is meh but ok
   const [editing, setEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const content = props.metadata[props.id];
+  const content = props.data[props.id];
   const initialText = content ? (content.text as string) : '';
   const [text, setText] = useState<string>(initialText);
   const [debouncedText] = useDebounce(text, DEBOUNCE_MS);
@@ -28,7 +25,7 @@ const PageBlock = (props) => {
 
   const syncUpdates = async function (value) {
     try {
-      await updatePage(props.uploadUrl, props.metadata, props.id, value);
+      await updatePage(props.uploadUrl, props.data, props.id, value);
     } catch (e) {
       console.error(e);
     }

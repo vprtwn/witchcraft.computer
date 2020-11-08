@@ -8,7 +8,7 @@ import PaymentBlock from '../components/PaymentBlock';
 import PageFooter from '../components/PageFooter';
 import { getOrCreateCustomer } from '../lib/ops';
 import { reorder, remove, add, unprefixUsername, generateBlockId, parseBlockId } from '../lib/utils';
-import { updatePage, readBlockOrder, readDict } from '../lib/metadataUtils';
+import { updatePage } from '../lib/updatePage';
 import { Direction, BlockType } from '../lib/typedefs';
 import { useRouter } from 'next/router';
 import { Box, Checkbox, Link, Badge, Input, IconButton, Flex, Card, Button, Text, Label, Textarea } from 'theme-ui';
@@ -70,16 +70,16 @@ const UserPage = (props) => {
   const signedIn = session && session.user.username;
 
   // block ordering, [{i: "b.text.A1B2"}, ...]
-  const paymentSettings = readDict(props.metadata, 'payment_settings');
+  const paymentSettings = props.data['payment_settings'];
   const [tipsEnabled, setTipsEnabled] = useState(paymentSettings ? paymentSettings.enabled : false);
   const [tipText, setTipText] = useState(paymentSettings ? paymentSettings.text : 'Leave a tip');
   const [defaultTipAmount, setDefaultTipAmount] = useState(paymentSettings ? paymentSettings.defaultAmount : 500);
   const [hideTipsFeed, setHideTipsFeed] = useState(paymentSettings ? paymentSettings.hideFeed : false);
-  const initialOrder = props.metadata['b.order'];
+  const initialOrder = props.data['b.order'];
   const [order, setOrder] = useState(initialOrder);
   const [showingNewMenu, setShowingNewMenu] = useState(false);
   const [previewing, setPreviewing] = useState(DEBUG ? false : true);
-  const [metadata, setMetadata] = useState(props.metadata);
+  const [data, setData] = useState(props.data);
   const [stripeAccount, setStripeAccount] = useState<object | null>(null);
 
   useEffect(() => {
@@ -94,7 +94,7 @@ const UserPage = (props) => {
 
   const syncPaymentSettings = async function (newSettings: object) {
     try {
-      await updatePage(props.uploadUrl, metadata, 'payment_settings', newSettings);
+      await updatePage(props.uploadUrl, data, 'payment_settings', newSettings);
     } catch (e) {
       console.error(e);
     }
@@ -102,7 +102,7 @@ const UserPage = (props) => {
 
   const syncOrder = async function (newOrder: Record<string, string>[], removedId: string | null = null) {
     try {
-      await updatePage(props.uploadUrl, metadata, 'b.order', newOrder, removedId);
+      await updatePage(props.uploadUrl, data, 'b.order', newOrder, removedId);
     } catch (e) {
       console.error(e);
     }
@@ -111,9 +111,9 @@ const UserPage = (props) => {
   const syncNewBlock = async function (id: string, value: string, order: Record<string, string>[]) {
     try {
       setShowingNewMenu(false);
-      const newMetadata = await updatePage(props.uploadUrl, metadata, id, value, null, order);
-      DEBUG && console.table(newMetadata);
-      setMetadata(newMetadata);
+      const newData = await updatePage(props.uploadUrl, data, id, value, null, order);
+      DEBUG && console.table(newData);
+      setData(newData);
     } catch (e) {
       console.error(e);
     }
@@ -164,11 +164,11 @@ const UserPage = (props) => {
 
   return (
     <Layout>
-      {DEBUG && (
+      {/* {DEBUG && (
         <Textarea rows={10} sx={{ borderColor: 'blue', my: 4 }}>
-          {JSON.stringify(props.metadata, null, 2)}
+          {JSON.stringify(props.data, null, 2)}
         </Textarea>
-      )}
+      )} */}
       {props.error && (
         <Textarea rows={10} sx={{ borderColor: 'red', my: 4 }}>
           {JSON.stringify(props.error, null, 2)}
@@ -176,7 +176,7 @@ const UserPage = (props) => {
       )}
       {!props.error && (
         <>
-          <Header name={props.metadata.name} username={username} />
+          <Header name={props.data.name} username={username} />
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="droppable">
               {(provided, snapshot) => (
@@ -201,7 +201,7 @@ const UserPage = (props) => {
                                   <TextBlock
                                     id={orderItem.i}
                                     uploadUrl={props.uploadUrl}
-                                    metadata={metadata}
+                                    data={data}
                                     default={defaultText}
                                     previewing={previewing}
                                     hideUp={index === 0}
@@ -229,7 +229,7 @@ const UserPage = (props) => {
                                   <LinkBlock
                                     id={orderItem.i}
                                     uploadUrl={props.uploadUrl}
-                                    metadata={metadata}
+                                    data={data}
                                     hideUp={index === 0}
                                     hideDown={index === order.length - 1}
                                     hideToolbar={previewing}
@@ -254,7 +254,7 @@ const UserPage = (props) => {
                                 >
                                   <PageBlock
                                     uploadUrl={props.uploadUrl}
-                                    metadata={metadata}
+                                    data={data}
                                     id={orderItem.i}
                                     hideUp={index === 0}
                                     hideDown={index === order.length - 1}
@@ -517,7 +517,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const username = unprefixUsername(query.username as string);
   const session = await getSession(ctx);
   let error = null;
-  let metadata = null;
+  let data = null;
   let signedIn = false; // signed in as this user
   let uploadUrl = null;
   let sessionUsername = null;
@@ -579,14 +579,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   }
   try {
-    const data = await s3
+    const s3data = await s3
       .getObject({
         Bucket: 'traypages',
         Key: `@${username}`,
       })
       .promise();
-    const object = data.Body.toString('utf-8');
-    metadata = JSON.parse(object);
+    const object = s3data.Body.toString('utf-8');
+    data = JSON.parse(object);
   } catch (e) {
     return {
       props: {
@@ -598,7 +598,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
     props: {
       uploadUrl: uploadUrl,
-      metadata: metadata,
+      data: data,
       signedIn: signedIn,
       error: error,
     },

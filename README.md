@@ -10,9 +10,8 @@
 
 ## About
 
-### Storage
-
-- Using metadata on Stripe Customer objects for storage, as a kinda silly hack. Planning to move to S3 soon.
+- Page data is stored on S3.
+- Read-only user settings are stored on the user's Stripe customer.
 
 ### Updating the TextBlock Editor
 

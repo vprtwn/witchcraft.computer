@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, Box } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
-import { readString, updatePage } from '../lib/metadataUtils';
+import { updatePage } from '../lib/updatePage';
 import Editor from 'rich-markdown-editor';
 import EditToolbar from './EditToolbar';
 import RichMarkdownEditor from 'rich-markdown-editor';
@@ -10,8 +10,7 @@ const DEBOUNCE_MS = 700;
 
 const TextBlock = (props) => {
   const signedIn = props.signedIn;
-  // blocks read from all metadata, which is meh but ok
-  let initialText = props.metadata[props.id];
+  let initialText = props.data[props.id];
   if (props.signedIn && !initialText) {
     initialText = props.default;
   }
@@ -34,7 +33,7 @@ const TextBlock = (props) => {
 
   const syncUpdatedText = async function (value) {
     try {
-      await updatePage(props.uploadUrl, props.metadata, props.id, value);
+      await updatePage(props.uploadUrl, props.data, props.id, value);
       setText(value);
     } catch (e) {
       console.error(e);

@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
-import { readDict } from '../../lib/metadataUtils';
 import { usernameFromUrl } from '../../lib/utils';
 import { getCustomer, getOrCreateCustomer } from '../../lib/ops';
 import { ErrorResponse } from '../../lib/typedefs';

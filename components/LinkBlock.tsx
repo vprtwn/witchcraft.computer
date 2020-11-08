@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Card, Input, Flex, Box } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
 import EditToolbar from './EditToolbar';
-import { updatePage } from '../lib/metadataUtils';
+import { updatePage } from '../lib/updatePage';
 import isUrl from 'is-url';
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -12,7 +12,7 @@ const LinkBlock = (props) => {
   const signedIn = props.signedIn;
   const [editing, setEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const content = props.metadata[props.id];
+  const content = props.data[props.id];
   const initialText = content ? (content.text as string) : '';
   const initialUrl = content ? (content.url as string) : '';
   const initialComment = content ? (content.comment as string) : '';
@@ -36,7 +36,7 @@ const LinkBlock = (props) => {
 
   const syncUpdates = async function (value) {
     try {
-      await updatePage(props.uploadUrl, props.metadata, props.id, value);
+      await updatePage(props.uploadUrl, props.data, props.id, value);
     } catch (e) {
       console.error(e);
     }
@@ -87,7 +87,7 @@ const LinkBlock = (props) => {
               defaultValue={url}
               placeholder="Link address"
               sx={{
-                fontSize: '15px',
+                fontSize: '14px',
                 fontFamily: 'mono',
               }}
               onChange={(e) => {

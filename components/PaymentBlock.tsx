@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, Box, Button, Flex, IconButton, Input } from 'theme-ui';
-import { readDict } from '../lib/metadataUtils';
 import fetchJson from '../lib/fetchJson';
 import NumberFormat from 'react-number-format';
 import MinusButtonIcon from './MinusButtonIcon';
 import PaymentFeedBlock from './PaymentFeedBlock';
 import PlusButtonIcon from './PlusButtonIcon';
-// import { useStripe } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
 const PaymentBlock = (props) => {

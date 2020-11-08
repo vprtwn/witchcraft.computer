@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
-import { readDict } from '../../lib/metadataUtils';
 import { usernameFromUrl } from '../../lib/utils';
 import { getCustomer } from '../../lib/ops';
 import { ErrorResponse } from '../../lib/typedefs';
@@ -28,8 +27,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(error.httpStatus).json(error);
   }
   const customer = customerRes.data as Stripe.Customer;
-  const stripeAccount = readDict(customer.metadata, 'stripe_account');
-  if (!stripeAccount) {
+  const stripeAccountId = customer.metadata['stripe_account_id'];
+  if (!stripeAccountId) {
     const error: ErrorResponse = {
       errorCode: 'no_payment_setup',
       errorMessage: "This account hasn't enabled payments.",
@@ -45,7 +44,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         limit: 100,
       },
       {
-        stripeAccount: stripeAccount.id,
+        stripeAccount: stripeAccountId,
       },
     );
     const rawPIs = listRes.data;

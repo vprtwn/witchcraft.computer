@@ -29,11 +29,12 @@ const NewMenu = (props) => {
               sx={{
                 pl: 2,
                 pr: 1,
+                py: 0,
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 borderRadius: 8,
-                bg: 'text',
-                color: 'background',
+                bg: 'white',
+                color: 'black',
                 cursor: 'pointer',
               }}
             >
@@ -52,13 +53,13 @@ const NewMenu = (props) => {
                 placeholder="Link address"
                 type="url"
                 sx={{
-                  fontSize: '15px',
+                  fontSize: '14px',
                   fontFamily: 'mono',
                 }}
                 onChange={(t) => setUrl(t.target.value)}
               />
             </Box>
-            <Flex sx={{ py: 1, px: 2, bg: 'transparent' }}>
+            <Flex sx={{ py: 1, px: 2, bg: 'lightGray', borderRadius: '0px 0px 8px 8px' }}>
               <TextareaAutosize
                 style={{
                   background: 'none',
