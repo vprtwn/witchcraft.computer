@@ -10,10 +10,21 @@
 
 ## Tech
 
+### Storage
+
 - Pages are stored as JSON files on S3 (traypages bucket)
 - Read-only user settings are stored on  Stripe customer metadata
 - Every page has a tip button. Tip comments are descriptions on Stripe PaymentIntents, and can be displayed (optionally) as a feed on any page.
 - Curious about using [Cloudflare durable objects](https://blog.cloudflare.com/introducing-workers-durable-objects/) for collaborative storage (comments)
+
+### Auth
+
+- Twitter Oauth, using [NextAuthJS](https://next-auth.js.org/)
+
+### UX
+
+- Using [theme-ui](https://theme-ui.com/components) for components, theming, CSS-in-JS
+- Icons from https://icons.mono.company/
 
 ## Roadmap
 
@@ -26,6 +37,7 @@ Creators:
 
 Consumers: Mobile app, favorites, discovery, following, etc. Spotify x Tumblr x Bandcamp.
 
+## Documentation
 
 ### Updating the TextBlock Editor
 
@@ -39,14 +51,7 @@ Consumers: Mobile app, favorites, discovery, following, etc. Spotify x Tumblr x 
   - (Because we're pinned to a git branch, `yarn upgrade` doesn't work, you need to remove and re-add)
 - Modifications on this fork are pretty minimal: visual (removing extraneous elements) and functional (removing unsupported elements)
 
-### Auth
 
-- Twitter Oauth, using [NextAuthJS](https://next-auth.js.org/)
-
-### UX
-
-- Using [theme-ui](https://theme-ui.com/components) for components, theming, CSS-in-JS
-- Icons from https://icons.mono.company/
 
 
 
