@@ -554,28 +554,32 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
     // if this is a new user, populate initial page data
     if (customerResponse.createdCustomer) {
-      const initialPageData = {
-        customer_id: customerResponse.data['id'],
-        email: session.user.email,
-        name: session.user.name,
-        profile_image: session.user.picture,
-        twitter_id: session.user.id,
-        twitter_username: session.user.username,
-        twitter_description: session.user.description,
-        payment_settings: {
-          text: 'Leave a tip',
-          defaultAmount: 500,
-          enabled: false,
-          hideFeed: false,
-        },
-      };
-      await fetch(uploadUrl, {
-        method: 'PUT',
-        body: JSON.stringify(initialPageData, null, 2),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      try {
+        const initialPageData = {
+          customer_id: customerResponse.data['id'],
+          email: session.user.email,
+          name: session.user.name,
+          profile_image: session.user.picture,
+          twitter_id: session.user.id,
+          twitter_username: session.user.username,
+          twitter_description: session.user.description,
+          payment_settings: {
+            text: 'Leave a tip',
+            defaultAmount: 500,
+            enabled: false,
+            hideFeed: false,
+          },
+        };
+        await fetch(uploadUrl, {
+          method: 'PUT',
+          body: JSON.stringify(initialPageData, null, 2),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      } catch (e) {
+        return { props: { error: { message: e.message } } };
+      }
     }
   }
   try {
