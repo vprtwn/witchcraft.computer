@@ -5,6 +5,7 @@ import theme from '../theme';
 import { MDXProvider } from '@mdx-js/react';
 import Layout from '../components/Layout';
 import TrayIcon from '../components/TrayIcon';
+import MarketingFooter from '../components/MarketingFooter';
 import '../styles.css';
 
 const components = {
@@ -23,7 +24,8 @@ const components = {
           <main {...props} />
         </Card>
       </Layout>
-      <Box mb={5} />
+      <Box mb={3} />
+      <MarketingFooter />
     </div>
   ),
 };

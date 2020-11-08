@@ -2,27 +2,23 @@ import { Flex, Box, Container, IconButton, Button, Text, Image, Link } from 'the
 
 const MarketingFooter = (props) => {
   return (
-    <Box sx={{ textAlign: 'center', my: 2, py: 1, px: 2 }}>
+    <Box sx={{ textAlign: 'center', my: 2, py: 1, px: 2, color: 'gray' }}>
       <Box sx={{ flex: '1 1 auto' }} />
       <Flex sx={{ alignItems: 'center' }}>
         <Box sx={{ flex: '1 1 auto' }} />
         <Flex sx={{ bg: 'transparent', borderRadius: 4, alignItems: 'center' }}>
-          <Link
-            href="/policies"
-            variant="nav"
-            sx={{ mx: 2, py: 1, fontSize: '11px', color: 'black', fontWeight: 'normal' }}
-          >
+          <Link href="/policies" variant="nav" sx={{ mx: 2, py: 1, fontSize: '11px', fontWeight: 'normal' }}>
             policies
           </Link>
           |
-          <Link href="/faq" variant="nav" sx={{ mx: 2, py: 1, fontSize: '11px', color: 'black', fontWeight: 'normal' }}>
+          <Link href="/faq" variant="nav" sx={{ mx: 2, py: 1, fontSize: '11px', fontWeight: 'normal' }}>
             FAQ
           </Link>
           |
           <Link
             href="https://twitter.com/trayclub"
             variant="nav"
-            sx={{ mx: 2, py: 1, fontSize: '11px', color: 'black', fontWeight: 'normal' }}
+            sx={{ mx: 2, py: 1, fontSize: '11px', fontWeight: 'normal' }}
           >
             twitter
           </Link>
