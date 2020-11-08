@@ -508,19 +508,23 @@ const UserPage = (props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const AWS = require('aws-sdk');
-  const s3 = new AWS.S3();
-  const config = { accessKeyId: process.env.S3_ACCESS_KEY_ID, secretAccessKey: process.env.S3_SECRET };
-  AWS.config.update(config);
+  try {
+    const AWS = require('aws-sdk');
+    const s3 = new AWS.S3();
+    const config = { accessKeyId: process.env.S3_ACCESS_KEY_ID, secretAccessKey: process.env.S3_SECRET };
+    AWS.config.update(config);
 
-  const query = ctx.query;
-  const username = unprefixUsername(query.username as string);
-  const session = await getSession(ctx);
-  let error = null;
-  let data = null;
-  let signedIn = false; // signed in as this user
-  let uploadUrl = null;
-  let sessionUsername = null;
+    const query = ctx.query;
+    const username = unprefixUsername(query.username as string);
+    const session = await getSession(ctx);
+    let error = null;
+    let data = null;
+    let signedIn = false; // signed in as this user
+    let uploadUrl = null;
+    let sessionUsername = null;
+  } catch (e) {
+    return { props: { error: { message: e.message } } };
+  }
 
   return { props: { error: { message: 'uhh' } } };
 
