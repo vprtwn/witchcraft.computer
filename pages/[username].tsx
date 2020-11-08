@@ -525,93 +525,90 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   } catch (e) {
     return { props: { error: { message: e.message } } };
   }
+};
 
-  return { props: { error: { message: 'uhh' } } };
-
-  if (session && session.user.username) {
-    sessionUsername = session.user.username;
-    signedIn = sessionUsername === username;
-  }
-  if (signedIn) {
-    // get a Stripe Customer or create one
-    const customerResponse = await getOrCreateCustomer(session, signedIn);
-    if (customerResponse.errored) {
-      return {
-        props: {
-          error: customerResponse.data,
-        },
-      };
-    }
-
-    // create a signed S3 URL for page data updates
-    try {
-      uploadUrl = await s3.getSignedUrlPromise('putObject', {
-        Bucket: 'traypages',
-        Key: `@${username}`,
-        ContentType: 'application/json',
-      });
-    } catch (e) {
-      return {
-        props: {
-          error: e,
-        },
-      };
-    }
-
-    // if this is a new user, populate initial page data
-    if (customerResponse.createdCustomer) {
-      try {
-        const initialPageData = {
-          customer_id: customerResponse.data['id'],
-          email: session.user.email,
-          name: session.user.name,
-          profile_image: session.user.picture,
-          twitter_id: session.user.id,
-          twitter_username: session.user.username,
-          twitter_description: session.user.description,
-          payment_settings: {
-            text: 'Leave a tip',
-            defaultAmount: 500,
-            enabled: false,
-            hideFeed: false,
-          },
-        };
-        await fetch(uploadUrl, {
-          method: 'PUT',
-          body: JSON.stringify(initialPageData, null, 2),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-      } catch (e) {
-        return { props: { error: { message: e.message } } };
-      }
-    }
-  }
-  try {
-    const s3data = await s3
-      .getObject({
-        Bucket: 'traypages',
-        Key: `@${username}`,
-      })
-      .promise();
-    const object = s3data.Body.toString('utf-8');
-    data = JSON.parse(object);
-  } catch (e) {
-    return {
-      props: {
-        error: { message: e.message },
-      },
-    };
-  }
-
-  return {
-    props: {
-      uploadUrl: uploadUrl,
-      data: data,
-      signedIn: signedIn,
-      error: error,
-    },
-  };
+const foo = async (ctx) => {
+  // if (session && session.user.username) {
+  //   sessionUsername = session.user.username;
+  //   signedIn = sessionUsername === username;
+  // }
+  // if (signedIn) {
+  //   // get a Stripe Customer or create one
+  //   const customerResponse = await getOrCreateCustomer(session, signedIn);
+  //   if (customerResponse.errored) {
+  //     return {
+  //       props: {
+  //         error: customerResponse.data,
+  //       },
+  //     };
+  //   }
+  //   // create a signed S3 URL for page data updates
+  //   try {
+  //     uploadUrl = await s3.getSignedUrlPromise('putObject', {
+  //       Bucket: 'traypages',
+  //       Key: `@${username}`,
+  //       ContentType: 'application/json',
+  //     });
+  //   } catch (e) {
+  //     return {
+  //       props: {
+  //         error: e,
+  //       },
+  //     };
+  //   }
+  //   // if this is a new user, populate initial page data
+  //   if (customerResponse.createdCustomer) {
+  //     try {
+  //       const initialPageData = {
+  //         customer_id: customerResponse.data['id'],
+  //         email: session.user.email,
+  //         name: session.user.name,
+  //         profile_image: session.user.picture,
+  //         twitter_id: session.user.id,
+  //         twitter_username: session.user.username,
+  //         twitter_description: session.user.description,
+  //         payment_settings: {
+  //           text: 'Leave a tip',
+  //           defaultAmount: 500,
+  //           enabled: false,
+  //           hideFeed: false,
+  //         },
+  //       };
+  //       await fetch(uploadUrl, {
+  //         method: 'PUT',
+  //         body: JSON.stringify(initialPageData, null, 2),
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //       });
+  //     } catch (e) {
+  //       return { props: { error: { message: e.message } } };
+  //     }
+  //   }
+  // }
+  // try {
+  //   const s3data = await s3
+  //     .getObject({
+  //       Bucket: 'traypages',
+  //       Key: `@${username}`,
+  //     })
+  //     .promise();
+  //   const object = s3data.Body.toString('utf-8');
+  //   data = JSON.parse(object);
+  // } catch (e) {
+  //   return {
+  //     props: {
+  //       error: { message: e.message },
+  //     },
+  //   };
+  // }
+  // return {
+  //   props: {
+  //     uploadUrl: uploadUrl,
+  //     data: data,
+  //     signedIn: signedIn,
+  //     error: error,
+  //   },
+  // };
 };
 export default UserPage;
