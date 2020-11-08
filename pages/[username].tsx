@@ -522,6 +522,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     let signedIn = false; // signed in as this user
     let uploadUrl = null;
     let sessionUsername = null;
+    return { props: { success: true } };
   } catch (e) {
     return { props: { error: { message: e.message } } };
   }
