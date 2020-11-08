@@ -158,7 +158,7 @@ export default {
       p: 3,
       bg: 'white',
       borderRadius: 12,
-      border: '1px solid black',
+      border: '1px dotted black',
     },
     primary: {
       paddingX: 3,
