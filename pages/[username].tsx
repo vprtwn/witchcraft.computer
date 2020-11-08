@@ -176,7 +176,7 @@ const UserPage = (props) => {
       )}
       {!props.error && (
         <>
-          <Header name={props.data.name} username={username} />
+          <Header name={props.data ? props.data.name : ''} username={username} />
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="droppable">
               {(provided, snapshot) => (

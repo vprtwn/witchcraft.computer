@@ -11,7 +11,7 @@ const PageBlock = (props) => {
   const signedIn = props.signedIn;
   const [editing, setEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const content = props.data[props.id];
+  const content = props.data ? props.data[props.id] : null;
   const initialText = content ? (content.text as string) : '';
   const [text, setText] = useState<string>(initialText);
   const [debouncedText] = useDebounce(text, DEBOUNCE_MS);

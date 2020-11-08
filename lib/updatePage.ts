@@ -8,6 +8,9 @@ export const updatePage = async (
   removedKey: string | null = null, // this is ugly
   order: Record<string, string>[] | null = null,
 ): Promise<object> => {
+  if (!currentPage) {
+    return;
+  }
   try {
     const payload = currentPage;
     payload[key] = value;

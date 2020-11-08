@@ -10,7 +10,7 @@ const DEBOUNCE_MS = 700;
 
 const TextBlock = (props) => {
   const signedIn = props.signedIn;
-  let initialText = props.data[props.id];
+  let initialText = props.data ? props.data[props.id] : null;
   if (props.signedIn && !initialText) {
     initialText = props.default;
   }
