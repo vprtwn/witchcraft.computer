@@ -508,85 +508,79 @@ const UserPage = (props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  try {
-    const AWS = require('aws-sdk');
-    const s3 = new AWS.S3();
-    const config = { accessKeyId: process.env.S3_ACCESS_KEY_ID, secretAccessKey: process.env.S3_SECRET };
-    AWS.config.update(config);
+  const AWS = require('aws-sdk');
+  const s3 = new AWS.S3();
+  const config = { accessKeyId: process.env.S3_ACCESS_KEY_ID, secretAccessKey: process.env.S3_SECRET };
+  AWS.config.update(config);
 
-    const query = ctx.query;
-    const username = unprefixUsername(query.username as string);
-    const session = await getSession(ctx);
-    let error = null;
-    let data = null;
-    let signedIn = false; // signed in as this user
-    let uploadUrl = null;
-    let sessionUsername = null;
-    return { props: { success: true } };
-  } catch (e) {
-    return { props: { error: { message: e.message } } };
+  const query = ctx.query;
+  const username = unprefixUsername(query.username as string);
+  const session = await getSession(ctx);
+  let error = null;
+  let data = null;
+  let signedIn = false; // signed in as this user
+  let uploadUrl = null;
+  let sessionUsername = null;
+
+  if (session && session.user.username) {
+    sessionUsername = session.user.username;
+    signedIn = sessionUsername === username;
   }
-};
-
-const foo = async (ctx) => {
-  // if (session && session.user.username) {
-  //   sessionUsername = session.user.username;
-  //   signedIn = sessionUsername === username;
-  // }
-  // if (signedIn) {
-  //   // get a Stripe Customer or create one
-  //   const customerResponse = await getOrCreateCustomer(session, signedIn);
-  //   if (customerResponse.errored) {
-  //     return {
-  //       props: {
-  //         error: customerResponse.data,
-  //       },
-  //     };
-  //   }
-  //   // create a signed S3 URL for page data updates
-  //   try {
-  //     uploadUrl = await s3.getSignedUrlPromise('putObject', {
-  //       Bucket: 'traypages',
-  //       Key: `@${username}`,
-  //       ContentType: 'application/json',
-  //     });
-  //   } catch (e) {
-  //     return {
-  //       props: {
-  //         error: e,
-  //       },
-  //     };
-  //   }
-  //   // if this is a new user, populate initial page data
-  //   if (customerResponse.createdCustomer) {
-  //     try {
-  //       const initialPageData = {
-  //         customer_id: customerResponse.data['id'],
-  //         email: session.user.email,
-  //         name: session.user.name,
-  //         profile_image: session.user.picture,
-  //         twitter_id: session.user.id,
-  //         twitter_username: session.user.username,
-  //         twitter_description: session.user.description,
-  //         payment_settings: {
-  //           text: 'Leave a tip',
-  //           defaultAmount: 500,
-  //           enabled: false,
-  //           hideFeed: false,
-  //         },
-  //       };
-  //       await fetch(uploadUrl, {
-  //         method: 'PUT',
-  //         body: JSON.stringify(initialPageData, null, 2),
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //       });
-  //     } catch (e) {
-  //       return { props: { error: { message: e.message } } };
-  //     }
-  //   }
-  // }
+  if (signedIn) {
+    // get a Stripe Customer or create one
+    const customerResponse = await getOrCreateCustomer(session, signedIn);
+    if (customerResponse.errored) {
+      return {
+        props: {
+          error: customerResponse.data,
+        },
+      };
+    }
+    // create a signed S3 URL for page data updates
+    try {
+      uploadUrl = await s3.getSignedUrlPromise('putObject', {
+        Bucket: 'traypages',
+        Key: `@${username}`,
+        ContentType: 'application/json',
+      });
+    } catch (e) {
+      return {
+        props: {
+          error: e,
+        },
+      };
+    }
+    // if this is a new user, populate initial page data
+    if (customerResponse.createdCustomer) {
+      try {
+        const initialPageData = {
+          customer_id: customerResponse.data['id'],
+          email: session.user.email,
+          name: session.user.name,
+          profile_image: session.user.picture,
+          twitter_id: session.user.id,
+          twitter_username: session.user.username,
+          twitter_description: session.user.description,
+          payment_settings: {
+            text: 'Leave a tip',
+            defaultAmount: 500,
+            enabled: false,
+            hideFeed: false,
+          },
+        };
+        await fetch(uploadUrl, {
+          method: 'PUT',
+          body: JSON.stringify(initialPageData, null, 2),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      } catch (e) {
+        return { props: { error: { message: e.message } } };
+      }
+    }
+  }
+  return { props: { success: true } };
   // try {
   //   const s3data = await s3
   //     .getObject({
