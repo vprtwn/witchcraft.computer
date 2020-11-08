@@ -508,8 +508,6 @@ const UserPage = (props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  return { props: {} };
-  /** 
   const AWS = require('aws-sdk');
   const s3 = new AWS.S3();
   const config = { accessKeyId: process.env.S3_ACCESS_KEY_ID, secretAccessKey: process.env.S3_SECRET };
@@ -606,6 +604,5 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       error: error,
     },
   };
-*/
 };
 export default UserPage;

@@ -43,7 +43,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     res.setHeader('location', path);
     res.statusCode = 302;
     res.end();
-    return;
+    return { props: {} };
   }
   return { props: {} };
 };
