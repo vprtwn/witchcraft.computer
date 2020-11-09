@@ -8,7 +8,7 @@ const PageBlock = (props) => {
   const content = props.data ? props.data[props.id] : null;
   const pageId = content ? content['id'] : null;
   const [editing, setEditing] = useState(false);
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState('...');
 
   const fetchPage = async () => {
     try {

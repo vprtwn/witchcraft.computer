@@ -10,7 +10,6 @@ export const getPageProps = async (session: Session, query: object): Promise<Get
   AWS.config.update(config);
 
   let pageId = null;
-  let error = null;
   let data = null;
   let signedIn = false; // signed in as this user
   let uploadUrl = null;
@@ -142,7 +141,6 @@ export const getPageProps = async (session: Session, query: object): Promise<Get
       pageId: pageId,
       signedIn: signedIn,
       uploadUrl: uploadUrl,
-      error: error,
     },
   };
 };
