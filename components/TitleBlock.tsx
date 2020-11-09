@@ -32,15 +32,8 @@ const TitleBlock = (props) => {
   };
 
   return (
-    <Card variant="textBlock" sx={{ fontSize: '15px' }}>
-      <Box
-        sx={{ px: 0, pb: 2, cursor: 'text' }}
-        onClick={() => {
-          if (!props.previewing) {
-            // editorRef.current.focusAtEnd();
-          }
-        }}
-      >
+    <Card variant="textBlock" sx={{ fontSize: '15px', bg: 'transparent' }}>
+      <Box sx={{ px: 0, pb: 2, cursor: 'text' }}>
         <TextareaAutosize
           defaultValue={title}
           spellCheck={false}
@@ -56,7 +49,7 @@ const TitleBlock = (props) => {
             paddingTop: 4,
             paddingBottom: 4,
             overflow: 'hidden',
-            pointerEvents: props.hideToolbar ? 'none' : 'auto',
+            pointerEvents: props.previewing ? 'none' : 'auto',
           }}
           placeholder="Comment (optional)"
           onChange={(t) => {

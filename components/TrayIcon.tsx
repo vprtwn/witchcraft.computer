@@ -12,13 +12,9 @@ const TrayIcon = () => {
         // animation: 'gradient 10s ease infinite',
       }}
     >
-      <Box sx={{ bg: 'white', flexGrow: 1 }} />
+      <Box sx={{ flexGrow: 1 }} />
       <Link href="/">
         <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 0H33L23 36V72H0V0Z" fill="white" />
-          <path d="M38 0H72V72H49V36L38 0Z" fill="white" />
-          <rect x="5" width="62" height="25" fill="white" />
-          <rect x="5" y="47" width="62" height="25" fill="white" />
           <path d="M43.5 23H46.2228L51 40.55H48L43.5 23Z" fill="black" />
           <path d="M25.2391 23H28L24 40.55H21L25.2391 23Z" fill="black" />
           <path d="M25.2391 23H46.2228L46.2228 25H25.2391L25.2391 23Z" fill="black" />
@@ -28,7 +24,7 @@ const TrayIcon = () => {
           />
         </svg>
       </Link>
-      <Box sx={{ bg: 'white', flexGrow: 1 }} />
+      <Box sx={{ flexGrow: 1 }} />
     </Flex>
   );
 };

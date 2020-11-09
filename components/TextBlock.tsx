@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Card, Box } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
 import { updatePage } from '../lib/updatePage';
+import { light } from '../lib/editorThemes';
 import Editor from 'rich-markdown-editor';
 import EditToolbar from './EditToolbar';
 import RichMarkdownEditor from 'rich-markdown-editor';
@@ -41,7 +42,7 @@ const TextBlock = (props) => {
   };
 
   return (
-    <Card variant="textBlock" sx={{ fontSize: '15px' }}>
+    <Card variant="textBlock" sx={{ fontSize: '15px', bg: 'transparent' }}>
       <Box
         sx={{ px: 0, py: 2, cursor: 'text' }}
         onClick={() => {
@@ -52,6 +53,7 @@ const TextBlock = (props) => {
         }}
       >
         <Editor
+          theme={light}
           ref={editorRef}
           defaultValue={text}
           placeholder=""

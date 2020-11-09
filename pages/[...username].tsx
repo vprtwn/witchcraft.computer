@@ -342,7 +342,7 @@ const UserPage = (props) => {
       )}
       <PageFooter />
       {props.signedIn && (
-        <Card variant="block" sx={{ p: 3, mb: 4, border: '1px dotted lightGray' }}>
+        <Card variant="block" sx={{ p: 3, mb: 4, bg: 'transparent', border: '1px dotted lightGray' }}>
           {false && !props.pageId && (
             <Box sx={{ mb: 3 }}>
               <Flex sx={{ alignItems: 'center' }}>
@@ -498,11 +498,7 @@ const UserPage = (props) => {
           )}
 
           <Flex sx={{ bg: 'transparent', flexDirection: 'row-reverse' }}>
-            <Button
-              onClick={() => signOut()}
-              variant="tiny"
-              sx={{ border: 'dotted 1px', color: 'lightGray', cursor: 'pointer' }}
-            >
+            <Button onClick={() => signOut()} variant="tiny" sx={{ border: 'dotted 1px lightGray', cursor: 'pointer' }}>
               <SignOutButtonIcon />
             </Button>
           </Flex>
