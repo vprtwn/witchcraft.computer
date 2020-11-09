@@ -3,7 +3,6 @@ import { Card, Box } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
 import { updatePage } from '../lib/updatePage';
 import TextareaAutosize from 'react-textarea-autosize';
-import RichMarkdownEditor from 'rich-markdown-editor';
 
 const DEBOUNCE_MS = 700;
 
@@ -14,7 +13,6 @@ const TitleBlock = (props) => {
   }
   const [title, setTitle] = useState(initialTitle);
   const [debouncedTitle] = useDebounce(title, DEBOUNCE_MS);
-  const editorRef = useRef<RichMarkdownEditor | null>(null);
 
   useEffect(() => {
     if (debouncedTitle !== initialTitle) {
