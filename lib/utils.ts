@@ -26,6 +26,12 @@ export const add = (list, newObject): OrderItem[] => {
 };
 
 //====== string utils =======
+// page IDs are unique per user. 14,000 required for 1% chance of collision.
+export const generatePageId = (): string => {
+  const nanoid = customAlphabet('0123456789', 10);
+  return nanoid();
+};
+
 export const generateBlockId = (type: BlockType): string => {
   const nanoid = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 6);
   const id = nanoid();
@@ -36,6 +42,9 @@ export const generateBlockId = (type: BlockType): string => {
       break;
     case BlockType.Text:
       typeString = 'text';
+      break;
+    case BlockType.Page:
+      typeString = 'page';
       break;
   }
   return `b.${typeString}.${id}`;
@@ -50,11 +59,16 @@ export const parseBlockId = (id: string): BlockType => {
     return BlockType.Unknown;
   }
   const type = comps[1];
-  if (type === 'link' && comps.length === 3) {
-    return BlockType.Link;
-  } else if (type === 'text' && comps.length === 3) {
-    return BlockType.Text;
+  if (comps.length === 3) {
+    if (type === 'link') {
+      return BlockType.Link;
+    } else if (type === 'text') {
+      return BlockType.Text;
+    } else if (type === 'page') {
+      return BlockType.Page;
+    }
   }
+
   return BlockType.Unknown;
 };
 

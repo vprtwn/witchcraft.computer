@@ -7,7 +7,7 @@ import PageBlock from '../components/PageBlock';
 import PaymentBlock from '../components/PaymentBlock';
 import PageFooter from '../components/PageFooter';
 import { getOrCreateCustomer } from '../lib/ops';
-import { reorder, remove, add, unprefixUsername, generateBlockId, parseBlockId } from '../lib/utils';
+import { reorder, remove, add, unprefixUsername, generateBlockId, generatePageId, parseBlockId } from '../lib/utils';
 import { updatePage } from '../lib/updatePage';
 import { Direction, BlockType } from '../lib/typedefs';
 import { useRouter } from 'next/router';
@@ -16,6 +16,7 @@ import NumberFormat from 'react-number-format';
 import { GetServerSideProps } from 'next';
 import { signOut, getSession } from 'next-auth/client';
 import fetchJson from '../lib/fetchJson';
+import { syncPaymentSettings, syncOrder } from '../lib/pageHelpers';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import EditButtonIcon from '../components/EditButtonIcon';
 import ViewButtonIcon from '../components/ViewButtonIcon';
@@ -89,30 +90,13 @@ const UserPage = (props) => {
       enabled: tipsEnabled,
       hideFeed: hideTipsFeed,
     };
-    syncPaymentSettings(newSettings);
+    syncPaymentSettings(props.uploadUrl, data, newSettings);
   }, [tipText, tipsEnabled, defaultTipAmount, hideTipsFeed]);
 
-  const syncPaymentSettings = async function (newSettings: object) {
-    try {
-      await updatePage(props.uploadUrl, data, 'payment_settings', newSettings);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const syncOrder = async function (newOrder: Record<string, string>[], removedId: string | null = null) {
-    try {
-      await updatePage(props.uploadUrl, data, 'b.order', newOrder, removedId);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const syncNewBlock = async function (id: string, value: string, order: Record<string, string>[]) {
+  const syncNewBlock = async function (id: string, value: string | object, order: Record<string, string>[]) {
     try {
       setShowingNewMenu(false);
       const newData = await updatePage(props.uploadUrl, data, id, value, null, order);
-      DEBUG && console.table(newData);
       setData(newData);
     } catch (e) {
       console.error(e);
@@ -126,7 +110,7 @@ const UserPage = (props) => {
     }
     const newItems = reorder(order, result.source.index, result.destination.index);
     setOrder(newItems);
-    syncOrder(newItems);
+    syncOrder(props.uploadUrl, data, newItems);
   };
 
   const moveBlock = (index: number, direction: Direction) => {
@@ -136,13 +120,22 @@ const UserPage = (props) => {
     const newIndex = direction === Direction.Up ? index - 1 : index + 1;
     const newItems = reorder(order, index, newIndex);
     setOrder(newItems);
-    syncOrder(newItems);
+    syncOrder(props.uploadUrl, data, newItems);
   };
 
   const removeBlock = (index: number) => {
     const result = remove(order, index);
     setOrder(result.items);
-    syncOrder(result.items, result.removedId);
+    syncOrder(props.uploadUrl, data, result.items, result.removedId);
+  };
+
+  const addLinkBlock = async (content: any) => {
+    const id = generateBlockId(BlockType.Link);
+    const newItem = { i: id };
+    const newItems = add(order, newItem);
+    const value = { text: content.text, url: content.url, comment: content.comment };
+    await syncNewBlock(id, value, newItems);
+    setOrder(newItems);
   };
 
   const addTextBlock = async () => {
@@ -153,12 +146,14 @@ const UserPage = (props) => {
     setOrder(newItems);
   };
 
-  const addLinkBlock = async (content: any) => {
-    const id = generateBlockId(BlockType.Link);
-    const newItem = { i: id };
+  const addPageBlock = async () => {
+    console.log('addPageBlock');
+    const blockId = generateBlockId(BlockType.Page);
+    const pageId = generatePageId();
+    const newItem = { i: blockId };
     const newItems = add(order, newItem);
-    const value = JSON.stringify({ text: content.text, url: content.url, comment: content.comment });
-    await syncNewBlock(id, value, newItems);
+    const value = { id: pageId };
+    await syncNewBlock(blockId, value, newItems);
     setOrder(newItems);
   };
 
@@ -166,7 +161,7 @@ const UserPage = (props) => {
     <Layout>
       {/* {DEBUG && (
         <Textarea rows={10} sx={{ borderColor: 'blue', my: 4 }}>
-          {JSON.stringify(props.data, null, 2)}
+          {JSON.stringify(props, null, 2)}
         </Textarea>
       )} */}
       {props.error && (
@@ -246,13 +241,14 @@ const UserPage = (props) => {
                                   />
                                 </Box>
                               )}
-                              {false && (
+                              {parseBlockId(orderItem.i) === BlockType.Page && (
                                 <Box
                                   sx={{
                                     py: 2,
                                   }}
                                 >
                                   <PageBlock
+                                    username={username}
                                     uploadUrl={props.uploadUrl}
                                     data={data}
                                     id={orderItem.i}
@@ -285,6 +281,7 @@ const UserPage = (props) => {
 
           {showingNewMenu && !previewing && (
             <NewMenu
+              pageId={props.pageId}
               onClick={(result) => {
                 console.log(result);
                 switch (result.type as BlockType) {
@@ -294,8 +291,8 @@ const UserPage = (props) => {
                   case BlockType.Link:
                     addLinkBlock(result);
                     break;
-                  case BlockType.Unknown:
-                    // no-op
+                  case BlockType.Page:
+                    addPageBlock();
                     break;
                 }
               }}
@@ -328,7 +325,8 @@ const UserPage = (props) => {
             </Flex>
           )}
 
-          {stripeAccount && tipsEnabled && (
+          {/* hiding tip jar for now – payments will be nice, but the core has to be great first. */}
+          {false && stripeAccount && tipsEnabled && (
             <>
               <PaymentBlock
                 signedIn={signedIn}
@@ -344,8 +342,8 @@ const UserPage = (props) => {
       <PageFooter />
       {props.signedIn && (
         <Card variant="block" sx={{ p: 3, mb: 4, border: '1px dotted lightGray' }}>
-          <Box>
-            <Box>
+          {false && !props.pageId && (
+            <Box sx={{ mb: 3 }}>
               <Flex sx={{ alignItems: 'center' }}>
                 <Flex>
                   <Label sx={{ bg: 'lightBlue', p: 1, borderRadius: '8px 8px 0px 0px' }}>
@@ -425,79 +423,85 @@ const UserPage = (props) => {
                   </Text>
                 )}
               </Box>
-            </Box>
-            {stripeAccount && (
-              <Box>
-                <Flex sx={{ alignItems: 'center' }}>
-                  <Flex>
-                    <Label sx={{ bg: tipsEnabled ? 'lightGreen' : 'offWhite', p: 1, borderRadius: '8px 8px 0px 0px' }}>
-                      <Flex sx={{ alignItems: 'center' }}>
-                        <Checkbox defaultChecked={tipsEnabled} onChange={(e) => setTipsEnabled(e.target.checked)} />
-                        <Text variant="small">Enable tips</Text>
-                      </Flex>
-                    </Label>
+              {stripeAccount && (
+                <Box>
+                  <Flex sx={{ alignItems: 'center' }}>
+                    <Flex>
+                      <Label
+                        sx={{ bg: tipsEnabled ? 'lightGreen' : 'offWhite', p: 1, borderRadius: '8px 8px 0px 0px' }}
+                      >
+                        <Flex sx={{ alignItems: 'center' }}>
+                          <Checkbox defaultChecked={tipsEnabled} onChange={(e) => setTipsEnabled(e.target.checked)} />
+                          <Text variant="small">Enable tips</Text>
+                        </Flex>
+                      </Label>
+                    </Flex>
                   </Flex>
-                </Flex>
-                <Box
-                  sx={{
-                    px: 2,
-                    py: 1,
-                    mb: 2,
-                    borderRadius: 4,
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    border: `1px ${tipsEnabled ? 'dashed' : 'none'} lightGreen`,
-                    bg: 'offWhite',
-                  }}
-                >
-                  <Box sx={{ alignItems: 'center', mb: 2 }}>
-                    <Label sx={{ mb: 2 }}>Button text</Label>
-                    <Input
-                      disabled={!tipsEnabled}
-                      variant="standardInput"
-                      sx={{ textAlign: 'center', bg: 'transparent', border: `1px dotted lightGray` }}
-                      defaultValue={tipText}
-                      onChange={(e) => setTipText(e.target.value)}
-                    />
+                  <Box
+                    sx={{
+                      px: 2,
+                      py: 1,
+                      mb: 2,
+                      borderRadius: 4,
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      border: `1px ${tipsEnabled ? 'dashed' : 'none'} lightGreen`,
+                      bg: 'offWhite',
+                    }}
+                  >
+                    <Box sx={{ alignItems: 'center', mb: 2 }}>
+                      <Label sx={{ mb: 2 }}>Button text</Label>
+                      <Input
+                        disabled={!tipsEnabled}
+                        variant="standardInput"
+                        sx={{ textAlign: 'center', bg: 'transparent', border: `1px dotted lightGray` }}
+                        defaultValue={tipText}
+                        onChange={(e) => setTipText(e.target.value)}
+                      />
+                    </Box>
+                    <Box sx={{ alignItems: 'center', mb: 0 }}>
+                      <Label sx={{ mb: -3 }}>Default amount</Label>
+                      <NumberFormat
+                        disabled={!tipsEnabled}
+                        name="amount"
+                        id="amount"
+                        decimalScale={0}
+                        allowEmptyFormatting={true}
+                        allowNegative={false}
+                        type="tel"
+                        defaultValue={(defaultTipAmount as number) / 100.0}
+                        displayType={'input'}
+                        thousandSeparator={true}
+                        prefix={'$'}
+                        customInput={Input}
+                        renderText={(value) => <Input value={value} />}
+                        onValueChange={(values) => setDefaultTipAmount(~~(values.floatValue * 100))}
+                      />
+                    </Box>
+                    {tipsEnabled && (
+                      <Label>
+                        <Flex sx={{ alignItems: 'center' }}>
+                          <Checkbox
+                            disabled={!tipsEnabled}
+                            defaultChecked={hideTipsFeed}
+                            onChange={(e) => setHideTipsFeed(e.target.checked)}
+                          />
+                          <Text variant="tiny">Hide feed</Text>
+                        </Flex>
+                      </Label>
+                    )}
                   </Box>
-                  <Box sx={{ alignItems: 'center', mb: 0 }}>
-                    <Label sx={{ mb: -3 }}>Default amount</Label>
-                    <NumberFormat
-                      disabled={!tipsEnabled}
-                      name="amount"
-                      id="amount"
-                      decimalScale={0}
-                      allowEmptyFormatting={true}
-                      allowNegative={false}
-                      type="tel"
-                      defaultValue={(defaultTipAmount as number) / 100.0}
-                      displayType={'input'}
-                      thousandSeparator={true}
-                      prefix={'$'}
-                      customInput={Input}
-                      renderText={(value) => <Input value={value} />}
-                      onValueChange={(values) => setDefaultTipAmount(~~(values.floatValue * 100))}
-                    />
-                  </Box>
-                  {tipsEnabled && (
-                    <Label>
-                      <Flex sx={{ alignItems: 'center' }}>
-                        <Checkbox
-                          disabled={!tipsEnabled}
-                          defaultChecked={hideTipsFeed}
-                          onChange={(e) => setHideTipsFeed(e.target.checked)}
-                        />
-                        <Text variant="tiny">Hide feed</Text>
-                      </Flex>
-                    </Label>
-                  )}
                 </Box>
-              </Box>
-            )}
-          </Box>
+              )}
+            </Box>
+          )}
 
-          <Flex sx={{ bg: 'transparent', flexDirection: 'row-reverse', mt: 3 }}>
-            <Button onClick={() => signOut()} variant="tiny" sx={{ color: 'lightGray', cursor: 'pointer' }}>
+          <Flex sx={{ bg: 'transparent', flexDirection: 'row-reverse' }}>
+            <Button
+              onClick={() => signOut()}
+              variant="tiny"
+              sx={{ border: 'dotted 1px', color: 'lightGray', cursor: 'pointer' }}
+            >
               <SignOutButtonIcon />
             </Button>
           </Flex>
@@ -513,19 +517,53 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const config = { accessKeyId: process.env.S3_ACCESS_KEY_ID, secretAccessKey: process.env.S3_SECRET };
   AWS.config.update(config);
 
-  const query = ctx.query;
-  const username = unprefixUsername(query.username as string);
   const session = await getSession(ctx);
+  let pageId = null;
   let error = null;
   let data = null;
   let signedIn = false; // signed in as this user
   let uploadUrl = null;
   let sessionUsername = null;
 
+  const query = ctx.query;
+  console.log(JSON.stringify(query, null, 2));
+  const params = query['username'];
+  let username = params[0] as string;
+  username = unprefixUsername(username);
+  if (params.length > 2) {
+    return {
+      props: {
+        error: { message: 'invalid URL' },
+      },
+    };
+  }
+
+  if (params.length > 1) {
+    pageId = params[1];
+  }
+  let objectKey = `@${username}`;
+  if (pageId) {
+    objectKey = `@${username}/${pageId}`;
+  }
+
+  try {
+    const s3data = await s3
+      .getObject({
+        Bucket: 'traypages',
+        Key: objectKey,
+      })
+      .promise();
+    const object = s3data.Body.toString('utf-8');
+    data = JSON.parse(object);
+  } catch (e) {
+    console.error(`no object at ${objectKey}`, e.message);
+  }
+
   if (session && session.user.username) {
     sessionUsername = session.user.username;
     signedIn = sessionUsername === username;
   }
+
   if (signedIn) {
     // get a Stripe Customer or create one
     const customerResponse = await getOrCreateCustomer(session, signedIn);
@@ -536,11 +574,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
       };
     }
+
     // create a signed S3 URL for page data updates
     try {
       uploadUrl = await s3.getSignedUrlPromise('putObject', {
         Bucket: 'traypages',
-        Key: `@${username}`,
+        Key: objectKey,
         ContentType: 'application/json',
       });
     } catch (e) {
@@ -551,55 +590,48 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       };
     }
     // if this is a new user, populate initial page data
-    if (customerResponse.createdCustomer) {
+    if (customerResponse.createdCustomer || !data) {
       try {
-        const initialPageData = {
-          customer_id: customerResponse.data['id'],
-          email: session.user.email,
-          name: session.user.name,
-          profile_image: session.user.picture,
-          twitter_id: session.user.id,
-          twitter_username: session.user.username,
-          twitter_description: session.user.description,
-          payment_settings: {
-            text: 'Leave a tip',
-            defaultAmount: 500,
-            enabled: false,
-            hideFeed: false,
-          },
-        };
+        let initialData = {};
+        if (pageId) {
+          initialData = {
+            title: 'New page',
+          };
+        } else {
+          initialData = {
+            email: session.user.email,
+            name: session.user.name,
+            profile_image: session.user.picture,
+            twitter_id: session.user.id,
+            twitter_username: session.user.username,
+            twitter_description: session.user.description,
+            payment_settings: {
+              text: 'Leave a tip',
+              defaultAmount: 500,
+              enabled: false,
+              hideFeed: false,
+            },
+          };
+        }
         await fetch(uploadUrl, {
           method: 'PUT',
-          body: JSON.stringify(initialPageData, null, 2),
+          body: JSON.stringify(initialData, null, 2),
           headers: {
             'Content-Type': 'application/json',
           },
         });
+        data = initialData;
       } catch (e) {
         return { props: { error: { message: e.message } } };
       }
     }
   }
-  try {
-    const s3data = await s3
-      .getObject({
-        Bucket: 'traypages',
-        Key: `@${username}`,
-      })
-      .promise();
-    const object = s3data.Body.toString('utf-8');
-    data = JSON.parse(object);
-  } catch (e) {
-    return {
-      props: {
-        error: { message: e.message },
-      },
-    };
-  }
+
   return {
     props: {
       uploadUrl: uploadUrl,
       data: data,
+      pageId: pageId,
       signedIn: signedIn,
       error: error,
     },

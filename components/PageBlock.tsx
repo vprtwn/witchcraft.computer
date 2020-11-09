@@ -1,35 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Card, Input, Flex, Box } from 'theme-ui';
-import { useDebounce } from 'use-debounce';
-import EditToolbar from './EditToolbar';
-import { updatePage } from '../lib/updatePage';
-import TextareaAutosize from 'react-textarea-autosize';
+import { Card, Text, Flex, Box } from 'theme-ui';
+import PageBlockEditToolbar from './PageBlockEditToolbar';
 
 const DEBOUNCE_MS = 700;
 
 const PageBlock = (props) => {
   const signedIn = props.signedIn;
-  const [editing, setEditing] = useState(false);
-  const inputRef = useRef<HTMLInputElement | null>(null);
   const content = props.data ? props.data[props.id] : null;
-  const initialText = content ? (content.text as string) : '';
-  const [text, setText] = useState<string>(initialText);
-  const [debouncedText] = useDebounce(text, DEBOUNCE_MS);
+  if (content) {
+    const id = content['id'];
+    // todo: fetch
+  }
+  const [editing, setEditing] = useState(false);
+  const initialText = 'New page';
 
-  useEffect(() => {
-    const value = {
-      text: debouncedText,
-    };
-    syncUpdates(value);
-  }, [debouncedText]);
-
-  const syncUpdates = async function (value) {
-    try {
-      await updatePage(props.uploadUrl, props.data, props.id, value);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  useEffect(() => {}, []);
 
   return (
     <Card
@@ -47,37 +32,24 @@ const PageBlock = (props) => {
       }}
     >
       <Flex
-        sx={{ py: 2, px: 2, bg: 'transparent' }}
+        sx={{ py: 3, px: 3, bg: 'transparent' }}
         onClick={() => {
-          if (!props.hideToolbar) {
-            setEditing(true);
-          }
+          window.location.assign(`${props.username}/${content.id}` as string);
         }}
       >
-        <TextareaAutosize
-          defaultValue={text}
-          style={{
-            background: 'transparent',
-            width: '100%',
-            resize: 'none',
+        <Text
+          sx={{
             fontFamily:
               '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-            fontSize: '17px',
+            fontSize: '16px',
             border: 'none',
-            paddingLeft: 8,
-            paddingTop: 4,
-            paddingBottom: 4,
-            overflow: 'hidden',
-            pointerEvents: props.hideToolbar ? 'none' : 'auto',
           }}
-          placeholder=""
-          onChange={(t) => {
-            setText(t.target.value);
-          }}
-        />
+        >
+          {initialText}
+        </Text>
       </Flex>
       {signedIn && !props.hideToolbar && (
-        <EditToolbar
+        <PageBlockEditToolbar
           editing={editing}
           onDelete={props.onDelete}
           hideDown={props.hideDown}
@@ -86,13 +58,6 @@ const PageBlock = (props) => {
           onDown={props.onDown}
           onSwitchEditing={() => {
             setEditing(!editing);
-            if (inputRef.current) {
-              if (!editing) {
-                inputRef.current.focus();
-              } else {
-                inputRef.current.blur();
-              }
-            }
           }}
         />
       )}

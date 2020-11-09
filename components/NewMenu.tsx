@@ -24,62 +24,62 @@ const NewMenu = (props) => {
     <Box sx={{ pt: 2 }}>
       {showingForm && (
         <>
-          <Card variant="block" sx={{ border: 'dotted 1px black', borderRadius: 8, fontSize: '15px' }}>
-            <Flex
-              sx={{
-                pl: 2,
-                pr: 1,
-                py: 0,
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                borderRadius: 8,
-                bg: 'white',
-                color: 'black',
-                cursor: 'pointer',
-              }}
-            >
-              <Box sx={{ flexGrow: 1, py: 1 }}>
-                <Input
-                  ref={inputRef}
-                  variant="linkInput"
-                  placeholder="Link text"
-                  onChange={(t) => setText(t.target.value)}
-                />
-              </Box>
-            </Flex>
-            <Box sx={{ py: 1, px: 2, bg: 'transparent' }}>
+          <Box sx={{ fontSize: '15px' }}>
+            <Card variant="block" sx={{ py: 1, px: 2, bg: 'black', borderRadius: 8, mb: 1 }}>
               <Input
                 variant="linkInput"
                 placeholder="Link address"
                 type="url"
+                ref={inputRef}
                 sx={{
                   fontSize: '14px',
                   fontFamily: 'mono',
+                  color: 'white',
                 }}
                 onChange={(t) => setUrl(t.target.value)}
               />
-            </Box>
-            <Flex sx={{ py: 1, px: 2, bg: 'lightGray', borderRadius: '0px 0px 8px 8px' }}>
-              <TextareaAutosize
-                style={{
-                  background: 'none',
-                  width: '100%',
-                  resize: 'none',
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-                  fontSize: '13px',
-                  border: 'none',
-                  paddingLeft: 8,
-                  paddingTop: 4,
-                  paddingBottom: 4,
-                  overflow: 'hidden',
-                  pointerEvents: props.hideToolbar ? 'none' : 'auto',
+            </Card>
+            <Card variant="block" sx={{ border: 'dotted 1px black', borderRadius: 8 }}>
+              <Flex
+                sx={{
+                  pl: 2,
+                  pr: 1,
+                  py: 0,
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  borderRadius: 8,
+                  bg: 'white',
+                  color: 'black',
+                  cursor: 'pointer',
                 }}
-                placeholder="Comment (optional)"
-                onChange={(t) => setComment(t.target.value)}
-              />
-            </Flex>
-          </Card>
+              >
+                <Box sx={{ flexGrow: 1, py: 1 }}>
+                  <Input variant="linkInput" placeholder="Link text" onChange={(t) => setText(t.target.value)} />
+                </Box>
+              </Flex>
+
+              <Flex sx={{ py: 1, px: 2, bg: 'lightGray', borderRadius: '0px 0px 8px 8px' }}>
+                <TextareaAutosize
+                  style={{
+                    background: 'none',
+                    width: '100%',
+                    resize: 'none',
+                    fontFamily:
+                      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+                    fontSize: '13px',
+                    border: 'none',
+                    paddingLeft: 8,
+                    paddingTop: 4,
+                    paddingBottom: 4,
+                    overflow: 'hidden',
+                    pointerEvents: props.hideToolbar ? 'none' : 'auto',
+                  }}
+                  placeholder="Comment (optional)"
+                  onChange={(t) => setComment(t.target.value)}
+                />
+              </Flex>
+            </Card>
+          </Box>
           <Flex sx={{ justifyContent: 'right', pt: 1 }}>
             <Button
               variant="newMenuButton"
@@ -115,6 +115,17 @@ const NewMenu = (props) => {
           >
             <TextButtonIcon />
           </Button>
+          {!props.pageId && (
+            <Button
+              variant="newMenuButton"
+              sx={{ flexGrow: 1 }}
+              onClick={() => {
+                props.onClick({ type: BlockType.Page });
+              }}
+            >
+              <PageButtonIcon />
+            </Button>
+          )}
           {/* <Button
             variant="newMenuButton"
             sx={{ flexGrow: 1, mr: 2 }}
@@ -123,16 +134,7 @@ const NewMenu = (props) => {
             }}
           >
             <AudioButtonIcon />
-          </Button>
-          <Button
-            variant="newMenuButton"
-            sx={{ flexGrow: 1 }}
-            onClick={() => {
-              // props.onClick({ type: BlockType.Text });
-            }}
-          >
-            <PageButtonIcon />
-          </Button> */}
+          </Button>*/}
         </Flex>
       )}
     </Box>

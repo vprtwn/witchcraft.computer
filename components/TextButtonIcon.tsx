@@ -16,7 +16,7 @@ const TextButtonIcon = () => {
         ></path>
       </svg>
       <Box>
-        <Label variant="buttonLabel">Text</Label>
+        <Label variant="buttonLabel">Note</Label>
       </Box>
     </Flex>
   );
