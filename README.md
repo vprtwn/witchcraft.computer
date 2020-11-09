@@ -42,6 +42,8 @@ Consumers: Mobile app, favorites, discovery, following, etc. Spotify x Tumblr x 
 
 ### Updating the TextBlock Editor
 
+Note: These instructions are for `rich-markdown-editor`, which I stopped using (see `52721ab`, last commit before removal).
+
 - TextBlock uses a [forked rich-markdown-editor](https://github.com/mysterious-technology/rich-markdown-editor). Modifications on this fork are pretty minimal: visual (removing extraneous elements) and functional (removing unsupported elements)
 - First, push to the `flexjar` branch of the fork.
   - I'm not sure if you have to run `yarn build` and commit those changes, or if that happens as part of yarn...

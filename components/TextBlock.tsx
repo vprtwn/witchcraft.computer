@@ -3,9 +3,8 @@ import { Card, Box } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
 import { updatePage } from '../lib/updatePage';
 import { light } from '../lib/editorThemes';
-import Editor from 'rich-markdown-editor';
 import EditToolbar from './EditToolbar';
-import RichMarkdownEditor from 'rich-markdown-editor';
+import TextareaAutosize from 'react-textarea-autosize';
 
 const DEBOUNCE_MS = 700;
 
@@ -18,19 +17,12 @@ const TextBlock = (props) => {
   const [editing, setEditing] = useState(false);
   const [text, setText] = useState(initialText);
   const [debouncedText] = useDebounce(text, DEBOUNCE_MS);
-  const editorRef = useRef<RichMarkdownEditor | null>(null);
 
   useEffect(() => {
     if (debouncedText !== initialText) {
       syncUpdatedText(debouncedText);
     }
   }, [debouncedText]);
-
-  useEffect(() => {
-    if (editing) {
-      editorRef.current.focusAtEnd();
-    }
-  }, [editing]);
 
   const syncUpdatedText = async function (newText: string) {
     try {
@@ -48,18 +40,28 @@ const TextBlock = (props) => {
         onClick={() => {
           if (!props.previewing && !editing) {
             setEditing(true);
-            editorRef.current.focusAtEnd();
           }
         }}
       >
-        <Editor
-          theme={light}
-          ref={editorRef}
+        <TextareaAutosize
           defaultValue={text}
-          placeholder=""
-          readOnly={props.previewing || !editing}
-          onChange={(v) => {
-            setText(v());
+          spellCheck={false}
+          style={{
+            background: 'transparent',
+            width: '100%',
+            resize: 'none',
+            fontFamily:
+              '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+            fontSize: '16px',
+            border: 'none',
+            paddingTop: 4,
+            paddingBottom: 4,
+            overflow: 'hidden',
+            pointerEvents: props.previewing ? 'none' : 'auto',
+          }}
+          placeholder="Comment (optional)"
+          onChange={(t) => {
+            setText(t.target.value);
           }}
         />
       </Box>
