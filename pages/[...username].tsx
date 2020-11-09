@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
 import Header from '../components/Header';
 import TextBlock from '../components/TextBlock';
+import TitleBlock from '../components/TitleBlock';
 import LinkBlock from '../components/LinkBlock';
 import PageBlock from '../components/PageBlock';
 import PaymentBlock from '../components/PaymentBlock';
 import PageFooter from '../components/PageFooter';
-import { getOrCreateCustomer } from '../lib/ops';
-import { reorder, remove, add, unprefixUsername, generateBlockId, generatePageId, parseBlockId } from '../lib/utils';
+import { useDebounce } from 'use-debounce';
+import { reorder, remove, add, generateBlockId, generatePageId, parseBlockId } from '../lib/utils';
 import { updatePage } from '../lib/updatePage';
+import { getPageProps } from '../lib/getPageProps';
 import { Direction, BlockType } from '../lib/typedefs';
-import { useRouter } from 'next/router';
 import { Box, Checkbox, Link, Badge, Input, IconButton, Flex, Card, Button, Text, Label, Textarea } from 'theme-ui';
 import NumberFormat from 'react-number-format';
 import { GetServerSideProps } from 'next';
@@ -26,16 +27,14 @@ import SignOutButtonIcon from '../components/SignOutButtonIcon';
 import NewMenu from '../components/NewMenu';
 import { useSession } from 'next-auth/client';
 
+const DEBOUNCE_MS = 700;
+
 let DEBUG = true;
 if (process.env.NODE_ENV === 'production') {
   DEBUG = false;
 }
 
 const UserPage = (props) => {
-  const {
-    query: { username },
-  } = useRouter();
-
   const defaultText = 'edit me';
 
   const disconnectStripe = async function () {
@@ -74,12 +73,15 @@ const UserPage = (props) => {
   const paymentSettings = props.data ? props.data['payment_settings'] : null;
   const [tipsEnabled, setTipsEnabled] = useState(paymentSettings ? paymentSettings.enabled : false);
   const [tipText, setTipText] = useState(paymentSettings ? paymentSettings.text : 'Leave a tip');
+  const [debouncedTipText] = useDebounce(tipText, DEBOUNCE_MS);
   const [defaultTipAmount, setDefaultTipAmount] = useState(paymentSettings ? paymentSettings.defaultAmount : 500);
+  const [debouncedTipAmount] = useDebounce(defaultTipAmount, DEBOUNCE_MS);
   const [hideTipsFeed, setHideTipsFeed] = useState(paymentSettings ? paymentSettings.hideFeed : false);
   const initialOrder = props.data ? props.data['b.order'] : [];
   const [order, setOrder] = useState(initialOrder);
+
   const [showingNewMenu, setShowingNewMenu] = useState(false);
-  const [previewing, setPreviewing] = useState(DEBUG ? false : true);
+  const [previewing, setPreviewing] = useState(true);
   const [data, setData] = useState(props.data);
   const [stripeAccount, setStripeAccount] = useState<object | null>(null);
 
@@ -90,8 +92,10 @@ const UserPage = (props) => {
       enabled: tipsEnabled,
       hideFeed: hideTipsFeed,
     };
-    syncPaymentSettings(props.uploadUrl, data, newSettings);
-  }, [tipText, tipsEnabled, defaultTipAmount, hideTipsFeed]);
+    if (!props.pageId) {
+      syncPaymentSettings(props.uploadUrl, data, newSettings);
+    }
+  }, [debouncedTipText, tipsEnabled, debouncedTipAmount, hideTipsFeed]);
 
   const syncNewBlock = async function (id: string, value: string | object, order: Record<string, string>[]) {
     try {
@@ -104,7 +108,6 @@ const UserPage = (props) => {
   };
 
   const onDragEnd = (result) => {
-    // dropped outside the list
     if (!result.destination) {
       return;
     }
@@ -147,7 +150,6 @@ const UserPage = (props) => {
   };
 
   const addPageBlock = async () => {
-    console.log('addPageBlock');
     const blockId = generateBlockId(BlockType.Page);
     const pageId = generatePageId();
     const newItem = { i: blockId };
@@ -160,18 +162,17 @@ const UserPage = (props) => {
   return (
     <Layout>
       {/* {DEBUG && (
-        <Textarea rows={10} sx={{ borderColor: 'blue', my: 4 }}>
-          {JSON.stringify(props, null, 2)}
-        </Textarea>
+        <Textarea rows={10} sx={{ borderColor: 'blue', my: 4 }} defaultValue={JSON.stringify(props, null, 2)} />
       )} */}
       {props.error && (
-        <Textarea rows={10} sx={{ borderColor: 'red', my: 4 }}>
-          {JSON.stringify(props.error, null, 2)}
-        </Textarea>
+        <Textarea rows={10} sx={{ borderColor: 'red', my: 4 }} defaultValue={JSON.stringify(props.error, null, 2)} />
       )}
       {!props.error && (
         <>
-          <Header name={props.data ? props.data.name : ''} username={username} />
+          <Header name={props.data ? props.data.name : ''} username={props.username} pageId={props.pageId} />
+          {props.pageId && (
+            <TitleBlock uploadUrl={props.uploadUrl} data={data} previewing={previewing} signedIn={props.signedIn} />
+          )}
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="droppable">
               {(provided, snapshot) => (
@@ -248,7 +249,7 @@ const UserPage = (props) => {
                                   }}
                                 >
                                   <PageBlock
-                                    username={username}
+                                    username={props.username}
                                     uploadUrl={props.uploadUrl}
                                     data={data}
                                     id={orderItem.i}
@@ -512,129 +513,10 @@ const UserPage = (props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const AWS = require('aws-sdk');
-  const s3 = new AWS.S3();
-  const config = { accessKeyId: process.env.S3_ACCESS_KEY_ID, secretAccessKey: process.env.S3_SECRET };
-  AWS.config.update(config);
-
   const session = await getSession(ctx);
-  let pageId = null;
-  let error = null;
-  let data = null;
-  let signedIn = false; // signed in as this user
-  let uploadUrl = null;
-  let sessionUsername = null;
-
   const query = ctx.query;
-  console.log(JSON.stringify(query, null, 2));
-  const params = query['username'];
-  let username = params[0] as string;
-  username = unprefixUsername(username);
-  if (params.length > 2) {
-    return {
-      props: {
-        error: { message: 'invalid URL' },
-      },
-    };
-  }
 
-  if (params.length > 1) {
-    pageId = params[1];
-  }
-  let objectKey = `@${username}`;
-  if (pageId) {
-    objectKey = `@${username}/${pageId}`;
-  }
-
-  try {
-    const s3data = await s3
-      .getObject({
-        Bucket: 'traypages',
-        Key: objectKey,
-      })
-      .promise();
-    const object = s3data.Body.toString('utf-8');
-    data = JSON.parse(object);
-  } catch (e) {
-    console.error(`no object at ${objectKey}`, e.message);
-  }
-
-  if (session && session.user.username) {
-    sessionUsername = session.user.username;
-    signedIn = sessionUsername === username;
-  }
-
-  if (signedIn) {
-    // get a Stripe Customer or create one
-    const customerResponse = await getOrCreateCustomer(session, signedIn);
-    if (customerResponse.errored) {
-      return {
-        props: {
-          error: customerResponse.data,
-        },
-      };
-    }
-
-    // create a signed S3 URL for page data updates
-    try {
-      uploadUrl = await s3.getSignedUrlPromise('putObject', {
-        Bucket: 'traypages',
-        Key: objectKey,
-        ContentType: 'application/json',
-      });
-    } catch (e) {
-      return {
-        props: {
-          error: e,
-        },
-      };
-    }
-    // if this is a new user, populate initial page data
-    if (customerResponse.createdCustomer || !data) {
-      try {
-        let initialData = {};
-        if (pageId) {
-          initialData = {
-            title: 'New page',
-          };
-        } else {
-          initialData = {
-            email: session.user.email,
-            name: session.user.name,
-            profile_image: session.user.picture,
-            twitter_id: session.user.id,
-            twitter_username: session.user.username,
-            twitter_description: session.user.description,
-            payment_settings: {
-              text: 'Leave a tip',
-              defaultAmount: 500,
-              enabled: false,
-              hideFeed: false,
-            },
-          };
-        }
-        await fetch(uploadUrl, {
-          method: 'PUT',
-          body: JSON.stringify(initialData, null, 2),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        data = initialData;
-      } catch (e) {
-        return { props: { error: { message: e.message } } };
-      }
-    }
-  }
-
-  return {
-    props: {
-      uploadUrl: uploadUrl,
-      data: data,
-      pageId: pageId,
-      signedIn: signedIn,
-      error: error,
-    },
-  };
+  const result = await getPageProps(session, query);
+  return result;
 };
 export default UserPage;

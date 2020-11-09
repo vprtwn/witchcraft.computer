@@ -4,17 +4,12 @@ import AboutTray from '../components/AboutTray';
 import TrayIcon from '../components/TrayIcon';
 import SignInButton from '../components/SignInButton';
 import MarketingFooter from '../components/MarketingFooter';
-import fetchJson from '../lib/fetchJson';
-import { Flex, Text, Link, Box, Button, Card } from 'theme-ui';
+import { Card } from 'theme-ui';
 import { GetServerSideProps } from 'next';
-import Router, { useRouter } from 'next/router';
 import { signIn, getSession, useSession } from 'next-auth/client';
 import { generateUserPath, validateStripeConnectParams } from '../lib/utils';
 
 const IndexPage = () => {
-  const {
-    query: { code, state },
-  } = useRouter();
   const [session, loading] = useSession();
   const signedIn = session && session.user.username;
 

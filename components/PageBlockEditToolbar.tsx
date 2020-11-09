@@ -17,12 +17,12 @@ const PageBlockEditToolbar = (props) => {
           <DeleteButtonIcon />
         </IconButton>
       </Box>
-      <Box sx={{ flexGrow: 1 }} hidden={props.hideDown}>
+      <Box sx={{ flexGrow: 1, visibility: props.hideDown ? 'hidden' : 'visible' }}>
         <IconButton onClick={props.onDown}>
           <DownButtonIcon />
         </IconButton>
       </Box>
-      <Box sx={{ flexGrow: 1 }} hidden={props.hideUp}>
+      <Box sx={{ visibility: props.hideUp ? 'hidden' : 'visible' }}>
         <IconButton onClick={props.onUp}>
           <UpButtonIcon />
         </IconButton>

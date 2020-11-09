@@ -13,9 +13,7 @@ const PaymentFeedBlock = (props) => {
       });
       setPayments(response.payments);
     } catch (e) {
-      // TODO: handle errors (in this entire function)
       console.error(e);
-      return;
     }
   };
 

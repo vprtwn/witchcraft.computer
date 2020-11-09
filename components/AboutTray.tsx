@@ -9,11 +9,7 @@ const AboutTray = (props) => {
         <strong>:</strong> a new way to share notes, links, and music.
       </Text>
       <Text variant="large" mt={3}>
-        This is{' '}
-        <Link href="http://paulgraham.com/early.html" variant="primary">
-          early work
-        </Link>
-        . Up next: upload your own audio.
+        
       </Text>
       {/* <Text variant="tiny" sx={{ pt: 3, pb: 2, color: 'gray' }}>
         <Badge variant="outline" sx={{ fontSize: 10, color: 'gray' }}>

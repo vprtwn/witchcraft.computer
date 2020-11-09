@@ -4,12 +4,20 @@ const Header = (props) => {
   const twitterProfileUrl = `https://twitter.com/${props.username}`;
 
   return (
-    <Container sx={{ mt: 1, mb: 3 }}>
-      <Flex sx={{ justifyContent: 'left' }}>
+    <Container sx={{ mt: 1, mb: props.pageId ? 1 : 3 }}>
+      <Flex sx={{ justifyContent: 'right' }}>
         {props.username && (
           <Box sx={{ px: 0 }}>
-            <Link href={twitterProfileUrl} variant="nav">
-              <Text sx={{ fontWeight: 'bold', fontSize: '13px', fontFamily: 'sans' }}>{props.username}</Text>
+            <Link href={props.pageId ? `/@${props.username}` : twitterProfileUrl} variant="nav">
+              <Text
+                sx={{
+                  fontWeight: 'bold',
+                  fontSize: '13px',
+                  fontFamily: 'sans',
+                }}
+              >
+                {props.username}
+              </Text>
             </Link>
           </Box>
         )}

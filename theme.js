@@ -29,7 +29,9 @@ export default {
     offWhite: '#f7fafc',
     primary: '#000',
     lightGreen: '#f0fff4',
+    lightRed: '#fff5f5',
     lightBlue: '#ebf8ff',
+    lightTeal: '#e6fffa',
     background: '#fff',
     lightGray: '#edf2f7',
     modes: {

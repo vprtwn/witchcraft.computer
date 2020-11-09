@@ -20,6 +20,9 @@ export const remove = (list, index): { removedId: string; items: OrderItem[] } =
 };
 
 export const add = (list, newObject): OrderItem[] => {
+  if (!list) {
+    return [];
+  }
   const result = Array.from(list) as OrderItem[];
   result.push(newObject);
   return result;

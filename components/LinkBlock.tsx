@@ -43,7 +43,7 @@ const LinkBlock = (props) => {
   };
 
   return (
-    <Card variant="block" sx={{ border: 'solid 1px black', fontSize: '15px' }}>
+    <Card variant="block" sx={{ border: 'solid 1px black', fontSize: '15px', bg: 'white' }}>
       <>
         <Flex
           onClick={() => {
@@ -60,7 +60,6 @@ const LinkBlock = (props) => {
             justifyContent: 'space-between',
             alignItems: 'center',
             borderRadius: 8,
-            bg: 'white',
             color: 'black',
             cursor: 'pointer',
           }}
@@ -112,7 +111,9 @@ const LinkBlock = (props) => {
         >
           <TextareaAutosize
             defaultValue={comment}
+            spellCheck={false}
             style={{
+              textAlign: 'right',
               background: 'transparent',
               width: '100%',
               resize: 'none',

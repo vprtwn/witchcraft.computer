@@ -31,10 +31,10 @@ const TextBlock = (props) => {
     }
   }, [editing]);
 
-  const syncUpdatedText = async function (value) {
+  const syncUpdatedText = async function (newText: string) {
     try {
-      await updatePage(props.uploadUrl, props.data, props.id, value);
-      setText(value);
+      await updatePage(props.uploadUrl, props.data, props.id, newText);
+      setText(newText);
     } catch (e) {
       console.error(e);
     }

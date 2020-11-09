@@ -1,5 +1,3 @@
-import fetchJson from './fetchJson';
-
 export const updatePage = async (
   uploadUrl: string,
   currentPage: object,
@@ -8,6 +6,7 @@ export const updatePage = async (
   removedKey: string | null = null, // this is ugly
   order: Record<string, string>[] | null = null,
 ): Promise<object> => {
+  console.log('updatePage');
   if (!currentPage) {
     return;
   }
@@ -25,10 +24,11 @@ export const updatePage = async (
       uploadUrl: uploadUrl,
       payload: payload,
     };
-    const result = await fetchJson('api/upload', {
+    const result = await fetch('/api/upload', {
       method: 'POST',
       body: JSON.stringify(params),
     });
+    console.log('updatePage', result.status);
     return payload;
   } catch (e) {
     return { error: e.message };

@@ -1,20 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, Text, Flex, Box } from 'theme-ui';
 import PageBlockEditToolbar from './PageBlockEditToolbar';
-
-const DEBOUNCE_MS = 700;
+import fetchJson from '../lib/fetchJson';
 
 const PageBlock = (props) => {
   const signedIn = props.signedIn;
   const content = props.data ? props.data[props.id] : null;
-  if (content) {
-    const id = content['id'];
-    // todo: fetch
-  }
+  const pageId = content ? content['id'] : null;
   const [editing, setEditing] = useState(false);
-  const initialText = 'New page';
+  const [title, setTitle] = useState('');
 
-  useEffect(() => {}, []);
+  const fetchPage = async () => {
+    try {
+      const response = await fetchJson(`/api/pages/${props.username}/${pageId}`, { method: 'GET' });
+      setTitle(response.title);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    fetchPage();
+  }, []);
 
   return (
     <Card
@@ -23,18 +30,14 @@ const PageBlock = (props) => {
         border: 'solid 2px black',
         bg: 'white',
         '&:hover': {
-          // bg: 'lightGray',
           cursor: 'pointer',
-          background: 'linear-gradient(-45deg, #ebf8ff, #f7fafc, #ebf4ff)',
-          backgroundSize: '400% 400%',
-          animation: 'gradient 10s ease infinite',
         },
       }}
     >
       <Flex
         sx={{ py: 3, px: 3, bg: 'transparent' }}
         onClick={() => {
-          window.location.assign(`${props.username}/${content.id}` as string);
+          window.location.assign(`/@${props.username}/${content.id}` as string);
         }}
       >
         <Text
@@ -42,10 +45,11 @@ const PageBlock = (props) => {
             fontFamily:
               '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
             fontSize: '16px',
+            fontWeight: 'bold',
             border: 'none',
           }}
         >
-          {initialText}
+          {title}
         </Text>
       </Flex>
       {signedIn && !props.hideToolbar && (

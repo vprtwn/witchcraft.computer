@@ -60,6 +60,7 @@ const NewMenu = (props) => {
 
               <Flex sx={{ py: 1, px: 2, bg: 'lightGray', borderRadius: '0px 0px 8px 8px' }}>
                 <TextareaAutosize
+                  spellCheck={false}
                   style={{
                     background: 'none',
                     width: '100%',
@@ -71,6 +72,7 @@ const NewMenu = (props) => {
                     paddingLeft: 8,
                     paddingTop: 4,
                     paddingBottom: 4,
+                    textAlign: 'right',
                     overflow: 'hidden',
                     pointerEvents: props.hideToolbar ? 'none' : 'auto',
                   }}

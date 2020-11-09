@@ -102,8 +102,7 @@ export const getCustomer = async (username: string): Promise<CustomerOpResponse>
 export const updateCustomerMetadata = async (
   session: any,
   customer: Stripe.Customer,
-  key: string,
-  value: string | null,
+  metadata: object,
 ): Promise<CustomerOpResponse> => {
   let errorResponse: ErrorResponse | null = null;
   let customerResponse: Stripe.Customer | null = null;
@@ -125,8 +124,6 @@ export const updateCustomerMetadata = async (
   }
   if (!errorResponse) {
     try {
-      const metadata = {};
-      metadata[key] = value;
       const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
       customerResponse = await stripe.customers.update(customer.id, {
         metadata: metadata,
@@ -199,7 +196,9 @@ export const connectStripeAccount = async (session: any): Promise<AnyResponse> =
             },
           });
           stripeAccountId = account.id;
-          const updateResponse = await updateCustomerMetadata(session, customer, 'stripe_account_id', stripeAccountId);
+          const updateResponse = await updateCustomerMetadata(session, customer, {
+            stripe_account_id: stripeAccountId,
+          });
           if (updateResponse.errored) {
             stripeAccountId = null;
             errorResponse = updateResponse.data as ErrorResponse;
@@ -265,7 +264,7 @@ export const disconnectStripeAccount = async (session: any): Promise<CustomerOpR
       errorResponse = getResponse.data as ErrorResponse;
     } else {
       const customer = getResponse.data as Stripe.Customer;
-      const updateResponse = await updateCustomerMetadata(session, customer, 'stripe_account_id', null);
+      const updateResponse = await updateCustomerMetadata(session, customer, { stripe_account_id: null });
       if (updateResponse.errored) {
         errorResponse = updateResponse.data as ErrorResponse;
       }
