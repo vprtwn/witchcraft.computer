@@ -11,8 +11,10 @@ export const getPageProps = async (session: Session, query: object): Promise<Get
 
   let pageId = null;
   let data = null;
+  let parentData = null;
   let signedIn = false; // signed in as this user
   let uploadUrl = null;
+  let parentUploadUrl = null;
   let sessionUsername = null;
 
   const params = query['username'];
@@ -30,7 +32,9 @@ export const getPageProps = async (session: Session, query: object): Promise<Get
     pageId = params[1];
   }
   let objectKey = `@${username}`;
+  let parentObjectKey = null;
   if (pageId) {
+    parentObjectKey = objectKey;
     objectKey = `@${username}/${pageId}`;
   }
 
@@ -77,6 +81,29 @@ export const getPageProps = async (session: Session, query: object): Promise<Get
         },
       };
     }
+
+    if (pageId) {
+      // fetch parent data
+      try {
+        const s3data = await s3
+          .getObject({
+            Bucket: 'traypages',
+            Key: parentObjectKey,
+          })
+          .promise();
+        const object = s3data.Body.toString('utf-8');
+        parentData = JSON.parse(object);
+
+        parentUploadUrl = await s3.getSignedUrlPromise('putObject', {
+          Bucket: 'traypages',
+          Key: parentObjectKey,
+          ContentType: 'application/json',
+        });
+      } catch (e) {
+        console.error(`no object at ${objectKey}`, e.message);
+      }
+    }
+
     // if this is a new user, populate initial page data
     if (customerResponse.createdCustomer || !data) {
       try {
@@ -108,7 +135,7 @@ export const getPageProps = async (session: Session, query: object): Promise<Get
       }
     }
   }
-  // trim nulls from data
+  // trim nulls from data (deleting blocks leaves nulls)
   const trimmedData = data;
   const keys = Object.keys(trimmedData);
   let trim = false;
@@ -137,10 +164,12 @@ export const getPageProps = async (session: Session, query: object): Promise<Get
   return {
     props: {
       data: data,
+      parentData: parentData,
       username: username,
       pageId: pageId,
       signedIn: signedIn,
       uploadUrl: uploadUrl,
+      parentUploadUrl: parentUploadUrl,
     },
   };
 };

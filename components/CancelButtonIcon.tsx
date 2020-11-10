@@ -1,6 +1,6 @@
 import { Label, Box, Flex } from 'theme-ui';
 
-const BackButtonIcon = () => {
+const CancelButtonIcon = () => {
   return (
     <Flex
       sx={{
@@ -15,10 +15,10 @@ const BackButtonIcon = () => {
           fill="black"
         ></path>
       </svg>
-      <Box>
+      {/* <Box>
         <Label variant="buttonLabel">Cancel</Label>
-      </Box>
+      </Box> */}
     </Flex>
   );
 };
-export default BackButtonIcon;
+export default CancelButtonIcon;

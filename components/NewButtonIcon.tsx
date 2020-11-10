@@ -15,9 +15,9 @@ const NewButtonIcon = () => {
           fill="black"
         ></path>
       </svg>
-      <Box>
+      {/* <Box>
         <Label variant="buttonLabel">New</Label>
-      </Box>
+      </Box> */}
     </Flex>
   );
 };

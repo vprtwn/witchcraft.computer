@@ -20,9 +20,9 @@ const ViewButtonIcon = (props) => {
           fill="black"
         ></path>
       </svg>
-      <Box>
+      {/* <Box>
         <Label variant="buttonLabel">View</Label>
-      </Box>
+      </Box> */}
     </Flex>
   );
 };

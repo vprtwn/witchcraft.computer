@@ -8,7 +8,7 @@ import PageBlock from '../components/PageBlock';
 import PaymentBlock from '../components/PaymentBlock';
 import PageFooter from '../components/PageFooter';
 import { useDebounce } from 'use-debounce';
-import { reorder, remove, add, generateBlockId, generatePageId, parseBlockId } from '../lib/utils';
+import { reorder, remove, add, generateBlockId, generatePageId, generatePageBlockId, parseBlockId } from '../lib/utils';
 import { updatePage } from '../lib/updatePage';
 import { getPageProps } from '../lib/getPageProps';
 import { Direction, BlockType } from '../lib/typedefs';
@@ -22,7 +22,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import EditButtonIcon from '../components/EditButtonIcon';
 import ViewButtonIcon from '../components/ViewButtonIcon';
 import AddButtonIcon from '../components/NewButtonIcon';
-import BackButtonIcon from '../components/BackButtonIcon';
+import CancelButtonIcon from '../components/CancelButtonIcon';
 import SignOutButtonIcon from '../components/SignOutButtonIcon';
 import NewMenu from '../components/NewMenu';
 import { useSession } from 'next-auth/client';
@@ -150,8 +150,8 @@ const UserPage = (props) => {
   };
 
   const addPageBlock = async () => {
-    const blockId = generateBlockId(BlockType.Page);
     const pageId = generatePageId();
+    const blockId = generatePageBlockId(pageId);
     const newItem = { i: blockId };
     const newItems = add(order, newItem);
     const value = { id: pageId };
@@ -171,7 +171,15 @@ const UserPage = (props) => {
         <>
           <Header name={props.data ? props.data.name : ''} username={props.username} pageId={props.pageId} />
           {props.pageId && (
-            <TitleBlock uploadUrl={props.uploadUrl} data={data} previewing={previewing} signedIn={props.signedIn} />
+            <TitleBlock
+              pageId={props.pageId}
+              uploadUrl={props.uploadUrl}
+              parentUploadUrl={props.parentUploadUrl}
+              data={data}
+              parentData={props.parentData}
+              previewing={previewing}
+              signedIn={props.signedIn}
+            />
           )}
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="droppable">
@@ -310,7 +318,7 @@ const UserPage = (props) => {
                     setShowingNewMenu(!showingNewMenu);
                   }}
                 >
-                  {showingNewMenu ? <BackButtonIcon /> : <AddButtonIcon />}
+                  {showingNewMenu ? <CancelButtonIcon /> : <AddButtonIcon />}
                 </IconButton>
               </Box>
               <Box>

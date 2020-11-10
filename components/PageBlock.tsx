@@ -6,22 +6,8 @@ import fetchJson from '../lib/fetchJson';
 const PageBlock = (props) => {
   const signedIn = props.signedIn;
   const content = props.data ? props.data[props.id] : null;
-  const pageId = content ? content['id'] : null;
   const [editing, setEditing] = useState(false);
-  const [title, setTitle] = useState('...');
-
-  const fetchPage = async () => {
-    try {
-      const response = await fetchJson(`/api/pages/${props.username}/${pageId}`, { method: 'GET' });
-      setTitle(response.title);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  useEffect(() => {
-    fetchPage();
-  }, []);
+  const title = content ? content['title'] : 'New page ➜';
 
   return (
     <Card

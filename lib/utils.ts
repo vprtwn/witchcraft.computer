@@ -35,6 +35,10 @@ export const generatePageId = (): string => {
   return nanoid();
 };
 
+export const generatePageBlockId = (pageId: string): string => {
+  return `b.page.${pageId}`;
+};
+
 export const generateBlockId = (type: BlockType): string => {
   const nanoid = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 6);
   const id = nanoid();
