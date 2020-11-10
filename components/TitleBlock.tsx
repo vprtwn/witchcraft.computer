@@ -38,7 +38,7 @@ const TitleBlock = (props) => {
   };
 
   return (
-    <Box sx={{ px: 0, pb: 2, cursor: 'text', fontSize: '15px' }}>
+    <Box sx={{ mt: 2, px: 0, pb: 2, cursor: 'text', fontSize: '15px' }}>
       <TextareaAutosize
         defaultValue={title}
         spellCheck={false}
