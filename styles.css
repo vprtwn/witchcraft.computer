@@ -18,6 +18,11 @@ body {
   background-repeat: repeat repeat;
 }
 
+html {
+  height: auto;
+  min-height: 100%;
+}
+
 a {
   color: #000;
 }
