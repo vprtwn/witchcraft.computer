@@ -12,8 +12,10 @@
 
 body {
   background: linear-gradient(-45deg, #e6fffa, #faf5ff, #ebf8ff);
-  background-size: 800% 800%;
+  background-size: cover;
   animation: gradient 30s ease infinite;
+  min-height: 100vh;
+  background-repeat: repeat repeat;
 }
 
 a {

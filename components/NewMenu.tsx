@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useDebounce } from 'use-debounce';
 import { Card, Box, Button, Flex, Label, Input } from 'theme-ui';
 import { BlockType } from '../lib/typedefs';
 import TextButtonIcon from './TextButtonIcon';
@@ -6,11 +7,16 @@ import LinkButtonIcon from './LinkButtonIcon';
 import AudioButtonIcon from './AudioButtonIcon';
 import PageButtonIcon from './PageButtonIcon';
 import TextareaAutosize from 'react-textarea-autosize';
+import isUrl from 'is-url';
+import fetchJson from '../lib/fetchJson';
+
+const DEBOUNCE_MS = 700;
 
 const NewMenu = (props) => {
   const [showingForm, setShowingForm] = useState(false);
   const [text, setText] = useState<string>('');
   const [url, setUrl] = useState<string>('');
+  const [debouncedUrl] = useDebounce(url, DEBOUNCE_MS);
   const [comment, setComment] = useState<string>('');
 
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -19,6 +25,22 @@ const NewMenu = (props) => {
       inputRef.current.focus();
     }
   }, [showingForm]);
+  useEffect(() => {
+    if (isUrl(debouncedUrl)) {
+      processNewUrl(debouncedUrl);
+    }
+  }, [debouncedUrl]);
+
+  const processNewUrl = async (url: string) => {
+    // remove query string
+    const trimmedUrl = url.split('?')[0];
+    const btoa = require('abab/lib/btoa');
+    const b64url = btoa(trimmedUrl);
+    const response = await fetchJson(`/api/metadata/${b64url}`, {
+      method: 'GET',
+    });
+    console.dir('response', response);
+  };
 
   return (
     <Box sx={{ pt: 2 }}>
@@ -37,6 +59,12 @@ const NewMenu = (props) => {
                   color: 'white',
                 }}
                 onChange={(t) => setUrl(t.target.value)}
+                onBlur={(e) => {
+                  const val = e.target.value;
+                  if (isUrl(val)) {
+                    processNewUrl(val);
+                  }
+                }}
               />
             </Card>
             <Card variant="block" sx={{ border: 'dotted 1px black', borderRadius: 8 }}>

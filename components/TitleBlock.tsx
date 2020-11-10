@@ -38,32 +38,31 @@ const TitleBlock = (props) => {
   };
 
   return (
-    <Card variant="textBlock" sx={{ fontSize: '15px', bg: 'transparent' }}>
-      <Box sx={{ px: 0, pb: 2, cursor: 'text' }}>
-        <TextareaAutosize
-          defaultValue={title}
-          spellCheck={false}
-          style={{
-            background: 'transparent',
-            width: '100%',
-            resize: 'none',
-            fontWeight: 'bold',
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-            fontSize: '20px',
-            border: 'none',
-            paddingTop: 4,
-            paddingBottom: 4,
-            overflow: 'hidden',
-            pointerEvents: props.previewing ? 'none' : 'auto',
-          }}
-          placeholder="Comment (optional)"
-          onChange={(t) => {
-            setTitle(t.target.value);
-          }}
-        />
-      </Box>
-    </Card>
+    <Box sx={{ px: 0, pb: 2, cursor: 'text', fontSize: '15px' }}>
+      <TextareaAutosize
+        defaultValue={title}
+        spellCheck={false}
+        style={{
+          background: 'transparent',
+          width: '100%',
+          resize: 'none',
+          fontWeight: 'bold',
+          fontFamily:
+            '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+          fontSize: '20px',
+          border: 'none',
+          paddingLeft: 0,
+          paddingTop: 4,
+          paddingBottom: 4,
+          overflow: 'hidden',
+          pointerEvents: props.previewing ? 'none' : 'auto',
+        }}
+        placeholder="Comment (optional)"
+        onChange={(t) => {
+          setTitle(t.target.value);
+        }}
+      />
+    </Box>
   );
 };
 export default TitleBlock;

@@ -5,7 +5,7 @@ const Header = (props) => {
 
   return (
     <Container sx={{ mt: 1, mb: props.pageId ? 1 : 3 }}>
-      <Flex sx={{ justifyContent: 'right' }}>
+      <Flex sx={{}}>
         {props.username && (
           <Box sx={{ px: 0 }}>
             <Link href={props.pageId ? `/@${props.username}` : twitterProfileUrl} variant="nav">
