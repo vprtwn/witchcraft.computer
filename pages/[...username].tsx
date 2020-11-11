@@ -21,8 +21,6 @@ import { syncPaymentSettings, syncOrder } from '../lib/pageHelpers';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import EditButtonIcon from '../components/EditButtonIcon';
 import ViewButtonIcon from '../components/ViewButtonIcon';
-import AddButtonIcon from '../components/NewButtonIcon';
-import CancelButtonIcon from '../components/CancelButtonIcon';
 import SignOutButtonIcon from '../components/SignOutButtonIcon';
 import NewMenu from '../components/NewMenu';
 import { useSession } from 'next-auth/client';
@@ -80,7 +78,6 @@ const UserPage = (props) => {
   const initialOrder = props.data ? props.data['b.order'] : [];
   const [order, setOrder] = useState(initialOrder);
 
-  const [showingNewMenu, setShowingNewMenu] = useState(false);
   const [previewing, setPreviewing] = useState(true);
   const [data, setData] = useState(props.data);
   const [stripeAccount, setStripeAccount] = useState<object | null>(null);
@@ -99,7 +96,6 @@ const UserPage = (props) => {
 
   const syncNewBlock = async function (id: string, value: string | object, order: Record<string, string>[]) {
     try {
-      setShowingNewMenu(false);
       const newData = await updatePage(props.uploadUrl, data, id, value, null, order);
       setData(newData);
     } catch (e) {
@@ -288,7 +284,7 @@ const UserPage = (props) => {
             </Droppable>
           </DragDropContext>
 
-          {showingNewMenu && !previewing && (
+          {!previewing && (
             <NewMenu
               pageId={props.pageId}
               onClick={(result) => {
@@ -310,20 +306,10 @@ const UserPage = (props) => {
 
           {props.signedIn && (
             <Flex sx={{ pt: 4, mx: 2, justifyContent: 'space-between' }}>
+              <Box></Box>
               <Box>
                 <IconButton
-                  sx={{ fontSize: '24px', visibility: previewing ? 'hidden' : 'visible' }}
-                  variant={showingNewMenu ? 'iconselected' : 'icon'}
-                  onClick={() => {
-                    setShowingNewMenu(!showingNewMenu);
-                  }}
-                >
-                  {showingNewMenu ? <CancelButtonIcon /> : <AddButtonIcon />}
-                </IconButton>
-              </Box>
-              <Box>
-                <IconButton
-                  variant={!previewing && !showingNewMenu ? 'iconselected' : 'icon'}
+                  variant={!previewing ? 'iconselected' : 'icon'}
                   onClick={() => {
                     setPreviewing(!previewing);
                   }}

@@ -77,7 +77,7 @@ export const getPageProps = async (session: Session, query: object): Promise<Get
     } catch (e) {
       return {
         props: {
-          error: e,
+          error: { message: e.message },
         },
       };
     }

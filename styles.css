@@ -10,15 +10,6 @@
   }
 }
 
-body {
-  background: linear-gradient(-45deg, #e6fffa, #faf5ff, #ebf8ff) fixed;
-  background-size: cover;
-  animation: gradient 30s ease infinite;
-  margin: 0;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-}
-
 a {
   color: #000;
 }

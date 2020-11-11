@@ -38,7 +38,7 @@ const TitleBlock = (props) => {
   };
 
   return (
-    <Box sx={{ mt: 2, px: 0, pb: 2, cursor: 'text', fontSize: '15px' }}>
+    <Box sx={{ mt: 2, px: 0, pb: 2, cursor: 'text' }}>
       <TextareaAutosize
         defaultValue={title}
         spellCheck={false}
@@ -49,7 +49,7 @@ const TitleBlock = (props) => {
           fontWeight: 'bold',
           fontFamily:
             '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-          fontSize: '20px',
+          fontSize: '28px',
           border: 'none',
           paddingLeft: 0,
           paddingTop: 4,

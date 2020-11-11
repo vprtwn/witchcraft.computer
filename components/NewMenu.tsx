@@ -126,7 +126,7 @@ const NewMenu = (props) => {
         </>
       )}
       {!showingForm && (
-        <Flex sx={{ justifyContent: 'space-between', mt: 3, mb: 2 }}>
+        <Flex sx={{ justifyContent: 'space-between', mt: 4, mb: 2 }}>
           <Button
             variant="newMenuButton"
             sx={{ flexGrow: 1, mr: 2 }}
