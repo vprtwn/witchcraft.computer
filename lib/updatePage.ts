@@ -20,6 +20,7 @@ export const updatePage = async (uploadUrl: string, data: object): Promise<objec
   if (!uploadUrl) {
     return { error: 'no upload URL' };
   }
+  console.log('updating page', data);
   try {
     const params = {
       uploadUrl: uploadUrl,
@@ -29,7 +30,8 @@ export const updatePage = async (uploadUrl: string, data: object): Promise<objec
       method: 'POST',
       body: JSON.stringify(params),
     });
-    return result;
+    console.log('result', result);
+    return data;
   } catch (e) {
     return { error: e.message };
   }
