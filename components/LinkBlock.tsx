@@ -43,7 +43,7 @@ const LinkBlock = (props) => {
   };
 
   return (
-    <Card variant="block" sx={{ border: 'solid 1px black', fontSize: '15px', bg: 'white' }}>
+    <Card variant="block" sx={{ border: 'solid 1px black', fontSize: '16px', bg: 'white' }}>
       <>
         <Flex
           onClick={() => {

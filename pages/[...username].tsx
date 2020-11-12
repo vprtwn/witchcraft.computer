@@ -67,6 +67,7 @@ const UserPage = (props) => {
   const initialize = async () => {
     if (!uploadUrl) {
       console.error("couldn't initialize page, no upload url");
+      return;
     }
     try {
       const body = {
@@ -82,13 +83,6 @@ const UserPage = (props) => {
       return;
     }
   };
-
-  useEffect(() => {
-    bootstrap();
-    if (!props.data) {
-      initialize();
-    }
-  }, []);
 
   const [session, loading] = useSession();
   const signedIn = session && session.user.username;
@@ -110,6 +104,16 @@ const UserPage = (props) => {
   const [previewing, setPreviewing] = useState(true);
   const [data, setData] = useState(props.data);
   const [stripeAccount, setStripeAccount] = useState<object | null>(null);
+
+  useEffect(() => {
+    bootstrap();
+  }, []);
+
+  useEffect(() => {
+    if (!props.data) {
+      initialize();
+    }
+  }, [uploadUrl]);
 
   useEffect(() => {
     const newSettings = {
@@ -200,7 +204,7 @@ const UserPage = (props) => {
 
   return (
     <Layout>
-      {/* {DEBUG && (
+      {/* {DEBUG && !props.error && (
         <Textarea rows={10} sx={{ borderColor: 'blue', my: 4 }} defaultValue={JSON.stringify(props, null, 2)} />
       )} */}
       {props.error && (

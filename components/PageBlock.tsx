@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, Text, Flex, Box } from 'theme-ui';
 import PageBlockEditToolbar from './PageBlockEditToolbar';
-import fetchJson from '../lib/fetchJson';
 
 const PageBlock = (props) => {
   const signedIn = props.signedIn;
@@ -30,7 +29,7 @@ const PageBlock = (props) => {
           sx={{
             fontFamily:
               '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-            fontSize: '16px',
+            fontSize: '18px',
             fontWeight: 'bold',
             border: 'none',
           }}
