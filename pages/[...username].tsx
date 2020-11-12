@@ -17,7 +17,6 @@ import NumberFormat from 'react-number-format';
 import { GetServerSideProps } from 'next';
 import { signOut, getSession } from 'next-auth/client';
 import fetchJson from '../lib/fetchJson';
-import { syncPaymentSettings, syncOrder } from '../lib/pageHelpers';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import EditButtonIcon from '../components/EditButtonIcon';
 import ViewButtonIcon from '../components/ViewButtonIcon';
@@ -122,13 +121,39 @@ const UserPage = (props) => {
   }, [debouncedTipText, tipsEnabled, debouncedTipAmount, hideTipsFeed]);
 
   const syncNewBlock = async function (id: string, value: string | object, order: Record<string, string>[]) {
-    if (!uploadUrl) {
-      console.error("couldn't sync update, no upload url");
+    if (!uploadUrl || !signedIn) {
+      console.error("couldn't sync update");
       return;
     }
     try {
       const newData = await updatePage(uploadUrl, data, id, value, null, order);
       setData(newData);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // TODO: sync payment settings to stripe customer
+  const syncPaymentSettings = async function (newSettings: object) {
+    try {
+      // await updatePage(uploadUrl, data, 'payment_settings', newSettings);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const syncOrder = async function (
+    uploadUrl: string,
+    data: object,
+    newOrder: Record<string, string>[],
+    removedId: string | null = null,
+  ) {
+    if (!uploadUrl || !signedIn) {
+      console.error("couldn't sync update");
+      return;
+    }
+    try {
+      await updatePage(uploadUrl, data, 'b.order', newOrder, removedId);
     } catch (e) {
       console.error(e);
     }

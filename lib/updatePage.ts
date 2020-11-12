@@ -6,8 +6,7 @@ export const updatePage = async (
   removedKey: string | null = null, // this is ugly
   order: Record<string, string>[] | null = null,
 ): Promise<object> => {
-  console.log('updatePage', uploadUrl);
-  if (!currentPage) {
+  if (!currentPage || !uploadUrl) {
     return;
   }
   try {
