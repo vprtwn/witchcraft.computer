@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getCustomer } from '../../../lib/ops';
+import { AWS_ENDPOINT, AWS_REGION } from '../../../lib/const';
 import { ErrorResponse } from '../../../lib/typedefs';
 import Stripe from 'stripe';
 import { getSession } from 'next-auth/client';
@@ -29,8 +30,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const config = {
       accessKeyId: process.env.S3_ACCESS_KEY_ID,
       secretAccessKey: process.env.S3_SECRET,
-      endpoint: 'https://traypages.s3-us-west-2.amazonaws.com',
-      region: 'us-west-2',
+      endpoint: AWS_ENDPOINT,
+      region: AWS_REGION,
     };
     AWS.config.update(config);
   } catch (e) {

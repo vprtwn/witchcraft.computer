@@ -1,9 +1,8 @@
 import { unprefixUsername } from '../lib/utils';
 import { getOrCreateCustomer } from '../lib/ops';
+import { AWS_ENDPOINT } from './const';
 import { Session } from 'next-auth/client';
 import { GetServerSidePropsResult } from 'next';
-
-const BASE_URL = 'https://traypages.s3-us-west-2.amazonaws.com/';
 
 export const getPageProps = async (session: Session, query: object): Promise<GetServerSidePropsResult<object>> => {
   let pageId = null;
@@ -35,7 +34,7 @@ export const getPageProps = async (session: Session, query: object): Promise<Get
 
   // fetch page data
   try {
-    const url = BASE_URL + objectKey;
+    const url = AWS_ENDPOINT + '/' + objectKey;
     const response = await fetch(url);
     const json = await response.json();
     data = json;
@@ -62,7 +61,7 @@ export const getPageProps = async (session: Session, query: object): Promise<Get
     if (pageId) {
       // fetch parent page data
       try {
-        const url = BASE_URL + parentObjectKey;
+        const url = AWS_ENDPOINT + '/' + parentObjectKey;
         const response = await fetch(url);
         const json = await response.json();
         parentData = json;
