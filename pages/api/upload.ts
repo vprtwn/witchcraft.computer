@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 /**
  * Uploads data to a signed S3 URL.
- * Should really do this client-side and avoid the roundtrip, but I can't figure out S3 CORS settings.
+ * (Should really do this client-side and avoid the roundtrip, but I got stumped by S3 CORS settings...)
  */
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   console.log('api/upload');

@@ -14,8 +14,7 @@ export const updatePage = async (
     const payload = currentPage;
     payload[key] = value;
     if (removedKey) {
-      // TODO: refactor this & test
-      payload[removedKey] = null;
+      delete payload[removedKey];
     }
     if (order) {
       payload['b.order'] = order;

@@ -46,14 +46,37 @@ const UserPage = (props) => {
     }
   };
 
-  const fetchStripeConnected = async () => {
+  const bootstrap = async () => {
     try {
-      const response = await fetchJson('/api/stripe_connected', {
+      let url = `/api/bootstrap/${props.username}`;
+      if (props.pageId) {
+        url = url + `/${props.pageId}`;
+      }
+      const response = await fetchJson(url, {
         method: 'GET',
       });
-      if (response.account) {
-        setStripeAccount(response.account);
-      }
+      setStripeAccount(response.stripeAccount);
+      setUploadUrl(response.uploadUrl);
+      setParentUploadUrl(response.parentUploadUrl);
+    } catch (e) {
+      console.error(e);
+      return;
+    }
+  };
+
+  const initialize = async () => {
+    if (!uploadUrl) {
+      console.error("couldn't initialize page, no upload url");
+    }
+    try {
+      const body = {
+        uploadUrl: uploadUrl,
+      };
+      const response = await fetchJson('api/initialize', {
+        method: 'POST',
+        body: JSON.stringify(body),
+      });
+      console.log('initialized page', response);
     } catch (e) {
       console.error(e);
       return;
@@ -61,13 +84,17 @@ const UserPage = (props) => {
   };
 
   useEffect(() => {
-    fetchStripeConnected();
+    bootstrap();
+    if (!props.data) {
+      initialize();
+    }
   }, []);
 
   const [session, loading] = useSession();
   const signedIn = session && session.user.username;
 
   // block ordering, [{i: "b.text.A1B2"}, ...]
+  // TODO: refactor/move payment settings storage to Stripe metadata
   const paymentSettings = props.data ? props.data['payment_settings'] : null;
   const [tipsEnabled, setTipsEnabled] = useState(paymentSettings ? paymentSettings.enabled : false);
   const [tipText, setTipText] = useState(paymentSettings ? paymentSettings.text : 'Leave a tip');
@@ -77,6 +104,8 @@ const UserPage = (props) => {
   const [hideTipsFeed, setHideTipsFeed] = useState(paymentSettings ? paymentSettings.hideFeed : false);
   const initialOrder = props.data ? props.data['b.order'] : [];
   const [order, setOrder] = useState(initialOrder);
+  const [uploadUrl, setUploadUrl] = useState<string | null>(null);
+  const [parentUploadUrl, setParentUploadUrl] = useState<string | null>(null);
 
   const [previewing, setPreviewing] = useState(true);
   const [data, setData] = useState(props.data);
@@ -89,14 +118,16 @@ const UserPage = (props) => {
       enabled: tipsEnabled,
       hideFeed: hideTipsFeed,
     };
-    if (!props.pageId) {
-      syncPaymentSettings(props.uploadUrl, data, newSettings);
-    }
+    syncPaymentSettings(newSettings);
   }, [debouncedTipText, tipsEnabled, debouncedTipAmount, hideTipsFeed]);
 
   const syncNewBlock = async function (id: string, value: string | object, order: Record<string, string>[]) {
+    if (!uploadUrl) {
+      console.error("couldn't sync update, no upload url");
+      return;
+    }
     try {
-      const newData = await updatePage(props.uploadUrl, data, id, value, null, order);
+      const newData = await updatePage(uploadUrl, data, id, value, null, order);
       setData(newData);
     } catch (e) {
       console.error(e);
@@ -107,25 +138,37 @@ const UserPage = (props) => {
     if (!result.destination) {
       return;
     }
+    if (!uploadUrl) {
+      console.error("couldn't sync update, no upload url");
+      return;
+    }
     const newItems = reorder(order, result.source.index, result.destination.index);
     setOrder(newItems);
-    syncOrder(props.uploadUrl, data, newItems);
+    syncOrder(uploadUrl, data, newItems);
   };
 
   const moveBlock = (index: number, direction: Direction) => {
     if (index === 0 && direction === Direction.Up) {
       return;
     }
+    if (!uploadUrl) {
+      console.error("couldn't sync update, no upload url");
+      return;
+    }
     const newIndex = direction === Direction.Up ? index - 1 : index + 1;
     const newItems = reorder(order, index, newIndex);
     setOrder(newItems);
-    syncOrder(props.uploadUrl, data, newItems);
+    syncOrder(uploadUrl, data, newItems);
   };
 
   const removeBlock = (index: number) => {
+    if (!uploadUrl) {
+      console.error("couldn't sync update, no upload url");
+      return;
+    }
     const result = remove(order, index);
     setOrder(result.items);
-    syncOrder(props.uploadUrl, data, result.items, result.removedId);
+    syncOrder(uploadUrl, data, result.items, result.removedId);
   };
 
   const addLinkBlock = async (content: any) => {
@@ -169,8 +212,8 @@ const UserPage = (props) => {
           {props.pageId && (
             <TitleBlock
               pageId={props.pageId}
-              uploadUrl={props.uploadUrl}
-              parentUploadUrl={props.parentUploadUrl}
+              uploadUrl={uploadUrl}
+              parentUploadUrl={parentUploadUrl}
               data={data}
               parentData={props.parentData}
               previewing={previewing}
@@ -200,7 +243,7 @@ const UserPage = (props) => {
                                 >
                                   <TextBlock
                                     id={orderItem.i}
-                                    uploadUrl={props.uploadUrl}
+                                    uploadUrl={uploadUrl}
                                     data={data}
                                     default={defaultText}
                                     previewing={previewing}
@@ -228,7 +271,7 @@ const UserPage = (props) => {
                                 >
                                   <LinkBlock
                                     id={orderItem.i}
-                                    uploadUrl={props.uploadUrl}
+                                    uploadUrl={uploadUrl}
                                     data={data}
                                     hideUp={index === 0}
                                     hideDown={index === order.length - 1}
@@ -254,7 +297,7 @@ const UserPage = (props) => {
                                 >
                                   <PageBlock
                                     username={props.username}
-                                    uploadUrl={props.uploadUrl}
+                                    uploadUrl={uploadUrl}
                                     data={data}
                                     id={orderItem.i}
                                     hideUp={index === 0}

@@ -1,7 +1,7 @@
 import { updatePage } from './updatePage';
 
 // TODO: sync payment settings to stripe customer
-export const syncPaymentSettings = async function (uploadUrl: string, data: object, newSettings: object) {
+export const syncPaymentSettings = async function (newSettings: object) {
   try {
     // await updatePage(uploadUrl, data, 'payment_settings', newSettings);
   } catch (e) {

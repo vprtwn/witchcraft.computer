@@ -13,8 +13,6 @@ export const getPageProps = async (session: Session, query: object): Promise<Get
   let data = null;
   let parentData = null;
   let signedIn = false; // signed in as this user
-  let uploadUrl = null;
-  let parentUploadUrl = null;
   let sessionUsername = null;
 
   const params = query['username'];
@@ -39,6 +37,7 @@ export const getPageProps = async (session: Session, query: object): Promise<Get
   }
 
   try {
+    // fetch page data
     const s3data = await s3
       .getObject({
         Bucket: 'traypages',
@@ -48,7 +47,7 @@ export const getPageProps = async (session: Session, query: object): Promise<Get
     const object = s3data.Body.toString('utf-8');
     data = JSON.parse(object);
   } catch (e) {
-    console.error(`no object at ${objectKey}`, e.message);
+    console.error(`Failed to fetch page at ${objectKey}:`, e.message);
   }
 
   if (session && session.user.username) {
@@ -67,21 +66,6 @@ export const getPageProps = async (session: Session, query: object): Promise<Get
       };
     }
 
-    // create a signed S3 URL for page data updates
-    try {
-      uploadUrl = await s3.getSignedUrlPromise('putObject', {
-        Bucket: 'traypages',
-        Key: objectKey,
-        ContentType: 'application/json',
-      });
-    } catch (e) {
-      return {
-        props: {
-          error: { message: e.message },
-        },
-      };
-    }
-
     if (pageId) {
       // fetch parent data
       try {
@@ -93,71 +77,9 @@ export const getPageProps = async (session: Session, query: object): Promise<Get
           .promise();
         const object = s3data.Body.toString('utf-8');
         parentData = JSON.parse(object);
-
-        parentUploadUrl = await s3.getSignedUrlPromise('putObject', {
-          Bucket: 'traypages',
-          Key: parentObjectKey,
-          ContentType: 'application/json',
-        });
       } catch (e) {
-        console.error(`no object at ${objectKey}`, e.message);
+        console.error(`Failed to fetch parent page at ${objectKey}:`, e.message);
       }
-    }
-
-    // if this is a new user, populate initial page data
-    if (customerResponse.createdCustomer || !data) {
-      try {
-        let initialData = {};
-        if (pageId) {
-          initialData = {
-            title: 'New page',
-          };
-        } else {
-          initialData = {
-            email: session.user.email,
-            name: session.user.name,
-            profile_image: session.user.picture,
-            twitter_id: session.user.id,
-            twitter_username: session.user.username,
-            twitter_description: session.user.description,
-          };
-        }
-        await fetch(uploadUrl, {
-          method: 'PUT',
-          body: JSON.stringify(initialData, null, 2),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        data = initialData;
-      } catch (e) {
-        return { props: { error: { message: e.message } } };
-      }
-    }
-  }
-  // trim nulls from data (deleting blocks leaves nulls)
-  const trimmedData = data;
-  const keys = Object.keys(trimmedData);
-  let trim = false;
-  keys.forEach((k) => {
-    const val = trimmedData[k];
-    if (!val) {
-      delete trimmedData[k];
-      trim = true;
-    }
-  });
-  if (trim) {
-    try {
-      await fetch(uploadUrl, {
-        method: 'PUT',
-        body: JSON.stringify(trimmedData, null, 2),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      data = trimmedData;
-    } catch (e) {
-      console.error('trimming data failed', e.message);
     }
   }
 
@@ -168,8 +90,6 @@ export const getPageProps = async (session: Session, query: object): Promise<Get
       username: username,
       pageId: pageId,
       signedIn: signedIn,
-      uploadUrl: uploadUrl,
-      parentUploadUrl: parentUploadUrl,
     },
   };
 };

@@ -17,8 +17,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const {
     query: { params },
   } = req;
-  const username = params[0];
-  const pageId = params[1];
+  const username = params[0] as string;
+  const pageId = params[1] as string;
 
   try {
     let objectKey = `@${username}`;
