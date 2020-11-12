@@ -40,7 +40,7 @@ const TitleBlock = (props) => {
   };
 
   return (
-    <Box sx={{ mt: 2, px: 0, pb: 2, cursor: 'text' }}>
+    <Box sx={{ mt: 3, px: 0, pb: 2, cursor: 'text' }}>
       {!props.previewing && (
         <TextareaAutosize
           defaultValue={title}
