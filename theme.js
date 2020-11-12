@@ -237,6 +237,12 @@ export default {
       color: 'text',
     },
   },
+  alerts: {
+    error: {
+      color: 'red',
+      bg: 'lightRed',
+    },
+  },
   text: {
     tiny: {
       fontSize: '11px',
