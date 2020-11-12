@@ -274,7 +274,6 @@ const UserPage = (props) => {
                                     previewing={previewing}
                                     hideUp={index === 0}
                                     hideDown={index === order.length - 1}
-                                    hideToolbar={previewing}
                                     signedIn={props.signedIn}
                                     onDown={() => {
                                       moveBlock(index, Direction.Down);
@@ -300,7 +299,7 @@ const UserPage = (props) => {
                                     data={data}
                                     hideUp={index === 0}
                                     hideDown={index === order.length - 1}
-                                    hideToolbar={previewing}
+                                    previewing={previewing}
                                     signedIn={props.signedIn}
                                     onDown={() => {
                                       moveBlock(index, Direction.Down);
@@ -327,7 +326,7 @@ const UserPage = (props) => {
                                     id={orderItem.i}
                                     hideUp={index === 0}
                                     hideDown={index === order.length - 1}
-                                    hideToolbar={previewing}
+                                    previewing={previewing}
                                     signedIn={props.signedIn}
                                     onDown={() => {
                                       moveBlock(index, Direction.Down);

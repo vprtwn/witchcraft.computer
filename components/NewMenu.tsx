@@ -9,6 +9,7 @@ import PageButtonIcon from './PageButtonIcon';
 import TextareaAutosize from 'react-textarea-autosize';
 import isUrl from 'is-url';
 import fetchJson from '../lib/fetchJson';
+import PlusButtonIcon from './PlusButtonIcon';
 
 const DEBOUNCE_MS = 700;
 
@@ -47,16 +48,29 @@ const NewMenu = (props) => {
       {showingForm && (
         <>
           <Box sx={{ fontSize: '15px' }}>
-            <Card variant="block" sx={{ py: 1, px: 2, bg: 'black', borderRadius: 8, mb: 1 }}>
+            <Card
+              variant="block"
+              sx={{
+                bg: 'black',
+                borderRadius: 8,
+                px: 0,
+                py: 0,
+                mb: 1,
+                background: 'linear-gradient(-45deg, #e6fffa, #faf5ff, #ebf8ff)',
+                backgroundSize: '400% 400%',
+                animation: 'gradient 10s ease infinite',
+              }}
+            >
               <Input
                 variant="linkInput"
                 placeholder="Link address"
                 type="url"
                 ref={inputRef}
                 sx={{
+                  px: 3,
+                  py: 2,
                   fontSize: '14px',
                   fontFamily: 'mono',
-                  color: 'white',
                 }}
                 onChange={(t) => setUrl(t.target.value)}
                 onBlur={(e) => {
@@ -70,9 +84,6 @@ const NewMenu = (props) => {
             <Card variant="block" sx={{ border: 'dotted 1px black', borderRadius: 8 }}>
               <Flex
                 sx={{
-                  pl: 2,
-                  pr: 1,
-                  py: 0,
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   borderRadius: 8,
@@ -81,12 +92,17 @@ const NewMenu = (props) => {
                   cursor: 'pointer',
                 }}
               >
-                <Box sx={{ flexGrow: 1, py: 1 }}>
-                  <Input variant="linkInput" placeholder="Link text" onChange={(t) => setText(t.target.value)} />
+                <Box sx={{ flexGrow: 1 }}>
+                  <Input
+                    variant="linkInput"
+                    sx={{ py: 2, px: 3 }}
+                    placeholder="Link text"
+                    onChange={(t) => setText(t.target.value)}
+                  />
                 </Box>
               </Flex>
 
-              <Flex sx={{ py: 1, px: 2, bg: 'lightGray', borderRadius: '0px 0px 8px 8px' }}>
+              <Flex sx={{ bg: 'lightGray', borderRadius: '0px 0px 8px 8px' }}>
                 <TextareaAutosize
                   spellCheck={false}
                   style={{
@@ -98,8 +114,9 @@ const NewMenu = (props) => {
                     fontSize: '13px',
                     border: 'none',
                     paddingLeft: 8,
-                    paddingTop: 4,
-                    paddingBottom: 4,
+                    paddingRight: 8,
+                    paddingTop: 8,
+                    paddingBottom: 8,
                     textAlign: 'right',
                     overflow: 'hidden',
                     pointerEvents: props.hideToolbar ? 'none' : 'auto',
@@ -110,9 +127,11 @@ const NewMenu = (props) => {
               </Flex>
             </Card>
           </Box>
-          <Flex sx={{ justifyContent: 'right', pt: 1 }}>
+          <Flex sx={{ pt: 2, justifyContent: 'space-between' }}>
+            <Box />
             <Button
               variant="newMenuButton"
+              sx={{ py: 3, px: 4 }}
               onClick={() => {
                 console.log('text', text);
                 console.log('url', url);
@@ -120,8 +139,9 @@ const NewMenu = (props) => {
                 props.onClick({ type: 'link', text: text, url: url, comment: comment });
               }}
             >
-              Add link
+              <PlusButtonIcon />
             </Button>
+            <Box />
           </Flex>
         </>
       )}

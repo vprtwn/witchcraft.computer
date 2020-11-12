@@ -3,7 +3,6 @@ export default {
   breakpoints: ['40em', '52em', '64em'],
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
-    heading: 'inherit',
     mono:
       'Recursive, San Francisco Mono, Monaco, "Consolas", "Lucida Console", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace',
     sans:
@@ -91,7 +90,7 @@ export default {
       bg: 'white',
       color: 'text',
       fontFamily: 'mono',
-      fontSize: 13,
+      fontSize: 15,
       cursor: 'pointer',
       py: 2,
       boxShadow: '0 0 4px rgba(0, 0, 0, 0.125)',
@@ -116,6 +115,13 @@ export default {
     },
     nav: {
       fontWeight: 'bold',
+      color: 'inherit',
+      textDecoration: 'none',
+      '&:hover': {
+        textDecoration: 'underline',
+      },
+    },
+    block: {
       color: 'inherit',
       textDecoration: 'none',
       '&:hover': {

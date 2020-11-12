@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Card, Text, Flex, Box } from 'theme-ui';
+import { Card, Text, Flex, Link } from 'theme-ui';
 import PageBlockEditToolbar from './PageBlockEditToolbar';
 
 const PageBlock = (props) => {
@@ -7,6 +7,7 @@ const PageBlock = (props) => {
   const content = props.data ? props.data[props.id] : null;
   const [editing, setEditing] = useState(false);
   const title = content ? content['title'] : 'New page ➜';
+  const url = `/@${props.username}/${content.id}`;
 
   return (
     <Card
@@ -22,22 +23,14 @@ const PageBlock = (props) => {
       <Flex
         sx={{ py: 3, px: 3, bg: 'transparent' }}
         onClick={() => {
-          window.location.assign(`/@${props.username}/${content.id}` as string);
+          window.location.assign(url);
         }}
       >
-        <Text
-          sx={{
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-            fontSize: '18px',
-            fontWeight: 'bold',
-            border: 'none',
-          }}
-        >
+        <Link href={url} variant="block" sx={{ fontSize: '18px', fontWeight: 'bold' }}>
           {title}
-        </Text>
+        </Link>
       </Flex>
-      {signedIn && !props.hideToolbar && (
+      {signedIn && !props.previewing && (
         <PageBlockEditToolbar
           editing={editing}
           onDelete={props.onDelete}

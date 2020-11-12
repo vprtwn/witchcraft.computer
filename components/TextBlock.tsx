@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Card, Box } from 'theme-ui';
+import { Card, Box, Text } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
 import { updatePage } from '../lib/updatePage';
-import { light } from '../lib/editorThemes';
 import EditToolbar from './EditToolbar';
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -36,36 +35,39 @@ const TextBlock = (props) => {
   return (
     <Card variant="textBlock" sx={{ fontSize: '15px', bg: 'transparent' }}>
       <Box
-        sx={{ px: 0, py: 2, cursor: 'text' }}
+        sx={{ px: 0, cursor: 'text' }}
         onClick={() => {
           if (!props.previewing && !editing) {
             setEditing(true);
           }
         }}
       >
-        <TextareaAutosize
-          defaultValue={text}
-          spellCheck={false}
-          style={{
-            background: 'transparent',
-            width: '100%',
-            resize: 'none',
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-            fontSize: '16px',
-            border: 'none',
-            paddingTop: 4,
-            paddingBottom: 4,
-            overflow: 'hidden',
-            pointerEvents: props.previewing ? 'none' : 'auto',
-          }}
-          placeholder="Comment (optional)"
-          onChange={(t) => {
-            setText(t.target.value);
-          }}
-        />
+        {editing && (
+          <TextareaAutosize
+            defaultValue={text}
+            spellCheck={false}
+            style={{
+              background: 'transparent',
+              width: '100%',
+              resize: 'none',
+              fontFamily:
+                '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+              fontSize: '16px',
+              border: 'none',
+              paddingTop: 8,
+              paddingBottom: 8,
+              overflow: 'hidden',
+              pointerEvents: props.previewing ? 'none' : 'auto',
+            }}
+            placeholder="Comment (optional)"
+            onChange={(t) => {
+              setText(t.target.value);
+            }}
+          />
+        )}
+        {!editing && <Text sx={{ fontSize: '16px', py: 2 }}>{text}</Text>}
       </Box>
-      {signedIn && !props.hideToolbar && (
+      {signedIn && !props.previewing && (
         <EditToolbar
           editing={editing}
           onDelete={props.onDelete}

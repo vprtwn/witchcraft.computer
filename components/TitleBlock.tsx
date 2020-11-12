@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Card, Box } from 'theme-ui';
+import { Box, Text } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
 import { updatePage } from '../lib/updatePage';
 import { generatePageBlockId } from '../lib/utils';
@@ -39,29 +39,42 @@ const TitleBlock = (props) => {
 
   return (
     <Box sx={{ mt: 2, px: 0, pb: 2, cursor: 'text' }}>
-      <TextareaAutosize
-        defaultValue={title}
-        spellCheck={false}
-        style={{
-          background: 'transparent',
-          width: '100%',
-          resize: 'none',
-          fontWeight: 'bold',
-          fontFamily:
-            '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-          fontSize: '28px',
-          border: 'none',
-          paddingLeft: 0,
-          paddingTop: 4,
-          paddingBottom: 4,
-          overflow: 'hidden',
-          pointerEvents: props.previewing ? 'none' : 'auto',
-        }}
-        placeholder="Comment (optional)"
-        onChange={(t) => {
-          setTitle(t.target.value);
-        }}
-      />
+      {!props.previewing && (
+        <TextareaAutosize
+          defaultValue={title}
+          spellCheck={false}
+          style={{
+            background: 'transparent',
+            width: '100%',
+            resize: 'none',
+            fontWeight: 'bold',
+            fontFamily:
+              '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+            fontSize: '28px',
+            border: 'none',
+            paddingLeft: 0,
+            paddingTop: 4,
+            paddingBottom: 4,
+            overflow: 'hidden',
+          }}
+          placeholder="Comment (optional)"
+          onChange={(t) => {
+            setTitle(t.target.value);
+          }}
+        />
+      )}
+      {props.previewing && (
+        <Text
+          sx={{
+            fontWeight: 'bold',
+            fontFamily:
+              '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+            fontSize: '28px',
+          }}
+        >
+          {title}
+        </Text>
+      )}
     </Box>
   );
 };
