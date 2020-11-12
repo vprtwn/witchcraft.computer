@@ -17,9 +17,6 @@ const EditButtonIcon = () => {
           fill="#282828"
         ></path>
       </svg>
-      {/* <Box>
-        <Label variant="buttonLabel">Edit</Label>
-      </Box> */}
     </Flex>
   );
 };

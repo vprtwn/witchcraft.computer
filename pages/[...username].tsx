@@ -9,7 +9,7 @@ import PaymentBlock from '../components/PaymentBlock';
 import PageFooter from '../components/PageFooter';
 import { useDebounce } from 'use-debounce';
 import { reorder, remove, add, generateBlockId, generatePageId, generatePageBlockId, parseBlockId } from '../lib/utils';
-import { updatePage } from '../lib/updatePage';
+import { transformPageData, updatePage } from '../lib/updatePage';
 import { getPageProps } from '../lib/getPageProps';
 import { Direction, BlockType } from '../lib/typedefs';
 import { Box, Checkbox, Link, Badge, Input, IconButton, Flex, Card, Button, Text, Label, Textarea } from 'theme-ui';
@@ -54,6 +54,7 @@ const UserPage = (props) => {
       const response = await fetchJson(url, {
         method: 'GET',
       });
+      console.log('api/bootstrap', response);
       setStripeAccount(response.stripeAccount);
       setUploadUrl(response.uploadUrl);
       setParentUploadUrl(response.parentUploadUrl);
@@ -73,11 +74,14 @@ const UserPage = (props) => {
       const body = {
         uploadUrl: uploadUrl,
         data: props.data,
+        pageId: props.pageId,
       };
-      const response = await fetchJson('api/initialize', {
+      console.log('initialize', body);
+      const response = await fetchJson('/api/initialize', {
         method: 'POST',
         body: JSON.stringify(body),
       });
+      console.log('api/initialize', response);
       setData(response);
     } catch (e) {
       console.error(e);
@@ -126,8 +130,9 @@ const UserPage = (props) => {
       return;
     }
     try {
-      const newData = await updatePage(uploadUrl, data, id, value, null, order);
-      setData(newData);
+      const pageData = transformPageData(data, id, value, null, order);
+      setData(pageData);
+      await updatePage(uploadUrl, pageData);
     } catch (e) {
       console.error(e);
     }
@@ -201,16 +206,16 @@ const UserPage = (props) => {
     const newItem = { i: id };
     const newItems = add(order, newItem);
     const value = { text: content.text, url: content.url, comment: content.comment };
-    await syncNewBlock(id, value, newItems);
     setOrder(newItems);
+    await syncNewBlock(id, value, newItems);
   };
 
   const addTextBlock = async () => {
     const id = generateBlockId(BlockType.Text);
     const newItem = { i: id };
     const newItems = add(order, newItem);
-    await syncNewBlock(id, defaultText, newItems);
     setOrder(newItems);
+    await syncNewBlock(id, defaultText, newItems);
   };
 
   const addPageBlock = async () => {
@@ -218,9 +223,9 @@ const UserPage = (props) => {
     const blockId = generatePageBlockId(pageId);
     const newItem = { i: blockId };
     const newItems = add(order, newItem);
-    const value = { id: pageId };
-    await syncNewBlock(blockId, value, newItems);
+    const value = { id: pageId, title: 'New page' };
     setOrder(newItems);
+    await syncNewBlock(blockId, value, newItems);
   };
 
   return (
@@ -372,7 +377,12 @@ const UserPage = (props) => {
           )}
 
           {props.signedIn && (
-            <Flex sx={{ pt: 4, mx: 2, justifyContent: 'space-between' }}>
+            <Flex
+              sx={{ pt: 4, mx: 2, justifyContent: 'space-between' }}
+              onClick={() => {
+                setPreviewing(!previewing);
+              }}
+            >
               <Box></Box>
               <Box>
                 <IconButton
@@ -384,6 +394,7 @@ const UserPage = (props) => {
                   {previewing ? <EditButtonIcon /> : <ViewButtonIcon />}
                 </IconButton>
               </Box>
+              <Box></Box>
             </Flex>
           )}
 

@@ -21,9 +21,14 @@ const NewMenu = (props) => {
   const [comment, setComment] = useState<string>('');
 
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+
   useEffect(() => {
     if (showingForm) {
       inputRef.current.focus();
+      inputRef.current.scrollIntoView(true);
+    } else {
+      buttonRef.current.scrollIntoView(true);
     }
   }, [showingForm]);
   useEffect(() => {
@@ -150,6 +155,7 @@ const NewMenu = (props) => {
           <Button
             variant="newMenuButton"
             sx={{ flexGrow: 1, mr: 2 }}
+            ref={buttonRef}
             onClick={() => {
               setShowingForm(!showingForm);
             }}

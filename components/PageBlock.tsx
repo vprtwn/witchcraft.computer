@@ -6,7 +6,10 @@ const PageBlock = (props) => {
   const signedIn = props.signedIn;
   const content = props.data ? props.data[props.id] : null;
   const [editing, setEditing] = useState(false);
-  const title = content ? content['title'] : 'New page ➜';
+  let title = content ? content['title'] : null;
+  if (!title) {
+    title = 'New page ➜';
+  }
   const url = `/@${props.username}/${content.id}`;
 
   return (

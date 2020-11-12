@@ -6,9 +6,6 @@ import { GetServerSidePropsResult } from 'next';
 const BASE_URL = 'https://traypages.s3-us-west-2.amazonaws.com/';
 
 export const getPageProps = async (session: Session, query: object): Promise<GetServerSidePropsResult<object>> => {
-  const AWS = require('aws-sdk');
-  const s3 = new AWS.S3(); // no credentials necessary, bucket is public
-
   let pageId = null;
   let data = null;
   let parentData = null;

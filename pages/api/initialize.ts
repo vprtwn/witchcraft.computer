@@ -6,7 +6,6 @@ import { validateSession } from '../../lib/validateSession';
  * Initializes page data for a new user.
  */
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log('api/initialize');
   if (req.method !== 'POST') {
     return res.status(400);
   }
@@ -22,22 +21,29 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const uploadUrl = params.uploadUrl;
   const data = params.data;
+  const pageId = params.pageId;
   if (data) {
     return res.status(409).json({
       error: 'Already initialized',
     });
   }
 
-  const payload = {
-    email: session.user.email,
-    name: session.user.name,
-    profile_image: session.user.picture,
-    twitter_id: session.user.id,
-    twitter_username: session.user.username,
-    twitter_description: session.user.description,
-  };
+  let payload;
+  if (pageId) {
+    payload = { title: 'New page' };
+  } else {
+    payload = {
+      email: session.user.email,
+      name: session.user.name,
+      profile_image: session.user.picture,
+      twitter_id: session.user.id,
+      twitter_username: session.user.username,
+      twitter_description: session.user.description,
+    };
+  }
 
   try {
+    console.log('initializing page', payload);
     const response = await fetch(uploadUrl, {
       method: 'PUT',
       body: JSON.stringify(payload, null, 2),
