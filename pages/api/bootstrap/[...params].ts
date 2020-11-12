@@ -83,6 +83,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       Key: objectKey,
       ContentType: 'application/json',
     });
+    // the S3 SDK has weird caching behavior. i've seen it swap us-west-2 for us-west-1.
+    // simply replacing seems to work, but this is a brittle workaround
     uploadUrl = uploadUrl.replace('us-west-1', 'us-west-2');
     if (parentObjectKey) {
       parentUploadUrl = await s3.getSignedUrlPromise('putObject', {

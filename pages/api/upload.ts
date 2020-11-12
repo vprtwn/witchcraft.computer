@@ -24,7 +24,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       },
     });
     console.log('response', response);
-    return res.status(200).json(response.headers);
+    if (response.status != 200) {
+      return res.status(200).json({ error: `S3 returned status ${response.status}` });
+    }
+    return res.status(200).json({});
   } catch (e) {
     return res.status(500).json({
       error: e.message,
