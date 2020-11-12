@@ -30,7 +30,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const config = {
       accessKeyId: process.env.S3_ACCESS_KEY_ID,
       secretAccessKey: process.env.S3_SECRET,
-      endpoint: AWS_ENDPOINT,
+      // endpoint: AWS_ENDPOINT,
       region: AWS_REGION,
     };
     AWS.config.update(config);
