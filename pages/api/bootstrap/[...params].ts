@@ -83,15 +83,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       Key: objectKey,
       ContentType: 'application/json',
     });
+    uploadUrl = uploadUrl.replace('us-west-1', 'us-west-2');
     if (parentObjectKey) {
       parentUploadUrl = await s3.getSignedUrlPromise('putObject', {
         Bucket: 'traypages',
         Key: parentObjectKey,
         ContentType: 'application/json',
       });
+      parentUploadUrl = parentUploadUrl.replace('us-west-1', 'us-west-2');
     }
-    uploadUrl = uploadUrl.replace('us-west-1', 'us-west-2');
-    parentUploadUrl = parentUploadUrl.replace('us-west-1', 'us-west-2');
   } catch (e) {
     const message = `Error creating upload URL(s) <${objectKey}>, <${parentObjectKey}>: ` + e.message;
     error = message;
