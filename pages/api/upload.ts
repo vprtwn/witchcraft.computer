@@ -22,7 +22,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         'Content-Type': 'application/json',
       },
     });
-    return res.status(response.status).json({});
+    return res.status(200).json({});
   } catch (e) {
     return res.status(500).json({
       error: e.message,
