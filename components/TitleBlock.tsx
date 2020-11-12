@@ -54,6 +54,7 @@ const TitleBlock = (props) => {
               '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
             fontSize: '28px',
             border: 'none',
+            lineHeight: 1.5,
             paddingLeft: 0,
             paddingTop: 4,
             paddingBottom: 4,
@@ -72,6 +73,8 @@ const TitleBlock = (props) => {
             fontFamily:
               '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
             fontSize: '28px',
+            whiteSpace: 'pre-wrap',
+            py: 1,
           }}
         >
           {title}

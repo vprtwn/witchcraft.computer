@@ -241,15 +241,23 @@ const UserPage = (props) => {
         <>
           <Header name={data ? data.name : ''} username={props.username} pageId={props.pageId} />
           {props.pageId && (
-            <TitleBlock
-              pageId={props.pageId}
-              uploadUrl={uploadUrl}
-              parentUploadUrl={parentUploadUrl}
-              data={data}
-              parentData={props.parentData}
-              previewing={previewing}
-              signedIn={props.signedIn}
-            />
+            <Box
+              onClick={() => {
+                if (previewing) {
+                  setPreviewing(false);
+                }
+              }}
+            >
+              <TitleBlock
+                pageId={props.pageId}
+                uploadUrl={uploadUrl}
+                parentUploadUrl={parentUploadUrl}
+                data={data}
+                parentData={props.parentData}
+                previewing={previewing}
+                signedIn={props.signedIn}
+              />
+            </Box>
           )}
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="droppable">

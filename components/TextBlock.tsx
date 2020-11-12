@@ -55,18 +55,21 @@ const TextBlock = (props) => {
                 '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
               fontSize: '16px',
               border: 'none',
+              lineHeight: 1.5,
               paddingTop: 8,
               paddingBottom: 8,
               overflow: 'hidden',
               pointerEvents: props.previewing ? 'none' : 'auto',
             }}
-            placeholder="Comment (optional)"
+            placeholder="Note"
             onChange={(t) => {
               setText(t.target.value);
             }}
           />
         )}
-        {!editing && <Text sx={{ fontSize: '16px', py: 2 }}>{text}</Text>}
+        {(!editing || props.previewing) && (
+          <Text sx={{ fontSize: '16px', py: 2, whiteSpace: 'pre-wrap' }}>{text.length === 0 ? '' : text}</Text>
+        )}
       </Box>
       {signedIn && !props.previewing && (
         <EditToolbar

@@ -29,7 +29,7 @@ const PageBlock = (props) => {
           window.location.assign(url);
         }}
       >
-        <Link href={url} variant="block" sx={{ fontSize: '18px', fontWeight: 'bold' }}>
+        <Link href={url} variant="block" sx={{ fontSize: '18px', fontWeight: 'bold', whiteSpace: 'pre-wrap' }}>
           {title}
         </Link>
       </Flex>

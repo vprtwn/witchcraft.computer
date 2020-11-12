@@ -93,7 +93,7 @@ const LinkBlock = (props) => {
             )}
             {!editing && (
               <Box sx={{ py: 2, px: 3 }}>
-                <Link href={url} variant="block">
+                <Link href={url} variant="block" sx={{ whiteSpace: 'pre-wrap' }}>
                   {text}
                 </Link>
               </Box>
@@ -116,7 +116,7 @@ const LinkBlock = (props) => {
               defaultValue={comment}
               spellCheck={false}
               style={{
-                textAlign: 'right',
+                // textAlign: 'right',
                 background: 'transparent',
                 width: '100%',
                 resize: 'none',
@@ -124,9 +124,10 @@ const LinkBlock = (props) => {
                   '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
                 fontSize: '13px',
                 border: 'none',
+                lineHeight: 1.5,
                 paddingLeft: 8,
                 paddingRight: 8,
-                paddingTop: 8,
+                paddingTop: 6,
                 paddingBottom: 8,
                 overflow: 'hidden',
               }}
@@ -137,7 +138,7 @@ const LinkBlock = (props) => {
             />
           )}
           {!editing && (
-            <Text sx={{ textAlign: 'right', width: '100%', fontSize: '13px', px: 2, py: 2 }}>{comment}</Text>
+            <Text sx={{ width: '100%', fontSize: '13px', px: 2, py: 2, whiteSpace: 'pre-wrap' }}>{comment}</Text>
           )}
         </Flex>
       )}
