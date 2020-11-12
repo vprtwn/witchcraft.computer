@@ -30,7 +30,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const config = {
       accessKeyId: process.env.S3_ACCESS_KEY_ID,
       secretAccessKey: process.env.S3_SECRET,
-      // endpoint: AWS_ENDPOINT,
       region: AWS_REGION,
     };
     AWS.config.update(config);
@@ -91,6 +90,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         ContentType: 'application/json',
       });
     }
+    uploadUrl = uploadUrl.replace('us-west-1', 'us-west-2');
+    parentUploadUrl = parentUploadUrl.replace('us-west-1', 'us-west-2');
   } catch (e) {
     const message = `Error creating upload URL(s) <${objectKey}>, <${parentObjectKey}>: ` + e.message;
     error = message;
