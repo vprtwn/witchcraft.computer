@@ -12,7 +12,7 @@
 
 ### Storage
 
-- Pages are stored as JSON files on S3 (traypages bucket)
+- Pages are stored as JSON files on S3 (traydata bucket)
 - Read-only user settings are stored on Stripe customer metadata
 - Every page has a tip button. Tip comments are descriptions on Stripe PaymentIntents, and can be displayed (optionally) as a feed on any page.
 - Curious about using [Cloudflare durable objects](https://blog.cloudflare.com/introducing-workers-durable-objects/) for collaborative storage (comments)

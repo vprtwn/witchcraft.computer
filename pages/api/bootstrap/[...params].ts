@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getCustomer } from '../../../lib/ops';
-import { AWS_ENDPOINT, AWS_REGION } from '../../../lib/const';
+import { AWS_ENDPOINT, AWS_REGION, AWS_BUCKET } from '../../../lib/const';
 import { ErrorResponse } from '../../../lib/typedefs';
 import Stripe from 'stripe';
 import { getSession } from 'next-auth/client';
@@ -80,20 +80,19 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     uploadUrl = await s3.getSignedUrlPromise('putObject', {
-      Bucket: 'traypages',
+      Bucket: AWS_BUCKET,
       Key: objectKey,
       ContentType: 'application/json',
     });
-    // the S3 SDK has weird caching behavior. i've seen it swap us-west-2 for us-west-1.
+    // the S3 SDK has weird caching behavior.
+    // i've seen it swap us-west-2 for us-west-1.
     // simply replacing seems to work, but this is a brittle workaround
-    uploadUrl = uploadUrl.replace('us-west-1', 'us-west-2');
     if (parentObjectKey) {
       parentUploadUrl = await s3.getSignedUrlPromise('putObject', {
-        Bucket: 'traypages',
+        Bucket: AWS_BUCKET,
         Key: parentObjectKey,
         ContentType: 'application/json',
       });
-      parentUploadUrl = parentUploadUrl.replace('us-west-1', 'us-west-2');
     }
   } catch (e) {
     const message = `Error creating upload URL(s) <${objectKey}>, <${parentObjectKey}>: ` + e.message;

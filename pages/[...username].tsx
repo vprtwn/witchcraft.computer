@@ -253,9 +253,9 @@ const UserPage = (props) => {
 
   return (
     <Layout>
-      {/* {DEBUG && !props.error && (
+      {DEBUG && !props.error && (
         <Textarea rows={10} sx={{ borderColor: 'blue', my: 4 }} defaultValue={JSON.stringify(props, null, 2)} />
-      )} */}
+      )}
       {props.error && (
         <Textarea rows={10} sx={{ borderColor: 'red', my: 4 }} defaultValue={JSON.stringify(props.error, null, 2)} />
       )}

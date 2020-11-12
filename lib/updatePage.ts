@@ -6,7 +6,10 @@ export const transformPageData = (
   value: object | string,
   removedKey: string | null = null, // this is ugly
   order: Record<string, string>[] | null = null,
-): object => {
+): object | null => {
+  if (!pageData) {
+    return null;
+  }
   const result = pageData;
   result[key] = value;
   if (removedKey) {
@@ -15,13 +18,18 @@ export const transformPageData = (
   if (order) {
     result['b.order'] = order;
   }
-  const orderIds = result['b.order'].map((item) => item.i);
-  const pageKeys = Object.keys(result).filter((item) => item.startsWith('b.') && item !== 'b.order');
-  pageKeys.forEach((k) => {
-    if (!orderIds.includes(k)) {
-      delete result[k];
+  if (result) {
+    const latestOrder = result['b.order'];
+    if (latestOrder) {
+      const orderIds = latestOrder.map((item) => item.i);
+      const pageKeys = Object.keys(result).filter((item) => item.startsWith('b.') && item !== 'b.order');
+      pageKeys.forEach((k) => {
+        if (!orderIds.includes(k)) {
+          delete result[k];
+        }
+      });
     }
-  });
+  }
   return result;
 };
 
