@@ -58,13 +58,14 @@ const UserPage = (props) => {
       setStripeAccount(response.stripeAccount);
       setUploadUrl(response.uploadUrl);
       setParentUploadUrl(response.parentUploadUrl);
+      await initialize(response.uploadUrl);
     } catch (e) {
       console.error(e);
       return;
     }
   };
 
-  const initialize = async () => {
+  const initialize = async (uploadUrl: string) => {
     if (!uploadUrl) {
       console.error("couldn't initialize page, no upload url");
       return;
@@ -72,12 +73,13 @@ const UserPage = (props) => {
     try {
       const body = {
         uploadUrl: uploadUrl,
+        data: props.data,
       };
       const response = await fetchJson('api/initialize', {
         method: 'POST',
         body: JSON.stringify(body),
       });
-      console.log('initialized page', response);
+      setData(response);
     } catch (e) {
       console.error(e);
       return;
@@ -106,16 +108,8 @@ const UserPage = (props) => {
   const [stripeAccount, setStripeAccount] = useState<object | null>(null);
 
   useEffect(() => {
-    if (signedIn) {
-      bootstrap();
-    }
+    bootstrap();
   }, []);
-
-  useEffect(() => {
-    if (signedIn && !props.data) {
-      initialize();
-    }
-  }, [uploadUrl]);
 
   useEffect(() => {
     const newSettings = {
@@ -206,15 +200,15 @@ const UserPage = (props) => {
 
   return (
     <Layout>
-      {/* {DEBUG && !props.error && (
+      {DEBUG && !props.error && (
         <Textarea rows={10} sx={{ borderColor: 'blue', my: 4 }} defaultValue={JSON.stringify(props, null, 2)} />
-      )} */}
+      )}
       {props.error && (
         <Textarea rows={10} sx={{ borderColor: 'red', my: 4 }} defaultValue={JSON.stringify(props.error, null, 2)} />
       )}
       {!props.error && (
         <>
-          <Header name={props.data ? props.data.name : ''} username={props.username} pageId={props.pageId} />
+          <Header name={data ? data.name : ''} username={props.username} pageId={props.pageId} />
           {props.pageId && (
             <TitleBlock
               pageId={props.pageId}

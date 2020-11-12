@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getCustomer } from '../../../lib/ops';
 import { ErrorResponse } from '../../../lib/typedefs';
 import Stripe from 'stripe';
+import { getSession } from 'next-auth/client';
+import { validateSession } from '../../../lib/validateSession';
 
 /**
  * Returns a new signed upload URL.
@@ -9,7 +11,14 @@ import Stripe from 'stripe';
  */
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'GET') {
-    return res.status(500);
+    return res.status(400);
+  }
+  // TODO(#39): use JWT – more secure?
+  // const token = await jwt.getToken({ req, secret });
+  const session = await getSession({ req });
+  const authError = validateSession(session, null);
+  if (authError) {
+    return res.status(authError.httpStatus).json(authError);
   }
 
   const AWS = require('aws-sdk');
