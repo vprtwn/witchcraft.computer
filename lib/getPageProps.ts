@@ -3,11 +3,11 @@ import { getOrCreateCustomer } from '../lib/ops';
 import { Session } from 'next-auth/client';
 import { GetServerSidePropsResult } from 'next';
 
+const BASE_URL = 'https://traypages.s3-us-west-2.amazonaws.com/';
+
 export const getPageProps = async (session: Session, query: object): Promise<GetServerSidePropsResult<object>> => {
   const AWS = require('aws-sdk');
-  const s3 = new AWS.S3();
-  const config = { accessKeyId: process.env.S3_ACCESS_KEY_ID, secretAccessKey: process.env.S3_SECRET };
-  AWS.config.update(config);
+  const s3 = new AWS.S3(); // no credentials necessary, bucket is public
 
   let pageId = null;
   let data = null;
@@ -36,16 +36,12 @@ export const getPageProps = async (session: Session, query: object): Promise<Get
     objectKey = `@${username}/${pageId}`;
   }
 
+  // fetch page data
   try {
-    // fetch page data
-    const s3data = await s3
-      .getObject({
-        Bucket: 'traypages',
-        Key: objectKey,
-      })
-      .promise();
-    const object = s3data.Body.toString('utf-8');
-    data = JSON.parse(object);
+    const url = BASE_URL + objectKey;
+    const response = await fetch(url);
+    const json = await response.json();
+    data = json;
   } catch (e) {
     console.error(`Failed to fetch page at ${objectKey}:`, e.message);
   }
@@ -67,16 +63,12 @@ export const getPageProps = async (session: Session, query: object): Promise<Get
     }
 
     if (pageId) {
-      // fetch parent data
+      // fetch parent page data
       try {
-        const s3data = await s3
-          .getObject({
-            Bucket: 'traypages',
-            Key: parentObjectKey,
-          })
-          .promise();
-        const object = s3data.Body.toString('utf-8');
-        parentData = JSON.parse(object);
+        const url = BASE_URL + parentObjectKey;
+        const response = await fetch(url);
+        const json = await response.json();
+        parentData = json;
       } catch (e) {
         console.error(`Failed to fetch parent page at ${objectKey}:`, e.message);
       }

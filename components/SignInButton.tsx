@@ -34,9 +34,6 @@ const SignInButton = (props) => {
           Sign in with Twitter
         </Button>
       </Flex>
-      <Flex sx={{ pt: 1, fontSize: 11, justifyContent: 'center', color: 'gray' }}>
-        <Text>to claim your space</Text>
-      </Flex>
     </Box>
   );
 };
