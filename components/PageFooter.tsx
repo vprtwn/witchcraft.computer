@@ -2,7 +2,7 @@ import { Flex, Box, Container, IconButton, Button, Text, Image, Link } from 'the
 
 const PageFooter = (props) => {
   return (
-    <Box sx={{ textAlign: 'center', mb: 4, py: 1, px: 2 }}>
+    <Box sx={{ textAlign: 'center', mt: 3, mb: 5, py: 1, px: 2 }}>
       <Box sx={{ flex: '1 1 auto' }} />
       <Flex sx={{ alignItems: 'center' }}>
         <Box sx={{ flex: '1 1 auto' }} />

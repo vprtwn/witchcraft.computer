@@ -26,14 +26,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const AWS = require('aws-sdk');
-    s3 = new AWS.S3();
-    const config = {
+    s3 = new AWS.S3({
       accessKeyId: process.env.S3_ACCESS_KEY_ID,
       secretAccessKey: process.env.S3_SECRET,
       region: AWS_REGION,
-    };
-    AWS.config.update(config);
-    console.log('region', AWS.config.region);
+    });
+    // AWS.config.update(config);
+    // console.log('region', AWS.config.region);
   } catch (e) {
     const message = 'Error initializing AWS SDK: ' + e.message;
     console.error(message);
