@@ -149,7 +149,6 @@ const NewMenu = (props) => {
                     paddingRight: 8,
                     paddingTop: 8,
                     paddingBottom: 8,
-                    textAlign: 'right',
                     overflow: 'hidden',
                     pointerEvents: props.hideToolbar ? 'none' : 'auto',
                   }}

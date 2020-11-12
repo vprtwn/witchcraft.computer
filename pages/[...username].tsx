@@ -158,8 +158,9 @@ const UserPage = (props) => {
       return;
     }
     try {
-      const parentData = transformPageData(props.parentData, 'b.order', newOrder, removedId);
-      await updatePage(uploadUrl, data);
+      const pageData = transformPageData(data, 'b.order', newOrder, removedId);
+      console.log('pageData', pageData);
+      await updatePage(uploadUrl, pageData);
     } catch (e) {
       console.error(e);
     }
