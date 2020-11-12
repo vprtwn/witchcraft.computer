@@ -12,7 +12,21 @@ import { reorder, remove, add, generateBlockId, generatePageId, generatePageBloc
 import { transformPageData, updatePage } from '../lib/updatePage';
 import { getPageProps } from '../lib/getPageProps';
 import { Direction, BlockType } from '../lib/typedefs';
-import { Box, Checkbox, Link, Badge, Input, IconButton, Flex, Card, Button, Text, Label, Textarea } from 'theme-ui';
+import {
+  Box,
+  Checkbox,
+  Link,
+  Badge,
+  Alert,
+  Input,
+  IconButton,
+  Flex,
+  Card,
+  Button,
+  Text,
+  Label,
+  Textarea,
+} from 'theme-ui';
 import NumberFormat from 'react-number-format';
 import { GetServerSideProps } from 'next';
 import { signOut, getSession } from 'next-auth/client';
@@ -54,7 +68,9 @@ const UserPage = (props) => {
       const response = await fetchJson(url, {
         method: 'GET',
       });
-      console.log('api/bootstrap', response);
+      if (response.error) {
+        setAlert(response.error);
+      }
       setStripeAccount(response.stripeAccount);
       setUploadUrl(response.uploadUrl);
       setParentUploadUrl(response.parentUploadUrl);
@@ -81,7 +97,6 @@ const UserPage = (props) => {
         method: 'POST',
         body: JSON.stringify(body),
       });
-      console.log('api/initialize', response);
       setData(response);
     } catch (e) {
       console.error(e);
@@ -105,6 +120,7 @@ const UserPage = (props) => {
   const [order, setOrder] = useState(initialOrder);
   const [uploadUrl, setUploadUrl] = useState<string | null>(null);
   const [parentUploadUrl, setParentUploadUrl] = useState<string | null>(null);
+  const [alert, setAlert] = useState<string | null>(null);
 
   const [previewing, setPreviewing] = useState(true);
   const [data, setData] = useState(props.data);
@@ -132,7 +148,10 @@ const UserPage = (props) => {
     try {
       const pageData = transformPageData(data, id, value, null, order);
       setData(pageData);
-      await updatePage(uploadUrl, pageData);
+      const response = await updatePage(uploadUrl, pageData);
+      if (response['error']) {
+        setAlert(response['error']);
+      }
     } catch (e) {
       console.error(e);
     }
@@ -159,8 +178,10 @@ const UserPage = (props) => {
     }
     try {
       const pageData = transformPageData(data, 'b.order', newOrder, removedId);
-      console.log('pageData', pageData);
-      await updatePage(uploadUrl, pageData);
+      const response = await updatePage(uploadUrl, pageData);
+      if (response['error']) {
+        setAlert(response['error']);
+      }
     } catch (e) {
       console.error(e);
     }
@@ -385,6 +406,8 @@ const UserPage = (props) => {
               }}
             />
           )}
+
+          {alert && <Alert>{alert}</Alert>}
 
           {props.signedIn && (
             <Flex sx={{ mx: 2, justifyContent: 'space-between' }}>

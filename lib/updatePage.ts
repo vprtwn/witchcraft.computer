@@ -18,7 +18,7 @@ export const transformPageData = (
 
 export const updatePage = async (uploadUrl: string, data: object): Promise<object> => {
   if (!uploadUrl) {
-    return;
+    return { error: 'no upload URL' };
   }
   try {
     const params = {
@@ -29,7 +29,7 @@ export const updatePage = async (uploadUrl: string, data: object): Promise<objec
       method: 'POST',
       body: JSON.stringify(params),
     });
-    return data;
+    return result;
   } catch (e) {
     return { error: e.message };
   }

@@ -17,14 +17,22 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   // const token = await jwt.getToken({ req, secret });
   const session = await getSession({ req });
   const authError = validateSession(session, req);
+  let error = null;
   if (authError) {
     return res.status(authError.httpStatus).json(authError);
   }
+  let s3 = null;
 
-  const AWS = require('aws-sdk');
-  const s3 = new AWS.S3();
-  const config = { accessKeyId: process.env.S3_ACCESS_KEY_ID, secretAccessKey: process.env.S3_SECRET };
-  AWS.config.update(config);
+  try {
+    const AWS = require('aws-sdk');
+    s3 = new AWS.S3();
+    const config = { accessKeyId: process.env.S3_ACCESS_KEY_ID, secretAccessKey: process.env.S3_SECRET };
+    AWS.config.update(config);
+  } catch (e) {
+    const message = 'error initializing aws sdk: ' + e.message;
+    console.error(message);
+    error = message;
+  }
 
   const {
     query: { params },
@@ -51,13 +59,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       stripeAccount = await stripe.accounts.retrieve(stripeAccountId);
     } catch (e) {
-      console.error(`Error retrieving stripe account <${stripeAccountId}> `, e.message);
+      const message = `Error retrieving stripe account <${stripeAccountId}>: ` + e.message;
+      console.error(message);
+      error = message;
     }
   }
 
+  let objectKey = `@${username}`;
+  let parentObjectKey = null;
   try {
-    let objectKey = `@${username}`;
-    let parentObjectKey = null;
     if (pageId) {
       parentObjectKey = objectKey;
       objectKey = `@${username}/${pageId}`;
@@ -75,12 +85,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         ContentType: 'application/json',
       });
     }
-    return res
-      .status(200)
-      .json({ uploadUrl: uploadUrl, parentUploadUrl: parentUploadUrl, stripeAccount: stripeAccount });
   } catch (e) {
-    return res.status(500).json({
-      error: e.message,
-    });
+    const message = `Error creating upload URL(s) <${objectKey}>, <${parentObjectKey}>: ` + e.message;
+    error = message;
   }
+  return res
+    .status(200)
+    .json({ error: error, uploadUrl: uploadUrl, parentUploadUrl: parentUploadUrl, stripeAccount: stripeAccount });
 };
