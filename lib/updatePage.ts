@@ -1,3 +1,5 @@
+import fetchJson from './fetchJson';
+
 export const transformPageData = (
   pageData: object,
   key: string,
@@ -26,12 +28,12 @@ export const updatePage = async (uploadUrl: string, data: object): Promise<objec
       uploadUrl: uploadUrl,
       payload: data,
     };
-    const result = await fetch('/api/upload', {
+    const result = await fetchJson('/api/upload', {
       method: 'POST',
       body: JSON.stringify(params),
     });
     console.log('result', result);
-    return data;
+    return result;
   } catch (e) {
     return { error: e.message };
   }
