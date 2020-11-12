@@ -67,7 +67,7 @@ const TextBlock = (props) => {
             }}
           />
         )}
-        {(!editing || props.previewing) && (
+        {!editing && (
           <Text sx={{ fontSize: '16px', py: 2, whiteSpace: 'pre-wrap' }}>{text.length === 0 ? '' : text}</Text>
         )}
       </Box>

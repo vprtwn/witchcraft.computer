@@ -120,7 +120,7 @@ const UserPage = (props) => {
   const [order, setOrder] = useState(initialOrder);
   const [uploadUrl, setUploadUrl] = useState<string | null>(null);
   const [parentUploadUrl, setParentUploadUrl] = useState<string | null>(null);
-  const [alert, setAlert] = useState<string | null>('foo');
+  const [alert, setAlert] = useState<string | null>(null);
 
   const [previewing, setPreviewing] = useState(true);
   const [data, setData] = useState(props.data);
@@ -407,7 +407,7 @@ const UserPage = (props) => {
             />
           )}
 
-          <Alert variant="error">{alert}</Alert>
+          {alert && <Alert variant="error">{alert}</Alert>}
 
           {props.signedIn && (
             <Flex sx={{ mx: 2, justifyContent: 'space-between' }}>

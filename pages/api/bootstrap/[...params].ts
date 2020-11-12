@@ -29,7 +29,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const config = { accessKeyId: process.env.S3_ACCESS_KEY_ID, secretAccessKey: process.env.S3_SECRET };
     AWS.config.update(config);
   } catch (e) {
-    const message = 'error initializing aws sdk: ' + e.message;
+    const message = 'Error initializing AWS SDK: ' + e.message;
     console.error(message);
     error = message;
   }
@@ -59,7 +59,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       stripeAccount = await stripe.accounts.retrieve(stripeAccountId);
     } catch (e) {
-      const message = `Error retrieving stripe account <${stripeAccountId}>: ` + e.message;
+      const message = `Error retrieving Stripe account <${stripeAccountId}>: ` + e.message;
       console.error(message);
       error = message;
     }
