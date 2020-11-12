@@ -15,6 +15,13 @@ export const transformPageData = (
   if (order) {
     result['b.order'] = order;
   }
+  const orderIds = result['b.order'].map((item) => item.i);
+  const pageKeys = Object.keys(result).filter((item) => item.startsWith('b.') && item !== 'b.order');
+  pageKeys.forEach((k) => {
+    if (!orderIds.includes(k)) {
+      delete result[k];
+    }
+  });
   return result;
 };
 
