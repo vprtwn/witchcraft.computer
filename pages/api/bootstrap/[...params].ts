@@ -33,6 +33,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       region: AWS_REGION,
     };
     AWS.config.update(config);
+    console.log('region', AWS.config.region);
   } catch (e) {
     const message = 'Error initializing AWS SDK: ' + e.message;
     console.error(message);
