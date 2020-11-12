@@ -29,6 +29,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const config = {
       accessKeyId: process.env.S3_ACCESS_KEY_ID,
       secretAccessKey: process.env.S3_SECRET,
+      endpoint: 'https://traypages.s3-us-west-2.amazonaws.com',
       region: 'us-west-2',
     };
     AWS.config.update(config);
