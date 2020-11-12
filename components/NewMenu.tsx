@@ -9,6 +9,7 @@ import PageButtonIcon from './PageButtonIcon';
 import TextareaAutosize from 'react-textarea-autosize';
 import isUrl from 'is-url';
 import fetchJson from '../lib/fetchJson';
+import { colorFromUrl } from '../lib/utils';
 import PlusButtonIcon from './PlusButtonIcon';
 
 const DEBOUNCE_MS = 700;
@@ -22,6 +23,8 @@ const NewMenu = (props) => {
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
+
+  const borderColor = colorFromUrl(url);
 
   useEffect(() => {
     if (showingForm) {
@@ -86,7 +89,7 @@ const NewMenu = (props) => {
                 }}
               />
             </Card>
-            <Card variant="block" sx={{ border: 'dotted 1px black', borderRadius: 8 }}>
+            <Card variant="block" sx={{ border: 'solid 2px', borderColor: borderColor, borderRadius: 8 }}>
               <Flex
                 sx={{
                   justifyContent: 'space-between',
@@ -98,13 +101,36 @@ const NewMenu = (props) => {
                 }}
               >
                 <Box sx={{ flexGrow: 1 }}>
-                  <Input
+                  <TextareaAutosize
+                    defaultValue={text}
+                    spellCheck={false}
+                    style={{
+                      background: 'transparent',
+                      width: '100%',
+                      resize: 'none',
+                      fontFamily:
+                        '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+                      fontSize: '16px',
+                      border: 'none',
+                      lineHeight: 1.5,
+                      paddingLeft: 16,
+                      paddingRight: 16,
+                      paddingTop: 6,
+                      paddingBottom: 6,
+                      overflow: 'hidden',
+                    }}
+                    placeholder="Link text"
+                    onChange={(t) => {
+                      setText(t.target.value);
+                    }}
+                  />
+                  {/* <Input
                     variant="linkInput"
                     sx={{ py: 2, px: 3 }}
                     placeholder="Link text"
                     value={text}
                     onChange={(t) => setText(t.target.value)}
-                  />
+                  /> */}
                 </Box>
               </Flex>
 
@@ -139,10 +165,11 @@ const NewMenu = (props) => {
               variant="newMenuButton"
               sx={{ py: 3, px: 4 }}
               onClick={() => {
-                console.log('text', text);
-                console.log('url', url);
-                console.log('comment', comment);
                 props.onClick({ type: 'link', text: text, url: url, comment: comment });
+                setShowingForm(false);
+                setText('');
+                setComment('');
+                setUrl('');
               }}
             >
               <PlusButtonIcon />

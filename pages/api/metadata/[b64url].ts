@@ -47,10 +47,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const firstComps = description.split(', a song by ');
     const song = firstComps[0];
     let rest = firstComps[1];
-    console.log('rest', rest);
-    rest = rest.replace('on Spotify', '');
+    if (rest) {
+      rest = rest.replace('on Spotify', '');
+    }
     const artist = rest;
-    title = `${song} – ${artist}`.trim();
+    if (artist) {
+      title = `${song} – ${artist}`.trim();
+    }
   }
-  res.json({ title: title, domain: domain });
+  res.json({ title: title, description: description, domain: domain });
 };

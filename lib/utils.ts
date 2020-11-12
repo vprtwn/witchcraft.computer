@@ -79,6 +79,28 @@ export const parseBlockId = (id: string): BlockType => {
   return BlockType.Unknown;
 };
 
+export const colorFromUrl = (url: string): string => {
+  let color = 'black';
+  const isUrl = require('is-url');
+  if (!url || !isUrl(url)) {
+    return color;
+  }
+  const psl = require('psl');
+  const parsedUrl = new URL(url);
+  const parsedHost = psl.parse(parsedUrl.host);
+  const domain = parsedHost.domain;
+  if (domain === 'spotify.com') {
+    color = 'spotifyGreen';
+  } else if (domain === 'youtube.com') {
+    color = 'youtubeRed';
+  } else if (domain === 'bandcamp.com') {
+    color = 'bandcampTeal';
+  } else if (domain === 'soundcloud.com') {
+    color = 'soundcloudOrange';
+  }
+  return color;
+};
+
 // twitter username from url
 export const usernameFromUrl = (inputUrl: string): string | null => {
   if (!isUrl(inputUrl)) {

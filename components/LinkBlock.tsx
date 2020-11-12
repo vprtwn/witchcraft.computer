@@ -3,6 +3,7 @@ import { Card, Input, Flex, Box, Link, Text } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
 import EditToolbar from './EditToolbar';
 import { updatePage, transformPageData } from '../lib/updatePage';
+import { colorFromUrl } from '../lib/utils';
 import isUrl from 'is-url';
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -21,6 +22,8 @@ const LinkBlock = (props) => {
   const [debouncedText] = useDebounce(text, DEBOUNCE_MS);
   const [debouncedUrl] = useDebounce(url, DEBOUNCE_MS);
   const [debouncedComment] = useDebounce(comment, DEBOUNCE_MS);
+
+  const borderColor = colorFromUrl(url);
 
   useEffect(() => {
     if (isUrl(debouncedUrl) && text.length > 0) {
@@ -43,7 +46,7 @@ const LinkBlock = (props) => {
   };
 
   return (
-    <Card variant="block" sx={{ border: 'solid 1px black', fontSize: '16px', bg: 'white' }}>
+    <Card variant="block" sx={{ border: `solid 2px`, borderColor: borderColor, fontSize: '16px', bg: 'white' }}>
       <>
         <Flex
           onClick={() => {
@@ -64,10 +67,24 @@ const LinkBlock = (props) => {
         >
           <Box sx={{ flexGrow: 1 }}>
             {editing && (
-              <Input
-                variant="linkInput"
-                sx={{ py: 2, px: 3 }}
+              <TextareaAutosize
                 defaultValue={text}
+                spellCheck={false}
+                style={{
+                  background: 'transparent',
+                  width: '100%',
+                  resize: 'none',
+                  fontFamily:
+                    '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+                  fontSize: '16px',
+                  border: 'none',
+                  lineHeight: 1.5,
+                  paddingLeft: 16,
+                  paddingRight: 16,
+                  paddingTop: 6,
+                  paddingBottom: 6,
+                  overflow: 'hidden',
+                }}
                 placeholder="Link text"
                 onChange={(t) => {
                   setText(t.target.value);
@@ -112,7 +129,6 @@ const LinkBlock = (props) => {
                 paddingTop: 8,
                 paddingBottom: 8,
                 overflow: 'hidden',
-                pointerEvents: props.previewing ? 'none' : 'auto',
               }}
               placeholder="Comment (optional)"
               onChange={(t) => {

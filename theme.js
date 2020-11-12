@@ -31,8 +31,13 @@ export default {
     lightRed: '#fff5f5',
     lightBlue: '#ebf8ff',
     lightTeal: '#e6fffa',
+    lightOrange: '#fffaf0',
     background: '#fff',
     lightGray: '#edf2f7',
+    spotifyGreen: '#1DB954',
+    youtubeRed: '#FF0000',
+    bandcampTeal: '#629aa9',
+    soundcloudOrange: '#ff7700',
     modes: {
       light: {
         text: '#000',

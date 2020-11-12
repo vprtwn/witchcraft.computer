@@ -378,14 +378,14 @@ const UserPage = (props) => {
           )}
 
           {props.signedIn && (
-            <Flex
-              sx={{ pt: 4, mx: 2, justifyContent: 'space-between' }}
-              onClick={() => {
-                setPreviewing(!previewing);
-              }}
-            >
+            <Flex sx={{ mx: 2, justifyContent: 'space-between' }}>
               <Box></Box>
-              <Box>
+              <Box
+                sx={{ p: 4 }}
+                onClick={() => {
+                  setPreviewing(!previewing);
+                }}
+              >
                 <IconButton
                   variant={!previewing ? 'iconselected' : 'icon'}
                   onClick={() => {
