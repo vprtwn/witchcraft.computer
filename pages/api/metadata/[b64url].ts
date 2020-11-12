@@ -25,9 +25,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   ]);
 
   let metadata = null;
+  let targetUrl = null;
 
   try {
-    let targetUrl = atob(b64url as string);
+    targetUrl = atob(b64url as string);
     const response = await fetch(targetUrl);
     let html = await response.text();
     metadata = await metascraper({ url: targetUrl, html });
@@ -36,5 +37,20 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(500).json({ error: e.message });
   }
 
-  res.json({ metadata: metadata });
+  let title = metadata['title'];
+  const description = metadata['description'];
+  const parsedUrl = new URL(targetUrl);
+  const psl = require('psl');
+  const parsedHost = psl.parse(parsedUrl.host);
+  const domain = parsedHost.domain; // spotify.com
+  if (domain === 'spotify.com') {
+    const firstComps = description.split(', a song by ');
+    const song = firstComps[0];
+    let rest = firstComps[1];
+    console.log('rest', rest);
+    rest = rest.replace('on Spotify', '');
+    const artist = rest;
+    title = `${song} – ${artist}`.trim();
+  }
+  res.json({ title: title, domain: domain });
 };

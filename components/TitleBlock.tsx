@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Text } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
-import { updatePage } from '../lib/updatePage';
+import { updatePage, transformPageData } from '../lib/updatePage';
 import { generatePageBlockId } from '../lib/utils';
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -23,13 +23,15 @@ const TitleBlock = (props) => {
 
   const syncUpdatedText = async function (newText: string) {
     try {
-      await updatePage(props.uploadUrl, props.data, 'title', newText);
+      const pageData = transformPageData(props.data, 'title', newText);
+      await updatePage(props.uploadUrl, pageData);
       if (props.parentUploadUrl && props.parentData) {
         const key = generatePageBlockId(props.pageId);
         const newVal = props.parentData[key];
         newVal['title'] = newText;
         console.log('updating parent page', newVal);
-        await updatePage(props.parentUploadUrl, props.parentData, key, newVal);
+        const parentData = transformPageData(props.parentData, key, newVal);
+        await updatePage(props.parentUploadUrl, parentData);
       }
       setTitle(newText);
     } catch (e) {

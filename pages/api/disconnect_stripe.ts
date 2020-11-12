@@ -10,7 +10,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   // TODO(#39): use JWT – more secure?
   // const token = await jwt.getToken({ req, secret });
   const session = await getSession({ req });
-  const authError = validateSession(session, null);
+  const authError = validateSession(session, req);
 
   if (authError) {
     return res.status(authError.httpStatus).json(authError);

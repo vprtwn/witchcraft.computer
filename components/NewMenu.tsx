@@ -45,7 +45,7 @@ const NewMenu = (props) => {
     const response = await fetchJson(`/api/metadata/${b64url}`, {
       method: 'GET',
     });
-    console.dir('response', response);
+    setText(response['title'] || '');
   };
 
   return (
@@ -102,6 +102,7 @@ const NewMenu = (props) => {
                     variant="linkInput"
                     sx={{ py: 2, px: 3 }}
                     placeholder="Link text"
+                    value={text}
                     onChange={(t) => setText(t.target.value)}
                   />
                 </Box>

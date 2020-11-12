@@ -1,6 +1,8 @@
 import { ErrorResponse } from './typedefs';
+import { NextApiRequest } from 'next';
+import { usernameFromUrl } from './utils';
 
-export const validateSession = (session, username: string | null = null): ErrorResponse | null => {
+export const validateSession = (session, req: NextApiRequest): ErrorResponse | null => {
   let response: ErrorResponse | null;
   if (!session || !session.user) {
     response = {
@@ -16,7 +18,9 @@ export const validateSession = (session, username: string | null = null): ErrorR
       errorMessage: 'no username in session',
     };
   }
-  if (username && session && session.user.username !== username) {
+  const referer = req.headers['referer'];
+  const refererUsername = usernameFromUrl(referer);
+  if (refererUsername && session && session.user.username !== refererUsername) {
     response = {
       httpStatus: 401,
       errorCode: 'session_username_mismatch',

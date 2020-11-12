@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, Box, Text } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
-import { updatePage } from '../lib/updatePage';
+import { updatePage, transformPageData } from '../lib/updatePage';
 import EditToolbar from './EditToolbar';
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -25,7 +25,8 @@ const TextBlock = (props) => {
 
   const syncUpdatedText = async function (newText: string) {
     try {
-      await updatePage(props.uploadUrl, props.data, props.id, newText);
+      const pageData = transformPageData(props.data, props.id, newText);
+      await updatePage(props.uploadUrl, pageData);
       setText(newText);
     } catch (e) {
       console.error(e);

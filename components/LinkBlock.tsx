@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Card, Input, Flex, Box, Link, Text } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
 import EditToolbar from './EditToolbar';
-import { updatePage } from '../lib/updatePage';
+import { updatePage, transformPageData } from '../lib/updatePage';
 import isUrl from 'is-url';
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -35,7 +35,8 @@ const LinkBlock = (props) => {
 
   const syncUpdates = async function (value) {
     try {
-      await updatePage(props.uploadUrl, props.data, props.id, value);
+      const pageData = transformPageData(props.data, props.id, value);
+      await updatePage(props.uploadUrl, pageData);
     } catch (e) {
       console.error(e);
     }

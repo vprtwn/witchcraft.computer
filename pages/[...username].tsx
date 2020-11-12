@@ -19,7 +19,7 @@ import { signOut, getSession } from 'next-auth/client';
 import fetchJson from '../lib/fetchJson';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import EditButtonIcon from '../components/EditButtonIcon';
-import ViewButtonIcon from '../components/ViewButtonIcon';
+import CloseButtonIcon from '../components/CloseButtonIcon';
 import SignOutButtonIcon from '../components/SignOutButtonIcon';
 import NewMenu from '../components/NewMenu';
 import { useSession } from 'next-auth/client';
@@ -158,7 +158,8 @@ const UserPage = (props) => {
       return;
     }
     try {
-      await updatePage(uploadUrl, data, 'b.order', newOrder, removedId);
+      const parentData = transformPageData(props.parentData, 'b.order', newOrder, removedId);
+      await updatePage(uploadUrl, data);
     } catch (e) {
       console.error(e);
     }
@@ -391,7 +392,7 @@ const UserPage = (props) => {
                     setPreviewing(!previewing);
                   }}
                 >
-                  {previewing ? <EditButtonIcon /> : <ViewButtonIcon />}
+                  {previewing ? <EditButtonIcon /> : <CloseButtonIcon />}
                 </IconButton>
               </Box>
               <Box></Box>
