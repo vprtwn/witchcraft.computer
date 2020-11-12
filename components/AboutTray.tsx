@@ -8,9 +8,6 @@ const AboutTray = (props) => {
         Welcome to <Badge variant="outline">tray</Badge>
         <strong>:</strong> a new way to share notes, links, and music.
       </Text>
-      <Text variant="large" mt={3}>
-        
-      </Text>
       {/* <Text variant="tiny" sx={{ pt: 3, pb: 2, color: 'gray' }}>
         <Badge variant="outline" sx={{ fontSize: 10, color: 'gray' }}>
           tray

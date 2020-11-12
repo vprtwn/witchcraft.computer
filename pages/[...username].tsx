@@ -106,11 +106,13 @@ const UserPage = (props) => {
   const [stripeAccount, setStripeAccount] = useState<object | null>(null);
 
   useEffect(() => {
-    bootstrap();
+    if (signedIn) {
+      bootstrap();
+    }
   }, []);
 
   useEffect(() => {
-    if (!props.data) {
+    if (signedIn && !props.data) {
       initialize();
     }
   }, [uploadUrl]);
