@@ -10,6 +10,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(500);
   }
   const params = JSON.parse(req.body);
+  console.log('params', params);
 
   const uploadUrl = params.uploadUrl;
   const payload = params.payload;
