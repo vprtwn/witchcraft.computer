@@ -38,7 +38,7 @@ const options = {
   // option is set - or by default if no database is specified.
   // https://next-auth.js.org/configuration/options#jwt
   jwt: {
-    encryption: true,
+    // encryption: true,
   },
 
   // You can define custom pages to override the built-in pages.

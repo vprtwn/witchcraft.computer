@@ -5,9 +5,9 @@ const AboutTray = (props) => {
   return (
     <Box>
       <Text variant="large">
-        Welcome to <Badge variant="outline">tray</Badge>
-        <strong>:</strong> a new way to share notes, links, and music.
+        welcome to <Badge variant="outline">tray</Badge>
       </Text>
+      <Text variant="large">a new way to share notes, links, and music.</Text>
       {/* <Text variant="tiny" sx={{ pt: 3, pb: 2, color: 'gray' }}>
         <Badge variant="outline" sx={{ fontSize: 10, color: 'gray' }}>
           tray

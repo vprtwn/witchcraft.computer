@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Card, Text, Flex, Link } from 'theme-ui';
+import { Card, Flex, Link } from 'theme-ui';
 import PageBlockEditToolbar from './PageBlockEditToolbar';
 
 const PageBlock = (props) => {

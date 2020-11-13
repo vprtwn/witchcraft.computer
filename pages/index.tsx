@@ -3,7 +3,7 @@ import Layout from '../components/Layout';
 import AboutTray from '../components/AboutTray';
 import TrayIcon from '../components/TrayIcon';
 import SignInButton from '../components/SignInButton';
-import MarketingFooter from '../components/MarketingFooter';
+import InfoFooter from '../components/InfoFooter';
 import { Card } from 'theme-ui';
 import { GetServerSideProps } from 'next';
 import { signIn, getSession, useSession } from 'next-auth/client';
@@ -20,7 +20,7 @@ const IndexPage = () => {
         <AboutTray />
       </Card>
       {!signedIn && <SignInButton />}
-      <MarketingFooter />
+      <InfoFooter />
     </Layout>
   );
 };

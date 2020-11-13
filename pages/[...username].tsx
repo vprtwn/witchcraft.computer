@@ -253,9 +253,9 @@ const UserPage = (props) => {
 
   return (
     <Layout>
-      {DEBUG && !props.error && (
+      {/* {DEBUG && !props.error && (
         <Textarea rows={10} sx={{ borderColor: 'blue', my: 4 }} defaultValue={JSON.stringify(props, null, 2)} />
-      )}
+      )} */}
       {props.error && (
         <Textarea rows={10} sx={{ borderColor: 'red', my: 4 }} defaultValue={JSON.stringify(props.error, null, 2)} />
       )}
@@ -448,6 +448,7 @@ const UserPage = (props) => {
       <PageFooter />
       {props.signedIn && (
         <Card variant="block" sx={{ p: 3, mb: 4, bg: 'transparent', border: '1px dotted lightGray' }}>
+          {/* disabling tip jar functionality for now – need to update how payment settings are stored */}
           {false && !props.pageId && (
             <Box sx={{ mb: 3 }}>
               <Flex sx={{ alignItems: 'center' }}>
