@@ -17,10 +17,12 @@ const PageBlock = (props) => {
       variant="block"
       sx={{
         border: 'solid 2px black',
-        bg: 'white',
         '&:hover': {
           cursor: 'pointer',
         },
+        background: title === 'New page' ? 'linear-gradient(-45deg, #e6fffa, #faf5ff, #ebf8ff)' : 'white',
+        backgroundSize: '400% 400%',
+        animation: title === 'New page' ? 'gradient 10s ease infinite' : 'none',
       }}
     >
       <Flex
