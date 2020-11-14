@@ -56,6 +56,8 @@ const TextBlock = (props) => {
               fontSize: '16px',
               border: 'none',
               lineHeight: 1.5,
+              paddingLeft: 2,
+              paddingRight: 2,
               paddingTop: 8,
               paddingBottom: 8,
               overflow: 'hidden',
@@ -68,7 +70,7 @@ const TextBlock = (props) => {
           />
         )}
         {!editing && (
-          <Text sx={{ fontSize: '16px', py: 2, whiteSpace: 'pre-wrap' }}>{text.length === 0 ? '' : text}</Text>
+          <Text sx={{ fontSize: '16px', py: 2, px: 1, whiteSpace: 'pre-wrap' }}>{text.length === 0 ? '' : text}</Text>
         )}
       </Box>
       {signedIn && !props.previewing && (
