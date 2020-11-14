@@ -143,21 +143,10 @@ export const emailFromUsername = (username: string): string => {
   return `${username}+twitter@tray.club`;
 };
 
-export const generateUserPath = (username: string): string => {
-  return `/@${username}`;
-};
-
 export const unprefixUsername = (username: string): string => {
   let newUsername = username;
   if (username.startsWith('@')) {
     newUsername = username.replace('@', '');
   }
   return newUsername;
-};
-
-export const validateStripeConnectParams = (
-  state: string[] | string | null,
-  code: string[] | string | null,
-): boolean => {
-  return code && code !== 'undefined' && state && state !== 'undefined';
 };

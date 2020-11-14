@@ -6,6 +6,8 @@ import fetchJson from '../lib/fetchJson';
 import { Text, Card, Flex, Link } from 'theme-ui';
 import AboutTray from '../components/AboutTray';
 import TrayIcon from '../components/TrayIcon';
+import UserListBlock from '../components/UserListBlock';
+import { GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/client';
 import SignInButton from '../components/SignInButton';
 
@@ -29,7 +31,9 @@ const AboutPage = (props) => {
         </Flex>
       )}
       <InfoFooter />
+      <UserListBlock />
     </Layout>
   );
 };
+
 export default AboutPage;

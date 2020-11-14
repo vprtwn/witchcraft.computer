@@ -31,7 +31,7 @@ const components = {
 };
 
 // @NOTE: using next-auth v3 beta
-export default ({ Component, pageProps }) => {
+const App = ({ Component, pageProps }) => {
   return (
     <Provider session={pageProps.session}>
       <ThemeProvider theme={theme}>
@@ -49,3 +49,4 @@ export default ({ Component, pageProps }) => {
     </Provider>
   );
 };
+export default App;

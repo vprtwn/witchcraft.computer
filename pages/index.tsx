@@ -4,10 +4,10 @@ import AboutTray from '../components/AboutTray';
 import TrayIcon from '../components/TrayIcon';
 import SignInButton from '../components/SignInButton';
 import InfoFooter from '../components/InfoFooter';
-import { Card } from 'theme-ui';
+import UserListBlock from '../components/UserListBlock';
+import { Card, Textarea } from 'theme-ui';
 import { GetServerSideProps } from 'next';
-import { signIn, getSession, useSession } from 'next-auth/client';
-import { generateUserPath, validateStripeConnectParams } from '../lib/utils';
+import { useSession } from 'next-auth/client';
 
 const IndexPage = () => {
   const [session, loading] = useSession();
@@ -21,25 +21,12 @@ const IndexPage = () => {
       </Card>
       {!signedIn && <SignInButton />}
       <InfoFooter />
+      <UserListBlock />
     </Layout>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const query = ctx.query;
-  const code = query.code as string | null;
-  const state = query.state as string | null;
-  const session = await getSession(ctx);
-
-  if (session && session.user.username && !validateStripeConnectParams(state, code)) {
-    console.log('redirecting');
-    const { res } = ctx;
-    const path = generateUserPath(session.user.username);
-    res.setHeader('location', path);
-    res.statusCode = 302;
-    res.end();
-    return { props: {} };
-  }
   return { props: {} };
 };
 
