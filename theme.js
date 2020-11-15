@@ -38,6 +38,7 @@ export default {
     youtubeRed: '#FF0000',
     bandcampTeal: '#629aa9',
     soundcloudOrange: '#ff7700',
+    twitterBlue: '#00acee',
     modes: {
       light: {
         text: '#000',

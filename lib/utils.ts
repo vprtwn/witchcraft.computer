@@ -97,6 +97,8 @@ export const colorFromUrl = (url: string): string => {
     color = 'bandcampTeal';
   } else if (domain === 'soundcloud.com') {
     color = 'soundcloudOrange';
+  } else if (domain === 'twitter.com') {
+    color = 'twitterBlue';
   }
   return color;
 };
