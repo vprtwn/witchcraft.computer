@@ -8,15 +8,7 @@ const AboutTray = (props) => {
         welcome to <Badge variant="outline">tray</Badge>
       </Text>
       <Text variant="large">a new way to share notes, links, and music.</Text>
-      {/* <Text variant="tiny" sx={{ pt: 3, pb: 2, color: 'gray' }}>
-        <Badge variant="outline" sx={{ fontSize: 10, color: 'gray' }}>
-          tray
-        </Badge>{' '}
-        is free software, made by{' '}
-        <Link variant="primary" href="https://tray.club/@bgdotjpg">
-          @bgdotjpg
-        </Link>
-      </Text> */}
+      <Text variant="large">"outbox infinity"</Text>
     </Box>
   );
 };
