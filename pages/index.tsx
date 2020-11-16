@@ -5,7 +5,7 @@ import TrayIcon from '../components/TrayIcon';
 import SignInButton from '../components/SignInButton';
 import InfoFooter from '../components/InfoFooter';
 import UserListBlock from '../components/UserListBlock';
-import { Card, Textarea, Flex, Text } from 'theme-ui';
+import { Card, Textarea, Flex, Text, Link } from 'theme-ui';
 import { GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/client';
 
