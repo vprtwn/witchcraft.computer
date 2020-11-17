@@ -5,18 +5,7 @@ const SignInButton = (props) => {
   return (
     <Box sx={{ pt: 4, pb: 3 }}>
       <Flex sx={{ bg: 'transparent', borderRadius: 4, fontSize: 11, justifyContent: 'center' }}>
-        <Button
-          variant="tiny"
-          onClick={() => signIn('twitter')}
-          sx={{
-            py: 2,
-            bg: 'white',
-            fontFamily: 'sans',
-            background: 'linear-gradient(-45deg, #e6fffa, #faf5ff, #ebf8ff)',
-            backgroundSize: '400% 400%',
-            animation: 'gradient 10s ease infinite',
-          }}
-        >
+        <Button variant="button_small_rainbow" onClick={() => signIn('twitter')}>
           <Box
             aria-hidden="true"
             sx={{

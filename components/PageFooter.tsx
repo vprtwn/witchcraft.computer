@@ -1,4 +1,4 @@
-import { Flex, Box, Container, IconButton, Button, Text, Image, Link } from 'theme-ui';
+import { Flex, Box, Text, Link } from 'theme-ui';
 
 const PageFooter = (props) => {
   return (
@@ -14,9 +14,9 @@ const PageFooter = (props) => {
             boxShadow: '0 0 8px rgba(0, 0, 0, 0.125)',
           }}
         >
-          <Link href="/" variant="nav">
-            <Flex sx={{ alignItems: 'center', color: 'gray' }}>
-              <Text sx={{ fontWeight: 'normal', fontSize: '10px', fontFamily: 'mono', mx: 2 }}>
+          <Link variant="link_footer" href="/">
+            <Flex sx={{ alignItems: 'center' }}>
+              <Text sx={{ fontFamily: 'mono', color: 'gray', mx: 2 }}>
                 made with <strong>tray</strong>
               </Text>
             </Flex>

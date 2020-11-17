@@ -7,19 +7,15 @@ const InfoFooter = (props) => {
       <Flex sx={{ alignItems: 'center' }}>
         <Box sx={{ flex: '1 1 auto' }} />
         <Flex sx={{ bg: 'transparent', borderRadius: 4, alignItems: 'center' }}>
-          <Link href="/policies" variant="nav" sx={{ mx: 2, py: 1, fontSize: '11px', fontWeight: 'normal' }}>
+          <Link variant="link_footer" href="/policies">
             policies
           </Link>
           |
-          <Link href="/faq" variant="nav" sx={{ mx: 2, py: 1, fontSize: '11px', fontWeight: 'normal' }}>
+          <Link variant="link_footer" href="/faq">
             FAQ
           </Link>
           |
-          <Link
-            href="https://twitter.com/trayclub"
-            variant="nav"
-            sx={{ mx: 2, py: 1, fontSize: '11px', fontWeight: 'normal' }}
-          >
+          <Link variant="link_footer" href="https://twitter.com/trayclub">
             twitter
           </Link>
         </Flex>

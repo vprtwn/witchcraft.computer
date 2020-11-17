@@ -123,7 +123,7 @@ const PaymentBlock = (props) => {
           <Flex sx={{ justifyContent: 'space-between' }}>
             <Button
               type="button"
-              variant="shadowButton"
+              variant="button_emphasis"
               onClick={() => {
                 setShowingForm(false);
               }}
@@ -131,7 +131,7 @@ const PaymentBlock = (props) => {
               Cancel
             </Button>
             <Button
-              variant="shadowButton"
+              variant="button_emphasis"
               type="submit"
               onClick={() => {
                 //todo
@@ -145,8 +145,8 @@ const PaymentBlock = (props) => {
       {!showingForm && (
         <Flex sx={{ justifyContent: 'space-between', py: 2 }}>
           <Button
-            variant="shadowButton"
-            sx={{ flexGrow: 1, fontSize: 14, color: 'gray' }}
+            variant="button_emphasis"
+            sx={{ flexGrow: 1 }}
             onClick={() => {
               setShowingForm(true);
             }}

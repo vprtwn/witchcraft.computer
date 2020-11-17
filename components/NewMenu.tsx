@@ -161,7 +161,7 @@ const NewMenu = (props) => {
           <Flex sx={{ pt: 2, justifyContent: 'space-between' }}>
             <Box />
             <Button
-              variant="newMenuButton"
+              variant="button_emphasis_large"
               sx={{ py: 3, px: 4 }}
               onClick={() => {
                 props.onClick({ type: 'link', text: text, url: url, comment: comment });
@@ -180,7 +180,7 @@ const NewMenu = (props) => {
       {!showingForm && (
         <Flex sx={{ justifyContent: 'space-between', mt: 4, mb: 2 }}>
           <Button
-            variant="newMenuButton"
+            variant="button_emphasis_large"
             sx={{ flexGrow: 1, mr: 2 }}
             ref={buttonRef}
             onClick={() => {
@@ -190,7 +190,7 @@ const NewMenu = (props) => {
             <LinkButtonIcon />
           </Button>
           <Button
-            variant="newMenuButton"
+            variant="button_emphasis_large"
             sx={{ flexGrow: 1, mr: 2 }}
             onClick={() => {
               props.onClick({ type: BlockType.Text });
@@ -200,7 +200,7 @@ const NewMenu = (props) => {
           </Button>
           {!props.pageId && (
             <Button
-              variant="newMenuButton"
+              variant="button_emphasis_large"
               sx={{ flexGrow: 1 }}
               onClick={() => {
                 props.onClick({ type: BlockType.Page });

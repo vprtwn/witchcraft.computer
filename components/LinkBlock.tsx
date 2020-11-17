@@ -93,7 +93,7 @@ const LinkBlock = (props) => {
             )}
             {!editing && (
               <Box sx={{ py: 2, px: 3 }}>
-                <Link href={url} variant="block" sx={{ whiteSpace: 'pre-wrap' }}>
+                <Link variant="link_block" href={url}>
                   {text}
                 </Link>
               </Box>

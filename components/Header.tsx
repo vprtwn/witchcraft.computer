@@ -8,16 +8,8 @@ const Header = (props) => {
       <Flex sx={{}}>
         {props.username && (
           <Box sx={{ px: 0 }}>
-            <Link href={props.pageId ? `/@${props.username}` : twitterProfileUrl} variant="nav">
-              <Text
-                sx={{
-                  fontWeight: 'bold',
-                  fontSize: '13px',
-                  fontFamily: 'sans',
-                }}
-              >
-                {props.username}
-              </Text>
+            <Link variant="link_no_underline" href={props.pageId ? `/@${props.username}` : twitterProfileUrl}>
+              <Text>{props.username}</Text>
             </Link>
           </Box>
         )}

@@ -496,7 +496,7 @@ const UserPage = (props) => {
                 {(!stripeAccount || (stripeAccount && !stripeAccount['charges_enabled'])) && (
                   <Box pt={2}>
                     <Button
-                      variant="shadowButton"
+                      variant="button_emphasis"
                       mr={2}
                       onClick={async () => {
                         try {
@@ -517,7 +517,7 @@ const UserPage = (props) => {
                 {!stripeAccount && (
                   <Text variant="tiny" sx={{ fontFamily: 'mono', pt: 2, color: 'gray' }}>
                     ^ You'll be redirected to create an account with Stripe, our payments provider. Stripe collects a{' '}
-                    <Link variant="primary" href="https://stripe.com/pricing#pricing-details">
+                    <Link variant="link_standard" href="https://stripe.com/pricing#pricing-details">
                       fee
                     </Link>{' '}
                     on payments.
@@ -604,7 +604,11 @@ const UserPage = (props) => {
           )}
 
           <Flex sx={{ bg: 'transparent', flexDirection: 'row-reverse' }}>
-            <Button variant="tiny" onClick={() => signOut()} sx={{ border: 'dotted 1px lightGray', cursor: 'pointer' }}>
+            <Button
+              variant="button_small"
+              onClick={() => signOut()}
+              sx={{ border: 'dotted 1px lightGray', cursor: 'pointer' }}
+            >
               <SignOutButtonIcon />
             </Button>
           </Flex>

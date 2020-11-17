@@ -30,11 +30,9 @@ const PaymentFeedBlock = (props) => {
               <Flex id={'bar'} sx={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
                 <Box />
                 <Link
-                  variant="nav"
+                  variant="link_footer"
                   sx={{
                     py: 2,
-                    color: 'black',
-                    fontSize: 12,
                   }}
                   href={`/${user.Key}`}
                 >

@@ -48,7 +48,7 @@ export default {
     },
   },
   buttons: {
-    tiny: {
+    button_small: {
       px: 2,
       py: 1,
       color: 'text',
@@ -59,53 +59,81 @@ export default {
       fontFamily: 'mono',
       cursor: 'pointer',
       '&:hover': {
-        bg: 'lightGray',
+        boxShadow: '0 0 16px rgba(0, 0, 0, 0.125)',
       },
     },
-    shadowButton: {
+    button_emphasis: {
+      py: 2,
+      color: 'text',
       border: 'dotted 1px lightGray',
       borderRadius: 12,
       bg: 'white',
-      color: 'text',
-      fontFamily: 'mono',
       fontSize: 13,
+      fontFamily: 'mono',
       cursor: 'pointer',
-      py: 2,
       boxShadow: '0 0 4px rgba(0, 0, 0, 0.125)',
       '&:hover': {
         boxShadow: '0 0 16px rgba(0, 0, 0, 0.125)',
       },
     },
-    newMenuButton: {
+    button_emphasis_large: {
+      py: 2,
+      color: 'text',
       border: 'dotted 1px lightGray',
       borderRadius: 8,
       bg: 'white',
-      color: 'text',
-      fontFamily: 'mono',
       fontSize: 15,
+      fontFamily: 'mono',
       cursor: 'pointer',
-      py: 2,
       boxShadow: '0 0 4px rgba(0, 0, 0, 0.125)',
       '&:hover': {
         boxShadow: '0 0 16px rgba(0, 0, 0, 0.125)',
       },
     },
-    icon: {
+    button_small_rainbow: {
+      px: 2,
+      py: 2,
+      color: 'text',
+      border: 'solid 1px lightGray',
+      borderWidth: 1,
+      bg: 'transparent',
+      fontSize: 13,
+      fontFamily: 'mono',
       cursor: 'pointer',
       '&:hover': {
-        bg: 'lightGray',
+        boxShadow: '0 0 16px rgba(0, 0, 0, 0.125)',
       },
-    },
-    iconselected: {
-      cursor: 'pointer',
-      bg: 'lightGray',
+      fontFamily: 'sans',
+      background: 'linear-gradient(-45deg, #e6fffa, #faf5ff, #ebf8ff)',
+      backgroundSize: '400% 400%',
+      animation: 'gradient 10s ease infinite',
     },
   },
   links: {
-    primary: {
+    link_standard: {
       color: 'inherit',
     },
-    nav: {
+    link_block: {
+      color: 'inherit',
+      textDecoration: 'none',
+      whiteSpace: 'pre-wrap',
+      '&:hover': {
+        textDecoration: 'underline',
+      },
+    },
+    link_page_block: {
+      color: 'inherit',
+      textDecoration: 'none',
+      fontSize: '18px',
+      fontWeight: 'bold',
+      whiteSpace: 'pre-wrap',
+      '&:hover': {
+        textDecoration: 'underline',
+      },
+    },
+    link_no_underline: {
+      fontSize: '13px',
+      fontFamily: 'sans',
       fontWeight: 'bold',
       color: 'inherit',
       textDecoration: 'none',
@@ -113,7 +141,11 @@ export default {
         textDecoration: 'underline',
       },
     },
-    block: {
+    link_footer: {
+      mx: 2,
+      py: 1,
+      fontSize: '11px',
+      fontWeight: 'normal',
       color: 'inherit',
       textDecoration: 'none',
       '&:hover': {
