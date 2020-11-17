@@ -22,6 +22,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const uploadUrl = params.uploadUrl;
   const data = params.data;
   const pageId = params.pageId;
+  // pay page (to be built) uses [username]/pay url
+  if (pageId === 'pay') {
+    return res.status(500).json({ error: { message: 'unimplemented' } });
+  }
+
   if (data) {
     return res.status(409).json({
       error: 'Already initialized',

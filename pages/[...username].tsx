@@ -5,29 +5,12 @@ import TextBlock from '../components/TextBlock';
 import TitleBlock from '../components/TitleBlock';
 import LinkBlock from '../components/LinkBlock';
 import PageBlock from '../components/PageBlock';
-import PaymentBlock from '../components/PaymentBlock';
 import PageFooter from '../components/PageFooter';
-import { useDebounce } from 'use-debounce';
 import { reorder, remove, add, generateBlockId, generatePageId, generatePageBlockId, parseBlockId } from '../lib/utils';
 import { transformPageData, updatePage } from '../lib/updatePage';
 import { getPageProps } from '../lib/getPageProps';
 import { Direction, BlockType } from '../lib/typedefs';
-import {
-  Box,
-  Checkbox,
-  Link,
-  Badge,
-  Alert,
-  Input,
-  IconButton,
-  Flex,
-  Card,
-  Button,
-  Text,
-  Label,
-  Textarea,
-} from 'theme-ui';
-import NumberFormat from 'react-number-format';
+import { Box, Alert, IconButton, Flex, Card, Button, Textarea } from 'theme-ui';
 import { GetServerSideProps } from 'next';
 import { signOut, getSession } from 'next-auth/client';
 import fetchJson from '../lib/fetchJson';
@@ -38,8 +21,6 @@ import SignOutButtonIcon from '../components/SignOutButtonIcon';
 import NewMenu from '../components/NewMenu';
 import { useSession } from 'next-auth/client';
 
-const DEBOUNCE_MS = 700;
-
 let DEBUG = true;
 if (process.env.NODE_ENV === 'production') {
   DEBUG = false;
@@ -47,17 +28,6 @@ if (process.env.NODE_ENV === 'production') {
 
 const UserPage = (props) => {
   const defaultText = 'edit me';
-
-  const disconnectStripe = async function () {
-    try {
-      await fetchJson('/api/disconnect_stripe', {
-        method: 'POST',
-      });
-      setStripeAccount(null);
-    } catch (e) {
-      console.error(e);
-    }
-  };
 
   const bootstrap = async () => {
     try {
@@ -71,7 +41,6 @@ const UserPage = (props) => {
       if (response.error) {
         setAlert(response.error);
       }
-      setStripeAccount(response.stripeAccount);
       setUploadUrl(response.uploadUrl);
       setParentUploadUrl(response.parentUploadUrl);
       await initialize(response.uploadUrl);
@@ -108,14 +77,6 @@ const UserPage = (props) => {
   const signedIn = session && session.user.username;
 
   // block ordering, [{i: "b.text.A1B2"}, ...]
-  // TODO: refactor/move payment settings storage to Stripe metadata
-  const paymentSettings = props.data ? props.data['payment_settings'] : null;
-  const [tipsEnabled, setTipsEnabled] = useState(paymentSettings ? paymentSettings.enabled : false);
-  const [tipText, setTipText] = useState(paymentSettings ? paymentSettings.text : 'Leave a tip');
-  const [debouncedTipText] = useDebounce(tipText, DEBOUNCE_MS);
-  const [defaultTipAmount, setDefaultTipAmount] = useState(paymentSettings ? paymentSettings.defaultAmount : 500);
-  const [debouncedTipAmount] = useDebounce(defaultTipAmount, DEBOUNCE_MS);
-  const [hideTipsFeed, setHideTipsFeed] = useState(paymentSettings ? paymentSettings.hideFeed : false);
   const initialOrder = props.data ? props.data['b.order'] : [];
   const [order, setOrder] = useState(initialOrder);
   const [uploadUrl, setUploadUrl] = useState<string | null>(null);
@@ -124,21 +85,10 @@ const UserPage = (props) => {
 
   const [previewing, setPreviewing] = useState(true);
   const [data, setData] = useState(props.data);
-  const [stripeAccount, setStripeAccount] = useState<object | null>(null);
 
   useEffect(() => {
     bootstrap();
   }, []);
-
-  useEffect(() => {
-    const newSettings = {
-      text: tipText,
-      defaultAmount: defaultTipAmount,
-      enabled: tipsEnabled,
-      hideFeed: hideTipsFeed,
-    };
-    syncPaymentSettings(newSettings);
-  }, [debouncedTipText, tipsEnabled, debouncedTipAmount, hideTipsFeed]);
 
   const syncNewBlock = async function (id: string, value: string | object, order: Record<string, string>[]) {
     if (!uploadUrl || !signedIn) {
@@ -152,15 +102,6 @@ const UserPage = (props) => {
       if (response['error']) {
         setAlert(response['error']);
       }
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  // TODO: sync payment settings to stripe customer
-  const syncPaymentSettings = async function (newSettings: object) {
-    try {
-      // await updatePage(uploadUrl, data, 'payment_settings', newSettings);
     } catch (e) {
       console.error(e);
     }
@@ -430,179 +371,11 @@ const UserPage = (props) => {
               <Box></Box>
             </Flex>
           )}
-
-          {/* hiding tip jar for now – payments will be nice, but the core has to be great first. */}
-          {false && stripeAccount && tipsEnabled && (
-            <>
-              <PaymentBlock
-                signedIn={signedIn}
-                stripeAccount={stripeAccount}
-                text={tipText}
-                defaultAmount={defaultTipAmount}
-                hideTipsFeed={hideTipsFeed}
-              />
-            </>
-          )}
         </>
       )}
       <PageFooter />
       {props.signedIn && (
         <Card variant="block" sx={{ p: 3, mb: 4, bg: 'transparent', border: '1px dotted lightGray' }}>
-          {/* disabling tip jar functionality for now – need to update how payment settings are stored */}
-          {false && !props.pageId && (
-            <Box sx={{ mb: 3 }}>
-              <Flex sx={{ alignItems: 'center' }}>
-                <Flex>
-                  <Label sx={{ bg: 'lightBlue', p: 1, borderRadius: '8px 8px 0px 0px' }}>
-                    <Flex sx={{ alignItems: 'center' }}>
-                      <Text variant="small">{stripeAccount ? 'Connected to Stripe' : 'Connect Stripe account'}</Text>
-                    </Flex>
-                  </Label>
-                </Flex>
-              </Flex>
-              <Box
-                sx={{
-                  p: 2,
-                  borderRadius: 4,
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  border: `1px dashed lightBlue`,
-                  bg: 'offWhite',
-                }}
-              >
-                <Flex sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
-                  {stripeAccount && (
-                    <Text variant="tiny" sx={{ fontFamily: 'mono' }}>
-                      {stripeAccount['id']}
-                    </Text>
-                  )}
-                  {stripeAccount && session && ['bgdotjpg'].includes(session.user.username) && (
-                    <Button
-                      variant="tiny"
-                      sx={{ fontSize: 11 }}
-                      onClick={() => {
-                        disconnectStripe();
-                      }}
-                    >
-                      Disconnect Stripe
-                    </Button>
-                  )}
-                </Flex>
-                {!stripeAccount && (
-                  <Text variant="small" sx={{ fontFamily: 'mono' }}>
-                    Monetize your <Badge variant="outline">tray</Badge> by collecting tips.
-                  </Text>
-                )}
-                {(!stripeAccount || (stripeAccount && !stripeAccount['charges_enabled'])) && (
-                  <Box pt={2}>
-                    <Button
-                      variant="button_emphasis"
-                      mr={2}
-                      onClick={async () => {
-                        try {
-                          const response = await fetchJson('/api/connect_stripe', {
-                            method: 'POST',
-                          });
-                          const url = response.url;
-                          window.location.assign(url);
-                        } catch (e) {
-                          // TODO: handle error
-                        }
-                      }}
-                    >
-                      {stripeAccount && !stripeAccount['charges_enabled'] ? 'Complete onboarding' : 'Get started'}
-                    </Button>{' '}
-                  </Box>
-                )}
-                {!stripeAccount && (
-                  <Text variant="tiny" sx={{ fontFamily: 'mono', pt: 2, color: 'gray' }}>
-                    ^ You'll be redirected to create an account with Stripe, our payments provider. Stripe collects a{' '}
-                    <Link variant="link_standard" href="https://stripe.com/pricing#pricing-details">
-                      fee
-                    </Link>{' '}
-                    on payments.
-                  </Text>
-                )}
-                {stripeAccount && !stripeAccount['charges_enabled'] && (
-                  <Text variant="tiny" sx={{ fontFamily: 'mono', pt: 2, color: 'gray' }}>
-                    ^ Payments are not yet enabled on your Stripe account. You'll be redirected to Stripe to continue
-                    setting up your account.
-                  </Text>
-                )}
-              </Box>
-              {stripeAccount && (
-                <Box>
-                  <Flex sx={{ alignItems: 'center' }}>
-                    <Flex>
-                      <Label
-                        sx={{ bg: tipsEnabled ? 'lightGreen' : 'offWhite', p: 1, borderRadius: '8px 8px 0px 0px' }}
-                      >
-                        <Flex sx={{ alignItems: 'center' }}>
-                          <Checkbox defaultChecked={tipsEnabled} onChange={(e) => setTipsEnabled(e.target.checked)} />
-                          <Text variant="small">Enable tips</Text>
-                        </Flex>
-                      </Label>
-                    </Flex>
-                  </Flex>
-                  <Box
-                    sx={{
-                      px: 2,
-                      py: 1,
-                      mb: 2,
-                      borderRadius: 4,
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      border: `1px ${tipsEnabled ? 'dashed' : 'none'} lightGreen`,
-                      bg: 'offWhite',
-                    }}
-                  >
-                    <Box sx={{ alignItems: 'center', mb: 2 }}>
-                      <Label sx={{ mb: 2 }}>Button text</Label>
-                      <Input
-                        disabled={!tipsEnabled}
-                        variant="standardInput"
-                        sx={{ textAlign: 'center', bg: 'transparent', border: `1px dotted lightGray` }}
-                        defaultValue={tipText}
-                        onChange={(e) => setTipText(e.target.value)}
-                      />
-                    </Box>
-                    <Box sx={{ alignItems: 'center', mb: 0 }}>
-                      <Label sx={{ mb: -3 }}>Default amount</Label>
-                      <NumberFormat
-                        disabled={!tipsEnabled}
-                        name="amount"
-                        id="amount"
-                        decimalScale={0}
-                        allowEmptyFormatting={true}
-                        allowNegative={false}
-                        type="tel"
-                        defaultValue={(defaultTipAmount as number) / 100.0}
-                        displayType={'input'}
-                        thousandSeparator={true}
-                        prefix={'$'}
-                        customInput={Input}
-                        renderText={(value) => <Input value={value} />}
-                        onValueChange={(values) => setDefaultTipAmount(~~(values.floatValue * 100))}
-                      />
-                    </Box>
-                    {tipsEnabled && (
-                      <Label>
-                        <Flex sx={{ alignItems: 'center' }}>
-                          <Checkbox
-                            disabled={!tipsEnabled}
-                            defaultChecked={hideTipsFeed}
-                            onChange={(e) => setHideTipsFeed(e.target.checked)}
-                          />
-                          <Text variant="tiny">Hide feed</Text>
-                        </Flex>
-                      </Label>
-                    )}
-                  </Box>
-                </Box>
-              )}
-            </Box>
-          )}
-
           <Flex sx={{ bg: 'transparent', flexDirection: 'row-reverse' }}>
             <Button
               variant="button_small"

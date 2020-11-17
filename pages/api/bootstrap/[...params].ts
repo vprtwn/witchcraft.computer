@@ -44,6 +44,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   } = req;
   const username = params[0] as string;
   const pageId = params[1] as string;
+  // pay page (to be built) uses [username]/pay url
+  if (pageId === 'pay') {
+    return res.status(500).json({ error: { message: 'unimplemented' } });
+  }
 
   let uploadUrl = null;
   let parentUploadUrl = null;
