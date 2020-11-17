@@ -48,20 +48,6 @@ export default {
     },
   },
   buttons: {
-    primary: {
-      px: 2,
-      py: 1,
-      color: 'text',
-      border: 'solid',
-      borderWidth: 1,
-      bg: 'transparent',
-      fontSize: 13,
-      fontFamily: 'mono',
-      cursor: 'pointer',
-      '&:hover': {
-        bg: 'lightGray',
-      },
-    },
     tiny: {
       px: 2,
       py: 1,

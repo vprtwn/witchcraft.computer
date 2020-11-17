@@ -5,7 +5,7 @@
 - Create an `.env.local` using credentials
 - Install dependencies: `yarn`
 - Run dev: `yarn dev`
-- Run tests (jk who has time for tests): `jest`
+- Run tests (jk who has the time): `jest`
 - Successful builds on master automatically deploy to Vercel
 
 ## Tech overview
@@ -13,30 +13,30 @@
 ### Storage
 
 - Pages are stored as JSON files on S3 (traydata bucket)
-- Read-only user settings are stored on Stripe customer metadata
-- Every page has a tip button. Tip comments are descriptions on Stripe PaymentIntents, and can be displayed (optionally) as a feed on any page.
+- There's some stripe integration stuff lying around. Might add it back but not feeling that inspired by payments <> tray right now.
 - Curious about using [Cloudflare durable objects](https://blog.cloudflare.com/introducing-workers-durable-objects/) for collaborative storage (comments)
 
 ### Auth
 
 - Twitter Oauth, using [NextAuthJS](https://next-auth.js.org/)
+- I feel pretty strongly that Twitter-only auth is the way.
 
 ### UX
 
-- Using [theme-ui](https://theme-ui.com/components) for components, theming, CSS-in-JS
+- [theme-ui](https://theme-ui.com/components) for components and theming. need to clean up theme.js and do a big audit (#78)
 - Icons from https://icons.mono.company/
 
 ## Roadmap
 
 Creators:
 
-- Subpages
-- Rich links (customized for Youtube, Spotify)
-- Upload audio
+- Uploading audio
 - Analytics
-- Subscription with payouts to creators based on what you view.
 
-Consumers: Mobile app, favorites, discovery, following, etc. Spotify x Tumblr x Bandcamp.
+Consumers:
+
+- Subscription with payouts to creators based on what you read
+- Mobile app? focused on listening
 
 ## Documentation
 

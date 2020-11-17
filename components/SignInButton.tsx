@@ -6,8 +6,8 @@ const SignInButton = (props) => {
     <Box sx={{ pt: 4, pb: 3 }}>
       <Flex sx={{ bg: 'transparent', borderRadius: 4, fontSize: 11, justifyContent: 'center' }}>
         <Button
-          onClick={() => signIn('twitter')}
           variant="tiny"
+          onClick={() => signIn('twitter')}
           sx={{
             py: 2,
             bg: 'white',

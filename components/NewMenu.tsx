@@ -209,15 +209,6 @@ const NewMenu = (props) => {
               <PageButtonIcon />
             </Button>
           )}
-          {/* <Button
-            variant="newMenuButton"
-            sx={{ flexGrow: 1, mr: 2 }}
-            onClick={() => {
-              // props.onClick({ type: BlockType.Text });
-            }}
-          >
-            <AudioButtonIcon />
-          </Button>*/}
         </Flex>
       )}
     </Box>

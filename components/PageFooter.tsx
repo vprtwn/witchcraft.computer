@@ -14,7 +14,7 @@ const PageFooter = (props) => {
             boxShadow: '0 0 8px rgba(0, 0, 0, 0.125)',
           }}
         >
-          <Link href="/about" variant="nav">
+          <Link href="/" variant="nav">
             <Flex sx={{ alignItems: 'center', color: 'gray' }}>
               <Text sx={{ fontWeight: 'normal', fontSize: '10px', fontFamily: 'mono', mx: 2 }}>
                 made with <strong>tray</strong>

@@ -16,7 +16,7 @@ const components = {
         <Card variant="aboutCard">
           <Flex>
             <Box>
-              <Link href="/about" variant="nav">
+              <Link href="/" variant="nav">
                 <Badge variant="outline">tray</Badge>
               </Link>
             </Box>

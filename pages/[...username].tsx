@@ -604,7 +604,7 @@ const UserPage = (props) => {
           )}
 
           <Flex sx={{ bg: 'transparent', flexDirection: 'row-reverse' }}>
-            <Button onClick={() => signOut()} variant="tiny" sx={{ border: 'dotted 1px lightGray', cursor: 'pointer' }}>
+            <Button variant="tiny" onClick={() => signOut()} sx={{ border: 'dotted 1px lightGray', cursor: 'pointer' }}>
               <SignOutButtonIcon />
             </Button>
           </Flex>
