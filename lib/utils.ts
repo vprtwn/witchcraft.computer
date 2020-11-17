@@ -91,13 +91,13 @@ export const colorFromUrl = (url: string): string => {
   const domain = parsedHost.domain;
   if (domain === 'spotify.com') {
     color = 'spotifyGreen';
-  } else if (domain === 'youtube.com') {
+  } else if (domain === 'youtube.com' || domain === 'youtu.be') {
     color = 'youtubeRed';
   } else if (domain === 'bandcamp.com') {
     color = 'bandcampTeal';
   } else if (domain === 'soundcloud.com') {
     color = 'soundcloudOrange';
-  } else if (domain === 'twitter.com') {
+  } else if (domain === 'twitter.com' || domain === 't.co') {
     color = 'twitterBlue';
   }
   return color;
