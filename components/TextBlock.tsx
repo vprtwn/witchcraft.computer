@@ -51,7 +51,7 @@ const TextBlock = (props) => {
               width: '100%',
               resize: 'none',
               fontFamily:
-                '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+                'Recursive ',
               fontSize: '16px',
               border: 'none',
               lineHeight: 1.5,
