@@ -95,6 +95,7 @@ export default {
       fontSize: 13,
       fontFamily: 'mono',
       cursor: 'pointer',
+      boxShadow: '0 0 8px rgba(0, 0, 0, 0.125)',
       '&:hover': {
         boxShadow: '0 0 16px rgba(0, 0, 0, 0.125)',
       },

@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
 import Layout from '../components/Layout';
-import AboutTray from '../components/AboutTray';
 import TrayIcon from '../components/TrayIcon';
 import SignInButton from '../components/SignInButton';
 import InfoFooter from '../components/InfoFooter';
 import UserListBlock from '../components/UserListBlock';
-import { Card, Badge, Flex, Text, Link } from 'theme-ui';
+import { Card, Badge, Box, Flex, Text, Link } from 'theme-ui';
 import { GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/client';
 import Head from 'next/head';
@@ -43,7 +42,11 @@ const IndexPage = () => {
             <i> "outbox infinity" </i>
           </Text>
         </Card>
-        {!signedIn && <SignInButton />}
+        {!signedIn && (
+          <Box sx={{ mt: 3 }}>
+            <SignInButton />
+          </Box>
+        )}
         {signedIn && (
           <Flex sx={{ justifyContent: 'center', mt: 4, mb: 3 }}>
             <Text sx={{ pr: 1 }}>your tray ⮕ </Text>

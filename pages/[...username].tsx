@@ -193,7 +193,7 @@ const UserPage = (props) => {
 
   const title = data ? data.title : 'New page';
   let description = null;
-  if (order.length > 0) {
+  if (order && order.length > 0) {
     const firstBlock = data[order[0]];
     if (firstBlock) {
       description = firstBlock.text || firstBlock.title;

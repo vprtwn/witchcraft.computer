@@ -24,8 +24,8 @@ const UserListBlock = (props) => {
     <Flex sx={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
       <Box />
       {users.length > 0 && (
-        <Card variant="card_dotted_black">
-          <Text sx={{ textAlign: 'center', pb: 2 }}> 🏙</Text>
+        <Card>
+          <Text sx={{ textAlign: 'center', pb: 2, fontSize: 25 }}> 🏙</Text>
           {users.map((user: any) => {
             return (
               <Box key={user.Key} sx={{ textAlign: 'center', py: 2 }}>
