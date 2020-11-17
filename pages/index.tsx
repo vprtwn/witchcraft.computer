@@ -21,7 +21,7 @@ const IndexPage = () => {
       </Card>
       {!signedIn && <SignInButton />}
       {signedIn && (
-        <Flex sx={{ justifyContent: 'center', mt: 3, mb: 3 }}>
+        <Flex sx={{ justifyContent: 'center', my: 3 }}>
           <Text sx={{ pr: 1 }}>Your tray ➜</Text>
           <Link href={`/@${session.user.username}`} variant="link_standard" sx={{ fontWeight: 'bold' }}>
             {`tray.club/@${session.user.username}`}

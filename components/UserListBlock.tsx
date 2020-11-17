@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, Box, Flex, Text } from 'theme-ui';
+import { Link, Box, Card, Flex, Text } from 'theme-ui';
 import fetchJson from '../lib/fetchJson';
 
 const UserListBlock = (props) => {
@@ -21,30 +21,24 @@ const UserListBlock = (props) => {
   }, []);
 
   return (
-    <Box sx={{ mb: 5 }}>
-      <Text sx={{ textAlign: 'center', pb: 2 }}> 🟢</Text>
+    <Flex sx={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
+      <Box />
       {users.length > 0 && (
-        <>
+        <Card variant="card_dotted_black">
+          <Text sx={{ textAlign: 'center', pb: 2 }}> 🟢</Text>
           {users.map((user: any) => {
             return (
-              <Flex key={user.Key} sx={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                <Box />
-                <Link
-                  variant="link_footer"
-                  sx={{
-                    py: 2,
-                  }}
-                  href={`/${user.Key}`}
-                >
+              <Box key={user.Key} sx={{ textAlign: 'center', py: 2 }}>
+                <Link variant="link_no_underline" href={`/${user.Key}`}>
                   {user.Key}
                 </Link>
-                <Box />
-              </Flex>
+              </Box>
             );
           })}
-        </>
+        </Card>
       )}
-    </Box>
+      <Box />
+    </Flex>
   );
 };
 export default UserListBlock;
