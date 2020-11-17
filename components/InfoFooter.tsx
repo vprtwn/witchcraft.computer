@@ -10,11 +10,11 @@ const InfoFooter = (props) => {
           <Link variant="link_footer" href="/policies">
             policies
           </Link>
-          |
+          •
           <Link variant="link_footer" href="/faq">
             FAQ
           </Link>
-          |
+          •
           <Link variant="link_footer" href="https://twitter.com/trayclub">
             twitter
           </Link>
