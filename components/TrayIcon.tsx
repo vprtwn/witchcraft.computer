@@ -14,35 +14,35 @@ const TrayIcon = () => {
     >
       <Box sx={{ flexGrow: 1 }} />
       <Link href="/">
-        <svg width="60" height="90" viewBox="0 0 110 108" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="40" height="80" viewBox="0 0 231 224" fill="none" xmlns="http://www.w3.org/2000/svg">
           <g filter="url(#filter0_d)">
-            <mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="19" y="14" width="72" height="72">
-              <rect x="19" y="14" width="72" height="72" fill="#F7FAFC" />
+            <mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="7" y="0" width="217" height="217">
+              <rect x="7" width="217" height="217" fill="#F7FAFC" />
             </mask>
             <g mask="url(#mask0)">
-              <path d="M33.4783 21.5H75.4457L85 62H25L33.4783 21.5Z" fill="white" />
-              <path d="M33.4783 21.5H75.4457L85 62H25L33.4783 21.5Z" fill="url(#paint0_linear)" />
+              <path d="M50.6359 22.6042H177.121L205.917 144.667H25.0833L50.6359 22.6042Z" fill="white" />
+              <path d="M50.6359 22.6042H177.121L205.917 144.667H25.0833L50.6359 22.6042Z" fill="url(#paint0_linear)" />
               <path
-                d="M25 62H85V71C85 75.1421 81.6421 78.5 77.5 78.5H32.5C28.3579 78.5 25 75.1421 25 71V62Z"
+                d="M25.0833 144.667H205.917V171.792C205.917 184.276 195.796 194.396 183.313 194.396H47.6875C35.2036 194.396 25.0833 184.276 25.0833 171.792V144.667Z"
                 fill="white"
               />
               <path
-                d="M25 62H85V71C85 75.1421 81.6421 78.5 77.5 78.5H32.5C28.3579 78.5 25 75.1421 25 71V62Z"
+                d="M25.0833 144.667H205.917V171.792C205.917 184.276 195.796 194.396 183.313 194.396H47.6875C35.2036 194.396 25.0833 184.276 25.0833 171.792V144.667Z"
                 fill="url(#paint1_linear)"
               />
               <g filter="url(#filter1_i)">
-                <path d="M39.0707 27.5H71.5954L79 62H32.5L39.0707 27.5Z" fill="#C3DAFE" />
-                <circle cx="55" cy="56" r="12" fill="#C3DAFE" />
+                <path d="M67.4907 40.6875H165.517L187.833 144.667H47.6875L67.4907 40.6875Z" fill="#C3DAFE" />
+                <circle cx="115.5" cy="126.583" r="36.1667" fill="#C3DAFE" />
               </g>
             </g>
           </g>
           <defs>
             <filter
               id="filter0_d"
-              x="0"
-              y="0.5"
-              width="110"
-              height="107"
+              x="0.0833282"
+              y="1.60425"
+              width="230.833"
+              height="221.792"
               filterUnits="userSpaceOnUse"
               color-interpolation-filters="sRGB"
             >
@@ -56,10 +56,10 @@ const TrayIcon = () => {
             </filter>
             <filter
               id="filter1_i"
-              x="32.5"
-              y="7.5"
-              width="76.5"
-              height="60.5"
+              x="47.6875"
+              y="30.6875"
+              width="150.146"
+              height="132.063"
               filterUnits="userSpaceOnUse"
               color-interpolation-filters="sRGB"
             >
@@ -71,17 +71,31 @@ const TrayIcon = () => {
                 values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
                 result="hardAlpha"
               />
-              <feOffset dx="30" dy="-20" />
-              <feGaussianBlur stdDeviation="30" />
+              <feOffset dx="10" dy="-10" />
+              <feGaussianBlur stdDeviation="25" />
               <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
               <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
               <feBlend mode="normal" in2="shape" result="effect1_innerShadow" />
             </filter>
-            <linearGradient id="paint0_linear" x1="55" y1="62" x2="55" y2="78.5" gradientUnits="userSpaceOnUse">
+            <linearGradient
+              id="paint0_linear"
+              x1="115.5"
+              y1="144.667"
+              x2="115.5"
+              y2="194.396"
+              gradientUnits="userSpaceOnUse"
+            >
               <stop stop-color="white" />
               <stop offset="1" stop-color="white" stop-opacity="0" />
             </linearGradient>
-            <linearGradient id="paint1_linear" x1="55" y1="62" x2="55" y2="78.5" gradientUnits="userSpaceOnUse">
+            <linearGradient
+              id="paint1_linear"
+              x1="115.5"
+              y1="144.667"
+              x2="115.5"
+              y2="194.396"
+              gradientUnits="userSpaceOnUse"
+            >
               <stop stop-color="white" />
               <stop offset="1" stop-color="white" stop-opacity="0" />
             </linearGradient>

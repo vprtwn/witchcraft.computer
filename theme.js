@@ -142,6 +142,7 @@ export default {
       py: 1,
       fontSize: '11px',
       fontWeight: 'normal',
+      fontFamily: 'mono',
       color: 'inherit',
       textDecoration: 'none',
       '&:hover': {
