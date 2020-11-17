@@ -195,7 +195,9 @@ const UserPage = (props) => {
   let description = null;
   if (order.length > 0) {
     const firstBlock = data[order[0]];
-    description = firstBlock.text || firstBlock.title;
+    if (firstBlock) {
+      description = firstBlock.text || firstBlock.title;
+    }
   }
 
   return (
