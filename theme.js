@@ -256,7 +256,6 @@ export default {
       px: 3,
       bg: 'transparent',
       border: 'none',
-      py: 1,
       fontSize: '14px',
       fontFamily: 'mono',
     },

@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import TextBlock from '../components/TextBlock';
 import TitleBlock from '../components/TitleBlock';
 import LinkBlock from '../components/LinkBlock';
+import Head from 'next/head';
 import PageBlock from '../components/PageBlock';
 import PageFooter from '../components/PageFooter';
 import { reorder, remove, add, generateBlockId, generatePageId, generatePageBlockId, parseBlockId } from '../lib/utils';
@@ -190,202 +191,224 @@ const UserPage = (props) => {
     await syncNewBlock(blockId, value, newItems);
   };
 
+  const title = data ? data.title : 'New page';
+  let description = null;
+  if (order.length > 0) {
+    const firstBlock = data[order[0]];
+    description = firstBlock.text || firstBlock.title;
+  }
+
   return (
-    <Layout>
-      {/* {DEBUG && !props.error && (
+    <>
+      <Head>
+        <title>{title}</title>
+        <meta name="title" content={title} />
+        <meta name="description" content={description} />
+        {/* <!-- Open Graph / Facebook --> */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        {/* <!-- Twitter --> */}
+        <meta property="twitter:card" content="summary" />
+        <meta property="twitter:title" content={title} />
+        <meta property="twitter:description" content={description} />
+      </Head>
+      <Layout>
+        {/* {DEBUG && !props.error && (
         <Textarea rows={10} sx={{ borderColor: 'blue', my: 4 }} defaultValue={JSON.stringify(props, null, 2)} />
       )} */}
-      {props.error && (
-        <Textarea rows={10} sx={{ borderColor: 'red', my: 4 }} defaultValue={JSON.stringify(props.error, null, 2)} />
-      )}
-      {!props.error && (
-        <>
-          <Header name={data ? data.name : ''} username={props.username} pageId={props.pageId} />
-          {props.pageId && (
-            <Box
-              onClick={() => {
-                if (previewing) {
-                  setPreviewing(false);
-                }
-              }}
-            >
-              <TitleBlock
-                pageId={props.pageId}
-                uploadUrl={uploadUrl}
-                parentUploadUrl={parentUploadUrl}
-                data={data}
-                parentData={props.parentData}
-                previewing={previewing}
-                signedIn={props.signedIn}
-              />
-            </Box>
-          )}
-          <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="droppable">
-              {(provided, snapshot) => (
-                <div {...provided.droppableProps} ref={provided.innerRef}>
-                  {order &&
-                    order.map((orderItem, index) => {
-                      return (
-                        <Draggable
-                          key={orderItem.i}
-                          draggableId={orderItem.i}
-                          index={index}
-                          isDragDisabled={!props.signedIn || previewing}
-                        >
-                          {(provided, snapshot) => (
-                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                              {parseBlockId(orderItem.i) === BlockType.Text && (
-                                <Box
-                                  sx={{
-                                    py: 2,
-                                  }}
-                                >
-                                  <TextBlock
-                                    id={orderItem.i}
-                                    uploadUrl={uploadUrl}
-                                    data={data}
-                                    default={defaultText}
-                                    previewing={previewing}
-                                    hideUp={index === 0}
-                                    hideDown={index === order.length - 1}
-                                    signedIn={props.signedIn}
-                                    onDown={() => {
-                                      moveBlock(index, Direction.Down);
-                                    }}
-                                    onUp={() => {
-                                      moveBlock(index, Direction.Up);
-                                    }}
-                                    onDelete={() => {
-                                      removeBlock(index);
-                                    }}
-                                  />
-                                </Box>
-                              )}
-                              {parseBlockId(orderItem.i) === BlockType.Link && (
-                                <Box
-                                  sx={{
-                                    py: 2,
-                                  }}
-                                >
-                                  <LinkBlock
-                                    id={orderItem.i}
-                                    uploadUrl={uploadUrl}
-                                    data={data}
-                                    hideUp={index === 0}
-                                    hideDown={index === order.length - 1}
-                                    previewing={previewing}
-                                    signedIn={props.signedIn}
-                                    onDown={() => {
-                                      moveBlock(index, Direction.Down);
-                                    }}
-                                    onUp={() => {
-                                      moveBlock(index, Direction.Up);
-                                    }}
-                                    onDelete={() => {
-                                      removeBlock(index);
-                                    }}
-                                  />
-                                </Box>
-                              )}
-                              {parseBlockId(orderItem.i) === BlockType.Page && (
-                                <Box
-                                  sx={{
-                                    py: 2,
-                                  }}
-                                >
-                                  <PageBlock
-                                    username={props.username}
-                                    uploadUrl={uploadUrl}
-                                    data={data}
-                                    id={orderItem.i}
-                                    hideUp={index === 0}
-                                    hideDown={index === order.length - 1}
-                                    previewing={previewing}
-                                    signedIn={props.signedIn}
-                                    onDown={() => {
-                                      moveBlock(index, Direction.Down);
-                                    }}
-                                    onUp={() => {
-                                      moveBlock(index, Direction.Up);
-                                    }}
-                                    onDelete={() => {
-                                      removeBlock(index);
-                                    }}
-                                  />
-                                </Box>
-                              )}
-                            </div>
-                          )}
-                        </Draggable>
-                      );
-                    })}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
-
-          {!previewing && (
-            <NewMenu
-              pageId={props.pageId}
-              onClick={(result) => {
-                console.log(result);
-                switch (result.type as BlockType) {
-                  case BlockType.Text:
-                    addTextBlock();
-                    break;
-                  case BlockType.Link:
-                    addLinkBlock(result);
-                    break;
-                  case BlockType.Page:
-                    addPageBlock();
-                    break;
-                }
-              }}
-            />
-          )}
-
-          {alert && <Alert variant="alert_error">{alert}</Alert>}
-
-          {props.signedIn && (
-            <Flex sx={{ mx: 2, justifyContent: 'space-between' }}>
-              <Box></Box>
+        {props.error && (
+          <Textarea rows={10} sx={{ borderColor: 'red', my: 4 }} defaultValue={JSON.stringify(props.error, null, 2)} />
+        )}
+        {!props.error && (
+          <>
+            <Header name={data ? data.name : ''} username={props.username} pageId={props.pageId} />
+            {props.pageId && (
               <Box
-                sx={{ p: 4 }}
                 onClick={() => {
-                  setPreviewing(!previewing);
+                  if (previewing) {
+                    setPreviewing(false);
+                  }
                 }}
               >
-                <IconButton
-                  variant={!previewing ? 'iconselected' : 'icon'}
+                <TitleBlock
+                  pageId={props.pageId}
+                  uploadUrl={uploadUrl}
+                  parentUploadUrl={parentUploadUrl}
+                  data={data}
+                  parentData={props.parentData}
+                  previewing={previewing}
+                  signedIn={props.signedIn}
+                />
+              </Box>
+            )}
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="droppable">
+                {(provided, snapshot) => (
+                  <div {...provided.droppableProps} ref={provided.innerRef}>
+                    {order &&
+                      order.map((orderItem, index) => {
+                        return (
+                          <Draggable
+                            key={orderItem.i}
+                            draggableId={orderItem.i}
+                            index={index}
+                            isDragDisabled={!props.signedIn || previewing}
+                          >
+                            {(provided, snapshot) => (
+                              <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                {parseBlockId(orderItem.i) === BlockType.Text && (
+                                  <Box
+                                    sx={{
+                                      py: 2,
+                                    }}
+                                  >
+                                    <TextBlock
+                                      id={orderItem.i}
+                                      uploadUrl={uploadUrl}
+                                      data={data}
+                                      default={defaultText}
+                                      previewing={previewing}
+                                      hideUp={index === 0}
+                                      hideDown={index === order.length - 1}
+                                      signedIn={props.signedIn}
+                                      onDown={() => {
+                                        moveBlock(index, Direction.Down);
+                                      }}
+                                      onUp={() => {
+                                        moveBlock(index, Direction.Up);
+                                      }}
+                                      onDelete={() => {
+                                        removeBlock(index);
+                                      }}
+                                    />
+                                  </Box>
+                                )}
+                                {parseBlockId(orderItem.i) === BlockType.Link && (
+                                  <Box
+                                    sx={{
+                                      py: 2,
+                                    }}
+                                  >
+                                    <LinkBlock
+                                      id={orderItem.i}
+                                      uploadUrl={uploadUrl}
+                                      data={data}
+                                      hideUp={index === 0}
+                                      hideDown={index === order.length - 1}
+                                      previewing={previewing}
+                                      signedIn={props.signedIn}
+                                      onDown={() => {
+                                        moveBlock(index, Direction.Down);
+                                      }}
+                                      onUp={() => {
+                                        moveBlock(index, Direction.Up);
+                                      }}
+                                      onDelete={() => {
+                                        removeBlock(index);
+                                      }}
+                                    />
+                                  </Box>
+                                )}
+                                {parseBlockId(orderItem.i) === BlockType.Page && (
+                                  <Box
+                                    sx={{
+                                      py: 2,
+                                    }}
+                                  >
+                                    <PageBlock
+                                      username={props.username}
+                                      uploadUrl={uploadUrl}
+                                      data={data}
+                                      id={orderItem.i}
+                                      hideUp={index === 0}
+                                      hideDown={index === order.length - 1}
+                                      previewing={previewing}
+                                      signedIn={props.signedIn}
+                                      onDown={() => {
+                                        moveBlock(index, Direction.Down);
+                                      }}
+                                      onUp={() => {
+                                        moveBlock(index, Direction.Up);
+                                      }}
+                                      onDelete={() => {
+                                        removeBlock(index);
+                                      }}
+                                    />
+                                  </Box>
+                                )}
+                              </div>
+                            )}
+                          </Draggable>
+                        );
+                      })}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+
+            {!previewing && (
+              <NewMenu
+                pageId={props.pageId}
+                onClick={(result) => {
+                  console.log(result);
+                  switch (result.type as BlockType) {
+                    case BlockType.Text:
+                      addTextBlock();
+                      break;
+                    case BlockType.Link:
+                      addLinkBlock(result);
+                      break;
+                    case BlockType.Page:
+                      addPageBlock();
+                      break;
+                  }
+                }}
+              />
+            )}
+
+            {alert && <Alert variant="alert_error">{alert}</Alert>}
+
+            {props.signedIn && (
+              <Flex sx={{ mx: 2, justifyContent: 'space-between' }}>
+                <Box></Box>
+                <Box
+                  sx={{ p: 4 }}
                   onClick={() => {
                     setPreviewing(!previewing);
                   }}
                 >
-                  {previewing ? <EditButtonIcon /> : <CloseButtonIcon />}
-                </IconButton>
-              </Box>
-              <Box></Box>
+                  <IconButton
+                    variant={!previewing ? 'iconselected' : 'icon'}
+                    onClick={() => {
+                      setPreviewing(!previewing);
+                    }}
+                  >
+                    {previewing ? <EditButtonIcon /> : <CloseButtonIcon />}
+                  </IconButton>
+                </Box>
+                <Box></Box>
+              </Flex>
+            )}
+          </>
+        )}
+        <PageFooter />
+        {props.signedIn && (
+          <Card variant="card_dotted_gray">
+            <Flex sx={{ bg: 'transparent', flexDirection: 'row-reverse' }}>
+              <Button
+                variant="button_small"
+                onClick={() => signOut()}
+                sx={{ border: 'dotted 1px lightGray', cursor: 'pointer' }}
+              >
+                <SignOutButtonIcon />
+              </Button>
             </Flex>
-          )}
-        </>
-      )}
-      <PageFooter />
-      {props.signedIn && (
-        <Card variant="card_dotted_gray">
-          <Flex sx={{ bg: 'transparent', flexDirection: 'row-reverse' }}>
-            <Button
-              variant="button_small"
-              onClick={() => signOut()}
-              sx={{ border: 'dotted 1px lightGray', cursor: 'pointer' }}
-            >
-              <SignOutButtonIcon />
-            </Button>
-          </Flex>
-        </Card>
-      )}
-    </Layout>
+          </Card>
+        )}
+      </Layout>
+    </>
   );
 };
 

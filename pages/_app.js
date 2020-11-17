@@ -8,9 +8,25 @@ import TrayIcon from '../components/TrayIcon';
 import InfoFooter from '../components/InfoFooter';
 import '../styles.css';
 
+const title = 'tray – info';
+const description = 'policies • faq';
+
 const components = {
   wrapper: (props) => (
     <div>
+      <Head>
+        <title>{title}</title>
+        <meta name="title" content={title} />
+        <meta name="description" content={description} />
+        {/* <!-- Open Graph / Facebook --> */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        {/* <!-- Twitter --> */}
+        <meta property="twitter:card" content="summary" />
+        <meta property="twitter:title" content={title} />
+        <meta property="twitter:description" content={description} />
+      </Head>
       <TrayIcon />
       <Layout>
         <Card variant="card_dotted_black">
