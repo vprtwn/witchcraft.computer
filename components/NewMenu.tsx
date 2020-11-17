@@ -103,7 +103,7 @@ const NewMenu = (props) => {
                     width: '100%',
                     resize: 'none',
                     fontFamily:
-                      'mono',
+                      'Recursive',
                     fontSize: '13px',
                     border: 'none',
                     paddingLeft: 16,
