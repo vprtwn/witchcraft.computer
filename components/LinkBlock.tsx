@@ -77,8 +77,8 @@ const LinkBlock = (props) => {
                   lineHeight: 1.5,
                   paddingLeft: 16,
                   paddingRight: 16,
-                  paddingTop: 6,
-                  paddingBottom: 6,
+                  paddingTop: 10,
+                  paddingBottom: 10,
                   overflow: 'hidden',
                 }}
                 placeholder="Link text"
