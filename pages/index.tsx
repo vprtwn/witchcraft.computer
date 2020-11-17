@@ -35,11 +35,11 @@ const IndexPage = () => {
       <Layout>
         <TrayIcon />
         <Card variant="card_dotted_black">
-          <Text variant="text_md_sans">
+          <Text variant="text_md_mono">
             welcome to <Badge variant="badge_outline">tray</Badge>
           </Text>
-          <Text variant="text_md_sans">a new way to share notes, links, and music.</Text>
-          <Text variant="text_md_sans" sx={{ textAlign: 'right', pt: 2 }}>
+          <Text variant="text_md_mono">a new way to share notes, links, and music.</Text>
+          <Text variant="text_md_mono" sx={{ textAlign: 'right', pt: 2 }}>
             <i> "outbox infinity" </i>
           </Text>
         </Card>

@@ -194,7 +194,7 @@ export default {
       border: '0px solid',
       borderColor: 'lightGray',
       borderRadius: 4,
-      bg: 'transparent',
+      bg: 'white',
       cursor: 'text',
     },
     card_rainbow_link: {
@@ -281,19 +281,22 @@ export default {
       fontSize: '13px',
       fontFamily: 'mono',
     },
-    text_md_sans: {
+    text_md_mono: {
       fontSize: '14px',
       fontFamily: 'sans',
+      fontFamily: 'mono',
     },
     text_block_link_comment: {
       width: '100%',
       fontSize: '13px',
+      fontFamily: 'mono',
       px: 3,
       py: 2,
       whiteSpace: 'pre-wrap',
     },
     text_block_text: {
       fontSize: '16px',
+      fontFamily: 'mono',
       py: 2,
       px: 1,
       whiteSpace: 'pre-wrap',
