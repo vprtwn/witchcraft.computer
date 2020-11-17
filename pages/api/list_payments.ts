@@ -1,11 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
-import { usernameFromUrl } from '../../lib/utils';
+import { parseTrayUrl } from '../../lib/utils';
 import { getCustomer } from '../../lib/ops';
 import { ErrorResponse } from '../../lib/typedefs';
 import Stripe from 'stripe';
 
-// PUBLIC, UNAUTHENTICATED, KINDA DANGEROUS
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'GET') {
     return;
@@ -15,7 +14,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   // const session = await getSession({ req });
   // const params = JSON.parse(req.body);
 
-  const username = usernameFromUrl(req.headers.referer);
+  const [username, pageId] = parseTrayUrl(req.headers.referer);
 
   let stripeKey = process.env.STRIPE_SECRET_KEY;
   const stripe = require('stripe')(stripeKey);

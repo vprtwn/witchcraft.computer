@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
-import { usernameFromUrl } from '../../lib/utils';
+import { parseTrayUrl } from '../../lib/utils';
 import { getCustomer, getOrCreateCustomer } from '../../lib/ops';
 import { ErrorResponse } from '../../lib/typedefs';
 import Stripe from 'stripe';
@@ -18,7 +18,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const message = params.message;
 
   const returnUrl = req.headers.referer;
-  const username = usernameFromUrl(returnUrl);
+  const [username, pageId] = parseTrayUrl(returnUrl);
 
   let stripeKey = process.env.STRIPE_SECRET_KEY;
   if (session.user.username === username) {
@@ -52,7 +52,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     };
     return res.status(error.httpStatus).json(error);
   }
-  console.log('accountId', stripeAccountId);
   let connectedCustomerId = null;
   let metadata = { from_tray_origin_url: returnUrl };
   if (session.user) {

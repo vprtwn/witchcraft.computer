@@ -56,8 +56,7 @@ const UserPage = (props) => {
 
   const bootstrap = async () => {
     try {
-      const url = `/api/bootstrap/${props.username}/pay`;
-      const response = await fetchJson(url, {
+      const response = await fetchJson(`/api/bootstrap`, {
         method: 'GET',
       });
       if (response.error) {
@@ -81,7 +80,6 @@ const UserPage = (props) => {
       const body = {
         uploadUrl: uploadUrl,
         data: props.data,
-        pageId: 'pay',
       };
       console.log('initialize', body);
       const response = await fetchJson('/api/initialize', {
@@ -130,9 +128,9 @@ const UserPage = (props) => {
     syncPaymentSettings(newSettings);
   }, [debouncedTipText, tipsEnabled, debouncedTipAmount, hideTipsFeed]);
 
-  // TODO: sync payment settings to stripe customer
   const syncPaymentSettings = async function (newSettings: object) {
     try {
+      // todo: fix this
       // await updatePage(uploadUrl, data, 'payment_settings', newSettings);
     } catch (e) {
       console.error(e);

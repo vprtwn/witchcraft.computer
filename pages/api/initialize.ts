@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
 import { validateSession } from '../../lib/validateSession';
+import { parseTrayUrl } from '../../lib/utils';
 
 /**
  * Initializes page data for a new user.
@@ -19,9 +20,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const params = JSON.parse(req.body);
 
+  const [username, pageId] = parseTrayUrl(req.headers.referer);
+
   const uploadUrl = params.uploadUrl;
   const data = params.data;
-  const pageId = params.pageId;
   // pay page (to be built) uses [username]/pay url
   if (pageId === 'pay') {
     return res.status(500).json({ error: { message: 'unimplemented' } });

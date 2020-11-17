@@ -289,7 +289,7 @@ export default {
     text_block_link_comment: {
       width: '100%',
       fontSize: '13px',
-      px: 2,
+      px: 3,
       py: 2,
       whiteSpace: 'pre-wrap',
     },

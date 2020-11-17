@@ -103,11 +103,11 @@ export const colorFromUrl = (url: string): string => {
   return color;
 };
 
-// twitter username from url
-export const usernameFromUrl = (inputUrl: string): string | null => {
+// returns [username, page id]
+export const parseTrayUrl = (inputUrl: string): [string | null, string | null] => {
   if (!isUrl(inputUrl)) {
     DEBUG && console.error('not a url');
-    return null;
+    return [null, null];
   }
   let url = inputUrl;
   const localhostDomain = 'http://127.0.0.1:3000';
@@ -119,7 +119,7 @@ export const usernameFromUrl = (inputUrl: string): string | null => {
   const domain = parsedHost.domain;
   if (!domain) {
     DEBUG && console.error('failed to parse domain: ', url);
-    return null;
+    return [null, null];
   }
   let allowedDomains = ['tray.club'];
   if (process.env.NODE_ENV !== 'production') {
@@ -127,18 +127,31 @@ export const usernameFromUrl = (inputUrl: string): string | null => {
   }
   if (!allowedDomains.includes(domain)) {
     DEBUG && console.error('not an allowed domain: ', domain);
-    return null;
+    return [null, null];
   }
 
-  const pathname = parsedUrl.pathname; // /benzguo/status/12345
+  const pathname = parsedUrl.pathname;
+  // /bgdotjpg
+  // /bgdotjpg/12345
+  // /pay/bgdotjpg
 
-  const pathComps = pathname.split('/');
-  if (pathComps.length !== 2) {
-    DEBUG && console.error('not enough path components');
-    return null;
+  const pathComps = pathname.split('/').filter((c) => c.length > 0);
+  console.log('pathComps', pathComps);
+  let username = pathComps[0];
+  if (username === 'pay') {
+    username = pathComps[1];
+    username = unprefixUsername(username);
+    if (username) {
+      return [username, null];
+    }
+  } else {
+    username = unprefixUsername(username);
+    const pageId = pathComps[1];
+    if (pageId) {
+      return [username, pageId];
+    }
+    return [username, null];
   }
-  const username = pathComps[pathComps.length - 1];
-  return unprefixUsername(username);
 };
 
 export const emailFromUsername = (username: string): string => {

@@ -1,6 +1,6 @@
 import { ErrorResponse } from './typedefs';
 import { NextApiRequest } from 'next';
-import { usernameFromUrl } from './utils';
+import { parseTrayUrl } from './utils';
 
 export const validateSession = (session, req: NextApiRequest): ErrorResponse | null => {
   let response: ErrorResponse | null;
@@ -18,8 +18,8 @@ export const validateSession = (session, req: NextApiRequest): ErrorResponse | n
       errorMessage: 'no username in session',
     };
   }
-  const referer = req.headers['referer'];
-  const refererUsername = usernameFromUrl(referer);
+  const referer = req.headers.referer;
+  const [refererUsername, pageId] = parseTrayUrl(referer);
   if (refererUsername && session && session.user.username !== refererUsername) {
     response = {
       httpStatus: 401,
