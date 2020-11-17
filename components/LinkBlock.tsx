@@ -121,7 +121,7 @@ const LinkBlock = (props) => {
                 width: '100%',
                 resize: 'none',
                 fontFamily:
-                  'Recursive, ',
+                  'Recursive',
                 fontSize: '13px',
                 border: 'none',
                 lineHeight: 1.5,
