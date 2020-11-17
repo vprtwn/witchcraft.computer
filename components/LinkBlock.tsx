@@ -79,10 +79,10 @@ const LinkBlock = (props) => {
                   fontSize: '16px',
                   border: 'none',
                   lineHeight: 1.5,
-                  paddingLeft: 16,
-                  paddingRight: 16,
-                  paddingTop: 6,
-                  paddingBottom: 6,
+                  paddingLeft: 20,
+                  paddingRight: 20,
+                  paddingTop: 10,
+                  paddingBottom: 10,
                   overflow: 'hidden',
                 }}
                 placeholder="Link text"
