@@ -25,7 +25,7 @@ const UserListBlock = (props) => {
       <Box />
       {users.length > 0 && (
         <Card variant="card_dotted_black">
-          <Text sx={{ textAlign: 'center', pb: 2 }}> 🟢</Text>
+          <Text sx={{ textAlign: 'center', pb: 2 }}> 🌌</Text>
           {users.map((user: any) => {
             return (
               <Box key={user.Key} sx={{ textAlign: 'center', py: 2 }}>
