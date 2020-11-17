@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Layout from '../components/Layout';
 import Header from '../components/Header';
 import TextBlock from '../components/TextBlock';
@@ -88,6 +88,9 @@ const UserPage = (props) => {
 
   useEffect(() => {
     bootstrap();
+    if (props.pageId && (!props.data || props.data['title'] === 'New page')) {
+      setPreviewing(false);
+    }
   }, []);
 
   const syncNewBlock = async function (id: string, value: string | object, order: Record<string, string>[]) {
