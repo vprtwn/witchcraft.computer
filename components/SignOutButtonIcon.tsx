@@ -10,7 +10,7 @@ const SignOutButtonIcon = () => {
       }}
     >
       <Box sx={{ pr: 1 }}>
-        <Label variant="buttonLabel">Sign out</Label>
+        <Label variant="label_icon_button">Sign out</Label>
       </Box>
       <svg height="17" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
         <g fill="none" stroke="#2a2e3b" transform="translate(4 3)">

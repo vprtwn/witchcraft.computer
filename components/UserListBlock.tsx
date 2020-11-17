@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, Box, Flex, Text } from 'theme-ui';
 import fetchJson from '../lib/fetchJson';
 
-const PaymentFeedBlock = (props) => {
+const UserListBlock = (props) => {
   const [users, setUsers] = useState<Array<object>>([]);
 
   const fetchUsers = async () => {
@@ -21,13 +21,13 @@ const PaymentFeedBlock = (props) => {
   }, []);
 
   return (
-    <Box>
+    <Box sx={{ mb: 5 }}>
       <Text sx={{ textAlign: 'center', pb: 2 }}> 🟢</Text>
       {users.length > 0 && (
         <>
           {users.map((user: any) => {
             return (
-              <Flex id={'bar'} sx={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
+              <Flex key={user.Key} sx={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
                 <Box />
                 <Link
                   variant="link_footer"
@@ -47,4 +47,4 @@ const PaymentFeedBlock = (props) => {
     </Box>
   );
 };
-export default PaymentFeedBlock;
+export default UserListBlock;

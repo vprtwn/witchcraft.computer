@@ -16,7 +16,7 @@ const DownButtonIcon = () => {
         ></path>
       </svg>
       {/* <Box>
-        <Label variant="buttonLabel">Down</Label>
+        <Label variant="label_icon_button">Down</Label>
       </Box> */}
     </Flex>
   );

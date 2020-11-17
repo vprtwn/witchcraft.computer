@@ -18,7 +18,7 @@ const CloseButtonIcon = (props) => {
         ></path>
       </svg>
       {/* <Box>
-        <Label variant="buttonLabel">View</Label>
+        <Label variant="label_icon_button">View</Label>
       </Box> */}
     </Flex>
   );

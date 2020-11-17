@@ -1,7 +1,5 @@
 // example base theme from @theme-ui/presets
 export default {
-  breakpoints: ['40em', '52em', '64em'],
-  space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
     mono:
       'Recursive, San Francisco Mono, Monaco, "Consolas", "Lucida Console", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace',
@@ -10,15 +8,12 @@ export default {
     body:
       '-apple-system, BlinkMacSystemFont, "avenir next", avenir, helvetica, "helvetica neue", ubuntu, roboto, noto, "segoe ui", arial, sans-serif',
   },
-  fontSizes: [12, 14, 16, 20, 24, 32, 48, 64, 96],
   fontWeights: {
     body: 400,
-    heading: 700,
     bold: 700,
   },
   lineHeights: {
     body: 1.5,
-    heading: 1,
   },
   useLocalStorage: false,
   colors: {
@@ -154,7 +149,7 @@ export default {
     },
   },
   badges: {
-    outline: {
+    badge_outline: {
       fontFamily: 'mono',
       color: 'primary',
       bg: 'transparent',
@@ -170,39 +165,64 @@ export default {
       borderRadius: 8,
       bg: 'white',
     },
-    textBlock: {
+    card_dotted_gray: {
+      p: 3,
+      border: '1px dotted',
+      borderColor: 'lightGray',
+      borderRadius: 8,
+      bg: 'transparent',
+    },
+    card_dotted_black: {
+      p: 3,
+      border: '1px dotted',
+      borderColor: 'black',
+      borderRadius: 8,
+      bg: 'transparent',
+    },
+    card_block_link: {
+      py: 0,
+      px: 0,
+      border: `solid 2px`,
+      fontSize: '16px',
+      bg: 'white',
+      borderColor: 'black',
+      borderRadius: 8,
+    },
+    card_block_text: {
       py: 0,
       px: 0,
       border: '0px solid',
       borderColor: 'lightGray',
       borderRadius: 4,
+      bg: 'transparent',
+      cursor: 'text',
+    },
+    card_rainbow_link: {
+      py: 0,
+      px: 0,
+      mb: 1,
+      border: '1px solid',
+      borderColor: 'lightGray',
+      borderRadius: 8,
+      background: 'linear-gradient(-45deg, #e6fffa, #faf5ff, #ebf8ff)',
+      backgroundSize: '400% 400%',
+      animation: 'gradient 10s ease infinite',
+    },
+    card_payment: {
+      py: 2,
+      px: 3,
+      border: '1px solid',
+      borderColor: 'lightGray',
+      borderRadius: 8,
       bg: 'white',
     },
-    shadowCard: {
+    card_payment_form: {
       p: 3,
       my: 2,
       bg: 'white',
       boxShadow: '0 0 8px rgba(0, 0, 0, 0.125)',
       borderRadius: 12,
       border: '1px solid lightGray',
-    },
-    aboutCard: {
-      p: 3,
-      bg: 'white',
-      borderRadius: 12,
-      border: '1px dotted black',
-    },
-    primary: {
-      paddingX: 3,
-      paddingY: 2,
-      borderRadius: 4,
-    },
-  },
-  images: {
-    profile: {
-      width: 48,
-      height: 48,
-      borderRadius: 99999,
     },
   },
   forms: {
@@ -211,11 +231,6 @@ export default {
     },
     label: {
       fontSize: '12px',
-      fontFamily: 'mono',
-      color: 'text',
-    },
-    formLabel: {
-      fontSize: '13px',
       fontFamily: 'mono',
       color: 'text',
     },
@@ -229,58 +244,65 @@ export default {
       fontFamily: 'mono',
       py: 2,
     },
-    standardInput: {
+    input_standard: {
       fontFamily: 'mono',
       fontSize: 13,
       bg: 'white',
       py: 2,
       border: '1px solid lightGray',
     },
-    linkInput: {
-      px: 2,
+    input_link: {
+      py: 2,
+      px: 3,
       bg: 'transparent',
       border: 'none',
       py: 1,
+      fontSize: '14px',
+      fontFamily: 'mono',
     },
-    buttonLabel: {
+    label_icon_button: {
       fontSize: 11,
       fontFamily: 'mono',
       color: 'text',
       cursor: 'pointer',
-      // fontWeight: 'bold',
-    },
-    settingsLabel: {
-      fontSize: 15,
-      fontWeight: 'bold',
-      fontFamily: 'mono',
-      color: 'text',
     },
   },
   alerts: {
-    error: {
+    alert_error: {
       color: 'red',
       bg: 'lightRed',
     },
   },
   text: {
-    tiny: {
+    text_xs: {
       fontSize: '11px',
+      fontFamily: 'mono',
     },
-    small: {
+    text_sm: {
       fontSize: '13px',
+      fontFamily: 'mono',
     },
-    large: {
+    text_md_sans: {
       fontSize: '14px',
+      fontFamily: 'sans',
     },
-    heading: {
-      fontFamily: 'heading',
-      lineHeight: 'heading',
-      fontWeight: 'heading',
+    text_block_link_comment: {
+      width: '100%',
+      fontSize: '13px',
+      px: 2,
+      py: 2,
+      whiteSpace: 'pre-wrap',
+    },
+    text_block_text: {
+      fontSize: '16px',
+      py: 2,
+      px: 1,
+      whiteSpace: 'pre-wrap',
     },
   },
   styles: {
     a: {
-      color: '#4299e1',
+      color: 'black',
     },
     progress: {
       color: 'text',

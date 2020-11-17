@@ -16,7 +16,7 @@ const AudioButtonIcon = () => {
         ></path>
       </svg>
       <Box>
-        <Label variant="buttonLabel">Audio</Label>
+        <Label variant="label_icon_button">Audio</Label>
       </Box>
     </Flex>
   );

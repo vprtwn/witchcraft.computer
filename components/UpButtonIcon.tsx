@@ -16,7 +16,7 @@ const UpButtonIcon = () => {
         ></path>
       </svg>
       {/* <Box>
-        <Label variant="buttonLabel">Up</Label>
+        <Label variant="label_icon_button">Up</Label>
       </Box> */}
     </Flex>
   );

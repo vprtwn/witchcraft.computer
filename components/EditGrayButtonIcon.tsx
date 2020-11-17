@@ -18,7 +18,7 @@ const EditGrayButtonIcon = () => {
         ></path>
       </svg>
       {/* <Box>
-        <Label variant="buttonLabel">Edit</Label>
+        <Label variant="label_icon_button">Edit</Label>
       </Box> */}
     </Flex>
   );

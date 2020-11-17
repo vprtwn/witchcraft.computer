@@ -348,7 +348,7 @@ const UserPage = (props) => {
             />
           )}
 
-          {alert && <Alert variant="error">{alert}</Alert>}
+          {alert && <Alert variant="alert_error">{alert}</Alert>}
 
           {props.signedIn && (
             <Flex sx={{ mx: 2, justifyContent: 'space-between' }}>
@@ -375,7 +375,7 @@ const UserPage = (props) => {
       )}
       <PageFooter />
       {props.signedIn && (
-        <Card variant="block" sx={{ p: 3, mb: 4, bg: 'transparent', border: '1px dotted lightGray' }}>
+        <Card variant="card_dotted_gray">
           <Flex sx={{ bg: 'transparent', flexDirection: 'row-reverse' }}>
             <Button
               variant="button_small"

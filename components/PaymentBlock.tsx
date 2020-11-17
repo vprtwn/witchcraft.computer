@@ -59,18 +59,13 @@ const PaymentBlock = (props) => {
 
   return (
     <Card
-      variant="block"
+      variant="card_payment"
       sx={{
         mt: 4,
-        py: 2,
-        px: 3,
-        background: showingForm ? 'linear-gradient(-45deg, #e6fffa, #ffffff, #f0fff4)' : 'none',
-        backgroundSize: '400% 400%',
-        animation: 'gradient 10s ease infinite',
       }}
     >
       {showingForm && (
-        <Card variant="shadowCard" as="form" onSubmit={handleCheckout} sx={{}}>
+        <Card variant="card_payment_form" as="form" onSubmit={handleCheckout}>
           <Flex sx={{ justifyContent: 'center', alignItems: 'center' }}>
             <IconButton
               type="button"

@@ -251,7 +251,7 @@ const UserPage = (props) => {
             </Droppable>
           </DragDropContext>
 
-          {alert && <Alert variant="error">{alert}</Alert>}
+          {alert && <Alert variant="alert_error">{alert}</Alert>}
 
           {props.signedIn && (
             <Flex sx={{ mx: 2, justifyContent: 'space-between' }}>
@@ -291,13 +291,13 @@ const UserPage = (props) => {
       )}
       <PageFooter />
       {props.signedIn && (
-        <Card variant="block" sx={{ p: 3, mb: 4, bg: 'transparent', border: '1px dotted lightGray' }}>
+        <Card variant="card_dotted_gray">
           <Box sx={{ mb: 3 }}>
             <Flex sx={{ alignItems: 'center' }}>
               <Flex>
                 <Label sx={{ bg: 'lightBlue', p: 1, borderRadius: '8px 8px 0px 0px' }}>
                   <Flex sx={{ alignItems: 'center' }}>
-                    <Text variant="small">{stripeAccount ? 'Connected to Stripe' : 'Connect Stripe account'}</Text>
+                    <Text variant="text_sm">{stripeAccount ? 'Connected to Stripe' : 'Connect Stripe account'}</Text>
                   </Flex>
                 </Label>
               </Flex>
@@ -313,15 +313,10 @@ const UserPage = (props) => {
               }}
             >
               <Flex sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
-                {stripeAccount && (
-                  <Text variant="tiny" sx={{ fontFamily: 'mono' }}>
-                    {stripeAccount['id']}
-                  </Text>
-                )}
+                {stripeAccount && <Text variant="text_xs">{stripeAccount['id']}</Text>}
                 {stripeAccount && session && ['bgdotjpg'].includes(session.user.username) && (
                   <Button
-                    variant="tiny"
-                    sx={{ fontSize: 11 }}
+                    variant="button_small"
                     onClick={() => {
                       disconnectStripe();
                     }}
@@ -331,8 +326,8 @@ const UserPage = (props) => {
                 )}
               </Flex>
               {!stripeAccount && (
-                <Text variant="small" sx={{ fontFamily: 'mono' }}>
-                  Monetize your <Badge variant="outline">tray</Badge> by collecting tips.
+                <Text variant="text_xs">
+                  Monetize your <Badge variant="badge_outline">tray</Badge> by collecting tips.
                 </Text>
               )}
               {(!stripeAccount || (stripeAccount && !stripeAccount['charges_enabled'])) && (
@@ -357,7 +352,7 @@ const UserPage = (props) => {
                 </Box>
               )}
               {!stripeAccount && (
-                <Text variant="tiny" sx={{ fontFamily: 'mono', pt: 2, color: 'gray' }}>
+                <Text variant="text_xs" sx={{ pt: 2, color: 'gray' }}>
                   ^ You'll be redirected to create an account with Stripe, our payments provider. Stripe collects a{' '}
                   <Link variant="link_standard" href="https://stripe.com/pricing#pricing-details">
                     fee
@@ -366,7 +361,7 @@ const UserPage = (props) => {
                 </Text>
               )}
               {stripeAccount && !stripeAccount['charges_enabled'] && (
-                <Text variant="tiny" sx={{ fontFamily: 'mono', pt: 2, color: 'gray' }}>
+                <Text variant="text_xs" sx={{ fpt: 2, color: 'gray' }}>
                   ^ Payments are not yet enabled on your Stripe account. You'll be redirected to Stripe to continue
                   setting up your account.
                 </Text>
@@ -379,7 +374,7 @@ const UserPage = (props) => {
                     <Label sx={{ bg: tipsEnabled ? 'lightGreen' : 'offWhite', p: 1, borderRadius: '8px 8px 0px 0px' }}>
                       <Flex sx={{ alignItems: 'center' }}>
                         <Checkbox defaultChecked={tipsEnabled} onChange={(e) => setTipsEnabled(e.target.checked)} />
-                        <Text variant="small">Enable tips</Text>
+                        <Text variant="text_sm">Enable tips</Text>
                       </Flex>
                     </Label>
                   </Flex>
@@ -399,8 +394,8 @@ const UserPage = (props) => {
                   <Box sx={{ alignItems: 'center', mb: 2 }}>
                     <Label sx={{ mb: 2 }}>Button text</Label>
                     <Input
+                      variant="input_standard"
                       disabled={!tipsEnabled}
-                      variant="standardInput"
                       sx={{ textAlign: 'center', bg: 'transparent', border: `1px dotted lightGray` }}
                       defaultValue={tipText}
                       onChange={(e) => setTipText(e.target.value)}
@@ -433,7 +428,7 @@ const UserPage = (props) => {
                           defaultChecked={hideTipsFeed}
                           onChange={(e) => setHideTipsFeed(e.target.checked)}
                         />
-                        <Text variant="tiny">Hide feed</Text>
+                        <Text variant="text_xs">Hide feed</Text>
                       </Flex>
                     </Label>
                   )}

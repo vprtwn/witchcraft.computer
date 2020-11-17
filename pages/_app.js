@@ -13,11 +13,11 @@ const components = {
     <div>
       <TrayIcon />
       <Layout>
-        <Card variant="aboutCard">
+        <Card variant="card_dotted_black">
           <Flex>
             <Box>
               <Link variant="link_no_underline" href="/">
-                <Badge variant="outline">tray</Badge>
+                <Badge variant="badge_outline">tray</Badge>
               </Link>
             </Box>
           </Flex>

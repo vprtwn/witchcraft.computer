@@ -16,7 +16,7 @@ const LinkButtonIcon = () => {
         ></path>
       </svg>
       <Box>
-        <Label variant="buttonLabel">Link</Label>
+        <Label variant="label_icon_button">Link</Label>
       </Box>
     </Flex>
   );

@@ -46,7 +46,7 @@ const LinkBlock = (props) => {
   };
 
   return (
-    <Card variant="block" sx={{ border: `solid 2px`, borderColor: borderColor, fontSize: '16px', bg: 'white' }}>
+    <Card variant="card_block_link" sx={{ borderColor: borderColor }}>
       <>
         <Flex
           onClick={() => {
@@ -137,9 +137,7 @@ const LinkBlock = (props) => {
               }}
             />
           )}
-          {!editing && (
-            <Text sx={{ width: '100%', fontSize: '13px', px: 2, py: 2, whiteSpace: 'pre-wrap' }}>{comment}</Text>
-          )}
+          {!editing && <Text variant="text_block_link_comment">{comment}</Text>}
         </Flex>
       )}
       {editing && !props.previewing && (
@@ -152,16 +150,10 @@ const LinkBlock = (props) => {
           }}
         >
           <Input
+            variant="input_link"
             type="url"
-            variant="linkInput"
             defaultValue={url}
             placeholder="Link address"
-            sx={{
-              py: 2,
-              px: 3,
-              fontSize: '14px',
-              fontFamily: 'mono',
-            }}
             onChange={(e) => {
               const val = e.target.value;
               if (isUrl(val)) {

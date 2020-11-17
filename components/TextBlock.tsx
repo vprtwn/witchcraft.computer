@@ -34,9 +34,8 @@ const TextBlock = (props) => {
   };
 
   return (
-    <Card variant="textBlock" sx={{ fontSize: '15px', bg: 'transparent' }}>
+    <Card variant="card_block_text">
       <Box
-        sx={{ px: 0, cursor: 'text' }}
         onClick={() => {
           if (!props.previewing && !editing) {
             setEditing(true);
@@ -69,9 +68,7 @@ const TextBlock = (props) => {
             }}
           />
         )}
-        {!editing && (
-          <Text sx={{ fontSize: '16px', py: 2, px: 1, whiteSpace: 'pre-wrap' }}>{text.length === 0 ? '' : text}</Text>
-        )}
+        {!editing && <Text variant="text_block_text">{text.length === 0 ? '' : text}</Text>}
       </Box>
       {signedIn && !props.previewing && (
         <EditToolbar

@@ -14,12 +14,8 @@ const PageBlock = (props) => {
 
   return (
     <Card
-      variant="block"
+      variant="card_block_link"
       sx={{
-        border: 'solid 2px black',
-        '&:hover': {
-          cursor: 'pointer',
-        },
         background: title === 'New page' ? 'linear-gradient(-45deg, #e6fffa, #faf5ff, #ebf8ff)' : 'white',
         backgroundSize: '400% 400%',
         animation: title === 'New page' ? 'gradient 10s ease infinite' : 'none',

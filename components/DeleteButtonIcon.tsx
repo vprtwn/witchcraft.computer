@@ -16,7 +16,7 @@ const DeleteButtonIcon = () => {
         ></path>
       </svg>
       {/* <Box>
-        <Label variant="buttonLabel">Trash</Label>
+        <Label variant="label_icon_button">Trash</Label>
       </Box> */}
     </Flex>
   );

@@ -55,31 +55,13 @@ const NewMenu = (props) => {
     <Box sx={{ pt: 2 }}>
       {showingForm && (
         <>
-          <Box sx={{ fontSize: '15px' }}>
-            <Card
-              variant="block"
-              sx={{
-                bg: 'black',
-                borderRadius: 8,
-                px: 0,
-                py: 0,
-                mb: 1,
-                background: 'linear-gradient(-45deg, #e6fffa, #faf5ff, #ebf8ff)',
-                backgroundSize: '400% 400%',
-                animation: 'gradient 10s ease infinite',
-              }}
-            >
+          <Box>
+            <Card variant="card_rainbow_link">
               <Input
-                variant="linkInput"
+                variant="input_link"
                 placeholder="Link address"
                 type="url"
                 ref={inputRef}
-                sx={{
-                  px: 3,
-                  py: 2,
-                  fontSize: '14px',
-                  fontFamily: 'mono',
-                }}
                 onChange={(t) => setUrl(t.target.value)}
                 onBlur={(e) => {
                   const val = e.target.value;
@@ -89,51 +71,30 @@ const NewMenu = (props) => {
                 }}
               />
             </Card>
-            <Card variant="block" sx={{ border: 'solid 2px', borderColor: borderColor, borderRadius: 8 }}>
-              <Flex
-                sx={{
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  borderRadius: 8,
-                  bg: 'white',
-                  color: 'black',
-                  cursor: 'pointer',
+            <Card variant="card_block_link" sx={{ borderColor: borderColor }}>
+              <TextareaAutosize
+                defaultValue={text}
+                spellCheck={false}
+                style={{
+                  background: 'transparent',
+                  width: '100%',
+                  resize: 'none',
+                  fontFamily:
+                    '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+                  fontSize: '16px',
+                  border: 'none',
+                  lineHeight: 1.5,
+                  paddingLeft: 16,
+                  paddingRight: 16,
+                  paddingTop: 6,
+                  paddingBottom: 6,
+                  overflow: 'hidden',
                 }}
-              >
-                <Box sx={{ flexGrow: 1 }}>
-                  <TextareaAutosize
-                    defaultValue={text}
-                    spellCheck={false}
-                    style={{
-                      background: 'transparent',
-                      width: '100%',
-                      resize: 'none',
-                      fontFamily:
-                        '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-                      fontSize: '16px',
-                      border: 'none',
-                      lineHeight: 1.5,
-                      paddingLeft: 16,
-                      paddingRight: 16,
-                      paddingTop: 6,
-                      paddingBottom: 6,
-                      overflow: 'hidden',
-                    }}
-                    placeholder="Link text"
-                    onChange={(t) => {
-                      setText(t.target.value);
-                    }}
-                  />
-                  {/* <Input
-                    variant="linkInput"
-                    sx={{ py: 2, px: 3 }}
-                    placeholder="Link text"
-                    value={text}
-                    onChange={(t) => setText(t.target.value)}
-                  /> */}
-                </Box>
-              </Flex>
-
+                placeholder="Link text"
+                onChange={(t) => {
+                  setText(t.target.value);
+                }}
+              />
               <Flex sx={{ bg: 'lightGray', borderRadius: '0px 0px 8px 8px' }}>
                 <TextareaAutosize
                   spellCheck={false}

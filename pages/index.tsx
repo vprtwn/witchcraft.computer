@@ -16,7 +16,7 @@ const IndexPage = () => {
   return (
     <Layout>
       <TrayIcon />
-      <Card variant="aboutCard">
+      <Card variant="card_dotted_black">
         <AboutTray />
       </Card>
       {!signedIn && <SignInButton />}

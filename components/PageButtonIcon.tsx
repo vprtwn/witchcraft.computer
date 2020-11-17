@@ -18,7 +18,7 @@ const PageButtonIcon = () => {
         ></path>
       </svg>
       <Box>
-        <Label variant="buttonLabel">Page</Label>
+        <Label variant="label_icon_button">Page</Label>
       </Box>
     </Flex>
   );
