@@ -1,12 +1,9 @@
-// example base theme from @theme-ui/presets
+import { FONT_MONO } from './lib/const';
 export default {
   fonts: {
-    mono:
-      'Recursive, San Francisco Mono, Monaco, "Consolas", "Lucida Console", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace',
-    sans:
-      '-apple-system, BlinkMacSystemFont, "avenir next", avenir, helvetica, "helvetica neue", ubuntu, roboto, noto, "segoe ui", arial, sans-serif',
-    body:
-      '-apple-system, BlinkMacSystemFont, "avenir next", avenir, helvetica, "helvetica neue", ubuntu, roboto, noto, "segoe ui", arial, sans-serif',
+    mono: FONT_MONO,
+    sans: FONT_SANS,
+    body: FONT_SANS,
   },
   fontWeights: {
     body: 400,
@@ -121,6 +118,7 @@ export default {
       color: 'inherit',
       textDecoration: 'none',
       fontSize: '18px',
+      // fontFamily: "mono",
       fontWeight: 'bold',
       whiteSpace: 'pre-wrap',
       '&:hover': {
