@@ -1,4 +1,4 @@
-import { FONT_MONO } from './lib/const';
+import { FONT_MONO, FONT_SANS } from './lib/const';
 export default {
   fonts: {
     mono: FONT_MONO,
@@ -9,6 +9,7 @@ export default {
     body: 400,
     bold: 700,
   },
+  fontSizes: [11, 13, 14, 16, 18, 28],
   lineHeights: {
     body: 1.5,
   },
@@ -47,7 +48,7 @@ export default {
       border: 'solid 1px lightGray',
       borderWidth: 1,
       bg: 'transparent',
-      fontSize: 13,
+      fontSize: 1,
       fontFamily: 'mono',
       cursor: 'pointer',
       '&:hover': {
@@ -60,7 +61,7 @@ export default {
       border: 'dotted 1px lightGray',
       borderRadius: 12,
       bg: 'white',
-      fontSize: 13,
+      fontSize: 1,
       fontFamily: 'mono',
       cursor: 'pointer',
       boxShadow: '0 0 4px rgba(0, 0, 0, 0.125)',
@@ -74,7 +75,7 @@ export default {
       border: 'dotted 1px lightGray',
       borderRadius: 8,
       bg: 'white',
-      fontSize: 15,
+      fontSize: 3,
       fontFamily: 'mono',
       cursor: 'pointer',
       boxShadow: '0 0 4px rgba(0, 0, 0, 0.125)',
@@ -89,7 +90,7 @@ export default {
       border: 'solid 1px lightGray',
       borderWidth: 1,
       bg: 'transparent',
-      fontSize: 13,
+      fontSize: 1,
       fontFamily: 'mono',
       cursor: 'pointer',
       boxShadow: '0 0 8px rgba(0, 0, 0, 0.125)',
@@ -117,8 +118,7 @@ export default {
     link_page_block: {
       color: 'inherit',
       textDecoration: 'none',
-      fontSize: '18px',
-      // fontFamily: "mono",
+      fontSize: 4,
       fontWeight: 'bold',
       whiteSpace: 'pre-wrap',
       '&:hover': {
@@ -126,7 +126,7 @@ export default {
       },
     },
     link_no_underline: {
-      fontSize: '13px',
+      fontSize: 1,
       fontFamily: 'sans',
       fontWeight: 'bold',
       color: 'inherit',
@@ -138,7 +138,7 @@ export default {
     link_footer: {
       mx: 2,
       py: 1,
-      fontSize: '11px',
+      fontSize: 0,
       fontWeight: 'normal',
       fontFamily: 'mono',
       color: 'inherit',
@@ -183,7 +183,7 @@ export default {
       py: 0,
       px: 0,
       border: `solid 2px`,
-      fontSize: '16px',
+      fontSize: 3,
       bg: 'white',
       borderColor: 'black',
       borderRadius: 8,
@@ -229,14 +229,9 @@ export default {
     checkbox: {
       color: 'black',
     },
-    label: {
-      fontSize: '12px',
-      fontFamily: 'mono',
-      color: 'text',
-    },
     input: {
       // PaymentBlock amount input
-      fontSize: 24,
+      fontSize: 5,
       fontWeight: 'bold',
       bg: 'transparent',
       borderWidth: 0,
@@ -246,21 +241,25 @@ export default {
     },
     input_standard: {
       fontFamily: 'mono',
-      fontSize: 13,
+      fontSize: 1,
       bg: 'white',
       py: 2,
       border: '1px solid lightGray',
+    },
+    input_payment_message: {
+      fontFamily: 'mono',
+      fontSize: 3,
     },
     input_link: {
       py: 2,
       px: 3,
       bg: 'transparent',
       border: 'none',
-      fontSize: '14px',
+      fontSize: 2,
       fontFamily: 'mono',
     },
     label_icon_button: {
-      fontSize: 11,
+      fontSize: 0,
       fontFamily: 'mono',
       color: 'text',
       cursor: 'pointer',
@@ -274,28 +273,28 @@ export default {
   },
   text: {
     text_xs: {
-      fontSize: '11px',
+      fontSize: 0,
       fontFamily: 'mono',
     },
     text_sm: {
-      fontSize: '13px',
+      fontSize: 1,
       fontFamily: 'mono',
     },
     text_md_mono: {
-      fontSize: '14px',
+      fontSize: 2,
       fontFamily: 'sans',
       fontFamily: 'mono',
     },
     text_block_link_comment: {
       width: '100%',
-      fontSize: '13px',
+      fontSize: 1,
       fontFamily: 'mono',
       px: 3,
       py: 2,
       whiteSpace: 'pre-wrap',
     },
     text_block_text: {
-      fontSize: '16px',
+      fontSize: 3,
       fontFamily: 'mono',
       py: 2,
       px: 1,
@@ -303,65 +302,10 @@ export default {
     },
   },
   styles: {
-    a: {
-      color: 'black',
-    },
-    progress: {
-      color: 'text',
-      bg: 'lightGray',
-    },
     root: {
       fontFamily: 'body',
       lineHeight: 'body',
       fontWeight: 'body',
-    },
-    h1: {
-      variant: 'text.heading',
-      fontSize: 6,
-    },
-    h2: {
-      variant: 'text.heading',
-      fontSize: 4,
-    },
-    h3: {
-      variant: 'text.heading',
-      fontSize: 3,
-    },
-    h4: {
-      variant: 'text.heading',
-      fontSize: 2,
-    },
-    h5: {
-      variant: 'text.heading',
-      fontSize: 1,
-    },
-    h6: {
-      variant: 'text.heading',
-      fontSize: 0,
-    },
-    pre: {
-      fontFamily: 'mono',
-      overflowX: 'auto',
-      code: {
-        color: 'inherit',
-      },
-    },
-    code: {
-      fontFamily: 'mono',
-      fontSize: 'inherit',
-    },
-    table: {
-      width: '100%',
-      borderCollapse: 'separate',
-      borderSpacing: 0,
-    },
-    th: {
-      textAlign: 'left',
-      borderBottomStyle: 'solid',
-    },
-    td: {
-      textAlign: 'left',
-      borderBottomStyle: 'solid',
     },
   },
 };

@@ -4,6 +4,7 @@ import { useDebounce } from 'use-debounce';
 import EditToolbar from './EditToolbar';
 import { updatePage, transformPageData } from '../lib/updatePage';
 import { colorFromUrl } from '../lib/utils';
+import { FONT_MONO, FONT_SANS } from '../lib/const';
 import isUrl from 'is-url';
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -70,9 +71,8 @@ const LinkBlock = (props) => {
                   background: 'transparent',
                   width: '100%',
                   resize: 'none',
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-                  fontSize: '16px',
+                  fontFamily: FONT_SANS,
+                  fontSize: 3,
                   border: 'none',
                   lineHeight: 1.5,
                   paddingLeft: 16,
@@ -112,13 +112,11 @@ const LinkBlock = (props) => {
               defaultValue={comment}
               spellCheck={false}
               style={{
-                // textAlign: 'right',
                 background: 'transparent',
                 width: '100%',
                 resize: 'none',
-                fontFamily:
-                  'Recursive',
-                fontSize: '13px',
+                fontFamily: FONT_MONO,
+                fontSize: 1,
                 border: 'none',
                 lineHeight: 1.5,
                 paddingLeft: 16,

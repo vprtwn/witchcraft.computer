@@ -10,6 +10,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import isUrl from 'is-url';
 import fetchJson from '../lib/fetchJson';
 import { colorFromUrl } from '../lib/utils';
+import { FONT_MONO, FONT_SANS } from '../lib/const';
 import PlusButtonIcon from './PlusButtonIcon';
 
 const DEBOUNCE_MS = 700;
@@ -79,9 +80,8 @@ const NewMenu = (props) => {
                   background: 'transparent',
                   width: '100%',
                   resize: 'none',
-                  fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-                  fontSize: '16px',
+                  fontFamily: FONT_SANS,
+                  fontSize: 3,
                   border: 'none',
                   lineHeight: 1.5,
                   paddingLeft: 16,
@@ -102,9 +102,8 @@ const NewMenu = (props) => {
                     background: 'none',
                     width: '100%',
                     resize: 'none',
-                    fontFamily:
-                      'Recursive',
-                    fontSize: '13px',
+                    fontFamily: FONT_MONO,
+                    fontSize: 1,
                     border: 'none',
                     paddingLeft: 16,
                     paddingRight: 16,

@@ -107,12 +107,12 @@ const PaymentBlock = (props) => {
             </IconButton>
           </Flex>
           <Input
+            variant="input_payment_message"
             name="message"
             id="message"
             placeholder="Message"
             mt={1}
             mb={3}
-            sx={{ fontSize: 14, fontWeight: 'normal' }}
             ref={firstInputRef}
           />
           <Flex sx={{ justifyContent: 'space-between' }}>

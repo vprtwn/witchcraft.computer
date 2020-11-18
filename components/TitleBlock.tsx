@@ -3,6 +3,7 @@ import { Box, Text } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
 import { updatePage, transformPageData } from '../lib/updatePage';
 import { generatePageBlockId } from '../lib/utils';
+import { FONT_SANS } from '../lib/const';
 import TextareaAutosize from 'react-textarea-autosize';
 
 const DEBOUNCE_MS = 700;
@@ -50,9 +51,8 @@ const TitleBlock = (props) => {
             width: '100%',
             resize: 'none',
             fontWeight: 'bold',
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-            fontSize: '28px',
+            fontFamily: FONT_SANS,
+            fontSize: 5,
             border: 'none',
             lineHeight: 1.5,
             paddingLeft: 0,
@@ -70,9 +70,8 @@ const TitleBlock = (props) => {
         <Text
           sx={{
             fontWeight: 'bold',
-            fontFamily:
-              '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-            fontSize: '28px',
+            fontFamily: 'sans',
+            fontSize: 5,
             whiteSpace: 'pre-wrap',
             py: 1,
           }}

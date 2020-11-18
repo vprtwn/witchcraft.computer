@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Card, Box, Text } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
 import { updatePage, transformPageData } from '../lib/updatePage';
+import { FONT_MONO } from '../lib/const';
 import EditToolbar from './EditToolbar';
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -50,9 +51,8 @@ const TextBlock = (props) => {
               background: 'transparent',
               width: '100%',
               resize: 'none',
-              fontFamily:
-                'Recursive ',
-              fontSize: '16px',
+              fontFamily: FONT_MONO,
+              fontSize: 3,
               border: 'none',
               lineHeight: 1.5,
               paddingLeft: 2,

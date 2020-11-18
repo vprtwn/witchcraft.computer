@@ -4,7 +4,7 @@ import { signIn } from 'next-auth/client';
 const SignInButton = (props) => {
   return (
     <Box sx={{ pt: 4, pb: 3 }}>
-      <Flex sx={{ bg: 'transparent', borderRadius: 4, fontSize: 11, justifyContent: 'center' }}>
+      <Flex sx={{ justifyContent: 'center' }}>
         <Button variant="button_small_rainbow" onClick={() => signIn('twitter')}>
           <Box
             aria-hidden="true"
