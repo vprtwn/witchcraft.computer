@@ -191,6 +191,7 @@ const UserPage = (props) => {
     await syncNewBlock(blockId, value, newItems);
   };
 
+  // build meta tag info (not quite working)
   const title = data ? data.title : props.username;
   let description = null;
   if (order && order.length > 0) {

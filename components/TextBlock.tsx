@@ -52,7 +52,7 @@ const TextBlock = (props) => {
               width: '100%',
               resize: 'none',
               fontFamily: FONT_MONO,
-              fontSize: 3,
+              fontSize: '16px',
               border: 'none',
               lineHeight: 1.5,
               paddingLeft: 2,

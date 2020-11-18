@@ -52,7 +52,7 @@ const TitleBlock = (props) => {
             resize: 'none',
             fontWeight: 'bold',
             fontFamily: FONT_SANS,
-            fontSize: 5,
+            fontSize: '28px',
             border: 'none',
             lineHeight: 1.5,
             paddingLeft: 0,
