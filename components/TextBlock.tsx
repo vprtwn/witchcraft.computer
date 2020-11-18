@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Card, Box, Text } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
 import { updatePage, transformPageData } from '../lib/updatePage';
-import { FONT_MONO } from '../lib/const';
 import EditToolbar from './EditToolbar';
-import TextareaAutosize from 'react-textarea-autosize';
+import BlockTextarea from './BlockTextarea';
+import { FONT_MONO } from '../lib/const';
 
 const DEBOUNCE_MS = 700;
 
@@ -44,24 +44,11 @@ const TextBlock = (props) => {
         }}
       >
         {editing && (
-          <TextareaAutosize
+          <BlockTextarea
+            px={2}
+            py={8}
             defaultValue={text}
-            spellCheck={false}
-            style={{
-              background: 'transparent',
-              width: '100%',
-              resize: 'none',
-              fontFamily: FONT_MONO,
-              fontSize: '16px',
-              border: 'none',
-              lineHeight: 1.5,
-              paddingLeft: 2,
-              paddingRight: 2,
-              paddingTop: 8,
-              paddingBottom: 8,
-              overflow: 'hidden',
-              pointerEvents: props.previewing ? 'none' : 'auto',
-            }}
+            fontFamily={FONT_MONO}
             placeholder="Note"
             onChange={(t) => {
               setText(t.target.value);

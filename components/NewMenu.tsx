@@ -4,7 +4,7 @@ import { Card, Box, Button, Flex, Label, Input } from 'theme-ui';
 import { BlockType } from '../lib/typedefs';
 import TextButtonIcon from './TextButtonIcon';
 import LinkButtonIcon from './LinkButtonIcon';
-import AudioButtonIcon from './AudioButtonIcon';
+import BlockTextarea from './BlockTextarea';
 import PageButtonIcon from './PageButtonIcon';
 import TextareaAutosize from 'react-textarea-autosize';
 import isUrl from 'is-url';
@@ -73,45 +73,16 @@ const NewMenu = (props) => {
               />
             </Card>
             <Card variant="card_block_link" sx={{ borderColor: borderColor }}>
-              <TextareaAutosize
+              <BlockTextarea
                 defaultValue={text}
-                spellCheck={false}
-                style={{
-                  background: 'transparent',
-                  width: '100%',
-                  resize: 'none',
-                  fontFamily: FONT_SANS,
-                  fontSize: '16px',
-                  border: 'none',
-                  lineHeight: 1.5,
-                  paddingLeft: 16,
-                  paddingRight: 16,
-                  paddingTop: 10,
-                  paddingBottom: 10,
-                  overflow: 'hidden',
-                }}
                 placeholder="Link text"
                 onChange={(t) => {
                   setText(t.target.value);
                 }}
               />
               <Flex sx={{ bg: 'lightGray', borderRadius: '0px 0px 8px 8px' }}>
-                <TextareaAutosize
-                  spellCheck={false}
-                  style={{
-                    background: 'none',
-                    width: '100%',
-                    resize: 'none',
-                    fontFamily: FONT_MONO,
-                    fontSize: '13px',
-                    border: 'none',
-                    paddingLeft: 16,
-                    paddingRight: 16,
-                    paddingTop: 10,
-                    paddingBottom: 10,
-                    overflow: 'hidden',
-                    pointerEvents: props.hideToolbar ? 'none' : 'auto',
-                  }}
+                <BlockTextarea
+                  fontSize={'13px'}
                   placeholder="Comment (optional)"
                   onChange={(t) => setComment(t.target.value)}
                 />

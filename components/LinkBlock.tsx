@@ -4,9 +4,8 @@ import { useDebounce } from 'use-debounce';
 import EditToolbar from './EditToolbar';
 import { updatePage, transformPageData } from '../lib/updatePage';
 import { colorFromUrl } from '../lib/utils';
-import { FONT_MONO, FONT_SANS } from '../lib/const';
 import isUrl from 'is-url';
-import TextareaAutosize from 'react-textarea-autosize';
+import BlockTextarea from './BlockTextarea';
 
 const DEBOUNCE_MS = 700;
 
@@ -64,23 +63,10 @@ const LinkBlock = (props) => {
         >
           <Box sx={{ flexGrow: 1 }}>
             {editing && (
-              <TextareaAutosize
+              <BlockTextarea
+                px={16}
+                py={10}
                 defaultValue={text}
-                spellCheck={false}
-                style={{
-                  background: 'transparent',
-                  width: '100%',
-                  resize: 'none',
-                  fontFamily: FONT_SANS,
-                  fontSize: '16px',
-                  border: 'none',
-                  lineHeight: 1.5,
-                  paddingLeft: 16,
-                  paddingRight: 16,
-                  paddingTop: 10,
-                  paddingBottom: 10,
-                  overflow: 'hidden',
-                }}
                 placeholder="Link text"
                 onChange={(t) => {
                   setText(t.target.value);
@@ -108,23 +94,11 @@ const LinkBlock = (props) => {
           }}
         >
           {editing && (
-            <TextareaAutosize
+            <BlockTextarea
+              px={16}
+              py={10}
               defaultValue={comment}
-              spellCheck={false}
-              style={{
-                background: 'transparent',
-                width: '100%',
-                resize: 'none',
-                fontFamily: FONT_MONO,
-                fontSize: '13px',
-                border: 'none',
-                lineHeight: 1.5,
-                paddingLeft: 16,
-                paddingRight: 16,
-                paddingTop: 10,
-                paddingBottom: 10,
-                overflow: 'hidden',
-              }}
+              fontSize={'13px'}
               placeholder="Comment (optional)"
               onChange={(t) => {
                 setComment(t.target.value);
@@ -135,14 +109,7 @@ const LinkBlock = (props) => {
         </Flex>
       )}
       {editing && !props.previewing && (
-        <Box
-          sx={{
-            mt: 1,
-            background: 'linear-gradient(-45deg, #e6fffa, #faf5ff, #ebf8ff)',
-            backgroundSize: '400% 400%',
-            animation: 'gradient 10s ease infinite',
-          }}
-        >
+        <Card variant="card_rainbow_link" sx={{ mt: 1 }}>
           <Input
             variant="input_link"
             type="url"
@@ -155,7 +122,7 @@ const LinkBlock = (props) => {
               }
             }}
           ></Input>
-        </Box>
+        </Card>
       )}
       {signedIn && !props.previewing && (
         <EditToolbar

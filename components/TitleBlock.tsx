@@ -3,8 +3,7 @@ import { Box, Text } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
 import { updatePage, transformPageData } from '../lib/updatePage';
 import { generatePageBlockId } from '../lib/utils';
-import { FONT_SANS } from '../lib/const';
-import TextareaAutosize from 'react-textarea-autosize';
+import BlockTextarea from './BlockTextarea';
 
 const DEBOUNCE_MS = 700;
 
@@ -43,23 +42,12 @@ const TitleBlock = (props) => {
   return (
     <Box sx={{ mt: 3, px: 0, pb: 2, cursor: 'text' }}>
       {!props.previewing && (
-        <TextareaAutosize
+        <BlockTextarea
           defaultValue={title}
-          spellCheck={false}
-          style={{
-            background: 'transparent',
-            width: '100%',
-            resize: 'none',
-            fontWeight: 'bold',
-            fontFamily: FONT_SANS,
-            fontSize: '28px',
-            border: 'none',
-            lineHeight: 1.5,
-            paddingLeft: 0,
-            paddingTop: 4,
-            paddingBottom: 4,
-            overflow: 'hidden',
-          }}
+          fontSize={'28px'}
+          fontWeight={'bold'}
+          px={0}
+          py={4}
           placeholder="Comment (optional)"
           onChange={(t) => {
             setTitle(t.target.value);
