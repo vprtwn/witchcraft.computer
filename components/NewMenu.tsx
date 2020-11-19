@@ -75,6 +75,8 @@ const NewMenu = (props) => {
             <Card variant="card_block_link" sx={{ borderColor: borderColor }}>
               <BlockTextarea
                 defaultValue={text}
+                px={16}
+                py={10}
                 placeholder="Link text"
                 onChange={(t) => {
                   setText(t.target.value);
@@ -83,6 +85,8 @@ const NewMenu = (props) => {
               <Flex sx={{ bg: 'lightGray', borderRadius: '0px 0px 8px 8px' }}>
                 <BlockTextarea
                   fontSize={'13px'}
+                  px={16}
+                  py={10}
                   placeholder="Comment (optional)"
                   onChange={(t) => setComment(t.target.value)}
                 />

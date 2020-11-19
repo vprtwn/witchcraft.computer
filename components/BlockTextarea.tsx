@@ -21,7 +21,7 @@ const BlockTextarea = (props) => {
         paddingBottom: props.py,
         overflow: 'hidden',
       }}
-      placeholder={props.placeHolder}
+      placeholder={props.placeholder}
       onChange={(t) => {
         props.onChange(t);
       }}
