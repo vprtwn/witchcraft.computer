@@ -4,6 +4,7 @@ import { useDebounce } from 'use-debounce';
 import EditToolbar from './EditToolbar';
 import { updatePage, transformPageData } from '../lib/updatePage';
 import { colorFromUrl } from '../lib/utils';
+import { FONT_MONO } from '../lib/const';
 import isUrl from 'is-url';
 import BlockTextarea from './BlockTextarea';
 
@@ -98,6 +99,7 @@ const LinkBlock = (props) => {
               px={16}
               py={10}
               defaultValue={comment}
+              fontFamily={FONT_MONO}
               fontSize={'13px'}
               placeholder="Comment (optional)"
               onChange={(t) => {

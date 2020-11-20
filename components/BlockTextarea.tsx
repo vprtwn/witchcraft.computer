@@ -2,6 +2,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { FONT_SANS } from '../lib/const';
 
 const BlockTextarea = (props) => {
+  console.log('props', props);
   return (
     <TextareaAutosize
       defaultValue={props.defaultValue}
