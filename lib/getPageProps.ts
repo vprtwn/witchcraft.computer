@@ -71,7 +71,7 @@ export const getPageProps = async (session: Session, query: object): Promise<Get
     }
   }
 
-  return {
+  const result = {
     props: {
       data: data,
       parentData: parentData,
@@ -80,4 +80,5 @@ export const getPageProps = async (session: Session, query: object): Promise<Get
       signedIn: signedIn,
     },
   };
+  return result;
 };
