@@ -52,6 +52,7 @@ const UserPage = (props) => {
       console.error("couldn't initialize page, no upload url");
       return;
     }
+    console.log('uploadUrl', uploadUrl);
     try {
       const body = {
         uploadUrl: uploadUrl,
