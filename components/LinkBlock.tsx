@@ -3,7 +3,7 @@ import { Card, Input, Flex, Box, Link, Text } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
 import EditToolbar from './EditToolbar';
 import { updatePage, transformPageData } from '../lib/updatePage';
-import { colorFromUrl } from '../lib/utils';
+import { linkStyleForUrl } from '../lib/utils';
 import { FONT_MONO } from '../lib/const';
 import isUrl from 'is-url';
 import BlockTextarea from './BlockTextarea';
@@ -25,7 +25,7 @@ const LinkBlock = (props) => {
   const [debouncedUrl] = useDebounce(url, DEBOUNCE_MS);
   const [debouncedComment] = useDebounce(comment, DEBOUNCE_MS);
 
-  const borderColor = colorFromUrl(url);
+  const linkStyle = linkStyleForUrl(url);
 
   useEffect(() => {
     if (isUrl(debouncedUrl) && text.length > 0) {
@@ -48,7 +48,7 @@ const LinkBlock = (props) => {
   };
 
   return (
-    <Card variant="card_block_link" sx={{ borderColor: borderColor, position: 'relative' }}>
+    <Card variant="card_block_link" sx={{ borderColor: linkStyle.borderColor, position: 'relative' }}>
       <>
         <Flex
           onClick={() => {

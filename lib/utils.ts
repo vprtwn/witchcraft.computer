@@ -79,30 +79,122 @@ export const parseBlockId = (id: string): BlockType => {
   return BlockType.Unknown;
 };
 
-export const colorFromUrl = (url: string): string => {
+export interface LinkStyle {
+  borderColor: string;
+  logo: string | null;
+}
+
+export const linkStyleForUrl = (url: string): LinkStyle => {
   let color = 'black';
+  let logo = null;
   const isUrl = require('is-url');
   if (!url || !isUrl(url)) {
-    return color;
+    return { borderColor: color, logo: logo };
   }
   const psl = require('psl');
   const parsedUrl = new URL(url);
   const parsedHost = psl.parse(parsedUrl.host);
   const domain = parsedHost.domain;
-  if (domain === 'spotify.com') {
-    color = 'spotifyGreen';
-  } else if (domain === 'youtube.com' || domain === 'youtu.be') {
-    color = 'youtubeRed';
+  if (domain === 'airbnb.com') {
+    logo = 'airbnb';
+  } else if (domain === 'amazon.com') {
+    logo = 'amazon';
+  } else if (domain === 'angellist.com') {
+    logo = 'angellist';
   } else if (domain === 'bandcamp.com') {
-    color = 'bandcampTeal';
-  } else if (domain === 'soundcloud.com') {
-    color = 'soundcloudOrange';
+    color = 'bandcamp';
+    logo = 'bandcamp';
+  } else if (domain === 'codepen.com') {
+    logo = 'codepen';
+  } else if (domain === 'deezer.com') {
+    logo = 'deezer';
+  } else if (domain === 'dev.to') {
+    logo = 'dev_to';
+  } else if (domain === 'discord.gg' || domain === 'discord.com') {
+    logo = 'discord';
+  } else if (domain === 'dropbox.com') {
+    logo = 'dropbox';
+  } else if (domain === 'ebay.com') {
+    logo = 'ebay';
+  } else if (domain === 'etsy.com') {
+    logo = 'etsy';
+  } else if (domain === 'facebook.com') {
+    logo = 'facebook';
+  } else if (domain === 'flattr.com') {
+    logo = 'flattr';
+  } else if (domain === 'flickr.com') {
+    logo = 'flickr';
+  } else if (domain === 'github.com') {
+    logo = 'github';
+  } else if (domain === 'gitlab.com') {
+    logo = 'gitlab';
+  } else if (domain === 'glitch.com') {
+    logo = 'glitch';
   } else if (domain === 'goodreads.com') {
-    color = 'goodreadsBrown';
+    color = 'goodreads';
+    logo = 'goodreads';
+  } else if (domain === 'keybase.io') {
+    logo = 'keybase';
+  } else if (domain === 'kickstarter.com') {
+    logo = 'kickstarter';
+  } else if (domain === 'ko-fi.com') {
+    logo = 'ko-fi';
+  } else if (domain === 'liberapay.com') {
+    logo = 'liberapay';
+  } else if (domain === 'linkedin.com') {
+    logo = 'linkedin';
+  } else if (domain === 'medium.com') {
+    logo = 'medium';
+  } else if (domain === 'patreon.com') {
+    logo = 'patreon';
+  } else if (domain === 'paypal.com') {
+    logo = 'paypal';
+    color = 'paypal';
+  } else if (domain === 'pinterest.com') {
+    logo = 'pinterest';
+    color = 'pinterest';
+  } else if (domain === 'reddit.com') {
+    logo = 'reddit';
+  } else if (domain === 'cash.app') {
+    logo = 'square_cash';
+    color = 'squareCash';
+  } else if (domain === 'stackoverflow.com') {
+    logo = 'stackoverflow';
+  } else if (domain === 'stackexchange.com') {
+    logo = 'stackexchange';
+  } else if (domain === 'steampowered.com') {
+    logo = 'steam';
+  } else if (domain === 'stitcher.com') {
+    logo = 'stitcher';
+  } else if (domain === 'strava.com') {
+    logo = 'strava';
+  } else if (domain === 'soundcloud.com') {
+    logo = 'soundcloud';
+    color = 'soundcloud';
+  } else if (domain === 'spotify.com') {
+    logo = 'spotify';
+    color = 'spotify';
+  } else if (domain === 'trello.com') {
+    logo = 'trello';
   } else if (domain === 'twitter.com' || domain === 't.co') {
-    color = 'twitterBlue';
+    color = 'twitter';
+    logo = 'twitter';
+  } else if (domain === 'twitch.com') {
+    logo = 'twitch';
+  } else if (domain === 'venmo.com') {
+    color = 'venmo';
+    logo = 'venmo';
+  } else if (domain === 'vimeo.com') {
+    logo = 'vimeo';
+  } else if (domain === 'wikipedia.com') {
+    logo = 'wikipedia';
+  } else if (domain === 'yelp.com') {
+    logo = 'yelp';
+  } else if (domain === 'youtube.com' || domain === 'youtu.be') {
+    color = 'youtube';
+    logo = 'youtube';
   }
-  return color;
+  return { borderColor: color, logo: logo };
 };
 
 // returns [username, page id]

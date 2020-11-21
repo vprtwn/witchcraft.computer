@@ -9,7 +9,7 @@ import PageButtonIcon from './PageButtonIcon';
 import TextareaAutosize from 'react-textarea-autosize';
 import isUrl from 'is-url';
 import fetchJson from '../lib/fetchJson';
-import { colorFromUrl } from '../lib/utils';
+import { linkStyleForUrl } from '../lib/utils';
 import { FONT_MONO, FONT_SANS } from '../lib/const';
 import PlusButtonIcon from './PlusButtonIcon';
 
@@ -25,7 +25,7 @@ const NewMenu = (props) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
-  const borderColor = colorFromUrl(url);
+  const linkStyle = linkStyleForUrl(url);
 
   useEffect(() => {
     if (showingForm) {
@@ -72,7 +72,7 @@ const NewMenu = (props) => {
                 }}
               />
             </Card>
-            <Card variant="card_block_link" sx={{ borderColor: borderColor }}>
+            <Card variant="card_block_link" sx={{ borderColor: linkStyle.borderColor }}>
               <BlockTextarea
                 defaultValue={text}
                 px={16}
