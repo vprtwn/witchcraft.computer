@@ -32,7 +32,11 @@ const UserPage = (props) => {
 
   const bootstrap = async () => {
     try {
-      const response = await fetchJson(`/api/bootstrap`, {
+      let url = `/api/bootstrap/${props.username}`;
+      if (props.pageId) {
+        url = url + `/${props.pageId}`;
+      }
+      const response = await fetchJson(url, {
         method: 'GET',
       });
       if (response.error) {
@@ -53,10 +57,12 @@ const UserPage = (props) => {
       return;
     }
     console.log('uploadUrl', uploadUrl);
+    console.log('data', data);
     try {
       const body = {
         uploadUrl: uploadUrl,
         data: props.data,
+        pageId: props.pageId,
       };
       console.log('initialize', body);
       const response = await fetchJson('/api/initialize', {

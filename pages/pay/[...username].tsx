@@ -80,6 +80,7 @@ const UserPage = (props) => {
       const body = {
         uploadUrl: uploadUrl,
         data: props.data,
+        pageId: props.pageId,
       };
       console.log('initialize', body);
       const response = await fetchJson('/api/initialize', {

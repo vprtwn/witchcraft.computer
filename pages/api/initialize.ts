@@ -19,8 +19,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const params = JSON.parse(req.body);
+  const pageId = params.pageId;
 
-  const [username, pageId] = parseTrayUrl(req.headers.referer);
+  const referer = req.headers.referer;
+  // Note: refererPageId is unreliable
+  const [username, refererPageId] = parseTrayUrl(referer);
 
   const uploadUrl = params.uploadUrl;
   const data = params.data;

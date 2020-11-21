@@ -18,7 +18,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const message = params.message;
 
   const returnUrl = req.headers.referer;
-  const [username, pageId] = parseTrayUrl(returnUrl);
+  // Note: refererPageId is unreliable
+  const [username, refererPageId] = parseTrayUrl(returnUrl);
 
   let stripeKey = process.env.STRIPE_SECRET_KEY;
   if (session.user.username === username) {

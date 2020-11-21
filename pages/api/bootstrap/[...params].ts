@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getCustomer } from '../../lib/ops';
-import { AWS_ENDPOINT, AWS_REGION, AWS_BUCKET } from '../../lib/const';
-import { ErrorResponse } from '../../lib/typedefs';
-import { parseTrayUrl } from '../../lib/utils';
+import { getCustomer } from '../../../lib/ops';
+import { AWS_ENDPOINT, AWS_REGION, AWS_BUCKET } from '../../../lib/const';
+import { ErrorResponse } from '../../../lib/typedefs';
+import { parseTrayUrl } from '../../../lib/utils';
 import Stripe from 'stripe';
 import { getSession } from 'next-auth/client';
-import { validateSession } from '../../lib/validateSession';
+import { validateSession } from '../../../lib/validateSession';
 
 /**
  * Returns a new signed upload URL.
@@ -40,7 +40,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     error = message;
   }
 
-  const [username, pageId] = parseTrayUrl(req.headers.referer);
+  const {
+    query: { params },
+  } = req;
+  const username = params[0] as string;
+  const pageId = params[1] as string;
 
   if (pageId === 'pay') {
     return res.status(500).json({ error: { message: 'unimplemented' } });

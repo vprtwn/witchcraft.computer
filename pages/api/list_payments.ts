@@ -14,7 +14,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   // const session = await getSession({ req });
   // const params = JSON.parse(req.body);
 
-  const [username, pageId] = parseTrayUrl(req.headers.referer);
+  // Note: refererPageId is unreliable
+  const [username, refererPageId] = parseTrayUrl(req.headers.referer);
 
   let stripeKey = process.env.STRIPE_SECRET_KEY;
   const stripe = require('stripe')(stripeKey);

@@ -19,7 +19,7 @@ export const validateSession = (session, req: NextApiRequest): ErrorResponse | n
     };
   }
   const referer = req.headers.referer;
-  const [refererUsername, pageId] = parseTrayUrl(referer);
+  const [refererUsername, refererPageId] = parseTrayUrl(referer);
   if (refererUsername && session && session.user.username !== refererUsername) {
     response = {
       httpStatus: 401,
