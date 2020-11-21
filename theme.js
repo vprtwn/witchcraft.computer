@@ -28,6 +28,7 @@ export default {
     background: '#fff',
     lightGray: '#edf2f7',
     spotifyGreen: '#1DB954',
+    goodreadsBrown: '#814910',
     youtubeRed: '#FF0000',
     bandcampTeal: '#629aa9',
     soundcloudOrange: '#ff7700',

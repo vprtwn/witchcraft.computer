@@ -7,6 +7,7 @@ import { colorFromUrl } from '../lib/utils';
 import { FONT_MONO } from '../lib/const';
 import isUrl from 'is-url';
 import BlockTextarea from './BlockTextarea';
+import LinkBlockLogo from './LinkBlockLogo';
 
 const DEBOUNCE_MS = 700;
 
@@ -47,7 +48,7 @@ const LinkBlock = (props) => {
   };
 
   return (
-    <Card variant="card_block_link" sx={{ borderColor: borderColor }}>
+    <Card variant="card_block_link" sx={{ borderColor: borderColor, position: 'relative' }}>
       <>
         <Flex
           onClick={() => {
@@ -125,6 +126,11 @@ const LinkBlock = (props) => {
             }}
           ></Input>
         </Card>
+      )}
+      {props.previewing && (
+        <Box sx={{ position: 'absolute', right: 1, bottom: '-1px' }}>
+          <LinkBlockLogo url={url} />
+        </Box>
       )}
       {signedIn && !props.previewing && (
         <EditToolbar
