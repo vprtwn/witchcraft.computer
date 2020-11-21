@@ -110,6 +110,9 @@ export const linkStyleForUrl = (url: string): LinkStyle => {
     logo = 'deezer';
   } else if (domain === 'dev.to') {
     logo = 'dev_to';
+  } else if (domain === 'dribbble.com') {
+    logo = 'dribbble';
+    color = 'dribbble';
   } else if (domain === 'discord.gg' || domain === 'discord.com') {
     logo = 'discord';
   } else if (domain === 'dropbox.com') {

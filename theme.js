@@ -28,6 +28,7 @@ export default {
     background: '#fff',
     lightGray: '#edf2f7',
     bandcamp: '#1ad',
+    dribbble: '#c32361',
     goodreads: '#814910',
     paypal: '#002c8a',
     pinterest: '#bd081b',
