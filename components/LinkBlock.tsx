@@ -78,7 +78,7 @@ const LinkBlock = (props) => {
             {!editing && (
               <Box sx={{ py: 2, px: 3 }}>
                 <Link variant="link_block" href={url}>
-                  {text}
+                  {text || url}
                 </Link>
               </Box>
             )}
