@@ -6,11 +6,9 @@ import TextButtonIcon from './TextButtonIcon';
 import LinkButtonIcon from './LinkButtonIcon';
 import BlockTextarea from './BlockTextarea';
 import PageButtonIcon from './PageButtonIcon';
-import TextareaAutosize from 'react-textarea-autosize';
 import isUrl from 'is-url';
 import fetchJson from '../lib/fetchJson';
-import { linkStyleForUrl } from '../lib/utils';
-import { FONT_MONO, FONT_SANS } from '../lib/const';
+import { linkStyleForUrl, sanitizeUrl } from '../lib/utils';
 import PlusButtonIcon from './PlusButtonIcon';
 
 const DEBOUNCE_MS = 700;
@@ -66,6 +64,8 @@ const NewMenu = (props) => {
                 onChange={(t) => setUrl(t.target.value)}
                 onBlur={(e) => {
                   const val = e.target.value;
+                  const sanitizedUrl = sanitizeUrl(val);
+                  setUrl(sanitizedUrl);
                   if (isUrl(val)) {
                     processNewUrl(val);
                   }

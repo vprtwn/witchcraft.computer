@@ -34,6 +34,10 @@ const TextBlock = (props) => {
     }
   };
 
+  if (!signedIn && text === 'edit me') {
+    return <></>;
+  }
+
   return (
     <Card variant="card_block_text">
       <Box

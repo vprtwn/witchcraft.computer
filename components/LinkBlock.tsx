@@ -20,7 +20,6 @@ const LinkBlock = (props) => {
   const initialComment = content ? (content.comment as string) : '';
   const [text, setText] = useState<string>(initialText);
   const [url, setUrl] = useState<string>(initialUrl);
-  const [sanitizedUrl, setSanitizedUrl] = useState<string>(sanitizeUrl(initialUrl));
   const [comment, setComment] = useState<string>(initialComment);
   const [debouncedText] = useDebounce(text, DEBOUNCE_MS);
   const [debouncedUrl] = useDebounce(url, DEBOUNCE_MS);
@@ -31,7 +30,7 @@ const LinkBlock = (props) => {
   useEffect(() => {
     if (isUrl(debouncedUrl) && text.length > 0) {
       const value = {
-        url: sanitizeUrl(debouncedUrl),
+        url: debouncedUrl,
         text: debouncedText,
         comment: debouncedComment,
       };
@@ -47,6 +46,10 @@ const LinkBlock = (props) => {
       console.error(e);
     }
   };
+
+  if (!signedIn && url === '') {
+    return <></>;
+  }
 
   return (
     <Card variant="card_block_link" sx={{ borderColor: linkStyle.borderColor, position: 'relative' }}>
@@ -123,6 +126,13 @@ const LinkBlock = (props) => {
               const val = e.target.value;
               if (isUrl(val)) {
                 setUrl(val);
+              }
+            }}
+            onBlur={(e) => {
+              const val = e.target.value;
+              const sanitizedUrl = sanitizeUrl(val);
+              if (sanitizedUrl !== val) {
+                setUrl(sanitizedUrl);
               }
             }}
           ></Input>

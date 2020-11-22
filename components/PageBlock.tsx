@@ -12,6 +12,10 @@ const PageBlock = (props) => {
   }
   const url = `/@${props.username}/${content.id}`;
 
+  if (!signedIn && title.startsWith('New page')) {
+    return <></>;
+  }
+
   return (
     <Card
       variant="card_block_link"
