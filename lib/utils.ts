@@ -96,11 +96,15 @@ export const linkStyleForUrl = (url: string): LinkStyle => {
   let color = 'black';
   let logo = null;
   const isUrl = require('is-url');
-  if (!url || !isUrl(url)) {
+  if (!url) {
+    return { borderColor: color, logo: logo };
+  }
+  const sanitizedUrl = sanitizeUrl(url);
+  if (!isUrl(sanitizedUrl)) {
     return { borderColor: color, logo: logo };
   }
   const psl = require('psl');
-  const parsedUrl = new URL(url);
+  const parsedUrl = new URL(sanitizedUrl);
   const parsedHost = psl.parse(parsedUrl.host);
   const domain = parsedHost.domain;
   if (domain === 'airbnb.com') {
@@ -109,6 +113,8 @@ export const linkStyleForUrl = (url: string): LinkStyle => {
     logo = 'amazon';
   } else if (domain === 'angellist.com') {
     logo = 'angellist';
+  } else if (domain === 'apple.com') {
+    logo = 'apple';
   } else if (domain === 'bandcamp.com') {
     color = 'bandcamp';
     logo = 'bandcamp';
@@ -156,6 +162,8 @@ export const linkStyleForUrl = (url: string): LinkStyle => {
     logo = 'linkedin';
   } else if (domain === 'medium.com') {
     logo = 'medium';
+  } else if (domain === 'figma.com') {
+    logo = 'figma';
   } else if (domain === 'patreon.com') {
     logo = 'patreon';
   } else if (domain === 'paypal.com') {
@@ -164,6 +172,8 @@ export const linkStyleForUrl = (url: string): LinkStyle => {
   } else if (domain === 'pinterest.com') {
     logo = 'pinterest';
     color = 'pinterest';
+  } else if (domain === 'producthunt.com') {
+    logo = 'producthunt';
   } else if (domain === 'reddit.com') {
     logo = 'reddit';
   } else if (domain === 'cash.app') {
