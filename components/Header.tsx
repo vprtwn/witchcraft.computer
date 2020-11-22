@@ -9,7 +9,9 @@ const Header = (props) => {
         {props.username && (
           <Box sx={{ px: 0 }}>
             <Link variant="link_no_underline" href={props.pageId ? `/@${props.username}` : twitterProfileUrl}>
-              <Text>{props.username}</Text>
+              <Text>
+                {props.pageId && '←'} {props.username}
+              </Text>
             </Link>
           </Box>
         )}
