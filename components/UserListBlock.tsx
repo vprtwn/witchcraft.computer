@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, Box, Card, Flex, Text } from 'theme-ui';
 import fetchJson from '../lib/fetchJson';
+import UserLink from './UserLink';
 
 const UserListBlock = (props) => {
   const [users, setUsers] = useState<Array<object>>([]);
@@ -21,19 +22,14 @@ const UserListBlock = (props) => {
   }, []);
 
   return (
-    <Flex sx={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
+    <Flex sx={{ justifyContent: 'space-between', alignItems: 'flex-end', mb: 5 }}>
       <Box />
       {users.length > 0 && (
         <Card>
-          <Text sx={{ textAlign: 'center', pb: 2, fontSize: 25 }}> 🏙</Text>
+          <Text sx={{ textAlign: 'center', pb: 0, fontSize: 25 }}> 🏙</Text>
+          <Text sx={{ textAlign: 'center', fontSize: 0, pb: 1 }}>pop. {users.length}</Text>
           {users.map((user: any) => {
-            return (
-              <Box key={user.Key} sx={{ textAlign: 'center', py: 2 }}>
-                <Link variant="link_no_underline" href={`/${user.Key}`}>
-                  {user.Key}
-                </Link>
-              </Box>
-            );
+            return <UserLink data={user} />;
           })}
         </Card>
       )}
