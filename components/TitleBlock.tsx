@@ -10,7 +10,7 @@ const DEBOUNCE_MS = 700;
 const TitleBlock = (props) => {
   let initialTitle = props.data ? props.data['title'] : null;
   if (props.signedIn && !initialTitle) {
-    initialTitle = 'New page';
+    initialTitle = null;
   }
   const [title, setTitle] = useState(initialTitle);
   const [debouncedTitle] = useDebounce(title, DEBOUNCE_MS);
@@ -43,12 +43,13 @@ const TitleBlock = (props) => {
     <Box sx={{ mt: 3, px: 0, pb: 2, cursor: 'text' }}>
       {!props.previewing && (
         <BlockTextarea
+          id={'title'}
           defaultValue={title}
           fontSize={'28px'}
           fontWeight={'bold'}
           px={0}
           py={4}
-          placeholder="Comment (optional)"
+          placeholder="Page title"
           onChange={(t) => {
             setTitle(t.target.value);
           }}

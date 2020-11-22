@@ -193,6 +193,7 @@ export default {
       bg: 'white',
       borderColor: 'black',
       borderRadius: 8,
+      cursor: 'pointer',
     },
     card_block_text: {
       py: 0,

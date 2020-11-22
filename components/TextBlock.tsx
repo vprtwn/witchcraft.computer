@@ -49,6 +49,7 @@ const TextBlock = (props) => {
       >
         {editing && (
           <BlockTextarea
+            id={props.id}
             px={2}
             py={8}
             defaultValue={text}

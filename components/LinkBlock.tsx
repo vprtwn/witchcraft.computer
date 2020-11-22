@@ -70,6 +70,7 @@ const LinkBlock = (props) => {
           <Box sx={{ flexGrow: 1 }}>
             {!props.previewing && editing && (
               <BlockTextarea
+                id={props.id}
                 px={16}
                 py={10}
                 defaultValue={text}
@@ -101,6 +102,7 @@ const LinkBlock = (props) => {
         >
           {editing && (
             <BlockTextarea
+              id={props.id}
               px={16}
               py={10}
               defaultValue={comment}

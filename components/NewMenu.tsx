@@ -74,6 +74,7 @@ const NewMenu = (props) => {
             </Card>
             <Card variant="card_block_link" sx={{ borderColor: linkStyle.borderColor }}>
               <BlockTextarea
+                id={props.id}
                 defaultValue={text}
                 px={16}
                 py={10}
@@ -84,6 +85,7 @@ const NewMenu = (props) => {
               />
               <Flex sx={{ bg: 'lightGray', borderRadius: '0px 0px 8px 8px' }}>
                 <BlockTextarea
+                  id={props.id}
                   fontSize={'13px'}
                   px={16}
                   py={10}

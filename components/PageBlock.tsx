@@ -8,7 +8,7 @@ const PageBlock = (props) => {
   const [editing, setEditing] = useState(false);
   let title = content ? content['title'] : null;
   if (!title) {
-    title = 'New page ➜';
+    title = 'New page';
   }
   const url = `/@${props.username}/${content.id}`;
 

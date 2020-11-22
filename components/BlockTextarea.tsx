@@ -1,11 +1,20 @@
+import React, { useRef, useEffect } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { FONT_SANS } from '../lib/const';
 
 const BlockTextarea = (props) => {
-  console.log('props', props);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (props.id === 'title') {
+      inputRef.current.focus();
+    }
+  }, []);
+
   return (
     <TextareaAutosize
-      defaultValue={props.defaultValue}
+      ref={inputRef}
+      // defaultValue={props.defaultValue}
       spellCheck={false}
       style={{
         background: 'transparent',

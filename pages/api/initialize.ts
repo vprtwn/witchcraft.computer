@@ -40,7 +40,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   let payload;
   if (pageId) {
-    payload = { title: 'New page' };
+    payload = { title: null };
   } else {
     payload = {
       email: session.user.email,
