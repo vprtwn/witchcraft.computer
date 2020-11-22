@@ -40,6 +40,9 @@ const IndexPage = () => {
           <Text variant="text_md_mono" sx={{ textAlign: 'right', pt: 1 }}>
             a new way to share notes, links, and music
           </Text>
+          <Text variant="text_md_mono" sx={{ pt: 1 }}>
+            here's an <Link href="https://tray.club/@bgdotjpg">example</Link>
+          </Text>
         </Card>
         {!signedIn && (
           <Box sx={{ mt: 3 }}>
