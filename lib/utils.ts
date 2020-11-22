@@ -84,6 +84,14 @@ export interface LinkStyle {
   logo: string | null;
 }
 
+// previously, UI allowed setting e.g. "producthunt.com" as a url
+export const sanitizeUrl = (url: string): string => {
+  if (url && !url.includes('://') && !url.startsWith('https://') && !url.startsWith('https://')) {
+    return `http://${url}`;
+  }
+  return url;
+};
+
 export const linkStyleForUrl = (url: string): LinkStyle => {
   let color = 'black';
   let logo = null;

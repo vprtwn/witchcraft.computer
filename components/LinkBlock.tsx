@@ -3,7 +3,7 @@ import { Card, Input, Flex, Box, Link, Text } from 'theme-ui';
 import { useDebounce } from 'use-debounce';
 import EditToolbar from './EditToolbar';
 import { updatePage, transformPageData } from '../lib/updatePage';
-import { linkStyleForUrl } from '../lib/utils';
+import { linkStyleForUrl, sanitizeUrl } from '../lib/utils';
 import { FONT_MONO } from '../lib/const';
 import isUrl from 'is-url';
 import BlockTextarea from './BlockTextarea';
@@ -20,6 +20,7 @@ const LinkBlock = (props) => {
   const initialComment = content ? (content.comment as string) : '';
   const [text, setText] = useState<string>(initialText);
   const [url, setUrl] = useState<string>(initialUrl);
+  const [sanitizedUrl, setSanitizedUrl] = useState<string>(sanitizeUrl(initialUrl));
   const [comment, setComment] = useState<string>(initialComment);
   const [debouncedText] = useDebounce(text, DEBOUNCE_MS);
   const [debouncedUrl] = useDebounce(url, DEBOUNCE_MS);
@@ -30,7 +31,7 @@ const LinkBlock = (props) => {
   useEffect(() => {
     if (isUrl(debouncedUrl) && text.length > 0) {
       const value = {
-        url: debouncedUrl,
+        url: sanitizeUrl(debouncedUrl),
         text: debouncedText,
         comment: debouncedComment,
       };
@@ -53,7 +54,7 @@ const LinkBlock = (props) => {
         <Flex
           onClick={() => {
             if (content && props.previewing) {
-              window.location.assign(content.url as string);
+              window.location.assign(sanitizeUrl(content.url));
             } else {
               setEditing(true);
             }
@@ -64,7 +65,7 @@ const LinkBlock = (props) => {
           }}
         >
           <Box sx={{ flexGrow: 1 }}>
-            {editing && (
+            {!props.previewing && editing && (
               <BlockTextarea
                 px={16}
                 py={10}
@@ -75,10 +76,10 @@ const LinkBlock = (props) => {
                 }}
               />
             )}
-            {!editing && (
+            {(!editing || props.previewing) && (
               <Box sx={{ py: 2, px: 3 }}>
-                <Link variant="link_block" href={url}>
-                  {text || url}
+                <Link variant="link_block" href={sanitizeUrl(url)}>
+                  {text && text.length > 0 ? text : url}
                 </Link>
               </Box>
             )}

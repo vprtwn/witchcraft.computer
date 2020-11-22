@@ -17,7 +17,7 @@ export const getPageProps = async (session: Session, query: object): Promise<Get
   if (params.length > 2) {
     return {
       props: {
-        error: { message: 'invalid URL' },
+        error: { message: 'invalid link' },
       },
     };
   }
@@ -30,6 +30,14 @@ export const getPageProps = async (session: Session, query: object): Promise<Get
   if (pageId) {
     parentObjectKey = objectKey;
     objectKey = `@${username}/${pageId}`;
+  }
+
+  if (pageId && isNaN(pageId)) {
+    return {
+      props: {
+        error: { message: 'invalid link' },
+      },
+    };
   }
 
   // fetch page data
