@@ -6,7 +6,7 @@ const BlockTextarea = (props) => {
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    if (props.id === 'title') {
+    if (props.id === 'title' && !props.defaultValue) {
       inputRef.current.focus();
     }
   }, []);
