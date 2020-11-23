@@ -14,7 +14,7 @@ const BlockTextarea = (props) => {
   return (
     <TextareaAutosize
       ref={inputRef}
-      // defaultValue={props.defaultValue}
+      defaultValue={props.defaultValue}
       spellCheck={false}
       style={{
         background: 'transparent',
