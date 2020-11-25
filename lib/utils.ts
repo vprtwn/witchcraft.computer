@@ -162,6 +162,8 @@ export const linkStyleForUrl = (url: string): LinkStyle => {
     logo = 'linkedin';
   } else if (domain === 'medium.com') {
     logo = 'medium';
+  } else if (domain === 'netflix.com') {
+    logo = 'netflix';
   } else if (domain === 'figma.com') {
     logo = 'figma';
   } else if (domain === 'patreon.com') {
