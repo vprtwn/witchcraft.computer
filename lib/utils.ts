@@ -115,6 +115,8 @@ export const linkStyleForUrl = (url: string): LinkStyle => {
     logo = 'angellist';
   } else if (domain === 'apple.com') {
     logo = 'apple';
+  } else if (domain === 'behance.com') {
+    logo = 'behance';
   } else if (domain === 'bandcamp.com') {
     color = 'bandcamp';
     logo = 'bandcamp';
@@ -135,12 +137,14 @@ export const linkStyleForUrl = (url: string): LinkStyle => {
     logo = 'ebay';
   } else if (domain === 'etsy.com') {
     logo = 'etsy';
-  } else if (domain === 'facebook.com') {
+  } else if (domain === 'facebook.com' || domain == 'fb.me') {
     logo = 'facebook';
   } else if (domain === 'flattr.com') {
     logo = 'flattr';
   } else if (domain === 'flickr.com') {
     logo = 'flickr';
+  } else if (domain === 'figma.com') {
+    logo = 'figma';
   } else if (domain === 'github.com') {
     logo = 'github';
   } else if (domain === 'gitlab.com') {
@@ -150,6 +154,8 @@ export const linkStyleForUrl = (url: string): LinkStyle => {
   } else if (domain === 'goodreads.com') {
     color = 'goodreads';
     logo = 'goodreads';
+  } else if (domain === 'instagram.com') {
+    logo = 'instagram';
   } else if (domain === 'keybase.io') {
     logo = 'keybase';
   } else if (domain === 'kickstarter.com') {
@@ -162,10 +168,12 @@ export const linkStyleForUrl = (url: string): LinkStyle => {
     logo = 'linkedin';
   } else if (domain === 'medium.com') {
     logo = 'medium';
+  } else if (domain === 'messenger.com') {
+    logo = 'messenger';
   } else if (domain === 'netflix.com') {
     logo = 'netflix';
-  } else if (domain === 'figma.com') {
-    logo = 'figma';
+  } else if (domain === 'netflix.com') {
+    logo = 'netflix';
   } else if (domain === 'patreon.com') {
     logo = 'patreon';
   } else if (domain === 'paypal.com') {
@@ -181,6 +189,8 @@ export const linkStyleForUrl = (url: string): LinkStyle => {
   } else if (domain === 'cash.app') {
     logo = 'square_cash';
     color = 'squareCash';
+  } else if (domain === 'signal.org') {
+    logo = 'signal';
   } else if (domain === 'stackoverflow.com') {
     logo = 'stackoverflow';
   } else if (domain === 'stackexchange.com') {
@@ -197,6 +207,8 @@ export const linkStyleForUrl = (url: string): LinkStyle => {
   } else if (domain === 'spotify.com') {
     logo = 'spotify';
     color = 'spotify';
+  } else if (domain === 'telegram.org' || domain == 't.me') {
+    logo = 'telegram';
   } else if (domain === 'trello.com') {
     logo = 'trello';
   } else if (domain === 'twitter.com' || domain === 't.co') {
