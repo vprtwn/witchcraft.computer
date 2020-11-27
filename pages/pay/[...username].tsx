@@ -41,8 +41,6 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const UserPage = (props) => {
-  const defaultText = 'edit me';
-
   const disconnectStripe = async function () {
     try {
       await fetchJson('/api/disconnect_stripe', {

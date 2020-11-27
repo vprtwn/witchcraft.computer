@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getCustomer } from '../../../lib/ops';
 import { AWS_ENDPOINT, AWS_REGION, AWS_BUCKET } from '../../../lib/const';
 import { ErrorResponse } from '../../../lib/typedefs';
-import { parseTrayUrl } from '../../../lib/utils';
 import Stripe from 'stripe';
 import { getSession } from 'next-auth/client';
 import { validateSession } from '../../../lib/validateSession';
