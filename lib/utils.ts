@@ -113,6 +113,8 @@ export const linkStyleForUrl = (url: string): LinkStyle => {
     logo = 'amazon';
   } else if (domain === 'angellist.com') {
     logo = 'angellist';
+  } else if (domain === 'audible.com') {
+    logo = 'audible';
   } else if (domain === 'apple.com') {
     logo = 'apple';
   } else if (domain === 'behance.com') {
