@@ -97,7 +97,6 @@ export default {
       borderWidth: 1,
       bg: 'transparent',
       fontSize: 1,
-      fontFamily: 'mono',
       cursor: 'pointer',
       boxShadow: '0 0 8px rgba(0, 0, 0, 0.125)',
       '&:hover': {
@@ -289,7 +288,6 @@ export default {
     },
     text_md_mono: {
       fontSize: 2,
-      fontFamily: 'sans',
       fontFamily: 'mono',
     },
     text_block_link_comment: {

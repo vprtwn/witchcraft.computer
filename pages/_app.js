@@ -7,6 +7,7 @@ import Layout from '../components/Layout';
 import TrayIcon from '../components/TrayIcon';
 import InfoFooter from '../components/InfoFooter';
 import '../styles.css';
+import React from "react"
 
 const title = 'tray – info';
 const description = 'policies • faq';
