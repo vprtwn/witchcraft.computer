@@ -119,6 +119,7 @@ export const linkStyleForUrl = (url: string): LinkStyle => {
     logo = 'apple';
   } else if (domain === 'behance.net' || domain === 'behance.com') {
     logo = 'behance';
+    color = 'behance';
   } else if (domain === 'bandcamp.com') {
     color = 'bandcamp';
     logo = 'bandcamp';
