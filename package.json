@@ -40,6 +40,7 @@
     "react": "16.13.1",
     "react-beautiful-dnd": "13.0.0",
     "react-dom": "16.13.1",
+    "react-linkify": "^1.0.0-alpha",
     "react-number-format": "^4.4.1",
     "react-textarea-autosize": "^8.2.0",
     "stripe": "^8.78.0",
