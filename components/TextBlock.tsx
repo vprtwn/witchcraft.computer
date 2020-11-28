@@ -5,6 +5,7 @@ import { updatePage, transformPageData } from '../lib/updatePage';
 import EditToolbar from './EditToolbar';
 import BlockTextarea from './BlockTextarea';
 import { FONT_MONO } from '../lib/const';
+import Linkify from 'react-linkify';
 
 const DEBOUNCE_MS = 700;
 
@@ -60,7 +61,11 @@ const TextBlock = (props) => {
             }}
           />
         )}
-        {!editing && <Text variant="text_block_text">{text.length === 0 ? '' : text}</Text>}
+        {!editing && (
+          <Text variant="text_block_text">
+            <Linkify>{text.length === 0 ? '' : text}</Linkify>
+          </Text>
+        )}
       </Box>
       {signedIn && !props.previewing && (
         <EditToolbar
