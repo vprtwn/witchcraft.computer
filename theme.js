@@ -298,6 +298,7 @@ export default {
       px: 3,
       py: 2,
       whiteSpace: 'pre-wrap',
+      cursor: 'auto',
     },
     text_block_text: {
       fontSize: 3,
