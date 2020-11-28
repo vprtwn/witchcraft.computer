@@ -35,7 +35,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       .promise();
     const rawList = response['Contents'];
     const users = rawList.filter((o) => !o['Key'].includes('/'));
-    const userPages = await Promise.all(users.map((u) => fetchData(u.Key)));
+    const sortedUsers = users.sort((a, b) => {
+      return b['LastModified'] - a['LastModified'];
+    });
+    const userPages = await Promise.all(sortedUsers.map((u) => fetchData(u.Key)));
     const filteredPages = userPages.filter((p) => {
       let hide = false;
       const order = p['b.order'];
