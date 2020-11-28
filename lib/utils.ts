@@ -159,6 +159,7 @@ export const linkStyleForUrl = (url: string): LinkStyle => {
     logo = 'goodreads';
   } else if (domain === 'instagram.com') {
     logo = 'instagram';
+    color = 'instagram';
   } else if (domain === 'keybase.io') {
     logo = 'keybase';
   } else if (domain === 'kickstarter.com') {

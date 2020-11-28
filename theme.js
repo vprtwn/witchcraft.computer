@@ -31,6 +31,7 @@ export default {
     behance: '#4175fa',
     dribbble: '#c32361',
     goodreads: '#814910',
+    instagram: '#60f',
     paypal: '#002c8a',
     pinterest: '#bd081b',
     soundcloud: '#ff7700',
