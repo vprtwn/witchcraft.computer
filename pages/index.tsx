@@ -13,24 +13,8 @@ const IndexPage = () => {
   const [session, loading] = useSession();
   const signedIn = session && session.user.username;
 
-  const title = 'welcome to tray';
-  const description = 'a new way to share notes, links, and music.';
-
   return (
     <>
-      <Head>
-        <title>{title}</title>
-        <meta name="title" content={title} />
-        <meta name="description" content={description} />
-        {/* <!-- Open Graph / Facebook --> */}
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        {/* <!-- Twitter --> */}
-        <meta property="twitter:card" content="summary" />
-        <meta property="twitter:title" content={title} />
-        <meta property="twitter:description" content={description} />
-      </Head>
       <Layout>
         <TrayIcon />
         <Card variant="card_block_link" sx={{ px: 3, py: 2 }}>

@@ -8,9 +8,7 @@ import TrayIcon from '../components/TrayIcon';
 import InfoFooter from '../components/InfoFooter';
 import '../styles.css';
 import React from 'react';
-
-const title = 'tray – info';
-const description = 'policies • faq';
+import { NextSeo } from 'next-seo';
 
 // Markdown pages use this
 const components = {
@@ -45,18 +43,31 @@ const App = ({ Component, pageProps }) => {
             <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
             <link rel="icon" href="/favicon.png" />
             <link href="https://fonts.googleapis.com/css2?family=Recursive:CRSV@0&display=swap" rel="stylesheet" />
-            <title>{title}</title>
-            <meta name="title" content={title} />
-            <meta name="description" content={description} />
-            {/* <!-- Open Graph / Facebook --> */}
-            <meta property="og:type" content="website" />
-            <meta property="og:title" content={title} />
-            <meta property="og:description" content={description} />
-            {/* <!-- Twitter --> */}
-            <meta property="twitter:card" content="summary" />
-            <meta property="twitter:title" content={title} />
-            <meta property="twitter:description" content={description} />
           </Head>
+          <NextSeo
+            title="Using More of Config"
+            description="This example uses more of the available config options."
+            canonical="https://www.canonical.ie/"
+            openGraph={{
+              url: 'https://www.url.ie/a',
+              title: 'Open Graph Title',
+              description: 'Open Graph Description',
+              images: [
+                {
+                  url: 'tray-512.png',
+                  width: 512,
+                  height: 512,
+                  alt: 'outbox infinity',
+                },
+              ],
+              site_name: 'tray',
+            }}
+            twitter={{
+              handle: '@handle',
+              site: '@site',
+              cardType: 'summary_large_image',
+            }}
+          />
           <MDXProvider components={components}>
             <Component {...pageProps} />
           </MDXProvider>
