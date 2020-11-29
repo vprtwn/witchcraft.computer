@@ -141,7 +141,7 @@ const LinkBlock = (props) => {
         </Card>
       )}
       {props.previewing && (
-        <Box sx={{ position: 'absolute', right: 1, bottom: '-1px', pointerEvents: 'none' }}>
+        <Box sx={{ position: 'absolute', right: 1, bottom: 1, pointerEvents: 'none' }}>
           <LinkBlockLogo url={url} />
         </Box>
       )}
