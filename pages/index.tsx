@@ -7,7 +7,6 @@ import UserListBlock from '../components/UserListBlock';
 import { Card, Badge, Box, Flex, Text, Link } from 'theme-ui';
 import { GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/client';
-import Head from 'next/head';
 
 const IndexPage = () => {
   const [session, loading] = useSession();
@@ -22,7 +21,7 @@ const IndexPage = () => {
             welcome to <Badge variant="badge_outline">tray</Badge>
           </Text>
           <Text variant="text_md_mono" sx={{ textAlign: 'right', pt: 1 }}>
-            a new way to share notes, links, and music
+            a space to share notes and cool links
           </Text>
           <Text variant="text_md_mono" sx={{ pt: 1 }}>
             here's an <Link href="https://tray.club/@bgdotjpg">example</Link>

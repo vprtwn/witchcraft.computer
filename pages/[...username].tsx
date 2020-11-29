@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Layout from '../components/Layout';
 import Header from '../components/Header';
 import TextBlock from '../components/TextBlock';
+import Layout from '../components/Layout';
 import TitleBlock from '../components/TitleBlock';
 import LinkBlock from '../components/LinkBlock';
-import Head from 'next/head';
 import PageBlock from '../components/PageBlock';
 import PageFooter from '../components/PageFooter';
 import { reorder, remove, add, generateBlockId, generatePageId, generatePageBlockId, parseBlockId } from '../lib/utils';
@@ -21,6 +20,7 @@ import CloseButtonIcon from '../components/CloseButtonIcon';
 import SignOutButtonIcon from '../components/SignOutButtonIcon';
 import NewMenu from '../components/NewMenu';
 import { useSession } from 'next-auth/client';
+import { NextSeo } from 'next-seo';
 
 let DEBUG = true;
 if (process.env.NODE_ENV === 'production') {
@@ -198,35 +198,71 @@ const UserPage = (props) => {
     await syncNewBlock(blockId, value, newItems);
   };
 
-  // build meta tag info (not quite working)
-  const title = data ? data.title : props.username;
-  let description = null;
-  if (order && order.length > 0) {
-    const firstBlock = data[order[0]];
-    if (firstBlock) {
-      description = firstBlock.text || firstBlock.title;
+  let title = `${props.username} on tray`;
+  if (props.pageId && props.data) {
+    const pageTitle = props.data.title || 'Untitled';
+    title = pageTitle + ' | ' + `${props.username}`;
+  }
+  let description = `page by ${props.username}`;
+  const blockOrder = props.data['b.order'];
+  if (blockOrder && blockOrder.length > 0) {
+    description = '';
+    let i = 0;
+    const maxLength = 160;
+    while (description.length < maxLength && i < blockOrder.length) {
+      const block = props.data[blockOrder[i].i];
+      if (block) {
+        let text = null;
+        if (typeof block === 'string') {
+          text = block;
+        } else {
+          text = block.text || block.title;
+        }
+        if (text) {
+          if (description.length > 1) {
+            description = description + ' ✧ ' + text;
+          } else {
+            description = text;
+          }
+        }
+      }
+      i = i + 1;
     }
+  }
+  let url = `https://tray.club/@${props.username}`;
+  if (props.pageId) {
+    url = url + `/${props.pageId}`;
   }
 
   return (
     <>
-      <Head>
-        <title>{title}</title>
-        <meta name="title" content={title} />
-        <meta name="description" content={description} />
-        {/* <!-- Open Graph / Facebook --> */}
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        {/* <!-- Twitter --> */}
-        <meta property="twitter:card" content="summary" />
-        <meta property="twitter:title" content={title} />
-        <meta property="twitter:description" content={description} />
-      </Head>
+      <NextSeo
+        title={title}
+        description={description}
+        openGraph={{
+          url: url,
+          title: title,
+          description: description,
+          images: [
+            {
+              url: 'https://tray.club/tray-512.png',
+              width: 512,
+              height: 512,
+              alt: 'outbox infinity',
+            },
+          ],
+          site_name: 'tray',
+        }}
+        twitter={{
+          handle: `@${props.username}`,
+          site: `@${props.username}`,
+          cardType: 'summary_large_image',
+        }}
+      />
       <Layout>
         {/* {DEBUG && !props.error && (
-        <Textarea rows={10} sx={{ borderColor: 'blue', my: 4 }} defaultValue={JSON.stringify(props, null, 2)} />
-      )} */}
+          <Textarea rows={10} sx={{ borderColor: 'blue', my: 4 }} defaultValue={JSON.stringify(props, null, 2)} />
+        )} */}
         {props.error && (
           <Textarea rows={10} sx={{ borderColor: 'red', my: 4 }} defaultValue={JSON.stringify(props.error, null, 2)} />
         )}

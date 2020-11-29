@@ -8,12 +8,35 @@ import TrayIcon from '../components/TrayIcon';
 import InfoFooter from '../components/InfoFooter';
 import '../styles.css';
 import React from 'react';
-import { NextSeo } from 'next-seo';
+import { DefaultSeo, NextSeo } from 'next-seo';
 
 // Markdown pages use this
 const components = {
   wrapper: (props) => (
     <div>
+      <NextSeo
+        title="about tray"
+        description="FAQ, terms of service, privacy policy, etc"
+        openGraph={{
+          url: 'https://tray.club',
+          title: 'about tray',
+          description: 'FAQ, terms of service, privacy policy, etc',
+          images: [
+            {
+              url: 'https://tray.club/tray-512.png',
+              width: 512,
+              height: 512,
+              alt: 'outbox infinity',
+            },
+          ],
+          site_name: 'tray',
+        }}
+        twitter={{
+          handle: '@trayClub',
+          site: '@trayClub',
+          cardType: 'summary_large_image',
+        }}
+      />
       <TrayIcon />
       <Layout>
         <Card variant="card_dotted_black">
@@ -44,17 +67,16 @@ const App = ({ Component, pageProps }) => {
             <link rel="icon" href="/favicon.png" />
             <link href="https://fonts.googleapis.com/css2?family=Recursive:CRSV@0&display=swap" rel="stylesheet" />
           </Head>
-          <NextSeo
-            title="Using More of Config"
-            description="This example uses more of the available config options."
-            canonical="https://www.canonical.ie/"
+          <DefaultSeo
+            title="tray"
+            description="a space to share notes and cool links"
             openGraph={{
-              url: 'https://www.url.ie/a',
-              title: 'Open Graph Title',
-              description: 'Open Graph Description',
+              url: 'https://tray.club',
+              title: 'tray',
+              description: 'a space to share notes and cool links',
               images: [
                 {
-                  url: 'tray-512.png',
+                  url: 'https://tray.club/tray-512.png',
                   width: 512,
                   height: 512,
                   alt: 'outbox infinity',
@@ -63,8 +85,8 @@ const App = ({ Component, pageProps }) => {
               site_name: 'tray',
             }}
             twitter={{
-              handle: '@handle',
-              site: '@site',
+              handle: '@trayClub',
+              site: '@trayClub',
               cardType: 'summary_large_image',
             }}
           />
