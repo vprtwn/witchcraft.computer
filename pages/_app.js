@@ -7,27 +7,36 @@ import Layout from '../components/Layout';
 import TrayIcon from '../components/TrayIcon';
 import InfoFooter from '../components/InfoFooter';
 import '../styles.css';
-import React from "react"
+import React from 'react';
+import { DefaultSeo, NextSeo } from 'next-seo';
 
-const title = 'tray – info';
-const description = 'policies • faq';
-
+// Markdown pages use this
 const components = {
   wrapper: (props) => (
     <div>
-      <Head>
-        <title>{title}</title>
-        <meta name="title" content={title} />
-        <meta name="description" content={description} />
-        {/* <!-- Open Graph / Facebook --> */}
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        {/* <!-- Twitter --> */}
-        <meta property="twitter:card" content="summary" />
-        <meta property="twitter:title" content={title} />
-        <meta property="twitter:description" content={description} />
-      </Head>
+      <NextSeo
+        title="about tray"
+        description="FAQ, terms of service, privacy policy, etc"
+        openGraph={{
+          url: 'https://tray.club',
+          title: 'about tray',
+          description: 'FAQ, terms of service, privacy policy, etc',
+          images: [
+            {
+              url: 'https://tray.club/tray-512.png',
+              width: 512,
+              height: 512,
+              alt: 'outbox infinity',
+            },
+          ],
+          site_name: 'tray',
+        }}
+        twitter={{
+          handle: '@trayClub',
+          site: '@trayClub',
+          cardType: 'summary_large_image',
+        }}
+      />
       <TrayIcon />
       <Layout>
         <Card variant="card_dotted_black">
@@ -47,7 +56,7 @@ const components = {
   ),
 };
 
-// @NOTE: using next-auth v3 beta
+// Normal pages use this
 const App = ({ Component, pageProps }) => {
   return (
     <Provider session={pageProps.session}>
@@ -58,6 +67,29 @@ const App = ({ Component, pageProps }) => {
             <link rel="icon" href="/favicon.png" />
             <link href="https://fonts.googleapis.com/css2?family=Recursive:CRSV@0&display=swap" rel="stylesheet" />
           </Head>
+          <DefaultSeo
+            title="tray"
+            description="a space to share notes and cool links"
+            openGraph={{
+              url: 'https://tray.club',
+              title: 'tray',
+              description: 'a space to share notes and cool links',
+              images: [
+                {
+                  url: 'https://tray.club/tray-512.png',
+                  width: 512,
+                  height: 512,
+                  alt: 'outbox infinity',
+                },
+              ],
+              site_name: 'tray',
+            }}
+            twitter={{
+              handle: '@trayClub',
+              site: '@trayClub',
+              cardType: 'summary_large_image',
+            }}
+          />
           <MDXProvider components={components}>
             <Component {...pageProps} />
           </MDXProvider>
