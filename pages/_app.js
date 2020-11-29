@@ -7,27 +7,15 @@ import Layout from '../components/Layout';
 import TrayIcon from '../components/TrayIcon';
 import InfoFooter from '../components/InfoFooter';
 import '../styles.css';
-import React from "react"
+import React from 'react';
 
 const title = 'tray – info';
 const description = 'policies • faq';
 
+// Markdown pages use this
 const components = {
   wrapper: (props) => (
     <div>
-      <Head>
-        <title>{title}</title>
-        <meta name="title" content={title} />
-        <meta name="description" content={description} />
-        {/* <!-- Open Graph / Facebook --> */}
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        {/* <!-- Twitter --> */}
-        <meta property="twitter:card" content="summary" />
-        <meta property="twitter:title" content={title} />
-        <meta property="twitter:description" content={description} />
-      </Head>
       <TrayIcon />
       <Layout>
         <Card variant="card_dotted_black">
@@ -47,7 +35,7 @@ const components = {
   ),
 };
 
-// @NOTE: using next-auth v3 beta
+// Normal pages use this
 const App = ({ Component, pageProps }) => {
   return (
     <Provider session={pageProps.session}>
@@ -57,6 +45,17 @@ const App = ({ Component, pageProps }) => {
             <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
             <link rel="icon" href="/favicon.png" />
             <link href="https://fonts.googleapis.com/css2?family=Recursive:CRSV@0&display=swap" rel="stylesheet" />
+            <title>{title}</title>
+            <meta name="title" content={title} />
+            <meta name="description" content={description} />
+            {/* <!-- Open Graph / Facebook --> */}
+            <meta property="og:type" content="website" />
+            <meta property="og:title" content={title} />
+            <meta property="og:description" content={description} />
+            {/* <!-- Twitter --> */}
+            <meta property="twitter:card" content="summary" />
+            <meta property="twitter:title" content={title} />
+            <meta property="twitter:description" content={description} />
           </Head>
           <MDXProvider components={components}>
             <Component {...pageProps} />
