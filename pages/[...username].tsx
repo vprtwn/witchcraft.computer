@@ -204,7 +204,7 @@ const UserPage = (props) => {
     title = pageTitle + ' | ' + `${props.username}`;
   }
   let description = `page by ${props.username}`;
-  const blockOrder = props.data['b.order'];
+  const blockOrder = props.data ? props.data['b.order'] : null;
   if (blockOrder && blockOrder.length > 0) {
     description = '';
     let i = 0;
