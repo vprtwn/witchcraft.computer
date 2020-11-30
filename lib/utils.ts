@@ -287,6 +287,41 @@ export const parseTrayUrl = (inputUrl: string): [string | null, string | null] =
   }
 };
 
+// returns [username, page id]
+export const parseUploadUrl = (inputUrl: string): [string | null, string | null] => {
+  if (!isUrl(inputUrl)) {
+    DEBUG && console.error('not a url');
+    return [null, null];
+  }
+  let url = inputUrl;
+  const parsedUrl = new URL(url);
+  const parsedHost = psl.parse(parsedUrl.host);
+  const domain = parsedHost.domain;
+  if (!domain) {
+    DEBUG && console.error('failed to parse domain: ', url);
+    return [null, null];
+  }
+  let allowedDomains = ['amazonaws.com'];
+  if (!allowedDomains.includes(domain)) {
+    DEBUG && console.error('not an allowed domain: ', domain);
+    return [null, null];
+  }
+
+  const pathname = parsedUrl.pathname;
+  // /bgdotjpg
+  // /bgdotjpg/12345
+
+  const pathComps = pathname.split('/').filter((c) => c.length > 0);
+  console.log('pathComps', pathComps);
+  let username = pathComps[0];
+  username = unprefixUsername(username);
+  const pageId = pathComps[1];
+  if (pageId) {
+    return [username, pageId];
+  }
+  return [username, null];
+};
+
 export const emailFromUsername = (username: string): string => {
   return `${username}+twitter@tray.club`;
 };
@@ -295,6 +330,9 @@ export const unprefixUsername = (username: string): string => {
   let newUsername = username;
   if (username.startsWith('@')) {
     newUsername = username.replace('@', '');
+  }
+  if (username.startsWith('%40')) {
+    newUsername = username.replace('%40', '');
   }
   return newUsername;
 };

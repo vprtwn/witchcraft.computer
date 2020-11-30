@@ -42,6 +42,8 @@ const UserPage = (props) => {
       if (response.error) {
         setAlert(response.error);
       }
+      console.log('uploadUrl', response.uploadUrl);
+      console.log('parentUploadUrl', response.parentUploadUrl);
       setUploadUrl(response.uploadUrl);
       setParentUploadUrl(response.parentUploadUrl);
       await initialize(response.uploadUrl);
