@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
 import { validateSession } from '../../lib/validateSession';
-import { parseTrayUrl } from '../../lib/utils';
+import { parseTrayUrl, parseUploadUrl } from '../../lib/utils';
 
 /**
  * Initializes page data for a new user.
@@ -26,6 +26,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const [username, refererPageId] = parseTrayUrl(referer);
 
   const uploadUrl = params.uploadUrl;
+  const [uploadUsername, uploadPageId] = parseUploadUrl(uploadUrl);
+  if (username !== uploadUsername) {
+    return res.status(500).json({ error: { message: 'mismatched usernames' } });
+  }
+  if (pageId && uploadPageId !== pageId) {
+    return res.status(500).json({ error: { message: 'mismatched page IDs' } });
+  }
+
   const data = params.data;
   // pay page (to be built) uses [username]/pay url
   if (pageId === 'pay') {
