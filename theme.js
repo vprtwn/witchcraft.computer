@@ -197,6 +197,10 @@ export default {
       cursor: 'pointer',
     },
     card_block_text: {
+      overflowWrap: 'break-word',
+      wordWrap: 'break-word',
+      msWordBreak: 'break-all',
+      wordBreak: 'break-word',
       py: 0,
       px: 0,
       border: '0px solid',
