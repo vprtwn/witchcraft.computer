@@ -45,7 +45,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     payload = {
       email: session.user.email,
       name: session.user.name,
-      profile_image: session.user.picture,
       twitter_id: session.user.id,
       twitter_username: session.user.username,
       twitter_description: session.user.description,
