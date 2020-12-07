@@ -57,7 +57,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   let metadata = { from_tray_origin_url: returnUrl };
   if (session.user) {
     metadata['from_tray_twitter_username'] = session.user.username;
-    metadata['from_tray_profile_image'] = session.user.picture;
 
     const getResponse = await getOrCreateCustomer(session, true, stripeAccountId);
     if (getResponse.errored) {
