@@ -9,7 +9,6 @@ const UserLink = (props) => {
       <Link variant="link_no_underline" href={`/@${username}`}>
         {`@${username}`}
       </Link>
-      {data && <Image src={data['profile_image']} width="20px" sx={{ borderRadius: 99999, ml: 1 }} />}
     </Flex>
   );
 };
