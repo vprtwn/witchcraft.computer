@@ -18,10 +18,11 @@ const IndexPage = () => {
         <TrayIcon />
         <Card variant="card_block_link" sx={{ px: 3, py: 2 }}>
           <Text variant="text_md_mono">
-            welcome to <Badge variant="badge_outline">tray</Badge>
+            welcome to <Badge variant="badge_tray">tray</Badge>
           </Text>
           <Text variant="text_md_mono" sx={{ textAlign: 'right', pt: 1 }}>
-            a space to share notes and cool links
+            a space to share <Badge variant="badge_outline">notes</Badge> and{' '}
+            <Badge variant="badge_outline">cool links</Badge>
           </Text>
           <Text variant="text_md_mono" sx={{ pt: 1 }}>
             here's an <Link href="https://tray.club/@bgdotjpg">example</Link>
@@ -41,6 +42,7 @@ const IndexPage = () => {
           </Flex>
         )}
         <InfoFooter />
+        <Box sx={{ py: 5 }}></Box>
         <UserListBlock />
       </Layout>
     </>
