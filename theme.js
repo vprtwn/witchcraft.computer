@@ -162,10 +162,11 @@ export default {
       fontSize: 2,
       color: 'white',
       borderRadius: 4,
-      // bg: 'transparent',
+      fontWeight: 'normal',
       boxShadow: 'inset 0 0 0 1px',
     },
     badge_outline: {
+      fontWeight: 'normal',
       fontFamily: 'mono',
       fontSize: 2,
       color: 'primary',
