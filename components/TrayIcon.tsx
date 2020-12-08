@@ -1,4 +1,4 @@
-import { Link, Box, Flex } from 'theme-ui';
+import { Link, Box, Flex, Card } from 'theme-ui';
 
 const TrayIcon = () => {
   return (
@@ -7,14 +7,14 @@ const TrayIcon = () => {
         flexDirection: 'row',
         alignItems: 'stretch',
         alignContent: 'stretch',
-        // background: 'linear-gradient(-45deg, #e6fffa, #faf5ff, #ebf8ff)',
-        // backgroundSize: '400% 400%',
-        // animation: 'gradient 10s ease infinite',
       }}
     >
       <Box sx={{ flexGrow: 1 }} />
       <Link href="/">
-        <svg width="40" height="80" viewBox="0 0 231 224" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="25" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4.5" y="4.5" width="63" height="63" rx="20.5" fill="white" stroke="black" stroke-width="9" />
+        </svg>
+        {/* <svg width="40" height="80" viewBox="0 0 231 224" fill="none" xmlns="http://www.w3.org/2000/svg">
           <g filter="url(#filter0_d)">
             <mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="7" y="0" width="217" height="217">
               <rect x="7" width="217" height="217" fill="#F7FAFC" />
@@ -100,7 +100,7 @@ const TrayIcon = () => {
               <stop offset="1" stop-color="white" stop-opacity="0" />
             </linearGradient>
           </defs>
-        </svg>
+        </svg> */}
       </Link>
       <Box sx={{ flexGrow: 1 }} />
     </Flex>
