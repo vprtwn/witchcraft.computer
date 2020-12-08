@@ -92,19 +92,19 @@ export default {
       },
     },
     button_small_rainbow: {
-      px: 2,
+      px: 3,
       py: 2,
       color: 'text',
       border: 'solid 1px black',
       borderWidth: 1,
       bg: 'transparent',
-      fontSize: 1,
+      fontSize: 2,
       cursor: 'pointer',
       boxShadow: '0 0 8px rgba(0, 0, 0, 0.125)',
       '&:hover': {
         boxShadow: '0 0 16px rgba(0, 0, 0, 0.125)',
       },
-      fontFamily: 'sans',
+      fontFamily: 'mono',
       background: 'linear-gradient(-45deg, #e6fffa, #faf5ff, #ebf8ff)',
       backgroundSize: '400% 400%',
       animation: 'gradient 10s ease infinite',
@@ -148,7 +148,8 @@ export default {
       fontSize: 0,
       fontWeight: 'normal',
       fontFamily: 'mono',
-      color: 'inherit',
+      color: 'gray',
+      '&:visited': { color: 'gray' },
       textDecoration: 'none',
       '&:hover': {
         textDecoration: 'underline',
@@ -156,8 +157,17 @@ export default {
     },
   },
   badges: {
+    badge_tray: {
+      fontFamily: 'mono',
+      fontSize: 2,
+      color: 'white',
+      borderRadius: 4,
+      // bg: 'transparent',
+      boxShadow: 'inset 0 0 0 1px',
+    },
     badge_outline: {
       fontFamily: 'mono',
+      fontSize: 2,
       color: 'primary',
       bg: 'transparent',
       boxShadow: 'inset 0 0 0 1px',
@@ -293,7 +303,7 @@ export default {
       fontFamily: 'mono',
     },
     text_md_mono: {
-      fontSize: 2,
+      fontSize: 3,
       fontFamily: 'mono',
     },
     text_block_link_comment: {

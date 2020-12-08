@@ -26,8 +26,8 @@ const UserListBlock = (props) => {
       <Box />
       {users.length > 0 && (
         <Card>
-          <Text sx={{ textAlign: 'center', pb: 0, fontSize: 25 }}> 🏙</Text>
-          <Text sx={{ textAlign: 'center', fontSize: 0, pb: 1 }}>pop. {users.length}</Text>
+          <Text sx={{ textAlign: 'center', pb: 0, fontSize: 20 }}> 🏙</Text>
+          <Text sx={{ textAlign: 'center', fontSize: 0, pb: 1, color: 'gray' }}>pop. {users.length}</Text>
           {users.map((user: any) => {
             return <UserLink data={user} />;
           })}

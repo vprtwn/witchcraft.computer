@@ -39,11 +39,11 @@ const components = {
       />
       <TrayIcon />
       <Layout>
-        <Card variant="card_dotted_black">
+        <Card variant="card_block_link" sx={{ px: 3, py: 2 }}>
           <Flex>
-            <Box>
+            <Box sx={{ pt: 2 }}>
               <Link variant="link_no_underline" href="/">
-                <Badge variant="badge_outline">tray</Badge>
+                <Badge variant="badge_tray">tray</Badge>
               </Link>
             </Box>
           </Flex>
