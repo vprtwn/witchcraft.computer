@@ -95,7 +95,7 @@ export default {
       px: 2,
       py: 2,
       color: 'text',
-      border: 'solid 1px lightGray',
+      border: 'solid 1px black',
       borderWidth: 1,
       bg: 'transparent',
       fontSize: 1,
