@@ -163,7 +163,6 @@ export default {
       color: 'white',
       borderRadius: 4,
       fontWeight: 'normal',
-      boxShadow: 'inset 0 0 0 1px',
     },
     badge_outline: {
       fontWeight: 'normal',
