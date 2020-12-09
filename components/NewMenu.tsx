@@ -23,7 +23,7 @@ const NewMenu = (props) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
-  const linkStyle = linkStyleForUrl(url);
+  const linkStyle = linkStyleForUrl(url, 32);
 
   useEffect(() => {
     if (showingForm) {

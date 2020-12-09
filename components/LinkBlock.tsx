@@ -25,7 +25,7 @@ const LinkBlock = (props) => {
   const [debouncedUrl] = useDebounce(url, DEBOUNCE_MS);
   const [debouncedComment] = useDebounce(comment, DEBOUNCE_MS);
 
-  const linkStyle = linkStyleForUrl(url);
+  const linkStyle = linkStyleForUrl(url, 32);
 
   useEffect(() => {
     if (isUrl(debouncedUrl) && text.length > 0) {
