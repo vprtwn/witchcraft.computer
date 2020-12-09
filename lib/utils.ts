@@ -1,3 +1,4 @@
+import { GOOGLE_FAVICONS } from './const';
 import { customAlphabet } from 'nanoid';
 import { OrderItem, BlockType } from './typedefs';
 const psl = require('psl');
@@ -92,148 +93,51 @@ export const sanitizeUrl = (url: string): string => {
   return url;
 };
 
-export const linkStyleForUrl = (url: string): LinkStyle => {
+export const linkStyleForUrl = (url: string, size: number): LinkStyle => {
   let color = 'black';
   let logo = null;
   const isUrl = require('is-url');
   if (!url) {
-    return { borderColor: color, logo: logo };
+    return { borderColor: color, logo };
   }
   const sanitizedUrl = sanitizeUrl(url);
   if (!isUrl(sanitizedUrl)) {
-    return { borderColor: color, logo: logo };
+    return { borderColor: color, logo };
   }
   const psl = require('psl');
   const parsedUrl = new URL(sanitizedUrl);
   const parsedHost = psl.parse(parsedUrl.host);
   const domain = parsedHost.domain;
-  if (domain === 'airbnb.com') {
-    logo = 'airbnb';
-  } else if (domain === 'amazon.com') {
-    logo = 'amazon';
-  } else if (domain === 'angellist.com') {
-    logo = 'angellist';
-  } else if (domain === 'audible.com') {
-    logo = 'audible';
-  } else if (domain === 'apple.com') {
-    logo = 'apple';
-  } else if (domain === 'behance.net' || domain === 'behance.com') {
-    logo = 'behance';
+   if (domain === 'behance.net' || domain === 'behance.com') {
     color = 'behance';
   } else if (domain === 'bandcamp.com') {
     color = 'bandcamp';
-    logo = 'bandcamp';
-  } else if (domain === 'codepen.com') {
-    logo = 'codepen';
-  } else if (domain === 'deezer.com') {
-    logo = 'deezer';
-  } else if (domain === 'dev.to') {
-    logo = 'dev_to';
   } else if (domain === 'dribbble.com') {
-    logo = 'dribbble';
     color = 'dribbble';
-  } else if (domain === 'discord.gg' || domain === 'discord.com') {
-    logo = 'discord';
-  } else if (domain === 'dropbox.com') {
-    logo = 'dropbox';
-  } else if (domain === 'ebay.com') {
-    logo = 'ebay';
-  } else if (domain === 'etsy.com') {
-    logo = 'etsy';
-  } else if (domain === 'facebook.com' || domain == 'fb.me') {
-    logo = 'facebook';
-  } else if (domain === 'flattr.com') {
-    logo = 'flattr';
-  } else if (domain === 'flickr.com') {
-    logo = 'flickr';
-  } else if (domain === 'figma.com') {
-    logo = 'figma';
-  } else if (domain === 'github.com') {
-    logo = 'github';
-  } else if (domain === 'gitlab.com') {
-    logo = 'gitlab';
-  } else if (domain === 'glitch.com') {
-    logo = 'glitch';
   } else if (domain === 'goodreads.com') {
     color = 'goodreads';
-    logo = 'goodreads';
   } else if (domain === 'instagram.com') {
-    logo = 'instagram';
     color = 'instagram';
-  } else if (domain === 'keybase.io') {
-    logo = 'keybase';
-  } else if (domain === 'kickstarter.com') {
-    logo = 'kickstarter';
-  } else if (domain === 'ko-fi.com') {
-    logo = 'ko-fi';
-  } else if (domain === 'liberapay.com') {
-    logo = 'liberapay';
-  } else if (domain === 'linkedin.com') {
-    logo = 'linkedin';
-  } else if (domain === 'medium.com') {
-    logo = 'medium';
-  } else if (domain === 'messenger.com') {
-    logo = 'messenger';
-  } else if (domain === 'netflix.com') {
-    logo = 'netflix';
-  } else if (domain === 'netflix.com') {
-    logo = 'netflix';
-  } else if (domain === 'patreon.com') {
-    logo = 'patreon';
   } else if (domain === 'paypal.com') {
-    logo = 'paypal';
     color = 'paypal';
   } else if (domain === 'pinterest.com') {
-    logo = 'pinterest';
     color = 'pinterest';
-  } else if (domain === 'producthunt.com') {
-    logo = 'producthunt';
-  } else if (domain === 'reddit.com') {
-    logo = 'reddit';
   } else if (domain === 'cash.app') {
-    logo = 'square_cash';
     color = 'squareCash';
-  } else if (domain === 'signal.org') {
-    logo = 'signal';
-  } else if (domain === 'stackoverflow.com') {
-    logo = 'stackoverflow';
-  } else if (domain === 'stackexchange.com') {
-    logo = 'stackexchange';
-  } else if (domain === 'steampowered.com') {
-    logo = 'steam';
-  } else if (domain === 'stitcher.com') {
-    logo = 'stitcher';
-  } else if (domain === 'strava.com') {
-    logo = 'strava';
   } else if (domain === 'soundcloud.com') {
-    logo = 'soundcloud';
     color = 'soundcloud';
   } else if (domain === 'spotify.com') {
-    logo = 'spotify';
     color = 'spotify';
-  } else if (domain === 'telegram.org' || domain == 't.me') {
-    logo = 'telegram';
-  } else if (domain === 'trello.com') {
-    logo = 'trello';
   } else if (domain === 'twitter.com' || domain === 't.co') {
     color = 'twitter';
-    logo = 'twitter';
-  } else if (domain === 'twitch.com') {
-    logo = 'twitch';
   } else if (domain === 'venmo.com') {
     color = 'venmo';
-    logo = 'venmo';
-  } else if (domain === 'vimeo.com') {
-    logo = 'vimeo';
-  } else if (domain === 'wikipedia.com') {
-    logo = 'wikipedia';
-  } else if (domain === 'yelp.com') {
-    logo = 'yelp';
   } else if (domain === 'youtube.com' || domain === 'youtu.be') {
     color = 'youtube';
-    logo = 'youtube';
   }
-  return { borderColor: color, logo: logo };
+
+  logo = `${GOOGLE_FAVICONS}?domain=${domain}&sz=${size}`
+  return { borderColor: color, logo };
 };
 
 // returns [username, page id]

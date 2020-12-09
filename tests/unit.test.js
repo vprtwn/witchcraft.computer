@@ -1,5 +1,5 @@
 import { BlockType } from '../lib/typedefs';
-import { parseBlockId, parseTrayUrl, parseUploadUrl } from '../lib/utils';
+import { parseBlockId, parseTrayUrl, parseUploadUrl, linkStyleForUrl } from '../lib/utils';
 
 test('parseBlockId', () => {
   expect(parseBlockId('foo')).toEqual(BlockType.Unknown);
@@ -27,4 +27,23 @@ test('parseUploadUrl', () => {
     ),
   ).toEqual(['bgdotjpg', null]);
   expect(parseUploadUrl('https://tray.club/@bgdotjpg/12345')).toEqual([null, null]);
+});
+
+test('linkStyleForUrl', () => {
+  expect(linkStyleForUrl('https://bandcamp.com/some-path', 32)).toEqual({
+    borderColor: 'bandcamp',
+    logo: 'https://s2.googleusercontent.com/s2/favicons?domain=bandcamp.com&sz=32'
+  });
+  expect(linkStyleForUrl('https://some-url-without-a-predefined-color.com', 32)).toEqual({
+    borderColor: 'black',
+    logo: 'https://s2.googleusercontent.com/s2/favicons?domain=some-url-without-a-predefined-color.com&sz=32'
+  });
+  expect(linkStyleForUrl('', 32)).toEqual({
+    borderColor: 'black',
+    logo: null
+  });
+  expect(linkStyleForUrl('not-a-valid-url', 32)).toEqual({
+    borderColor: 'black',
+    logo: null
+  })
 });
