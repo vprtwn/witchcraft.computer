@@ -109,6 +109,24 @@ export default {
       backgroundSize: '400% 400%',
       animation: 'gradient 10s ease infinite',
     },
+    button_large_rainbow: {
+      px: 4,
+      py: 2,
+      color: 'text',
+      border: 'solid 1px black',
+      borderWidth: 1,
+      bg: 'transparent',
+      fontSize: 3,
+      cursor: 'pointer',
+      boxShadow: '0 0 8px rgba(0, 0, 0, 0.125)',
+      '&:hover': {
+        boxShadow: '0 0 16px rgba(0, 0, 0, 0.125)',
+      },
+      fontFamily: 'mono',
+      background: 'linear-gradient(-45deg, #e6fffa, #faf5ff, #ebf8ff)',
+      backgroundSize: '400% 400%',
+      animation: 'gradient 10s ease infinite',
+    },
   },
   links: {
     link_standard: {
