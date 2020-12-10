@@ -39,7 +39,7 @@ const components = {
       />
       <TrayIcon />
       <Layout>
-        <Card variant="card_block_link" sx={{ px: 3, py: 2 }}>
+        <Card variant="card_block_link" sx={{ px: 3, py: 2, cursor: 'auto' }}>
           <Flex>
             <Box sx={{ pt: 2 }}>
               <Link variant="link_no_underline" href="/">
