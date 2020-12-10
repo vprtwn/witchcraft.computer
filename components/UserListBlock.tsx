@@ -22,7 +22,7 @@ const UserListBlock = (props) => {
   }, []);
 
   return (
-    <Flex sx={{ justifyContent: 'space-between', alignItems: 'flex-end', mt:4, mb: 5 }}>
+    <Flex sx={{ justifyContent: 'space-between', alignItems: 'flex-end', mb: 5 }}>
       <Box />
       {users.length > 0 && (
         <Card>
