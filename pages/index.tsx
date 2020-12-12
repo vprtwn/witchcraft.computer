@@ -49,7 +49,7 @@ const IndexPage = () => {
             welcome to <Badge variant="badge_tray">tray</Badge>
           </Text>
           <Text variant="text_md_mono" sx={{ textAlign: 'right', pt: 1 }}>
-            a space to share <Badge variant="badge_outline">notes</Badge> and{' '}
+            a public scratchpad for sharing <Badge variant="badge_outline">notes</Badge> and{' '}
             <Badge variant="badge_outline">cool links</Badge>
           </Text>
           <Text variant="text_md_mono" sx={{ pt: 1 }}>
