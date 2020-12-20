@@ -4,7 +4,6 @@ import Head from 'next/head';
 import theme from '../theme';
 import { MDXProvider } from '@mdx-js/react';
 import Layout from '../components/Layout';
-import TrayIcon from '../components/TrayIcon';
 import InfoFooter from '../components/InfoFooter';
 import '../styles.css';
 import React from 'react';
@@ -15,11 +14,11 @@ const components = {
   wrapper: (props) => (
     <div>
       <NextSeo
-        title="about tray"
+        title="tarot express"
         description="FAQ, terms of service, privacy policy, etc"
         openGraph={{
-          url: 'https://tray.club',
-          title: 'about tray',
+          url: 'https://tarot.express',
+          title: 'tarot express',
           description: 'FAQ, terms of service, privacy policy, etc',
           images: [
             {
@@ -37,7 +36,6 @@ const components = {
           cardType: 'summary_large_image',
         }}
       />
-      <TrayIcon />
       <Layout>
         <Card variant="card_block_link" sx={{ px: 3, py: 2, cursor: 'auto' }}>
           <Flex>

@@ -17,7 +17,7 @@ const PageFooter = (props) => {
           <Link variant="link_footer" href="/">
             <Flex sx={{ alignItems: 'center' }}>
               <Text sx={{ fontFamily: 'mono', color: 'gray', mx: 2 }}>
-                made with <strong>tray</strong>
+                tarot <strong>express</strong>
               </Text>
             </Flex>
           </Link>
