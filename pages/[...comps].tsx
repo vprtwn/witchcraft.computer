@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Layout from '../components/Layout';
 import PageFooter from '../components/PageFooter';
-import { Image, Box, Text, Heading, Flex, Card } from 'theme-ui';
+import { Image, Box, Text, Link, Heading, Flex, Card } from 'theme-ui';
 import { GetServerSideProps } from 'next';
 import fetchJson from '../lib/fetchJson';
 import { Router, useRouter } from 'next/router';
@@ -140,11 +140,15 @@ const UserPage = (props) => {
         <PageFooter />
         {selected && (
           <Box sx={{ fontFamily: 'mono' }}>
-            <Heading sx={{ fontFamily: 'mono' }}>{selected.name}</Heading>
+            <Link href={selected.wiki} target="_blank">
+              <Heading sx={{ fontFamily: 'mono' }}>{selected.name}</Heading>
+            </Link>
             <Text sx={{ py: 2 }}>{selected.desc}</Text>
-            <Text>
-              <strong>Reversed: </strong> {selected.desc_rev}
-            </Text>
+            {selected.desc_rev && (
+              <Text>
+                <strong>Reversed: </strong> {selected.desc_rev}
+              </Text>
+            )}
           </Box>
         )}
       </Box>
