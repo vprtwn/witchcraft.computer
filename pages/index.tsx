@@ -50,7 +50,9 @@ const IndexPage = (props) => {
               const i1 = Math.floor(Math.random() * keys.length);
               const i2 = Math.floor(Math.random() * keys.length);
               const i3 = Math.floor(Math.random() * keys.length);
-              const url = `/ppf/${keys[i1]}/${keys[i2]}/${keys[i3]}`;
+              const url = `/ppf/${keys[i1] + (Math.random() < 0.5 ? '_' : '')}/${
+                keys[i2] + (Math.random() < 0.5 ? '_' : '')
+              }/${keys[i3] + (Math.random() < 0.5 ? '_' : '')}`;
               window.location.assign(url);
             }}
           >
@@ -61,8 +63,8 @@ const IndexPage = (props) => {
             sx={{ my: 2 }}
             onClick={() => {
               const i = Math.floor(Math.random() * keys.length);
-              const key = keys[i];
-              const url = `/s/${keys[i]}`;
+              const key = keys[i] + (Math.random() < 0.5 ? '_' : '');
+              const url = `/s/${key}`;
               window.location.assign(url);
             }}
           >

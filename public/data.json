@@ -548,7 +548,7 @@
     "wiki": "https://en.wikipedia.org/wiki/Judgement_(Tarot_card)"
   },
   {
-    "id": "a-tsn",
+    "id": "a-sn",
     "type": "Major Arcana",
     "number": 19,
     "name": "The Sun",
@@ -557,7 +557,7 @@
     "wiki": "https://en.wikipedia.org/wiki/The_Sun_(Tarot_card)"
   },
   {
-    "id": "a-tmn",
+    "id": "a-mn",
     "type": "Major Arcana",
     "number": 18,
     "name": "The Moon",
@@ -567,7 +567,7 @@
     "wiki": "https://en.wikipedia.org/wiki/The_Moon_(Tarot_card)"
   },
   {
-    "id": "a-tsr",
+    "id": "a-sr",
     "type": "Major Arcana",
     "number": 17,
     "name": "The Star",
@@ -618,7 +618,7 @@
     "wiki": "https://en.wikipedia.org/wiki/Death_(Tarot_card)"
   },
   {
-    "id": "a-thm",
+    "id": "a-hm",
     "type": "Major Arcana",
     "number": 12,
     "name": "The Hanged Man",
@@ -651,7 +651,7 @@
     "wiki": "https://en.wikipedia.org/wiki/Wheel_of_Fortune_(Tarot_card)"
   },
   {
-    "id": "a-th",
+    "id": "a-h",
     "type": "Major Arcana",
     "number": 9,
     "name": "The Hermit",
@@ -671,7 +671,7 @@
     "wiki": "https://en.wikipedia.org/wiki/Justice_(Tarot_card)"
   },
   {
-    "id": "a-tc",
+    "id": "a-c",
     "type": "Major Arcana",
     "number": 7,
     "name": "The Chariot",
@@ -682,7 +682,7 @@
     "wiki": "https://en.wikipedia.org/wiki/The_Chariot_(Tarot_card)"
   },
   {
-    "id": "a-tl",
+    "id": "a-l",
     "type": "Major Arcana",
     "number": 6,
     "name": "The Lovers",
@@ -693,7 +693,7 @@
     "wiki": "https://en.wikipedia.org/wiki/The_Lovers"
   },
   {
-    "id": "a-tpt",
+    "id": "a-pt",
     "type": "Major Arcana",
     "number": 5,
     "name": "The High Priest",
@@ -704,7 +704,7 @@
     "wiki": "https://en.wikipedia.org/wiki/The_Hierophant"
   },
   {
-    "id": "a-ter",
+    "id": "a-er",
     "type": "Major Arcana",
     "number": 4,
     "name": "The Emperor",
@@ -714,7 +714,7 @@
     "wiki": "https://en.wikipedia.org/wiki/The_Emperor_(Tarot_card)"
   },
   {
-    "id": "a-tes",
+    "id": "a-es",
     "type": "Major Arcana",
     "number": 3,
     "name": "The Empress",
@@ -725,7 +725,7 @@
     "wiki": "https://en.wikipedia.org/wiki/The_Empress_(Tarot_card)"
   },
   {
-    "id": "a-tps",
+    "id": "a-ps",
     "type": "Major Arcana",
     "number": 2,
     "name": "The High Priestess",
@@ -737,7 +737,7 @@
     "wiki": "https://en.wikipedia.org/wiki/The_High_Priestess"
   },
   {
-    "id": "a-tm",
+    "id": "a-m",
     "type": "Major Arcana",
     "number": 1,
     "name": "The Magician",
@@ -749,7 +749,7 @@
     "wiki": "https://en.wikipedia.org/wiki/The_Magician_(Tarot_card)"
   },
   {
-    "id": "a-tf",
+    "id": "a-f",
     "type": "Major Arcana",
     "number": 0,
     "name": "The Fool",

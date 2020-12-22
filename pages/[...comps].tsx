@@ -9,11 +9,6 @@ import { NextSeo } from 'next-seo';
 const psl = require('psl');
 
 const UserPage = (props) => {
-  const title = 'foo';
-  const description = 'bar';
-  const url = `https://witchcraft.computer`;
-  const twitter = '@fastTarot';
-
   const router = useRouter();
   const { comps } = router.query;
   const type = comps[0];
@@ -22,15 +17,45 @@ const UserPage = (props) => {
   const third = comps[3];
   let cards = [];
   let headings = null;
-  if (type === 's') {
-    const data = props.map[first];
+  if (type === 's' && first) {
+    const firstId = first.replace('_', '');
+    const data = props.map[firstId];
+    if (first.endsWith('_')) {
+      data['reversed'] = true;
+    }
     cards.push(data);
-  } else if (type === 'ppf' && props.map[first] && props.map[second] && props.map[third]) {
+  } else if (type === 'ppf' && first && second && third) {
+    const firstId = first.replace('_', '');
+    const secondId = second.replace('_', '');
+    const thirdId = third.replace('_', '');
     headings = ['present', 'past', 'future'];
-    cards.push(props.map[first]);
-    cards.push(props.map[second]);
-    cards.push(props.map[third]);
+    let data = props.map[firstId];
+    if (first.endsWith('_')) {
+      data['reversed'] = true;
+    }
+    cards.push(data);
+    data = props.map[secondId];
+    if (second.endsWith('_')) {
+      data['reversed'] = true;
+    }
+    cards.push(data);
+    data = props.map[thirdId];
+    if (third.endsWith('_')) {
+      data['reversed'] = true;
+    }
+    cards.push(data);
   }
+
+  const title = 'present, past, future';
+  let description = '';
+  cards.forEach((c) => {
+    if (title.length > 0) {
+      description = description + ' ✧ ';
+    }
+    description = description + c.name;
+  });
+  const url = `https://witchcraft.computer`;
+  const twitter = '@fastTarot';
 
   // router.events.on('hashChangeStart', (hash) => {
   //   console.log('hash', hash);
@@ -76,7 +101,10 @@ const UserPage = (props) => {
                       window.location.assign(`#${card.id}`);
                     }}
                   >
-                    <Image src={`${props.baseUrl}/rider-waite/${card.id}.svg`} />
+                    <Image
+                      src={`${props.baseUrl}/rider-waite/${card.id}.svg`}
+                      sx={{ transform: card.reversed ? 'rotate(180deg);' : 'none' }}
+                    />
                   </Card>
                   <Text
                     sx={{
