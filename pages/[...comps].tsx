@@ -33,58 +33,67 @@ const UserPage = (props) => {
   }
 
   return (
-    <Box sx={{ flexDirection: 'column', justifyContent: 'center', my: 4 }}>
-      <NextSeo
-        title={title}
-        description={description}
-        openGraph={{
-          url: url,
-          title: title,
-          description: description,
-          images: [
-            {
-              url: `https://api.microlink.io/?url=${url}&screenshot=true&meta=false&embed=screenshot.url`,
-              width: 512,
-              height: 512,
-              alt: title,
-            },
-          ],
-          site_name: 'tarot express',
-        }}
-        twitter={{
-          handle: twitter,
-          site: twitter,
-          cardType: 'summary_large_image',
-        }}
-      />
-      <Flex sx={{ justifyContent: 'center', mx: 2 }}>
-        <Flex sx={{ flexDirection: 'row', justifyContent: 'center' }}>
-          {cards.map((card, i) => {
-            return (
-              <Flex sx={{ mx: 1, mt: 3, width: 300, flexDirection: 'column', alignItems: 'center' }}>
-                {headings && <Text sx={{ fontFamily: 'mono', mb: 2 }}>{headings[i]}</Text>}
-                <Card variant="card" sx={{}}>
+    <Layout>
+      <Box sx={{ flexDirection: 'column', justifyContent: 'center', my: 4 }}>
+        <NextSeo
+          title={title}
+          description={description}
+          openGraph={{
+            url: url,
+            title: title,
+            description: description,
+            images: [
+              {
+                url: `https://api.microlink.io/?url=${url}&screenshot=true&meta=false&embed=screenshot.url`,
+                width: 512,
+                height: 512,
+                alt: title,
+              },
+            ],
+            site_name: 'tarot express',
+          }}
+          twitter={{
+            handle: twitter,
+            site: twitter,
+            cardType: 'summary_large_image',
+          }}
+        />
+        <Flex sx={{ justifyContent: 'center', mx: 2 }}>
+          <Flex sx={{ flexDirection: 'row', justifyContent: 'center' }}>
+            {cards.map((card, i) => {
+              const prefix = card.id.split('-')[0];
+              return (
+                <Flex sx={{ mx: 1, mt: 3, width: 300, flexDirection: 'column', alignItems: 'center' }}>
+                  {headings && <Text sx={{ fontFamily: 'mono', mb: 2 }}>{headings[i]}</Text>}
+                  <Card
+                    variant={`card_${prefix}`}
+                    sx={{}}
+                    onClick={() => {
+                      window.location.assign(`#${card.id}`);
+                    }}
+                  >
+                    <Image src={`${props.baseUrl}/rider-waite/${card.id}.svg`} />
+                  </Card>
                   <Text
                     sx={{
-                      fontSize: 22,
+                      fontSize: 18,
                       textAlign: 'center',
                       lineHeight: 1.2,
                       fontFamily: 'mono',
                       fontWeight: 'medium',
-                      pb: 2,
+                      pt: 2,
                     }}
                   >
                     {card.name}
                   </Text>
-                  <Image src={`${props.baseUrl}/rider-waite/${card.id}.svg`} />
-                </Card>
-              </Flex>
-            );
-          })}
+                </Flex>
+              );
+            })}
+          </Flex>
         </Flex>
-      </Flex>
-      <PageFooter />
-    </Box>
+        <PageFooter />
+      </Box>
+    </Layout>
   );
 };
 
