@@ -1,24 +1,29 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Layout from '../components/Layout';
 import PageFooter from '../components/PageFooter';
-import { Image, Box, Text, Button, Flex, Card } from 'theme-ui';
+import { Image, Box, Text, Heading, Flex, Card } from 'theme-ui';
 import { GetServerSideProps } from 'next';
 import fetchJson from '../lib/fetchJson';
-import { useRouter } from 'next/router';
+import { Router, useRouter } from 'next/router';
 import { NextSeo } from 'next-seo';
 const psl = require('psl');
 
 const UserPage = (props) => {
   const router = useRouter();
+  let selected = null;
+
   const { comps } = router.query;
   const type = comps[0];
   const first = comps[1];
   const second = comps[2];
   const third = comps[3];
+  const fourth = comps[4];
+  let basePath = '/';
   let cards = [];
   let headings = null;
   if (type === 's' && first) {
     const firstId = first.replace('_', '');
+    basePath = `${type}/${firstId}`;
     const data = props.map[firstId];
     if (first.endsWith('_')) {
       data['reversed'] = true;
@@ -28,6 +33,7 @@ const UserPage = (props) => {
     const firstId = first.replace('_', '');
     const secondId = second.replace('_', '');
     const thirdId = third.replace('_', '');
+    basePath = `${type}/${firstId}/${secondId}/${thirdId}`;
     headings = ['present', 'past', 'future'];
     let data = props.map[firstId];
     if (first.endsWith('_')) {
@@ -44,6 +50,8 @@ const UserPage = (props) => {
       data['reversed'] = true;
     }
     cards.push(data);
+    selected = props.map[fourth];
+    console.log('fourth', selected);
   }
 
   const title = 'present, past, future';
@@ -57,9 +65,13 @@ const UserPage = (props) => {
   const url = `https://witchcraft.computer`;
   const twitter = '@fastTarot';
 
-  // router.events.on('hashChangeStart', (hash) => {
-  //   console.log('hash', hash);
-  // });
+  useEffect(() => {
+    if (type !== 's') {
+      document.body.addEventListener('click', () => {
+        router.push(basePath);
+      });
+    }
+  }, []);
 
   return (
     <Layout>
@@ -92,13 +104,15 @@ const UserPage = (props) => {
             {cards.map((card, i) => {
               const prefix = card.id.split('-')[0];
               return (
-                <Flex sx={{ mx: 1, mt: 3, width: 300, flexDirection: 'column', alignItems: 'center' }}>
+                <Flex key={card.id} sx={{ mx: 1, mt: 3, width: 300, flexDirection: 'column', alignItems: 'center' }}>
                   {headings && <Text sx={{ fontFamily: 'mono', mb: 2 }}>{headings[i]}</Text>}
                   <Card
                     variant={`card_${prefix}`}
                     sx={{}}
                     onClick={() => {
-                      window.location.assign(`#${card.id}`);
+                      if (type !== 's') {
+                        router.push(`${basePath}/${card.id}`);
+                      }
                     }}
                   >
                     <Image
@@ -124,6 +138,15 @@ const UserPage = (props) => {
           </Flex>
         </Flex>
         <PageFooter />
+        {selected && (
+          <Box sx={{ fontFamily: 'mono' }}>
+            <Heading sx={{ fontFamily: 'mono' }}>{selected.name}</Heading>
+            <Text sx={{ py: 2 }}>{selected.desc}</Text>
+            <Text>
+              <strong>Reversed: </strong> {selected.desc_rev}
+            </Text>
+          </Box>
+        )}
       </Box>
     </Layout>
   );
