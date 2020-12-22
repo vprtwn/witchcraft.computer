@@ -6,7 +6,9 @@ import { Flex, Badge, Box, Button, Text, Link } from 'theme-ui';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
 
-const IndexPage = () => {
+const IndexPage = (props) => {
+  const keys = Object.keys(props.map);
+
   const title = 'tarot express ✧ free online tarot reading';
   const url = 'https://tarot.express';
   const description = 'free online tarot card divinations';
@@ -41,10 +43,29 @@ const IndexPage = () => {
           <Text variant="text_md_mono" sx={{ my: 2 }}>
             <Badge variant="badge_tray">tarot express</Badge>
           </Text>
-          <Button variant="button" sx={{ my: 2 }}>
+          <Button
+            variant="button"
+            sx={{ my: 2 }}
+            onClick={() => {
+              const i1 = Math.floor(Math.random() * keys.length);
+              const i2 = Math.floor(Math.random() * keys.length);
+              const i3 = Math.floor(Math.random() * keys.length);
+              const url = `/ppf/${keys[i1]}/${keys[i2]}/${keys[i3]}`;
+              window.location.assign(url);
+            }}
+          >
             Present, Past, Future
           </Button>
-          <Button variant="button" sx={{ my: 2 }}>
+          <Button
+            variant="button"
+            sx={{ my: 2 }}
+            onClick={() => {
+              const i = Math.floor(Math.random() * keys.length);
+              const key = keys[i];
+              const url = `/s/${keys[i]}`;
+              window.location.assign(url);
+            }}
+          >
             Single Card
           </Button>
           {/* <Button variant="button">All Cards</Button> */}

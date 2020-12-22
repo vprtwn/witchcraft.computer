@@ -21,10 +21,12 @@ const UserPage = (props) => {
   const second = comps[2];
   const third = comps[3];
   let cards = [];
+  let headings = null;
   if (type === 's') {
     const data = props.map[first];
     cards.push(data);
   } else if (type === 'ppf' && props.map[first] && props.map[second] && props.map[third]) {
+    headings = ['present', 'past', 'future'];
     cards.push(props.map[first]);
     cards.push(props.map[second]);
     cards.push(props.map[third]);
@@ -57,23 +59,26 @@ const UserPage = (props) => {
       />
       <Flex sx={{ justifyContent: 'center', mx: 2 }}>
         <Flex sx={{ flexDirection: 'row', justifyContent: 'center' }}>
-          {cards.map((card) => {
+          {cards.map((card, i) => {
             return (
-              <Card variant="card" sx={{ width: 300, mx: 1, mt: 3 }}>
-                <Text
-                  sx={{
-                    fontSize: 25,
-                    textAlign: 'center',
-                    lineHeight: 1.2,
-                    fontFamily: 'mono',
-                    fontWeight: 'medium',
-                    pb: 2,
-                  }}
-                >
-                  {card.name}
-                </Text>
-                <Image src={`${props.baseUrl}/rider-waite/${card.id}.svg`} />
-              </Card>
+              <Flex sx={{ mx: 1, mt: 3, width: 300, flexDirection: 'column', alignItems: 'center' }}>
+                {headings && <Text sx={{ fontFamily: 'mono', mb: 2 }}>{headings[i]}</Text>}
+                <Card variant="card" sx={{}}>
+                  <Text
+                    sx={{
+                      fontSize: 22,
+                      textAlign: 'center',
+                      lineHeight: 1.2,
+                      fontFamily: 'mono',
+                      fontWeight: 'medium',
+                      pb: 2,
+                    }}
+                  >
+                    {card.name}
+                  </Text>
+                  <Image src={`${props.baseUrl}/rider-waite/${card.id}.svg`} />
+                </Card>
+              </Flex>
             );
           })}
         </Flex>
