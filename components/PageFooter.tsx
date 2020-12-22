@@ -1,4 +1,4 @@
-import { Flex, Box, Text, Link } from 'theme-ui';
+import { Flex, Box, Text, Link, Badge } from 'theme-ui';
 
 const PageFooter = (props) => {
   return (
@@ -6,22 +6,15 @@ const PageFooter = (props) => {
       <Box sx={{ flex: '1 1 auto' }} />
       <Flex sx={{ alignItems: 'center' }}>
         <Box sx={{ flex: '1 1 auto' }} />
-        <Flex
-          sx={{
-            bg: 'white',
-            borderRadius: 4,
-            alignItems: 'center',
-            boxShadow: '0 0 8px rgba(0, 0, 0, 0.125)',
-          }}
-        >
-          <Link variant="link_footer" href="/">
-            <Flex sx={{ alignItems: 'center' }}>
-              <Text sx={{ fontFamily: 'mono', color: 'gray', mx: 2 }}>
-                tarot <strong>express</strong>
-              </Text>
-            </Flex>
-          </Link>
-        </Flex>
+        <Link href="/">
+          <Flex sx={{ alignItems: 'center' }}>
+            <Text sx={{ fontFamily: 'mono', color: 'gray', mx: 2 }}>
+              <Badge variant="tray" sx={{ fontSize: 12, fontWeight: 'normal' }}>
+                tarot express
+              </Badge>
+            </Text>
+          </Flex>
+        </Link>
         <Box sx={{ flex: '1 1 auto' }} />
       </Flex>
       <Box sx={{ flex: '1 1 auto' }} />

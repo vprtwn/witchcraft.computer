@@ -1,18 +1,16 @@
 import React, { useEffect } from 'react';
 import Layout from '../components/Layout';
+import fetchJson from '../lib/fetchJson';
 import InfoFooter from '../components/InfoFooter';
-import { Card, Badge, Box, Flex, Text, Link } from 'theme-ui';
+import { Flex, Badge, Box, Button, Text, Link } from 'theme-ui';
 import { GetServerSideProps } from 'next';
-import { useSession } from 'next-auth/client';
 import { NextSeo } from 'next-seo';
 
 const IndexPage = () => {
-  const [session, loading] = useSession();
-  const signedIn = session && session.user.username;
-
   const title = 'tarot express ✧ free online tarot reading';
   const url = 'https://tarot.express';
   const description = 'free online tarot card divinations';
+  const twitter = '@fastTarot';
   return (
     <>
       <Layout>
@@ -28,31 +26,48 @@ const IndexPage = () => {
                 url: `https://api.microlink.io/?url=${url}&screenshot=true&meta=false&embed=screenshot.url`,
                 width: 512,
                 height: 512,
-                alt: 'tarot express',
+                alt: title,
               },
             ],
             site_name: 'tray',
           }}
           twitter={{
-            handle: `@tarotExpressApp`,
-            site: `@tarotExpressApp`,
+            handle: twitter,
+            site: twitter,
             cardType: 'summary_large_image',
           }}
         />
-        <Card variant="card_block_link" sx={{ px: 3, py: 2 }}>
-          <Text variant="text_md_mono">
-            tarot <Badge variant="badge_tray">express</Badge>
+        <Flex sx={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          <Text variant="text_md_mono" sx={{ my: 2 }}>
+            <Badge variant="badge_tray">tarot express</Badge>
           </Text>
-        </Card>
+          <Button variant="button" sx={{ my: 2 }}>
+            Present, Past, Future
+          </Button>
+          <Button variant="button" sx={{ my: 2 }}>
+            Single Card
+          </Button>
+          {/* <Button variant="button">All Cards</Button> */}
+        </Flex>
         <InfoFooter />
-        <Box sx={{ py: 5 }}></Box>
       </Layout>
     </>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  return { props: {} };
+  let baseUrl = 'http://tarot.express';
+  if (process.env.NODE_ENV === 'development') {
+    baseUrl = 'http://127.0.0.1:3000';
+  }
+  const list = await fetchJson(`${baseUrl}/data.json`);
+  const map = {};
+  list.forEach((c) => {
+    map[c.id] = c;
+  });
+  return {
+    props: { baseUrl: baseUrl, list: list, map: map },
+  };
 };
 
 export default IndexPage;

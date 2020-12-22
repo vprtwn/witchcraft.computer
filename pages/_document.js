@@ -1,5 +1,5 @@
-import Document, { Html, Head, Main, NextScript } from "next/document";
-import { resetServerContext } from "react-beautiful-dnd";
+import Document, { Html, Head, Main, NextScript } from 'next/document';
+import { resetServerContext } from 'react-beautiful-dnd';
 
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
@@ -15,6 +15,7 @@ class MyDocument extends Document {
           <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
           <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png" />
           <link rel="manifest" href="/site.webmanifest" />
+          <link href="/fonts/style.css" rel="stylesheet" />
         </Head>
         <body>
           <Main />
