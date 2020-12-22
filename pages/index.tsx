@@ -9,10 +9,10 @@ import { NextSeo } from 'next-seo';
 const IndexPage = (props) => {
   const keys = Object.keys(props.map);
 
-  const title = 'tarot express ✧ free online tarot reading';
+  const title = 'witchcraft.computer ✧ free online tarot reading';
   const url = 'https://witchcraft.computer';
   const description = 'free online tarot card divinations';
-  const twitter = '@fastTarot';
+  const twitter = '@tarotComputer';
   return (
     <>
       <Layout>
@@ -64,13 +64,16 @@ const IndexPage = (props) => {
             onClick={() => {
               const i = Math.floor(Math.random() * keys.length);
               const key = keys[i] + (Math.random() < 0.5 ? '_' : '');
-              const url = `/s/${key}`;
+              const url = `/o/${key}`;
               window.location.assign(url);
             }}
           >
             one answer
           </Button>
-          {/* <Button variant="button">All Cards</Button> */}
+          <Text sx={{ fontFamily: 'mono', mt: 3, mb: 2, width: 200 }}>
+            tweet <Link href="https://twitter.com/intent/tweet?text=%40tarotComputer">@tarotComputer</Link> for a public
+            divination 🔮
+          </Text>
         </Flex>
         <InfoFooter />
       </Layout>

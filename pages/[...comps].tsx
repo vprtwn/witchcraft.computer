@@ -21,19 +21,22 @@ const UserPage = (props) => {
   let basePath = '/';
   let cards = [];
   let headings = null;
-  if (type === 's' && first) {
+  let title = 'witchcraft.computer';
+  if (type === 'o' && first) {
     const firstId = first.replace('_', '');
-    basePath = `${type}/${firstId}`;
+    basePath = `${type}/${first}`;
     const data = props.map[firstId];
     if (first.endsWith('_')) {
       data['reversed'] = true;
     }
     cards.push(data);
+    selected = data;
+    title = `${data.name} ✧ witchcraft.computer`;
   } else if (type === 'ppf' && first && second && third) {
     const firstId = first.replace('_', '');
     const secondId = second.replace('_', '');
     const thirdId = third.replace('_', '');
-    basePath = `${type}/${firstId}/${secondId}/${thirdId}`;
+    basePath = `${type}/${first}/${second}/${third}`;
     headings = ['present', 'past', 'future'];
     let data = props.map[firstId];
     if (first.endsWith('_')) {
@@ -51,10 +54,9 @@ const UserPage = (props) => {
     }
     cards.push(data);
     selected = props.map[fourth];
-    console.log('fourth', selected);
+    title = `present, past, future ✧ witchcraft.computer`;
   }
 
-  const title = 'present, past, future';
   let description = '';
   cards.forEach((c) => {
     if (title.length > 0) {
@@ -63,15 +65,7 @@ const UserPage = (props) => {
     description = description + c.name;
   });
   const url = `https://witchcraft.computer`;
-  const twitter = '@fastTarot';
-
-  useEffect(() => {
-    if (type !== 's') {
-      document.body.addEventListener('click', () => {
-        router.push(basePath);
-      });
-    }
-  }, []);
+  const twitter = '@tarotComputer';
 
   return (
     <Layout>
@@ -91,7 +85,7 @@ const UserPage = (props) => {
                 alt: title,
               },
             ],
-            site_name: 'tarot express',
+            site_name: 'witchcraft.computer',
           }}
           twitter={{
             handle: twitter,
@@ -110,7 +104,7 @@ const UserPage = (props) => {
                     variant={`card_${prefix}`}
                     sx={{}}
                     onClick={() => {
-                      if (type !== 's') {
+                      if (type !== 'o') {
                         router.push(`${basePath}/${card.id}`);
                       }
                     }}
@@ -139,8 +133,8 @@ const UserPage = (props) => {
         </Flex>
         <PageFooter />
         {selected && (
-          <Box sx={{ fontFamily: 'mono' }}>
-            <Link href={selected.wiki} target="_blank">
+          <Box sx={{ fontFamily: 'mono', pb: 4 }}>
+            <Link href={type === 'o' ? selected.wiki : `/o/${selected.id}`} target={type === 'o' ? '_blank' : 'none'}>
               <Heading sx={{ fontFamily: 'mono' }}>{selected.name}</Heading>
             </Link>
             <Text sx={{ py: 2 }}>{selected.desc}</Text>

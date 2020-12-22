@@ -9,8 +9,9 @@ import '../styles.css';
 import React from 'react';
 import { DefaultSeo, NextSeo } from 'next-seo';
 
-const title = 'tarot express ✧ free online tarot reading';
-const twitter = '@fastTarot';
+const title = 'witchcraft.computer ✧ free online tarot reading';
+const twitter = '@tarotComputer';
+const description = title;
 
 // Markdown pages use this
 const components = {
@@ -18,11 +19,11 @@ const components = {
     <div style={{}}>
       <NextSeo
         title={title}
-        description="FAQ, terms of service, privacy policy, etc"
+        description={description}
         openGraph={{
           url: 'https://witchcraft.computer',
           title: title,
-          description: 'FAQ, terms of service, privacy policy, etc',
+          description: description,
           images: [
             {
               url: 'https://witchcraft.computer/tray-512.png',
@@ -31,7 +32,7 @@ const components = {
               alt: title,
             },
           ],
-          site_name: 'tarot express',
+          site_name: 'witchcraft.computer',
         }}
         twitter={{
           handle: twitter,
@@ -40,7 +41,7 @@ const components = {
         }}
       />
       <Layout>
-        <Card variant="card_info" sx={{ px: 3, my: 2, cursor: 'auto' }}>
+        <Card variant="card_info" sx={{ px: 3, my: 4, mx: 5, cursor: 'auto' }}>
           <Flex></Flex>
           <main {...props} />
         </Card>
@@ -63,7 +64,7 @@ const App = ({ Component, pageProps }) => {
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/roboto-slab.min.css" />
           </Head>
           <DefaultSeo
-            title="tarot express"
+            title="witchcraft.computer"
             description="free online tarot reading"
             openGraph={{
               url: 'https://witchcraft.computer',
@@ -74,14 +75,14 @@ const App = ({ Component, pageProps }) => {
                   url: 'https://witchcraft.computer/icon-512.png',
                   width: 512,
                   height: 512,
-                  alt: 'tarot express',
+                  alt: 'witchcraft.computer',
                 },
               ],
               site_name: 'tarotExpress',
             }}
             twitter={{
-              handle: '@fastTarot',
-              site: '@fastTarot',
+              handle: twitter,
+              site: twitter,
               cardType: 'summary_large_image',
             }}
           />
