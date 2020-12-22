@@ -1,4 +1,4 @@
-# tarot.express
+# witchcraft.computer
 
 ## Getting started
 

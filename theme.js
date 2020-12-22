@@ -115,7 +115,7 @@ export default {
     },
   },
   cards: {
-    card_a: {
+    card_s: {
       py: 0,
       px: 0,
       border: `solid 2px`,
@@ -171,7 +171,7 @@ export default {
       animation: 'gradient 14s ease infinite',
       boxShadow: '0 0 8px rgba(0, 0, 0, 0.5)',
     },
-    card_s: {
+    card_a: {
       py: 0,
       px: 0,
       border: `solid 2px`,

@@ -10,7 +10,7 @@ const IndexPage = (props) => {
   const keys = Object.keys(props.map);
 
   const title = 'tarot express ✧ free online tarot reading';
-  const url = 'https://tarot.express';
+  const url = 'https://witchcraft.computer';
   const description = 'free online tarot card divinations';
   const twitter = '@fastTarot';
   return (
@@ -41,7 +41,7 @@ const IndexPage = (props) => {
         />
         <Flex sx={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <Text variant="text_md_mono" sx={{ my: 2 }}>
-            <Badge variant="badge_tray">tarot express</Badge>
+            <Badge variant="badge_tray">witchcraft.computer</Badge>
           </Text>
           <Button
             variant="button"
@@ -54,7 +54,7 @@ const IndexPage = (props) => {
               window.location.assign(url);
             }}
           >
-            Present, Past, Future
+            present, past, future
           </Button>
           <Button
             variant="button"
@@ -66,7 +66,7 @@ const IndexPage = (props) => {
               window.location.assign(url);
             }}
           >
-            Single Card
+            one answer
           </Button>
           {/* <Button variant="button">All Cards</Button> */}
         </Flex>
@@ -77,7 +77,7 @@ const IndexPage = (props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  let baseUrl = 'http://tarot.express';
+  let baseUrl = 'http://witchcraft.computer';
   if (process.env.NODE_ENV === 'development') {
     baseUrl = 'http://127.0.0.1:3000';
   }

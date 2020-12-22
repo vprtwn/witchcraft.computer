@@ -20,12 +20,12 @@ const components = {
         title={title}
         description="FAQ, terms of service, privacy policy, etc"
         openGraph={{
-          url: 'https://tarot.express',
+          url: 'https://witchcraft.computer',
           title: title,
           description: 'FAQ, terms of service, privacy policy, etc',
           images: [
             {
-              url: 'https://tarot.express/tray-512.png',
+              url: 'https://witchcraft.computer/tray-512.png',
               width: 512,
               height: 512,
               alt: title,
@@ -70,12 +70,12 @@ const App = ({ Component, pageProps }) => {
             title="tarot express"
             description="free online tarot reading"
             openGraph={{
-              url: 'https://tarot.express',
+              url: 'https://witchcraft.computer',
               title: 'tray',
               description: 'free online tarot reading',
               images: [
                 {
-                  url: 'https://tarot.express/icon-512.png',
+                  url: 'https://witchcraft.computer/icon-512.png',
                   width: 512,
                   height: 512,
                   alt: 'tarot express',

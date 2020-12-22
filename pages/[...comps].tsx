@@ -11,7 +11,7 @@ const psl = require('psl');
 const UserPage = (props) => {
   const title = 'foo';
   const description = 'bar';
-  const url = `https://tarot.express`;
+  const url = `https://witchcraft.computer`;
   const twitter = '@fastTarot';
 
   const router = useRouter();
@@ -31,6 +31,10 @@ const UserPage = (props) => {
     cards.push(props.map[second]);
     cards.push(props.map[third]);
   }
+
+  // router.events.on('hashChangeStart', (hash) => {
+  //   console.log('hash', hash);
+  // });
 
   return (
     <Layout>
@@ -98,7 +102,7 @@ const UserPage = (props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  let baseUrl = 'http://tarot.express';
+  let baseUrl = 'http://witchcraft.computer';
   if (process.env.NODE_ENV === 'development') {
     baseUrl = 'http://127.0.0.1:3000';
   }
