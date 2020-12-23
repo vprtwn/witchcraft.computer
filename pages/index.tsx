@@ -9,9 +9,9 @@ import { NextSeo } from 'next-seo';
 const IndexPage = (props) => {
   const keys = Object.keys(props.map);
 
-  const title = 'witchcraft.computer ✧ free online tarot reading';
+  const title = 'witchcraft.computer ✧ free online tarot cards';
   const url = 'https://witchcraft.computer';
-  const description = 'free online tarot card divinations';
+  const description = 'free online tarot cards, divinations, and other witchcraft';
   const twitter = '@tarotComputer';
   return (
     <>
@@ -25,9 +25,7 @@ const IndexPage = (props) => {
             description: description,
             images: [
               {
-                url: `https://api.microlink.io/?url=${url}&screenshot=true&meta=false&embed=screenshot.url`,
-                width: 512,
-                height: 512,
+                url: `http://witchcraft.computer/preview-fool.png`,
                 alt: title,
               },
             ],
@@ -41,7 +39,9 @@ const IndexPage = (props) => {
         />
         <Flex sx={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <Text variant="text_md_mono" sx={{ my: 2 }}>
-            <Badge variant="badge_tray">witchcraft.computer</Badge>
+            <Badge variant="badge_tray" sx={{ fontWeight: 'bold', fontSize: 13 }}>
+              witchcraft.computer
+            </Badge>
           </Text>
           <Button
             variant="button"
@@ -70,9 +70,9 @@ const IndexPage = (props) => {
           >
             one answer
           </Button>
-          <Text sx={{ fontFamily: 'mono', mt: 3, mb: 2, width: 200 }}>
-            tweet <Link href="https://twitter.com/intent/tweet?text=%40tarotComputer">@tarotComputer</Link> for a public
-            divination 🔮
+          <Text sx={{ fontFamily: 'mono', mt: 3, mb: 2, width: 180 }}>
+            tweet <Link href="https://twitter.com/intent/tweet?text=%40tarotComputer">@tarotComputer</Link> for an
+            e-divination 🔮
           </Text>
         </Flex>
         <InfoFooter />

@@ -9,7 +9,7 @@ const PageFooter = (props) => {
         <Link href="/">
           <Flex sx={{ alignItems: 'center' }}>
             <Text sx={{ fontFamily: 'mono', color: 'gray', mx: 2 }}>
-              <Badge variant="tray" sx={{ fontSize: 12, fontWeight: 'normal' }}>
+              <Badge variant="tray" sx={{ fontSize: 12, fontWeight: 'bold' }}>
                 witchcraft.computer
               </Badge>
             </Text>

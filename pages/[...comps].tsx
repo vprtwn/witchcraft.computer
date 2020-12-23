@@ -58,14 +58,22 @@ const UserPage = (props) => {
   }
 
   let description = '';
-  cards.forEach((c) => {
-    if (title.length > 0) {
-      description = description + ' ✧ ';
-    }
-    description = description + c.name;
-  });
+  if (cards.length > 1) {
+    cards.forEach((c) => {
+      if (description.length > 0) {
+        description = description + ' ✧ ';
+      }
+      description = description + c.name;
+    });
+  } else {
+    description = cards[0].desc;
+  }
   const url = `https://witchcraft.computer`;
   const twitter = '@tarotComputer';
+  let previewImage = `http://witchcraft.computer/rider-waite/${cards[0].id}.png`;
+  if (selected) {
+    previewImage = `http://witchcraft.computer/rider-waite/${selected.id}.png`;
+  }
 
   return (
     <Layout>
@@ -79,9 +87,7 @@ const UserPage = (props) => {
             description: description,
             images: [
               {
-                url: `https://api.microlink.io/?url=${url}&screenshot=true&meta=false&embed=screenshot.url`,
-                width: 512,
-                height: 512,
+                url: previewImage,
                 alt: title,
               },
             ],
@@ -99,7 +105,17 @@ const UserPage = (props) => {
               const prefix = card.id.split('-')[0];
               return (
                 <Flex key={card.id} sx={{ mx: 1, mt: 3, width: 300, flexDirection: 'column', alignItems: 'center' }}>
-                  {headings && <Text sx={{ fontFamily: 'mono', mb: 2 }}>{headings[i]}</Text>}
+                  {headings && (
+                    <Text
+                      sx={{
+                        fontFamily: 'mono',
+                        fontWeight: 'bold',
+                        mb: 2,
+                      }}
+                    >
+                      {headings[i]}
+                    </Text>
+                  )}
                   <Card
                     variant={`card_${prefix}`}
                     sx={{}}
@@ -120,7 +136,7 @@ const UserPage = (props) => {
                       textAlign: 'center',
                       lineHeight: 1.2,
                       fontFamily: 'mono',
-                      fontWeight: 'medium',
+                      fontWeight: 'bold',
                       pt: 2,
                     }}
                   >
