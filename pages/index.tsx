@@ -70,10 +70,6 @@ const IndexPage = (props) => {
           >
             one answer
           </Button>
-          <Text sx={{ fontFamily: 'mono', mt: 3, mb: 2, width: 180 }}>
-            tweet <Link href="https://twitter.com/intent/tweet?text=%40tarotComputer">@tarotComputer</Link> for an
-            e-divination 🔮
-          </Text>
         </Flex>
         <InfoFooter />
       </Layout>
