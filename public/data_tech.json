@@ -568,9 +568,9 @@
   },
   {
     "id": "a-sr",
-    "type": "The Engineering Manager",
+    "type": "Major Arcana",
     "number": 17,
-    "name": "The Star",
+    "name": "The User",
     "desc": "Loss, theft, privation, abandonment; another reading says--hope bright prospects.",
     "desc_rev": "Arrogance, haughtiness, impotence.",
     "wiki": "https://www.biddytarot.com/tarot-card-meanings/major-arcana/star/"
@@ -604,7 +604,7 @@
     "associations": ["attainment of a goal"],
     "desc": "Economy, moderation, frugality, management, accommodation.",
     "desc_rev": "Things connected with churches, religions, sects, the priesthood, sometimes even the priest who will marry Querent; also disunion, unfortunate combinations, competing interests.",
-    "wiki": "https://en.wikipedia.org/wiki/Temperance_(Tarot_card)"
+    "wiki": "https://www.biddytarot.com/tarot-card-meanings/major-arcana/temperance/"
   },
   {
     "id": "a-d",
@@ -615,7 +615,7 @@
     "associations": ["an ending", "self awareness"],
     "desc": "End, mortality, destruction, corruption; also, for a man, the loss of a benefactor; for a woman, many contrarieties; for a maid, failure of marriage projects.",
     "desc_rev": "Inertia, sleep, lethargy, petrifaction, somnambulism; hope destroyed.",
-    "wiki": "https://www.biddytarot.com/tarot-card-meanings/major-arcana/temperance/"
+    "wiki": "https://www.biddytarot.com/tarot-card-meanings/major-arcana/death/"
   },
   {
     "id": "a-hm",
@@ -711,7 +711,7 @@
     "associations": ["mars", "power", "wisdom"],
     "desc": "Stability, power, protection, realization; a great person; aid, reason, conviction also authority and will.",
     "desc_rev": "Benevolence, compassion, credit; also confusion to enemies, obstruction, immaturity.",
-    "wiki": "https://en.wikipedia.org/wiki/The_Emperor_(Tarot_card)"
+    "wiki": "https://www.biddytarot.com/tarot-card-meanings/major-arcana/emperor"
   },
   {
     "id": "a-es",

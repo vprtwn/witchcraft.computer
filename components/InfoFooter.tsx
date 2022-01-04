@@ -10,6 +10,9 @@ const InfoFooter = (props) => {
           <Link variant="link_footer" href="/faq">
             FAQ
           </Link>
+          <Link variant="link_footer" href="/major-arcana">
+            major arcana
+          </Link>
         </Flex>
         <Box sx={{ flex: '1 1 auto' }} />
       </Flex>
