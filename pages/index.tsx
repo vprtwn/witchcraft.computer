@@ -9,7 +9,7 @@ import { NextSeo } from 'next-seo';
 const IndexPage = (props) => {
   const keys = Object.keys(props.map);
 
-  const title = 'witchcraft.computer ✧ tarot for techies';
+  const title = 'witchcraft.computer ✧ tarot 4 techies';
   const url = 'https://witchcraft.computer';
   const description = 'tech themed tarot deck';
   return (
