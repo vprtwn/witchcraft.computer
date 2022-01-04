@@ -45,7 +45,7 @@ const UserPage = (props) => {
 
   return (
     <Layout>
-      <Box sx={{ flexDirection: 'column', justifyContent: 'center', my: 4 }}>
+      <Box sx={{ flexDirection: 'column', justifyContent: 'center', mt: 4, mb: 0 }}>
         <NextSeo
           title={title}
           description={description}
@@ -62,12 +62,15 @@ const UserPage = (props) => {
             site_name: 'witchcraft.computer',
           }}
         />
-        <Flex sx={{ justifyContent: 'center', mx: 2 }}>
+        <Flex sx={{ justifyContent: 'center' }}>
           <Flex sx={{ flexDirection: 'row', justifyContent: 'center' }}>
             {cards.map((card, i) => {
               const prefix = card.id.split('-')[0];
               return (
-                <Flex key={card.id} sx={{ mx: 1, mt: 3, width: 300, flexDirection: 'column', alignItems: 'center' }}>
+                <Flex
+                  key={card.id}
+                  sx={{ mx: 1, mt: 3, mb: 3, width: 300, flexDirection: 'column', alignItems: 'center' }}
+                >
                   {headings && (
                     <Text
                       sx={{
@@ -85,7 +88,7 @@ const UserPage = (props) => {
                       sx={{ transform: card.reversed ? 'rotate(180deg);' : 'none' }}
                     />
                   </Card>
-                  <Box sx={{ fontFamily: 'mono', py: 3 }}>
+                  <Box sx={{ fontFamily: 'mono', pt: 3, pb: 0 }}>
                     <Link href={selected.wiki} target={'_blank'}>
                       <Heading sx={{ fontFamily: 'mono' }}>{selected.name}</Heading>
                     </Link>
@@ -95,7 +98,6 @@ const UserPage = (props) => {
             })}
           </Flex>
         </Flex>
-
         <PageFooter />
       </Box>
     </Layout>

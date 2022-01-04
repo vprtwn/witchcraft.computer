@@ -66,7 +66,7 @@ const IndexPage = (props) => {
           </Button> */}
           <Button
             variant="button"
-            sx={{ my: 3 }}
+            sx={{ mt: 3 }}
             onClick={() => {
               const i = Math.floor(Math.random() * keys.length);
               const key = keys[i];

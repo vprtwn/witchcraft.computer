@@ -2,7 +2,7 @@ import { Flex, Box, Text, Link, Badge } from 'theme-ui';
 
 const PageFooter = (props) => {
   return (
-    <Box sx={{ textAlign: 'center', mt: 4, mb: 4, py: 1, px: 2 }}>
+    <Box sx={{ textAlign: 'center', mt: 0, mb: 4, px: 2 }}>
       <Box sx={{ flex: '1 1 auto' }} />
       <Flex sx={{ alignItems: 'center' }}>
         <Box sx={{ flex: '1 1 auto' }} />
