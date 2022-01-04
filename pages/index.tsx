@@ -24,7 +24,7 @@ const IndexPage = (props) => {
             description: description,
             images: [
               {
-                url: `http://witchcraft.computer/preview-fool.png`,
+                url: `http://witchcraft.computer/rider-waite/a-m.png`,
                 alt: title,
               },
             ],
