@@ -31,7 +31,7 @@ const IndexPage = (props) => {
             site_name: 'tray',
           }}
         />
-        <Flex sx={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        <Flex sx={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', mt: 3 }}>
           <Text variant="text_md_mono" sx={{ my: 2 }}>
             <Badge variant="badge_tray" sx={{ fontWeight: 'bold', fontSize: 13 }}>
               witchcraft.computer
