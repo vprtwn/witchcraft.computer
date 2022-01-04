@@ -421,7 +421,7 @@ const UserPage = (props) => {
     title = `${data.name} ✧ witchcraft.computer`;
   }
 
-  const description = cards[0].desc;
+  const description = 'tech tarot deck';
   const url = `https://witchcraft.computer`;
   const previewImage = `http://witchcraft.computer/rider-waite/${selected.id}.png`;
 

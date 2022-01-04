@@ -9,7 +9,7 @@ import React from 'react';
 import { DefaultSeo, NextSeo } from 'next-seo';
 
 const title = '✧ witchcraft.computer ✧';
-const description = 'tech themed tarot deck';
+const description = 'tech tarot deck';
 
 // Markdown pages use this
 const components = {
