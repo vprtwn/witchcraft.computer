@@ -1,4 +1,4 @@
-import { Flex, Box, Container, IconButton, Button, Text, Image, Link } from 'theme-ui';
+import { Flex, Box, Link } from 'theme-ui';
 
 const InfoFooter = (props) => {
   return (

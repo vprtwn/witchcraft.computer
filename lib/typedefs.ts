@@ -1,1 +1,0 @@
-import Stripe from 'stripe';

@@ -1,4 +1,4 @@
-import { ThemeProvider, Badge, Card, Styled, Flex, Box, Link } from 'theme-ui';
+import { ThemeProvider, Badge, Card, Styled, Flex, Box } from 'theme-ui';
 import Head from 'next/head';
 import theme from '../theme';
 import { MDXProvider } from '@mdx-js/react';
