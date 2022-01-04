@@ -1,4 +1,3 @@
-import { Provider } from 'next-auth/client';
 import { ThemeProvider, Badge, Card, Styled, Flex, Box, Link } from 'theme-ui';
 import Head from 'next/head';
 import theme from '../theme';
@@ -49,37 +48,35 @@ const components = {
 // Normal pages use this
 const App = ({ Component, pageProps }) => {
   return (
-    <Provider session={pageProps.session}>
-      <ThemeProvider theme={theme}>
-        <Styled.root>
-          <Head>
-            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-            <link rel="icon" href="/favicon.png" />
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/roboto-slab.min.css" />
-          </Head>
-          <DefaultSeo
-            title={title}
-            description={description}
-            openGraph={{
-              url: 'https://witchcraft.computer',
-              title: { title },
-              description: { description },
-              images: [
-                {
-                  url: 'https://witchcraft.computer/icon-512.png',
-                  width: 512,
-                  height: 512,
-                  alt: 'witchcraft.computer',
-                },
-              ],
-            }}
-          />
-          <MDXProvider components={components}>
-            <Component {...pageProps} />
-          </MDXProvider>
-        </Styled.root>
-      </ThemeProvider>
-    </Provider>
+    <ThemeProvider theme={theme}>
+      <Styled.root>
+        <Head>
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+          <link rel="icon" href="/favicon.png" />
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/roboto-slab.min.css" />
+        </Head>
+        <DefaultSeo
+          title={title}
+          description={description}
+          openGraph={{
+            url: 'https://witchcraft.computer',
+            title: { title },
+            description: { description },
+            images: [
+              {
+                url: 'https://witchcraft.computer/icon-512.png',
+                width: 512,
+                height: 512,
+                alt: 'witchcraft.computer',
+              },
+            ],
+          }}
+        />
+        <MDXProvider components={components}>
+          <Component {...pageProps} />
+        </MDXProvider>
+      </Styled.root>
+    </ThemeProvider>
   );
 };
 export default App;
