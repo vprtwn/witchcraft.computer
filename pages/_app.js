@@ -24,7 +24,7 @@ const components = {
           description: description,
           images: [
             {
-              url: 'https://witchcraft.computer/tray-512.png',
+              url: 'http://witchcraft.computer/rider-waite/a-m.png',
               width: 512,
               height: 512,
               alt: title,
