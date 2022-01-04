@@ -12,7 +12,6 @@ const IndexPage = (props) => {
   const title = 'witchcraft.computer ✧ free online tarot cards';
   const url = 'https://witchcraft.computer';
   const description = 'free online tarot cards, divinations, and other witchcraft';
-  const twitter = '@tarotComputer';
   return (
     <>
       <Layout>
@@ -31,11 +30,6 @@ const IndexPage = (props) => {
             ],
             site_name: 'tray',
           }}
-          twitter={{
-            handle: twitter,
-            site: twitter,
-            cardType: 'summary_large_image',
-          }}
         />
         <Flex sx={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <Text variant="text_md_mono" sx={{ my: 2 }}>
@@ -43,7 +37,7 @@ const IndexPage = (props) => {
               witchcraft.computer
             </Badge>
           </Text>
-          <Button
+          {/* <Button
             variant="button"
             sx={{ my: 4 }}
             onClick={() => {
@@ -69,6 +63,18 @@ const IndexPage = (props) => {
             }}
           >
             one answer
+          </Button> */}
+          <Button
+            variant="button"
+            sx={{ my: 3 }}
+            onClick={() => {
+              const i = Math.floor(Math.random() * keys.length);
+              const key = keys[i];
+              const url = `tech/${key}`;
+              window.location.assign(url);
+            }}
+          >
+            Go
           </Button>
         </Flex>
         <InfoFooter />
