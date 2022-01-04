@@ -541,17 +541,17 @@
   },
   {
     "id": "a-jg",
-    "type": "The Perf Cycle",
+    "type": "Major Arcana",
     "number": 20,
-    "name": "Judgement",
+    "name": "The Perf Cycle",
     "desc": "May be associated with rebirth, inner-calling, absolution, karma, causality, second chances",
     "wiki": "https://www.biddytarot.com/tarot-card-meanings/major-arcana/judgement/"
   },
   {
     "id": "a-sn",
-    "type": "The Frontend",
+    "type": "Major Arcana",
     "number": 19,
-    "name": "The Sun",
+    "name": "The Frontend",
     "associations": ["attained knowledge"],
     "desc": "The conscious mind prevails over the fears and illusions of the unconscious. Innocence is renewed through discovery, bringing hope for the future.",
     "wiki": "https://www.biddytarot.com/tarot-card-meanings/major-arcana/sun/"

@@ -26,22 +26,9 @@ const UserPage = (props) => {
     title = `${data.name} ✧ witchcraft.computer`;
   }
 
-  let description = '';
-  if (cards.length > 1) {
-    cards.forEach((c) => {
-      if (description.length > 0) {
-        description = description + ' ✧ ';
-      }
-      description = description + c.name;
-    });
-  } else {
-    description = cards[0].desc;
-  }
+  const description = cards[0].desc;
   const url = `https://witchcraft.computer`;
-  let previewImage = `http://witchcraft.computer/rider-waite/${cards[0].id}.png`;
-  if (selected) {
-    previewImage = `http://witchcraft.computer/rider-waite/${selected.id}.png`;
-  }
+  const previewImage = `http://witchcraft.computer/rider-waite/${selected.id}.png`;
 
   return (
     <Layout>
