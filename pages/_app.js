@@ -35,7 +35,7 @@ const components = {
         }}
       />
       <Layout>
-        <Card variant="card_info" sx={{ px: 3, my: 4, mx: 5, cursor: 'auto' }}>
+        <Card variant="card_info" sx={{ px: 3, my: 4, mx: 0, cursor: 'auto' }}>
           <Flex></Flex>
           <main {...props} />
         </Card>
