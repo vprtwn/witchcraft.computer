@@ -9,9 +9,8 @@ import '../styles.css';
 import React from 'react';
 import { DefaultSeo, NextSeo } from 'next-seo';
 
-const title = 'witchcraft.computer ✧ free online tarot reading';
-const twitter = '@tarotComputer';
-const description = title;
+const title = '✧ witchcraft.computer ✧';
+const description = 'tech themed tarot deck';
 
 // Markdown pages use this
 const components = {
@@ -33,11 +32,6 @@ const components = {
             },
           ],
           site_name: 'witchcraft.computer',
-        }}
-        twitter={{
-          handle: twitter,
-          site: twitter,
-          cardType: 'summary_large_image',
         }}
       />
       <Layout>
@@ -64,12 +58,12 @@ const App = ({ Component, pageProps }) => {
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xz/fonts@1/serve/roboto-slab.min.css" />
           </Head>
           <DefaultSeo
-            title="witchcraft.computer"
-            description="free online tarot reading"
+            title={title}
+            description={description}
             openGraph={{
               url: 'https://witchcraft.computer',
-              title: 'tray',
-              description: 'free online tarot reading',
+              title: { title },
+              description: { description },
               images: [
                 {
                   url: 'https://witchcraft.computer/icon-512.png',
@@ -78,12 +72,6 @@ const App = ({ Component, pageProps }) => {
                   alt: 'witchcraft.computer',
                 },
               ],
-              site_name: 'tarotExpress',
-            }}
-            twitter={{
-              handle: twitter,
-              site: twitter,
-              cardType: 'summary_large_image',
             }}
           />
           <MDXProvider components={components}>
