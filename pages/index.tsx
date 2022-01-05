@@ -122,7 +122,7 @@ const IndexPage = (props) => {
               sx={{ mt: 3 }}
               onClick={() => {
                 const i = Math.floor(Math.random() * keys.length);
-                const key = keys[i] + (Math.random() < 0.5 ? '_' : '');
+                const key = keys[i] + (Math.random() < 0.3 ? '_' : '');
                 const url = `tech/${key}`;
                 window.location.assign(url);
               }}
