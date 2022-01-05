@@ -90,7 +90,7 @@ const IndexPage = (props) => {
   const title = '✧ witchcraft.computer ✧';
   const url = 'https://witchcraft.computer';
   const description = 'tech tarot deck';
-  const [reverseEnabled, setReverseEnabled] = useState<boolean>(false);
+  const [reverseEnabled, setReverseEnabled] = useState<boolean>(true);
   return (
     <>
       <Layout>
