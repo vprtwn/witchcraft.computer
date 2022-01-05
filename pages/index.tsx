@@ -130,7 +130,7 @@ const IndexPage = (props) => {
               Go
             </Button>
             <Switch
-              label="↺"
+              label={reverseEnabled ? '↺' : '↑'}
               sx={{ mt: 1 }}
               checked={reverseEnabled}
               onChange={() => setReverseEnabled(!reverseEnabled)}
