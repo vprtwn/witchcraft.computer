@@ -290,7 +290,7 @@ const UserPage = (props) => {
     },
     {
       id: 'a-tw',
-      name: 'The Internet',
+      name: 'The IPO',
       wiki: 'https://www.biddytarot.com/tarot-card-meanings/major-arcana/world/',
     },
     {
@@ -300,12 +300,12 @@ const UserPage = (props) => {
     },
     {
       id: 'a-sn',
-      name: 'The Frontend',
+      name: 'The Launch',
       wiki: 'https://www.biddytarot.com/tarot-card-meanings/major-arcana/sun/',
     },
     {
       id: 'a-mn',
-      name: 'The Backend',
+      name: 'The Bubble',
       wiki: 'https://www.biddytarot.com/tarot-card-meanings/major-arcana/moon/',
     },
     {
@@ -320,12 +320,12 @@ const UserPage = (props) => {
     },
     {
       id: 'a-td',
-      name: 'The AWS Outage',
+      name: 'The Hacker',
       wiki: 'https://www.biddytarot.com/tarot-card-meanings/major-arcana/devil/',
     },
     {
       id: 'a-t',
-      name: 'The AWS Cost',
+      name: 'The Break',
       wiki: 'https://www.biddytarot.com/tarot-card-meanings/major-arcana/temperance/',
     },
     {
@@ -335,42 +335,42 @@ const UserPage = (props) => {
     },
     {
       id: 'a-hm',
-      name: 'The UXR',
+      name: 'The User Research',
       wiki: 'https://www.biddytarot.com/tarot-card-meanings/major-arcana/hanged-man/',
     },
     {
       id: 'a-s',
-      name: 'The Metrics',
+      name: 'The Investor',
       wiki: 'https://www.biddytarot.com/tarot-card-meanings/major-arcana/strength/',
     },
     {
       id: 'a-wf',
-      name: 'The Stonk',
+      name: 'The Unicorn',
       wiki: 'https://www.biddytarot.com/tarot-card-meanings/major-arcana/wheel-of-fortune/',
     },
     {
       id: 'a-h',
-      name: 'The Strategy',
+      name: 'The Product Manager',
       wiki: 'https://www.biddytarot.com/tarot-card-meanings/major-arcana/hermit',
     },
     {
       id: 'a-j',
-      name: 'The Tests',
+      name: 'HR',
       wiki: 'https://www.biddytarot.com/tarot-card-meanings/major-arcana/justice',
     },
     {
       id: 'a-c',
-      name: 'The Account Manager',
+      name: 'The Startup',
       wiki: 'https://www.biddytarot.com/tarot-card-meanings/major-arcana/chariot/',
     },
     {
       id: 'a-l',
-      name: 'The Designers',
+      name: 'The Offsite',
       wiki: 'https://www.biddytarot.com/tarot-card-meanings/major-arcana/lovers/',
     },
     {
       id: 'a-pt',
-      name: 'The Recruiter',
+      name: 'The Engineering Manager',
       wiki: 'https://www.biddytarot.com/tarot-card-meanings/major-arcana/hierophant',
     },
     {
@@ -385,7 +385,7 @@ const UserPage = (props) => {
     },
     {
       id: 'a-ps',
-      name: 'The Product Manager',
+      name: 'The Designer',
       wiki: 'https://www.biddytarot.com/tarot-card-meanings/major-arcana/high-priestess/',
     },
     {
