@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import Layout from '../components/Layout';
 import InfoFooter from '../components/InfoFooter';
-import { Flex, Badge, Box, Button, Text, Link } from 'theme-ui';
+import { Flex, Badge, Switch, Button, Text, Box } from 'theme-ui';
 import { GetServerSideProps } from 'next';
 import { NextSeo } from 'next-seo';
 
@@ -90,6 +90,7 @@ const IndexPage = (props) => {
   const title = '✧ witchcraft.computer ✧';
   const url = 'https://witchcraft.computer';
   const description = 'tech tarot deck';
+  const [reverseEnabled, setReverseEnabled] = useState<boolean>(false);
   return (
     <>
       <Layout>
@@ -106,7 +107,7 @@ const IndexPage = (props) => {
                 alt: title,
               },
             ],
-            site_name: 'tray',
+            site_name: 'witchcraft.computer',
           }}
         />
         <Flex sx={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', mt: 3 }}>
@@ -115,18 +116,26 @@ const IndexPage = (props) => {
               witchcraft.computer
             </Badge>
           </Text>
-          <Button
-            variant="button"
-            sx={{ mt: 3 }}
-            onClick={() => {
-              const i = Math.floor(Math.random() * keys.length);
-              const key = keys[i];
-              const url = `tech/${key}`;
-              window.location.assign(url);
-            }}
-          >
-            Go
-          </Button>
+          <Box>
+            <Button
+              variant="button"
+              sx={{ mt: 3 }}
+              onClick={() => {
+                const i = Math.floor(Math.random() * keys.length);
+                const key = keys[i] + (Math.random() < 0.5 ? '_' : '');
+                const url = `tech/${key}`;
+                window.location.assign(url);
+              }}
+            >
+              Go
+            </Button>
+            <Switch
+              label="↺"
+              sx={{ mt: 1 }}
+              checked={reverseEnabled}
+              onChange={() => setReverseEnabled(!reverseEnabled)}
+            />
+          </Box>
         </Flex>
         <InfoFooter />
       </Layout>

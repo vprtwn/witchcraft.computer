@@ -409,13 +409,15 @@ const UserPage = (props) => {
 
   const { comps } = router.query;
   const first = comps[0];
-  let basePath = '/';
   let cards = [];
   let headings = null;
   let title = 'witchcraft.computer';
+  const firstId = first.replace('_', '');
   if (first) {
-    basePath = `o/${first}`;
-    const data = map[first];
+    let data = map[firstId];
+    if (first.endsWith('_')) {
+      data['reversed'] = true;
+    }
     cards.push(data);
     selected = data;
     title = `${data.name} ✧ witchcraft.computer`;
@@ -447,7 +449,7 @@ const UserPage = (props) => {
         <Flex sx={{ justifyContent: 'center' }}>
           <Flex sx={{ flexDirection: 'row', justifyContent: 'center' }}>
             {cards.map((card, i) => {
-              const prefix = card.id.split('-')[0];
+              console.log(card);
               return (
                 <Flex
                   key={card.id}
@@ -464,7 +466,7 @@ const UserPage = (props) => {
                       {headings[i]}
                     </Text>
                   )}
-                  <Card variant={`card_${prefix}`} sx={{}}>
+                  <Card variant={`card_a`}>
                     <Image
                       src={`${props.baseUrl}/rider-waite/${card.id}.png`}
                       sx={{ transform: card.reversed ? 'rotate(180deg);' : 'none' }}
