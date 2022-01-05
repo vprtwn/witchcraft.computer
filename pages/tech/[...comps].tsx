@@ -466,7 +466,7 @@ const UserPage = (props) => {
                   )}
                   <Card variant={`card_${prefix}`} sx={{}}>
                     <Image
-                      src={`${props.baseUrl}/rider-waite/${card.id}.svg`}
+                      src={`${props.baseUrl}/rider-waite/${card.id}.png`}
                       sx={{ transform: card.reversed ? 'rotate(180deg);' : 'none' }}
                     />
                   </Card>
