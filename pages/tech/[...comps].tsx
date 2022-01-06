@@ -406,7 +406,6 @@ const UserPage = (props) => {
 
   const router = useRouter();
   let selected = null;
-
   const { comps } = router.query;
   const first = comps[0];
   let cards = [];
