@@ -19,13 +19,7 @@ export default {
     gray: '#718096',
     white: '#fff',
     primary: '#000',
-    lightGreen: '#f0fff4',
-    lightRed: '#fff5f5',
-    lightBlue: '#ebf8ff',
-    lightTeal: '#e6fffa',
-    lightOrange: '#fffaf0',
     background: '#fff',
-    lightGray: '#edf2f7',
   },
   buttons: {
     button: {
@@ -59,7 +53,7 @@ export default {
     },
   },
   badges: {
-    badge_tray: {
+    badge_black: {
       fontFamily: 'mono',
       fontSize: 2,
       color: 'white',
@@ -68,7 +62,7 @@ export default {
     },
   },
   cards: {
-    card_a: {
+    card_foil: {
       py: 0,
       px: 0,
       border: `solid 2px`,
@@ -92,12 +86,6 @@ export default {
       borderRadius: 8,
       cursor: 'pointer',
       boxShadow: '0 0 8px rgba(0, 0, 0, 0.5)',
-    },
-  },
-  text: {
-    text_md_mono: {
-      fontSize: 3,
-      fontFamily: 'mono',
     },
   },
   styles: {

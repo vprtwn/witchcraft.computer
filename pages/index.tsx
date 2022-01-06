@@ -111,8 +111,8 @@ const IndexPage = (props) => {
           }}
         />
         <Flex sx={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', mt: 3 }}>
-          <Text variant="text_md_mono" sx={{ my: 2 }}>
-            <Badge variant="badge_tray" sx={{ fontWeight: 'bold', fontSize: 13 }}>
+          <Text sx={{ my: 2, fontSize: 3, fontFamily: 'mono' }}>
+            <Badge variant="badge_black" sx={{ fontWeight: 'bold', fontSize: 13 }}>
               witchcraft.computer
             </Badge>
           </Text>
